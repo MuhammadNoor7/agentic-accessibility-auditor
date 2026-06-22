@@ -3,7 +3,7 @@
 An automated accessibility auditing tool for Android mobile UIs.
 
 ## Project Structure
-- data/screenshots/ — Android UI screenshots
+- data/screenshots/ - Android UI screenshots
 - data/xml/ — UIAutomator XML files
 - data/parsed/ — Parsed JSON component files
 - outputs/violations/ — Rule checker outputs

@@ -9,6 +9,7 @@ An automated accessibility auditing tool for Android mobile UIs.
 - outputs/violations/ — Rule checker outputs
 - outputs/reports/ — Generated HTML/PDF reports
 - docs/ — Weekly notes and documentation
+- scripts/ - Code scripts
 
 ## Dataset 
 - Mobile App Dataset for Building Classification Applications : https://drive.google.com/file/d/1hJlhxXtPwC3h8bSty45IQW0YxI44b3Le/view?usp=sharing

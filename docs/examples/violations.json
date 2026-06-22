@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "screen_001",
+  "image_path": "data/screenshots/screen_001.png",
+  "xml_path": "data/xml/window_001.xml",
+  "total_violations": 2,
+  "violations": [
+    {
+      "rule_id": "R2",
+      "issue": "Image button without description",
+      "component_id": "c_001",
+      "class": "android.widget.ImageButton",
+      "bounds": [32, 50, 80, 98],
+      "guideline": "ImageButtons must have a content description that describes their action.",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R5",
+      "issue": "Unlabeled input field",
+      "component_id": "c_002",
+      "class": "android.widget.EditText",
+      "bounds": [32, 120, 400, 168],
+      "guideline": "All input fields must have a visible label, hint, or content description.",
+      "severity": "High",
+      "recommendation": "Add android:hint or a programmatic label linked via labelFor."
+    }
+  ]
+}

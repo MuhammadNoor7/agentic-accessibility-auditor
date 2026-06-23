@@ -64,7 +64,7 @@ Adopt the **teammate's screen wrapper** for stages 1 and 2, and keep the **origi
 | `focusable` | **Yes** | boolean | Whether the element is focusable |
 | `bounds` | **Yes** | `[int,int,int,int]` | `[left, top, right, bottom]` in pixels |
 
-**Bounds note:** Format is `[x1, y1, x2, y2]` to check touch target size (R4), detect overlap (R8), measure spacing (R16), and draw bounding boxes in reports.
+**Bounds note:** Format is `[x1, y1, x2, y2]` to check touch target size (R04), detect overlap (R08), measure spacing (R17), and draw bounding boxes in reports.
 
 ---
 
@@ -85,7 +85,7 @@ Adopt the **teammate's screen wrapper** for stages 1 and 2, and keep the **origi
 
 | Field | Required | Type | Description |
 |-------|----------|------|-------------|
-| `rule_id` | **Yes** | string | `R1`–`R30` (see accessibility rules tables below) |
+| `rule_id` | **Yes** | string | `R01`–`R30` (see accessibility rules tables below) |
 | `issue` | **Yes** | string | Short problem title |
 | `component_id` | **Yes** | string | Links to `components[].component_id` |
 | `class` | **Yes** | string | Widget class at detection time |
@@ -93,80 +93,96 @@ Adopt the **teammate's screen wrapper** for stages 1 and 2, and keep the **origi
 | `guideline` | **Yes** | string | Accessibility principle violated |
 | `severity` | **Yes** | enum | `Critical`, `High`, `Medium`, or `Low` |
 | `recommendation` | **Yes** | string | Actionable fix from rules engine |
-| `related_component` | Conditional | string | Required when a rule involves a second element (e.g. **R3**, **R8**, **R16**) |
+| `related_component` | Conditional | string | Required when a rule involves a second element (e.g. **R03**, **R08**, **R17**) |
 
-### Guidelines (G1–G10) → rules mapping
+### Guidelines (G01–G30) → rules mapping
 
 Canonical mapping aligned with [`accessibility_guidelines_report.md`](accessibility_guidelines_report.md):
 
 | Guideline | Topic | Rules |
 |-----------|-------|-------|
-| G1 | Visual accessibility (color & contrast) | R11, R13, R9 *(optional)* |
-| G2 | Focus & keyboard navigation | R12 |
-| G3 | Touch target & motor | R4, R16, R6 |
-| G4 | Screen reader & labels | R1, R2, R3, R20, R26, R29 |
-| G5 | Form & input accessibility | R5, R19, R21, R30 |
-| G6 | Media & multimedia | R14, R15, R17 |
-| G7 | Photosensitivity & animation | R18 |
-| G8 | Navigation & structure | R7, R8, R22, R25, R27, R28 |
-| G9 | Time & session | R24 |
-| G10 | Language & cognitive clarity | R10 *(optional)*, R23, R21, R25, R30 |
+| G01 | Missing accessible label | R01, R23, R30 |
+| G02 | Image button without description | R01, R02 |
+| G03 | Duplicate labels | R03 |
+| G04 | Small touch target | R04 |
+| G05 | Unlabeled input field | R05, R20 |
+| G06 | Disabled important control | R06 |
+| G07 | Invisible or zero-size component | R07 |
+| G08 | Possible layout overlap | R08 |
+| G09 | Low contrast | R09 *(optional)* |
+| G10 | Text overflow | R10, R28 |
+| G11 | Color-only information | R09, R11 |
+| G12 | Missing captions | R12 |
+| G13 | Audio-only without transcript | R13 |
+| G14 | Audio-only notification | R14 |
+| G15 | Logical focus order | R08, R15 |
+| G16 | Decorative in focus tree | R15, R16 |
+| G17 | Insufficient spacing | R04, R17 |
+| G18 | Multi-finger gesture | R18 |
+| G19 | No destructive confirmation | R19 |
+| G20 | Label disappears on focus | R05, R20 |
+| G21 | Vague error messages | R21 |
+| G22 | Password show/hide toggle | R22 |
+| G23 | Unlabeled navigation | R23 |
+| G24 | Missing screen title | R24 |
+| G25 | Uncontrolled animation | R07, R25 |
+| G26 | Session timeout warning | R06, R26 |
+| G27 | Complex label language | R27 |
+| G28 | Font scale overflow | R10, R28 |
+| G29 | All-caps body text | R10, R29 |
+| G30 | Icon-only no label | R01, R02, R30 |
 
-### Core accessibility rules (R1–R10)
+### All detection rules (R01–R30)
 
-Deterministic rules implemented first from parsed XML/components. **R1–R8** are implemented in `src/rules.py`. **R9–R10** are optional (screenshot-based).
+Rules are detected from parsed XML/components. **R09** is optional (screenshot-based). Rule checker module is planned for Week 3+.
 
-| Rule ID | Guideline | Issue | Detection logic | Severity |
-|---------|-----------|-------|-----------------|----------|
-| R1 | G4 | Missing accessible label | Clickable element has empty `text` and empty `content-desc`. | High |
-| R2 | G4 | Image button without description | `ImageButton` / `ImageView` is clickable but `content-desc` is missing. | High |
-| R3 | G4 | Duplicate labels | Multiple clickable elements have the same visible `text` or `content-desc`. | Medium |
-| R4 | G3 | Small touch target | Clickable element width or height is below the expected threshold (preferably 48dp). | Medium / High |
-| R5 | G5 | Unlabeled input field | `EditText` has no hint, no `text`, and no `content-desc`. | High |
-| R6 | G3 | Disabled important control | Important clickable/control element is disabled or inaccessible without a clear reason. | Medium |
-| R7 | G8 | Invisible or zero-size component | Element has invalid `bounds` or zero visible area. | Medium |
-| R8 | G8 | Possible layout overlap | Two important UI elements have overlapping `bounds`. | Medium |
-| R9 | G1, G10 | Low contrast *(optional)* | Estimate foreground/background contrast from screenshot crop. | Medium |
-| R10 | G10 | Text overflow *(optional)* | Text component `bounds` are too small for visible text or likely clipped. | Low / Medium |
-
-### Extended accessibility rules (R11–R30)
-
-Additional rules for broader disability coverage and advanced checks.
-
-| Rule ID | Guideline | Issue | Detection logic | Severity |
-|---------|-----------|-------|-----------------|----------|
-| R11 | G1 | No color-independent indicator | UI uses color as the only way to convey information (e.g. red = error) with no icon, text, or pattern alongside it. | High |
-| R12 | G2 | No visual focus indicator | Focusable element has no visible focus ring or highlight state defined (missing `android:state_focused` drawable). | High |
-| R13 | G1 | Color contrast for non-text elements | Interactive elements (buttons, icons, borders) have contrast ratio below 3:1 against adjacent colors. | Medium |
-| R14 | G6 | Missing captions or transcript indicator | Media element (video/audio player) detected with no visible caption toggle, subtitle button, or transcript link nearby. | High |
-| R15 | G6 | Audio-only alert or notification | Alert or notification relies solely on sound with no visible banner, badge, or vibration indicator attribute present. | High |
-| R16 | G3 | Insufficient touch target spacing | Two or more clickable elements placed with a gap less than 8dp, risking accidental activation. | Medium |
-| R17 | G6 | Auto-playing media without pause control | Media element auto-starts with no accessible pause/stop button reachable within first focusable elements. | Medium |
-| R18 | G7 | Flashing or animated content | Element suggests rapid animation or flashing (`resource-id`/`class` contains `flash`, `blink`, `strobe`) that may trigger photosensitive seizures. | Critical |
-| R19 | G5 | Form field with no programmatic label association | `EditText` exists alongside a `TextView` label but not programmatically linked (no `labelFor` attribute set). | High |
-| R20 | G4 | Redundant or meaningless content description | Element's `content-desc` contains generic text like `image`, `icon`, or `button` rather than describing the actual action or meaning. | Medium |
-| R21 | G5, G10 | Missing error suggestion on input field | `EditText` that has a validation error but no `errorMessage` or hint describing what valid input looks like. | Medium |
-| R22 | G8 | Scrollable content with no scroll announcement | `ScrollView` or `RecyclerView` present but has no `contentDescription` indicating scrollable region for screen reader users. | Medium |
-| R23 | G10 | Language not set on text content | App-level or element-level locale/language attribute is missing, preventing screen readers from reading text in the correct language. | Medium |
-| R24 | G9 | Timed content with no extension option | Screen contains a countdown or session timer with no detectable option to extend or disable the time limit. | High |
-| R25 | G8, G10 | Missing skip navigation option | Long repeated navigation blocks (e.g. sidebars, menus) have no skip link or shortcut to jump to main content. | Medium |
-| R26 | G4 | Interactive element not announced as interactive | A clickable element has no role or class indicating it is a button/control, so screen readers treat it as plain text. | High |
-| R27 | G8 | Modal or dialog not trapping focus | Dialog/popup is present but focus is not confined within it, allowing screen reader to navigate behind the overlay. | High |
-| R28 | G8 | Missing loading or progress state announcement | Progress bar or loading spinner has no `contentDescription` or live region attribute to announce state to screen readers. | Medium |
-| R29 | G4 | Icon-only button with no label | Button contains only an icon drawable with no text and no `content-desc`, giving screen reader users no context. | High |
-| R30 | G5, G10 | Placeholder text used as only label | `EditText` relies solely on `android:hint` as its label with no separate visible or programmatic label linked to it. | Medium |
+| Rule ID | Guidelines | Issue (flag) | Severity |
+|---------|------------|--------------|----------|
+| R01 | G01,G02,G30 | Missing Label | High |
+| R02 | G02,G30 | No Image Desc | High |
+| R03 | G03 | Duplicate Label | Medium |
+| R04 | G04,G17 | Small Touch Target | High |
+| R05 | G05,G20 | Unlabeled Input | High |
+| R06 | G06,G26 | Disabled Control | Medium |
+| R07 | G07,G25 | Zero-Size Element | Medium |
+| R08 | G08,G15 | Layout Overlap | Medium |
+| R09 | G09,G11 | Low Contrast *(optional)* | Medium |
+| R10 | G10,G28,G29 | Text Overflow | Low/Medium |
+| R11 | G11 | Color-Only Info | High |
+| R12 | G12 | Missing Captions | High |
+| R13 | G13 | No Transcript | High |
+| R14 | G14 | Audio-Only Notification | Medium |
+| R15 | G15,G16 | Bad Focus Order | Medium |
+| R16 | G16 | Decorative In Focus Tree | Low |
+| R17 | G17 | Insufficient Spacing | Medium |
+| R18 | G18 | Multi-Gesture Only | High |
+| R19 | G19 | No Confirmation | Medium |
+| R20 | G05,G20 | Hint-Only Label | Medium |
+| R21 | G21 | Vague Error Message | High |
+| R22 | G22 | No Password Toggle | Medium |
+| R23 | G01,G23 | Unlabeled Nav Control | High |
+| R24 | G24 | Missing Screen Title | Medium |
+| R25 | G25 | Uncontrolled Animation | Medium |
+| R26 | G26 | No Timeout Warning | Medium |
+| R27 | G27 | Complex Label Language | Low |
+| R28 | G10,G28 | Font Scale Overflow | Medium |
+| R29 | G29 | All-Caps Body Text | Low |
+| R30 | G01,G30 | Icon-Only No Label | High |
 
 ### Coverage by disability
 
 | Disability | Rules |
 |------------|-------|
-| Color blindness | R11, R13 |
-| Low vision / contrast | R9 *(optional)*, R13 |
-| Hearing impairment | R14, R15, R17 |
-| Photosensitivity | R18 |
-| Motor / physical | R4, R6, R16, R24 |
-| Screen reader / blind | R1, R2, R3, R5, R12, R19, R20, R21, R22, R25, R26, R27, R28, R29, R30 |
-| Cognitive | R10 *(optional)*, R21, R23, R25, R30 |
+| Blind / Screen Reader | R01,R02,R03,R15,R16,R23,R24,R30 |
+| Low Vision | R09,R10,R28 |
+| Color Blind | R09,R11 |
+| Deaf / Hard of Hearing | R12,R13,R14 |
+| Motor Impaired | R04,R06,R17,R18,R19 |
+| Elderly | R04,R09,R10,R28 |
+| Cognitive / Memory | R03,R20,R21,R22,R27 |
+| ADHD / Epilepsy | R25,R26 |
+| Dyslexia / Low Literacy | R27,R29 |
+| All Users | R06,R07,R08 |
 
 ### Agent-enriched fields (`report.json` only)
 
@@ -185,19 +201,19 @@ Added after the agent stage; not present in raw `violations.json`:
 1. **Add `schema_version: "1.0"`** to every JSON file for forward compatibility.
 2. **Validate with JSON Schema** — use [`schemas/auditor_schema.json`](schemas/auditor_schema.json) in CI or at pipeline startup.
 3. **Enforce `total_violations === violations.length`** when writing `violations.json`.
-4. **Emit `class` and `bounds` in rules output** — implemented in `rules.py` via `_make_violation()`; wrap with `build_violations_document()` when saving `violations.json`.
-5. **Document `related_component`** for pair-based rules (e.g. R3 duplicate labels, R8 overlap, R16 touch spacing).
+4. **Emit `class` and `bounds` in rule-checker output** — denormalize on each violation when saving `violations.json`.
+5. **Document `related_component`** for pair-based rules (R03 duplicate labels, R08 overlap, R17 spacing).
 6. **Use empty strings, not `null`** for missing `text`, `content_desc`, and `resource_id`.
-7. **Add severity `summary`** in `report.json` including `critical` count for R18 and other Critical-severity rules.
-8. **Constrain enums** — `severity`: `Critical | High | Medium | Low`; `rule_id`: `R1`–`R30`.
+7. **Add severity `summary`** in `report.json` with counts per severity level.
+8. **Constrain enums** — `severity`: `Critical | High | Medium | Low`; `rule_id`: `R01`–`R30`.
 9. **Validate bounds** — exactly 4 integers; for visible components require `right > left` and `bottom > top`.
 
 ---
 
 ## 1. Parsed Components Schema
 **File:** `components.json`  
-**Producer:** Parser (`src/parser.py`)  
-**Consumer:** Rules engine (`src/rules.py`)
+**Producer:** XML parser (planned)  
+**Consumer:** Rule checker (planned)
 
 ```json
 {
@@ -247,8 +263,8 @@ Added after the agent stage; not present in raw `violations.json`:
 
 ## 2. Violations Schema
 **File:** `violations.json`  
-**Producer:** Rules engine (`src/rules.py`)  
-**Consumer:** Agent (`src/agent.py`)
+**Producer:** Rule checker (planned)  
+**Consumer:** Agent explanation module (planned)
 
 ```json
 {
@@ -259,22 +275,22 @@ Added after the agent stage; not present in raw `violations.json`:
   "total_violations": 2,
   "violations": [
     {
-      "rule_id": "R2",
+      "rule_id": "R02",
       "issue": "Image button without description",
       "component_id": "c_001",
       "class": "android.widget.ImageButton",
       "bounds": [32, 50, 80, 98],
-      "guideline": "ImageButtons must have a content description that describes their action.",
+      "guideline": "G02 — Image button without description",
       "severity": "High",
       "recommendation": "Add android:contentDescription with the action name, such as Back."
     },
     {
-      "rule_id": "R5",
+      "rule_id": "R05",
       "issue": "Unlabeled input field",
       "component_id": "c_002",
       "class": "android.widget.EditText",
       "bounds": [32, 120, 400, 168],
-      "guideline": "All input fields must have a visible label, hint, or content description.",
+      "guideline": "G05 — Unlabeled input field",
       "severity": "High",
       "recommendation": "Add android:hint or a programmatic label linked via labelFor."
     }
@@ -304,26 +320,26 @@ Added after the agent stage; not present in raw `violations.json`:
   },
   "violations": [
     {
-      "rule_id": "R2",
+      "rule_id": "R02",
       "issue": "Image button without description",
       "component_id": "c_001",
       "class": "android.widget.ImageButton",
       "bounds": [32, 50, 80, 98],
       "severity": "High",
-      "guideline": "ImageButtons must have a content description that describes their action.",
+      "guideline": "G02 — Image button without description",
       "recommendation": "Add android:contentDescription with the action name, such as Back.",
       "agent_explanation": "This ImageButton acts as a back button but has no text alternative.",
       "agent_why_it_matters": "Screen reader users will only hear 'button, unlabelled' and won't know what it does.",
       "agent_developer_fix": "In your XML layout, add android:contentDescription=\"@string/back_action\" to the ImageButton."
     },
     {
-      "rule_id": "R5",
+      "rule_id": "R05",
       "issue": "Unlabeled input field",
       "component_id": "c_002",
       "class": "android.widget.EditText",
       "bounds": [32, 120, 400, 168],
       "severity": "High",
-      "guideline": "All input fields must have a visible label, hint, or content description.",
+      "guideline": "G05 — Unlabeled input field",
       "recommendation": "Add android:hint or a programmatic label linked via labelFor.",
       "agent_explanation": "The username field has no hint, text, or associated label.",
       "agent_why_it_matters": "Users relying on assistive technology cannot tell what information to enter.",

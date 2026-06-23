@@ -1,8 +1,8 @@
 # Agentic Accessibility Auditor
 # Accessibility Guidelines & Rule Mapping Report
 
-**Summer Internship 2026 | Android Mobile UI Accessibility**  
-**Prepared by:** Ayesha Naveed (revised for rule alignment)  
+**FAST University 2025 — Summer Internship**  
+**Prepared by:** Muhammad Noor (schema & mapping) · Ayesha Naveed (original guidelines, revised)  
 **Schema version:** 1.0  
 **Related docs:** [`json_schemas.md`](json_schemas.md) · [`schemas/auditor_schema.json`](schemas/auditor_schema.json)
 
@@ -10,194 +10,152 @@
 
 ## 1. Introduction
 
-This document defines the accessibility **guidelines** followed by the Agentic Accessibility Auditor and maps each guideline to the specific **rules** implemented in the rule-checking engine.
+This document defines all **30 accessibility guidelines (G01–G30)** and **30 detection rules (R01–R30)** for the Agentic Accessibility Auditor. Guidelines describe *what* must be accessible; rules describe *how* violations are detected from UIAutomator XML (and optional screenshot analysis).
 
-The system audits Android mobile UI screens by accepting a screenshot and UIAutomator XML hierarchy, detecting accessibility violations, and generating developer-friendly fix recommendations.
+The pipeline maps each detected violation to one or more guideline IDs, a severity, and a developer recommendation.
 
-### Rule numbering (canonical)
-
-| Tier | Rule IDs | Description | Implementation status |
-|------|----------|-------------|------------------------|
-| **Core** | **R1–R10** | Detectable from parsed XML/components first; R9–R10 optional (screenshot) | R1–R8 in `rules.py`; R9–R10 planned |
-| **Extended** | **R11–R30** | Broader WCAG/disability coverage; advanced checks | Documented; implementation planned |
-
-> **Important:** Each rule ID is unique. Core rules use R1–R10. Extended rules use R11–R30. Do not reuse the same ID for two different checks.
+> **Important:** Each rule ID is unique (R01–R30). Each guideline ID is unique (G01–G30). A rule may enforce multiple guidelines; a guideline may be covered by multiple rules.
 
 ---
 
-## 2. Accessibility Guidelines
+## 2. All 30 Accessibility Guidelines (G01–G30)
 
-Guidelines are broad principles (G1–G10). Rules in Section 3 are specific, measurable checks derived from these guidelines.
-
-### Guideline G1 — Visual Accessibility (Color & Contrast)
-
-UI elements must not rely on color alone to convey information. Interactive elements must meet minimum contrast ratios so users with color blindness or low vision can perceive and operate them.
-
-- **Applies to:** Color blindness, Low vision  
-- **WCAG:** 1.4.1 (Use of Color), 1.4.3 (Contrast Minimum), 1.4.11 (Non-text Contrast)  
-- **Rules:** R11, R13, R9 *(optional)*
-
-### Guideline G2 — Focus & Keyboard Navigation
-
-All interactive elements must have a clearly visible focus indicator so users navigating by keyboard or switch access can identify which element is focused.
-
-- **Applies to:** Motor/physical disabilities, Screen reader users  
-- **WCAG:** 2.4.7 (Focus Visible), 2.4.3 (Focus Order)  
-- **Rules:** R12
-
-### Guideline G3 — Touch Target & Motor Accessibility
-
-Interactive elements must be large enough and spaced far enough apart to be tapped without accidental activation. Minimum recommended touch target is 48×48 dp with at least 8 dp spacing between targets.
-
-- **Applies to:** Motor/physical disabilities, Elderly users  
-- **WCAG:** 2.5.5 (Target Size), 2.5.8 (Target Size Minimum)  
-- **Rules:** R4, R16, R6
-
-### Guideline G4 — Screen Reader & Label Accessibility
-
-Every interactive and informative UI element must have a meaningful programmatic label. Labels must describe purpose or action, not only element type.
-
-- **Applies to:** Blind users, Screen reader users  
-- **WCAG:** 1.3.1 (Info and Relationships), 4.1.2 (Name, Role, Value)  
-- **Rules:** R1, R2, R3, R20, R26, R29
-
-### Guideline G5 — Form & Input Accessibility
-
-Input fields must have visible or programmatically associated labels. Error messages must describe valid input. Placeholder text alone is not sufficient.
-
-- **Applies to:** Screen reader users, Cognitive disabilities  
-- **WCAG:** 1.3.1, 3.3.1 (Error Identification), 3.3.2 (Labels or Instructions)  
-- **Rules:** R5, R19, R21, R30
-
-### Guideline G6 — Media & Multimedia Accessibility
-
-Audio/video must provide captions, transcripts, or visible alternatives. Alerts must not rely solely on sound. Auto-playing media must include accessible pause/stop.
-
-- **Applies to:** Hearing impairment, Deaf users  
-- **WCAG:** 1.2.1 (Audio-only), 1.2.2 (Captions), 1.4.2 (Audio Control)  
-- **Rules:** R14, R15, R17
-
-### Guideline G7 — Photosensitivity & Animation Safety
-
-Content must not flash more than three times per second. Animations should respect reduced-motion preferences.
-
-- **Applies to:** Photosensitivity, Epilepsy  
-- **WCAG:** 2.3.1 (Three Flashes or Below Threshold)  
-- **Rules:** R18
-
-### Guideline G8 — Navigation & Structure
-
-Repeated navigation must include skip links. Interactive elements must have correct roles. Modals must trap focus. Scrollable regions and loading states must be announced.
-
-- **Applies to:** Screen reader users, Motor/physical disabilities  
-- **WCAG:** 2.4.1 (Bypass Blocks), 4.1.2 (Name, Role, Value), 2.4.3 (Focus Order)  
-- **Rules:** R25, R27, R22, R28, R7, R8
-
-### Guideline G9 — Time & Session Accessibility
-
-Users must be able to extend, adjust, or disable time limits on timed content or sessions.
-
-- **Applies to:** Motor/physical disabilities, Cognitive disabilities  
-- **WCAG:** 2.2.1 (Timing Adjustable)  
-- **Rules:** R24
-
-### Guideline G10 — Language & Cognitive Clarity
-
-App/element language must be set programmatically. Instructions must be clear. Text must not be clipped; scrollable regions must be announced.
-
-- **Applies to:** Cognitive disabilities, Screen reader users, Non-native speakers  
-- **WCAG:** 3.1.1 (Language of Page), 3.1.2 (Language of Parts)  
-- **Rules:** R23, R10 *(optional)*, R21, R25, R30
+| ID | Issue / Guideline | Description | User Group | WCAG |
+|----|-------------------|-------------|------------|------|
+| G01 | Missing accessible label | Every interactive element must have a visible or programmatic label for screen readers. | Blind / Low Vision | 4.1.2 |
+| G02 | Image button without description | ImageButton and clickable ImageView must have a content description. | Blind | 1.1.1 |
+| G03 | Duplicate labels | No two interactive elements should share identical text/content-desc unless same action. | Blind / Cognitive | 4.1.2 |
+| G04 | Small touch target | Tappable elements must meet minimum size (48×48 dp). | Motor / Elderly | 2.5.5 |
+| G05 | Unlabeled input field | Every EditText must have a programmatic label (hint, labelFor, or content-desc). | Blind / Cognitive | 1.3.1 |
+| G06 | Disabled important control | Critical controls must not be disabled without explanation or alternative. | All Users | 2.1.1 |
+| G07 | Invisible or zero-size component | Zero-area or invalid bounds must be removed from focus tree. | All / Blind | 1.3.1 |
+| G08 | Possible layout overlap | Elements must not overlap in ways that hide content or break focus order. | All / Blind | 1.3.2 |
+| G09 | Low contrast | Text and UI components must meet minimum contrast ratios. | Low Vision / Color Blind | 1.4.3 |
+| G10 | Text overflow | Text bounds must fit full content without clipping. | Low Vision / Cognitive | 1.4.4 |
+| G11 | Information conveyed by color alone | Color must not be the only indicator of state or meaning. | Color Blind | 1.4.1 |
+| G12 | Missing captions on video | Video with spoken audio must provide captions/subtitles. | Deaf / Hard of Hearing | 1.2.2 |
+| G13 | Audio-only without transcript | Audio-only content must have a text transcript in the UI. | Deaf / Hard of Hearing | 1.2.1 |
+| G14 | Notification uses audio only | Alerts must include visual indicators, not sound alone. | Deaf / Hard of Hearing | 1.3.3 |
+| G15 | Logical focus / reading order | Focus order must follow natural top-to-bottom reading sequence. | Blind / Motor | 1.3.2 / 2.4.3 |
+| G16 | Non-interactive elements in focus tree | Decorative elements must be excluded from accessibility focus. | Blind | 1.3.1 |
+| G17 | Insufficient touch target spacing | Adjacent targets need ≥8 dp spacing to prevent mis-taps. | Motor Impaired | 2.5.5 |
+| G18 | Multi-finger gesture required | All functionality must work with a single pointer. | Motor / Single Hand | 2.1.1 |
+| G19 | No confirmation for destructive action | Irreversible actions must require confirmation. | Motor / Cognitive | 3.3.4 |
+| G20 | Input label disappears on focus | Labels must remain visible while typing. | Cognitive / Memory | 3.3.2 |
+| G21 | Vague or missing error messages | Errors must identify the field and how to fix it. | Cognitive / Blind | 3.3.1 / 3.3.3 |
+| G22 | Password field lacks show/hide toggle | Password fields should offer reveal/hide control. | Cognitive / Motor | 3.3.1 |
+| G23 | Navigation control not labeled | Back, home, close, menu buttons must have descriptive labels. | Blind | 2.4.6 |
+| G24 | Screen has no descriptive title | Every screen needs a visible title or heading. | Blind / Cognitive | 2.4.2 |
+| G25 | Uncontrolled auto-updating content | Animation/auto-update must be pausable/stoppable. | Cognitive / Epilepsy / ADHD | 2.2.2 |
+| G26 | Session timeout without warning | Timed sessions must warn ≥20 s before expiry with extend option. | Cognitive / Slow Readers | 2.2.1 |
+| G27 | Complex or jargon-heavy labels | Use plain, simple language in labels and hints. | Cognitive / Low Literacy | 3.1.5 |
+| G28 | Text does not scale with system font | Text must remain readable at 200% system font size. | Low Vision / Elderly | 1.4.4 |
+| G29 | All-caps body content | All-caps must not be used for paragraph or instruction text. | Cognitive / Dyslexia | 3.1.5 |
+| G30 | Icon-only button with no text alternative | Icon-only buttons must have content-desc describing the action. | Blind / Low Literacy | 1.1.1 |
 
 ---
 
-## 3. Accessibility Rules
+## 3. All 30 Detection Rules (R01–R30)
 
-Rules are applied to the parsed UIAutomator XML hierarchy of each Android screen.
+| Rule | Detection logic (XML condition → flag) | Severity | Guidelines |
+|------|----------------------------------------|----------|------------|
+| R01 | `clickable=true` AND `text=''` AND `content-desc=''` → Missing Label | High | G01, G02, G30 |
+| R02 | `ImageButton` OR clickable `ImageView` AND `content-desc=''` → No Image Desc | High | G02, G30 |
+| R03 | Two+ clickable elements share identical text/content-desc → Duplicate Label | Medium | G03 |
+| R04 | `clickable=true` AND (width < 48dp OR height < 48dp) → Small Touch Target | High | G04, G17 |
+| R05 | `EditText` AND `hint=''` AND `text=''` AND `content-desc=''` → Unlabeled Input | High | G05, G20 |
+| R06 | `clickable=true` AND `enabled=false` AND no explanation TextView → Disabled Control | Medium | G06, G26 |
+| R07 | bounds width=0 OR height=0 OR invalid rect → Zero-Size Element | Medium | G07, G25 |
+| R08 | Two elements overlap >50% of smaller area → Layout Overlap | Medium | G08, G15 |
+| R09 | Contrast ratio < 4.5:1 (text) or < 3:1 (icons) *(optional, screenshot)* → Low Contrast | Medium | G09, G11 |
+| R10 | TextView bounds height < estimated text height → Text Overflow | Low/Medium | G10, G28, G29 |
+| R11 | State change only via color, no icon/text → Color-Only Info | High | G11 |
+| R12 | VideoView present AND no caption toggle → Missing Captions | High | G12 |
+| R13 | Audio-only media AND no transcript link → No Transcript | High | G13 |
+| R14 | Alert/notification AND no visible icon/banner → Audio-Only Notification | Medium | G14 |
+| R15 | Focus order ≠ visual top-bottom order → Bad Focus Order | Medium | G15, G16 |
+| R16 | Decorative element `focusable=true` → Decorative In Focus Tree | Low | G16 |
+| R17 | Gap between clickable elements < 8dp → Insufficient Spacing | Medium | G17 |
+| R18 | Feature only via multi-touch gesture → Multi-Gesture Only | High | G18 |
+| R19 | Destructive button text AND no confirmation dialog → No Confirmation | Medium | G19 |
+| R20 | EditText hint-only, no paired label TextView → Hint-Only Label | Medium | G05, G20 |
+| R21 | Error TextView empty or vague → Vague Error Message | High | G21 |
+| R22 | Password EditText AND no show/hide toggle → No Password Toggle | Medium | G22 |
+| R23 | Nav ImageButton (`back`/`close`/`home`/`menu`) AND `content-desc=''` → Unlabeled Nav Control | High | G01, G23 |
+| R24 | Toolbar title TextView empty → Missing Screen Title | Medium | G24 |
+| R25 | AnimationView/auto-play media AND no pause control → Uncontrolled Animation | Medium | G25 |
+| R26 | Countdown dialog AND no Extend/OK button → No Timeout Warning | Medium | G26 |
+| R27 | content-desc/hint overly technical (long words) → Complex Label Language | Low | G27 |
+| R28 | TextView bounds don't fit 200% font scale → Font Scale Overflow | Medium | G10, G28 |
+| R29 | `textAllCaps=true` AND word count > 3 → All-Caps Body Text | Low | G29 |
+| R30 | `clickable=true` AND `text=''` AND icon-only class → Icon-Only No Label | High | G01, G30 |
 
-### 3.1 Core rules (R1–R10)
-
-Implemented first from XML/components. **R1–R8** are in `src/rules.py`. **R9–R10** are optional (require screenshot analysis).
-
-| Rule ID | Guideline | Issue | Detection logic | Severity |
-|---------|-----------|-------|-----------------|----------|
-| R1 | G4 | Missing accessible label | Clickable element has empty `text` and empty `content-desc`. | High |
-| R2 | G4 | Image button without description | `ImageButton` / `ImageView` is clickable but `content-desc` is missing. | High |
-| R3 | G4 | Duplicate labels | Multiple clickable elements share the same visible `text` or `content-desc`. | Medium |
-| R4 | G3 | Small touch target | Clickable element width or height is below 48 dp (threshold). | Medium / High |
-| R5 | G5 | Unlabeled input field | `EditText` has no hint, no `text`, and no `content-desc`. | High |
-| R6 | G3 | Disabled important control | Important clickable control is disabled without clear reason. | Medium |
-| R7 | G8 | Invisible or zero-size component | Element has invalid `bounds` or zero visible area. | Medium |
-| R8 | G8 | Possible layout overlap | Two important UI elements have overlapping `bounds`. | Medium |
-| R9 | G1, G10 | Low contrast *(optional)* | Estimate foreground/background contrast from screenshot crop. | Medium |
-| R10 | G10 | Text overflow *(optional)* | Text component `bounds` are too small for visible text or likely clipped. | Low / Medium |
-
-### 3.2 Extended rules (R11–R30)
-
-Broader disability and WCAG coverage. Documented for pipeline v1.0; implementation planned after core rules.
-
-| Rule ID | Guideline | Issue | Detection logic | Severity |
-|---------|-----------|-------|-----------------|----------|
-| R11 | G1 | No color-independent indicator | UI uses color as the only way to convey information with no icon, text, or pattern. | High |
-| R12 | G2 | No visual focus indicator | Focusable element has no visible focus ring (`android:state_focused` drawable). | High |
-| R13 | G1 | Color contrast for non-text elements | Interactive elements have contrast below 3:1 against adjacent colors. | Medium |
-| R14 | G6 | Missing captions or transcript indicator | Media element has no caption toggle, subtitle button, or transcript link nearby. | High |
-| R15 | G6 | Audio-only alert or notification | Alert relies solely on sound with no visible banner, badge, or vibration indicator. | High |
-| R16 | G3 | Insufficient touch target spacing | Two+ clickable elements have gap less than 8 dp. | Medium |
-| R17 | G6 | Auto-playing media without pause control | Media auto-starts with no accessible pause/stop in first focusable elements. | Medium |
-| R18 | G7 | Flashing or animated content | `resource-id`/`class` suggests flash/blink/strobe patterns. | Critical |
-| R19 | G5 | Form field with no programmatic label association | `EditText` beside `TextView` label but no `labelFor` link. | High |
-| R20 | G4 | Redundant or meaningless content description | `content-desc` is generic (`image`, `icon`, `button`) not descriptive. | Medium |
-| R21 | G5, G10 | Missing error suggestion on input field | `EditText` has validation error but no `errorMessage` or helpful hint. | Medium |
-| R22 | G8 | Scrollable content with no scroll announcement | `ScrollView` / `RecyclerView` lacks scrollable `contentDescription`. | Medium |
-| R23 | G10 | Language not set on text content | App/element locale attribute missing for screen readers. | Medium |
-| R24 | G9 | Timed content with no extension option | Countdown/session timer with no extend/disable option. | High |
-| R25 | G8, G10 | Missing skip navigation option | Long repeated nav blocks with no skip link to main content. | Medium |
-| R26 | G4 | Interactive element not announced as interactive | Clickable element has no role/class indicating button/control. | High |
-| R27 | G8 | Modal or dialog not trapping focus | Dialog present but focus not confined; user navigates behind overlay. | High |
-| R28 | G8 | Missing loading or progress state announcement | Progress/spinner has no `contentDescription` or live region. | Medium |
-| R29 | G4 | Icon-only button with no label | Button has icon only; no text and no `content-desc`. | High |
-| R30 | G5, G10 | Placeholder text used as only label | `EditText` relies solely on `android:hint` with no linked label. | Medium |
-
-### 3.3 Guideline → rules quick reference
-
-| Guideline | Rules |
-|-----------|-------|
-| G1 | R11, R13, R9* |
-| G2 | R12 |
-| G3 | R4, R16, R6 |
-| G4 | R1, R2, R3, R20, R26, R29 |
-| G5 | R5, R19, R21, R30 |
-| G6 | R14, R15, R17 |
-| G7 | R18 |
-| G8 | R7, R8, R22, R25, R27, R28 |
-| G9 | R24 |
-| G10 | R10*, R23, R21, R25, R30 |
-
-\* Optional rules requiring screenshot analysis.
+Pair-based rules may include `related_component`: **R03**, **R08**, **R17**.
 
 ---
 
-## 4. Coverage by Disability Category
+## 4. Guideline → Rule Mapping (quick reference)
 
-| Disability category | Covered by rules |
-|---------------------|------------------|
-| Color blindness | R11, R13 |
-| Low vision / contrast | R9*, R13 |
-| Hearing impairment | R14, R15, R17 |
-| Photosensitivity / Epilepsy | R18 |
-| Motor / physical | R4, R6, R16, R24 |
-| Blind / Screen reader | R1, R2, R3, R5, R12, R19, R20, R21, R22, R25, R26, R27, R28, R29, R30 |
-| Cognitive | R10*, R21, R23, R25, R30 |
+| G-ID | Guidelines | Rules |
+|------|------------|-------|
+| G01 | Missing accessible label | R01, R23, R30 |
+| G02 | Image button without description | R01, R02 |
+| G03 | Duplicate labels | R03 |
+| G04 | Small touch target | R04 |
+| G05 | Unlabeled input field | R05, R20 |
+| G06 | Disabled important control | R06 |
+| G07 | Invisible or zero-size component | R07 |
+| G08 | Possible layout overlap | R08 |
+| G09 | Low contrast | R09 |
+| G10 | Text overflow | R10, R28 |
+| G11 | Color-only information | R09, R11 |
+| G12 | Missing captions | R12 |
+| G13 | Audio-only without transcript | R13 |
+| G14 | Audio-only notification | R14 |
+| G15 | Logical focus order | R08, R15 |
+| G16 | Decorative in focus tree | R15, R16 |
+| G17 | Insufficient spacing | R04, R17 |
+| G18 | Multi-finger gesture | R18 |
+| G19 | No destructive confirmation | R19 |
+| G20 | Label disappears on focus | R05, R20 |
+| G21 | Vague error messages | R21 |
+| G22 | Password show/hide toggle | R22 |
+| G23 | Unlabeled navigation | R23 |
+| G24 | Missing screen title | R24 |
+| G25 | Uncontrolled animation | R07, R25 |
+| G26 | Session timeout warning | R06, R26 |
+| G27 | Complex label language | R27 |
+| G28 | Font scale overflow | R10, R28 |
+| G29 | All-caps body text | R10, R29 |
+| G30 | Icon-only no label | R01, R02, R30 |
 
 ---
 
-## 5. JSON schema alignment
+## 5. User Group Coverage
 
-Violations emitted by the pipeline use `rule_id` (R1–R30) and a text `guideline` field per [`json_schemas.md`](json_schemas.md). Formal validation: [`schemas/auditor_schema.json`](schemas/auditor_schema.json).
-
-Pair-based rules may include `related_component`: **R3**, **R8**, **R16**.
+| User / Disability Group | Guidelines | Primary Rules |
+|-------------------------|------------|---------------|
+| Blind / Screen Reader | G01,G02,G03,G05,G15,G16,G23,G24,G30 | R01,R02,R03,R15,R16,R23,R24,R30 |
+| Low Vision | G09,G10,G28 | R09,R10,R28 |
+| Color Blind | G09,G11 | R09,R11 |
+| Deaf / Hard of Hearing | G12,G13,G14 | R12,R13,R14 |
+| Motor Impaired / Switch | G04,G06,G17,G18,G19 | R04,R06,R17,R18,R19 |
+| Elderly | G04,G09,G10,G28 | R04,R09,R10,R28 |
+| Cognitive / Memory | G03,G20,G21,G22,G27 | R03,R20,R21,R22,R27 |
+| ADHD / Epilepsy | G25,G26 | R25,R26 |
+| Dyslexia / Low Literacy | G27,G29 | R27,R29 |
+| All Users | G06,G07,G08 | R06,R07,R08 |
 
 ---
 
-*Canonical source for `Accessibility_Guidelines_Report.pdf`. Export: run `python scripts/export_guidelines_html.py`, open `docs/Accessibility_Guidelines_Report.html`, then Print → Save as PDF.*
+## 6. JSON schema alignment
+
+Violations use `rule_id` (R01–R30), `guideline` (human-readable text referencing G-ID), `severity`, and `recommendation` per [`json_schemas.md`](json_schemas.md). Formal validation: [`schemas/auditor_schema.json`](schemas/auditor_schema.json).
+
+**Pipeline (planned):** Parser → `components.json` → Rule checker → `violations.json` → Agent → `report.json` → HTML/PDF report.
+
+The agent layer receives **only** rule-detected violations and must not invent new issues.
+
+---
+
+*Canonical source for the guidelines PDF. Regenerate HTML via export script or Print → PDF from `docs/Accessibility_Guidelines_Report.html`.*

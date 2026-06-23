@@ -1,9 +1,10 @@
 # Quality Assurance (QA) Test Plan
-**Project:** Agentic Accessibility Auditor
-**Author:** Intern 3 (Lead)
+**Project:** Agentic Accessibility Auditor  
+**Author:** Intern 3 (Lead)  
+**Related:** [`accessibility_guidelines_report.md`](accessibility_guidelines_report.md) · [`json_schemas.md`](json_schemas.md)
 
 ## 1. Objective
-To verify that the Agentic Accessibility Auditor correctly identifies UI accessibility violations based on the defined rules (R1-R10) and provides accurate, helpful developer fixes via the Agentic Layer.
+To verify that the Agentic Accessibility Auditor correctly identifies UI accessibility violations based on the defined **core rules (R1–R10)** and provides accurate, helpful developer fixes via the Agentic Layer. Extended rules **R11–R30** are documented for future implementation.
 
 ## 2. Testing Scope
 - **Rule Correctness:** Ensure the rule-checker logic accurately flags issues without excessive false positives.

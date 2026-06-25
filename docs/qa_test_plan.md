@@ -14,7 +14,7 @@ To verify that the Agentic Accessibility Auditor correctly identifies UI accessi
 
 ## 3. Test Data Strategy
 - **MASC dataset (7,068 screens):** Split into train (70%) / val (15%) / test (15%) via `scripts/split_masc_dataset.py`. Use train+val for development and tuning; MASC test split for internal regression only.
-- **OneExample dataset (266 screens):** Held out entirely as **unseen final evaluation** — never used during rule development or threshold tuning.
+- **Rico holdout (1,698 screens):** Filtered from `final_rico` with zero byte-level overlap against MASC (see [`rico_holdout_dataset.md`](rico_holdout_dataset.md)). Held out entirely as **unseen final evaluation** — never used during rule development or threshold tuning.
 - **Controlled Examples:** 10–15 manually crafted XML files with known injected violations (R01–R05 priority per internship acceptance criteria).
 
 ## 4. Manual Validation Process
@@ -36,5 +36,5 @@ For each screen tested, a reviewer will inspect the generated HTML/PDF report an
 ## 6. Sign-off Criteria
 - Rules R01–R05 reliably detect issues on 10–15 controlled test cases.
 - Pipeline processes MASC train split without fatal errors.
-- Final evaluation runs on **OneExample** (unseen) with documented manual validation summary.
+- Final evaluation runs on **Rico holdout** (`data/data-rico-holdout/`, unseen) with documented manual validation summary.
 - Generated HTML report is readable and matches JSON output.

@@ -133,7 +133,7 @@ Large datasets must be downloaded or copied manually.
 
 | Dataset | Path | Notes |
 |---------|------|-------|
-| **MASC** | `data/data-masc/` | [Google Drive — MASC dataset](https://drive.google.com/file/d/1hJlhxXtPwC3h8bSty45IQW0YxI44b3Le/view?usp=sharing) |
+| **MASC** | `data/data-masc/` | [Google Drive — MASC dataset](https://drive.google.com/file/d/1kx8qRbOtdQbbewZgfBTeCIj7lNvabFTF/view?usp=sharing) |
 | **final_rico** | `data/final_rico/final_rico/` | Raw Rico source (2,000 screens). Not for direct eval — 302 screens overlap MASC. |
 | **Rico holdout** | `data/data-rico-holdout/` | Filtered holdout (1,698 screens, zero MASC overlap). See [`rico_holdout_dataset.md`](rico_holdout_dataset.md). |
 

@@ -2,7 +2,7 @@
 Create stratified train / val / test splits for the full MASC dataset (7,068 screens).
 
 Use MASC splits for development and internal regression only.
-OneExample (data/data-oneexample/, 266 screens) is held out for unseen final evaluation.
+Rico holdout (`data/data-rico-holdout/`) is held out for unseen final evaluation.
 
 Pairs each screenshot (data/data-masc/screenshots/<category>/<id>.jpg)
 with its XML (data/data-masc/xml/<category>/<id>.xml) using labels.csv.

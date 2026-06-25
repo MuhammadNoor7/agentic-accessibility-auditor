@@ -86,10 +86,10 @@ agentic-accessibility-auditor/
 ## Dataset
 
 **MASC (Mobile App Screenshots Corpus)** — training & development  
-[Google Drive — MASC dataset](https://drive.google.com/file/d/1hJlhxXtPwC3h8bSty45IQW0YxI44b3Le/view?usp=sharing)
+[Google Drive — MASC dataset](https://drive.google.com/file/d/1kx8qRbOtdQbbewZgfBTeCIj7lNvabFTF/view?usp=sharing)
 
 **Rico holdout** — final unseen evaluation (filtered from `final_rico`, zero overlap with MASC)  
-See [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md) for the full filtering process.
+See [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md) and (https://drive.google.com/file/d/1DmFb4vAanD8dnzv2HAg38YpGk7ReTwfv/view?usp=sharing) for the full filtering process.
 
 | Dataset | Location | Split | Use |
 |---------|----------|-------|-----|

@@ -39,10 +39,14 @@ agentic-accessibility-auditor/
 │   │   ├── parsed/             # Batch parser output for MASC screens
 │   │   └── splits/             # train.csv, val.csv, test.csv (70/15/15)
 │   │
-│   └── data-oneexample/        # OneExample holdout (266 pairs) — unseen final testing
-│       ├── screenshots/
-│       ├── xml/
-│       └── json/
+│   ├── final_rico/             # Raw Rico source (2,000 screens) — local only, not in Git
+│   │   └── final_rico/         # Category_ID.jpg / .xml / .json (flat layout)
+│   │
+│   └── data-rico-holdout/      # MASC-disjoint Rico holdout (1,698 pairs) — unseen final testing
+│       ├── screenshots/{category}/
+│       ├── xml/{category}/
+│       ├── json/{category}/
+│       └── manifest/           # screens.csv, selection_report.json, sheet import CSV
 │
 ├── outputs/
 │   ├── violations/             # Stage 2 output: {screen}_violations.json
@@ -81,17 +85,36 @@ agentic-accessibility-auditor/
 
 ## Dataset
 
-**MASC (Mobile App Screenshots Corpus)**  
+**MASC (Mobile App Screenshots Corpus)** — training & development  
 [Google Drive — MASC dataset](https://drive.google.com/file/d/1hJlhxXtPwC3h8bSty45IQW0YxI44b3Le/view?usp=sharing)
+
+**Rico holdout** — final unseen evaluation (filtered from `final_rico`, zero overlap with MASC)  
+See [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md) for the full filtering process.
 
 | Dataset | Location | Split | Use |
 |---------|----------|-------|-----|
 | **MASC** | `data/data-masc/` | Train 70% / Val 15% / Test 15% | Development & tuning |
-| **OneExample** | `data/data-oneexample/` | No split (100% held out) | Unseen final evaluation only |
+| **Rico holdout** | `data/data-rico-holdout/` | No split (100% held out) | **Final unseen evaluation only** |
+| **final_rico** | `data/final_rico/final_rico/` | Source only (not for direct eval) | Raw Rico corpus; 302/2000 screens overlap MASC |
+
+### How Rico holdout was filtered from `final_rico`
+
+1. Hash every `.jpg`, `.xml`, and `.json` in both `data-masc` and `final_rico`.
+2. **Reject** any `final_rico` screen if **any** of its three files matches a MASC file by MD5 (same bytes).
+3. Keep only screens with a complete jpg + xml + json triplet.
+4. Stratify across the same 10 categories as MASC; include all 1,698 remaining unique screens.
+
+Verified: **0 byte-level collisions** with MASC across 5,094 holdout files.
 
 Regenerate MASC splits:
 ```bash
 python scripts/split_masc_dataset.py
+```
+
+Build Rico holdout from `final_rico`:
+```bash
+python scripts/build_rico_holdout.py
+python scripts/build_rico_holdout_sheet.py
 ```
 
 ---
@@ -101,8 +124,10 @@ python scripts/split_masc_dataset.py
 | Script | Purpose |
 |--------|---------|
 | `split_masc_dataset.py` | Create train/val/test CSVs for MASC |
+| `build_rico_holdout.py` | Build MASC-disjoint holdout from `final_rico` |
+| `build_rico_holdout_sheet.py` | Build Google Sheet import xlsx/csv for Rico holdout |
+| `compare_datasets.py` | Compare MASC vs `final_rico` for content overlap |
 | `convert_json-to-xml.py` | Convert MASC JSON hierarchies to XML |
-| `build_oneexample_sheet.py` | Build OneExample Google Sheet import CSV |
 | `generate_labels_csv.py` | Generate screenshot labels CSV |
 | `copy_matched_jsons.py` | Copy matched JSON files into dataset folders |
 
@@ -145,8 +170,11 @@ docker-compose up --build
 
 | Doc | Description |
 |-----|-------------|
+| [`docs/windows_setup.md`](docs/windows_setup.md) | Windows install & onboarding (Linux → Windows) |
 | [`docs/accessibility_guidelines_report.md`](docs/accessibility_guidelines_report.md) | G01–G30 guidelines, R01–R30 rules |
 | [`docs/json_schemas.md`](docs/json_schemas.md) | JSON schemas between modules |
 | [`docs/schemas/auditor_schema.json`](docs/schemas/auditor_schema.json) | Formal JSON Schema v1.0 |
-| [`docs/qa_test_plan.md`](docs/qa_test_plan.md) | QA test plan & sign-off criteria |
+| [`docs/qa_test_plan.md`](docs/qa_test_plan.md) | QA test cases & sign-off criteria |
+| [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md) | Rico holdout filtering, layout, and regeneration |
+| [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md) | Rico holdout filtering, layout, and regeneration |
 | [`docs/examples/`](docs/examples/) | Sample JSON for all pipeline stages |

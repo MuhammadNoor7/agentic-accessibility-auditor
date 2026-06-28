@@ -1,0 +1,204 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "welcome_9821",
+  "image_path": "data-masc/data-masc/screenshots/welcome/9821.png",
+  "xml_path": "data-masc/data-masc/xml/welcome/9821.xml",
+  "total_violations": 13,
+  "violations": [
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_006",
+      "class": "android.view.View",
+      "bounds": [
+        64,
+        0,
+        64,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_014",
+      "class": "android.widget.FrameLayout",
+      "bounds": [
+        64,
+        0,
+        64,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_015",
+      "class": "android.widget.FrameLayout",
+      "bounds": [
+        64,
+        0,
+        64,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_018",
+      "class": "android.widget.Button",
+      "bounds": [
+        92,
+        2196,
+        92,
+        2196
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_018",
+      "class": "android.widget.Button",
+      "bounds": [
+        92,
+        2196,
+        92,
+        2196
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_019",
+      "class": "android.widget.Button",
+      "bounds": [
+        92,
+        2196,
+        92,
+        2196
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_019",
+      "class": "android.widget.Button",
+      "bounds": [
+        92,
+        2196,
+        92,
+        2196
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_021",
+      "class": "android.view.ViewStub",
+      "bounds": [
+        36,
+        0,
+        36,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_020",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & android.widget.Button",
+      "bounds": [
+        0,
+        0,
+        1368,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_020",
+      "class": "android.widget.FrameLayout & android.widget.Button",
+      "bounds": [
+        0,
+        0,
+        1368,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_020",
+      "class": "android.widget.FrameLayout & android.widget.Button",
+      "bounds": [
+        36,
+        0,
+        1404,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_020",
+      "class": "android.widget.LinearLayout & android.widget.Button",
+      "bounds": [
+        64,
+        0,
+        1376,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_016<->c_020",
+      "class": "android.widget.LinearLayout & android.widget.Button",
+      "bounds": [
+        64,
+        2194,
+        1376,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_016 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    }
+  ]
+}

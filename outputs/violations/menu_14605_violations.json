@@ -1,0 +1,549 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "menu_14605",
+  "image_path": "data-masc/data-masc/screenshots/menu/14605.png",
+  "xml_path": "data-masc/data-masc/xml/menu/14605.xml",
+  "total_violations": 36,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_003",
+      "class": "android.widget.ListPopupWindow$DropDownListView",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_007",
+      "class": "android.widget.TextView",
+      "bounds": [
+        782,
+        293,
+        782,
+        293
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_011",
+      "class": "android.widget.TextView",
+      "bounds": [
+        782,
+        465,
+        782,
+        465
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_015",
+      "class": "android.widget.TextView",
+      "bounds": [
+        782,
+        637,
+        782,
+        637
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_019",
+      "class": "android.widget.TextView",
+      "bounds": [
+        782,
+        809,
+        782,
+        809
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_023",
+      "class": "android.widget.TextView",
+      "bounds": [
+        782,
+        981,
+        782,
+        981
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_027",
+      "class": "android.widget.TextView",
+      "bounds": [
+        782,
+        1153,
+        782,
+        1153
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_031",
+      "class": "android.widget.TextView",
+      "bounds": [
+        782,
+        1325,
+        782,
+        1325
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_035",
+      "class": "android.widget.TextView",
+      "bounds": [
+        782,
+        1497,
+        782,
+        1497
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_039",
+      "class": "android.widget.TextView",
+      "bounds": [
+        782,
+        1669,
+        782,
+        1669
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_043",
+      "class": "android.widget.TextView",
+      "bounds": [
+        782,
+        1841,
+        782,
+        1841
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_047",
+      "class": "android.widget.TextView",
+      "bounds": [
+        782,
+        2013,
+        782,
+        2013
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_003",
+      "class": "android.widget.PopupWindow$PopupDecorView & android.widget.ListPopupWindow$DropDownListView",
+      "bounds": [
+        0,
+        0,
+        742,
+        1944
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_003. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_003",
+      "class": "android.widget.PopupWindow$PopupBackgroundView & android.widget.ListPopupWindow$DropDownListView",
+      "bounds": [
+        0,
+        0,
+        742,
+        1944
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_003. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_004",
+      "class": "android.widget.ListPopupWindow$DropDownListView & com.android.internal.view.menu.ListMenuItemView",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_004. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_005",
+      "class": "android.widget.ListPopupWindow$DropDownListView & android.widget.RelativeLayout",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_005. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_008",
+      "class": "android.widget.ListPopupWindow$DropDownListView & com.android.internal.view.menu.ListMenuItemView",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_008. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_009",
+      "class": "android.widget.ListPopupWindow$DropDownListView & android.widget.RelativeLayout",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_009. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_012",
+      "class": "android.widget.ListPopupWindow$DropDownListView & com.android.internal.view.menu.ListMenuItemView",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_012. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_013",
+      "class": "android.widget.ListPopupWindow$DropDownListView & android.widget.RelativeLayout",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_013. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_016",
+      "class": "android.widget.ListPopupWindow$DropDownListView & com.android.internal.view.menu.ListMenuItemView",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_016. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_017",
+      "class": "android.widget.ListPopupWindow$DropDownListView & android.widget.RelativeLayout",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_017. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_020",
+      "class": "android.widget.ListPopupWindow$DropDownListView & com.android.internal.view.menu.ListMenuItemView",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_021",
+      "class": "android.widget.ListPopupWindow$DropDownListView & android.widget.RelativeLayout",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_021. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_024",
+      "class": "android.widget.ListPopupWindow$DropDownListView & com.android.internal.view.menu.ListMenuItemView",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_024. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_025",
+      "class": "android.widget.ListPopupWindow$DropDownListView & android.widget.RelativeLayout",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_028",
+      "class": "android.widget.ListPopupWindow$DropDownListView & com.android.internal.view.menu.ListMenuItemView",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_029",
+      "class": "android.widget.ListPopupWindow$DropDownListView & android.widget.RelativeLayout",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_032",
+      "class": "android.widget.ListPopupWindow$DropDownListView & com.android.internal.view.menu.ListMenuItemView",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_032. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_033",
+      "class": "android.widget.ListPopupWindow$DropDownListView & android.widget.RelativeLayout",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_033. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_036",
+      "class": "android.widget.ListPopupWindow$DropDownListView & com.android.internal.view.menu.ListMenuItemView",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_036. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_037",
+      "class": "android.widget.ListPopupWindow$DropDownListView & android.widget.RelativeLayout",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_037. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_040",
+      "class": "android.widget.ListPopupWindow$DropDownListView & com.android.internal.view.menu.ListMenuItemView",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_040. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_041",
+      "class": "android.widget.ListPopupWindow$DropDownListView & android.widget.RelativeLayout",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_041. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_044",
+      "class": "android.widget.ListPopupWindow$DropDownListView & com.android.internal.view.menu.ListMenuItemView",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_044. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_003<->c_045",
+      "class": "android.widget.ListPopupWindow$DropDownListView & android.widget.RelativeLayout",
+      "bounds": [
+        28,
+        28,
+        714,
+        1916
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_003 and c_045. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    }
+  ]
+}

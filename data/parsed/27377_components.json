@@ -1,0 +1,856 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "chat_27377",
+  "image_path": "data-masc/data-masc/screenshots/chat/27377.png",
+  "xml_path": "data-masc/data-masc/xml/chat/27377.xml",
+  "components": [
+    {
+      "component_id": "c_001",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_002",
+      "class": "com.android.internal.widget.ActionBarOverlayLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/decor_content_parent",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_003",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/content",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        252,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_004",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2140
+      ]
+    },
+    {
+      "component_id": "c_005",
+      "class": "android.widget.TabHost",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/tabhost",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        252,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_006",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2140
+      ]
+    },
+    {
+      "component_id": "c_007",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/banner",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        124,
+        57
+      ]
+    },
+    {
+      "component_id": "c_008",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/tabcontent",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ]
+    },
+    {
+      "component_id": "c_009",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/realtabcontent",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        252,
+        1440,
+        2209
+      ]
+    },
+    {
+      "component_id": "c_010",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        1957
+      ]
+    },
+    {
+      "component_id": "c_011",
+      "class": "android.widget.ListView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/lvChatList",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        252,
+        1440,
+        2209
+      ]
+    },
+    {
+      "component_id": "c_012",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/rlNoConversation",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        252,
+        1440,
+        2209
+      ]
+    },
+    {
+      "component_id": "c_013",
+      "class": "android.widget.TextView",
+      "text": "You haven't messaged with anyone yet.",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tvErrorMsgHeading",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        197,
+        252,
+        1242,
+        568
+      ]
+    },
+    {
+      "component_id": "c_014",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/llErrorInfo",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        314,
+        568,
+        1126,
+        736
+      ]
+    },
+    {
+      "component_id": "c_015",
+      "class": "android.widget.TextView",
+      "text": "You can start a new message by tapping the compose icon:",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tvErrorMsg",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        314,
+        568,
+        982,
+        736
+      ]
+    },
+    {
+      "component_id": "c_016",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/ivErrorMsg",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        982,
+        645,
+        1073,
+        736
+      ]
+    },
+    {
+      "component_id": "c_017",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/progress_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ]
+    },
+    {
+      "component_id": "c_018",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1957,
+        1440,
+        1958
+      ]
+    },
+    {
+      "component_id": "c_019",
+      "class": "android.widget.TabWidget",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/tabs",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        2210,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_020",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        21,
+        360,
+        182
+      ]
+    },
+    {
+      "component_id": "c_021",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tab_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        96,
+        2231,
+        264,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_022",
+      "class": "android.widget.TextView",
+      "text": "Events",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tab_title",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        118,
+        2328,
+        242,
+        2385
+      ]
+    },
+    {
+      "component_id": "c_023",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/image_reddot",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2231,
+        0,
+        2231
+      ]
+    },
+    {
+      "component_id": "c_024",
+      "class": "android.widget.TextView",
+      "text": "10",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tv_reddot",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2231,
+        0,
+        2231
+      ]
+    },
+    {
+      "component_id": "c_025",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        360,
+        21,
+        720,
+        182
+      ]
+    },
+    {
+      "component_id": "c_026",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tab_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        456,
+        2231,
+        624,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_027",
+      "class": "android.widget.TextView",
+      "text": "Contacts",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tab_title",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        455,
+        2328,
+        624,
+        2385
+      ]
+    },
+    {
+      "component_id": "c_028",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/image_reddot",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        580,
+        2231,
+        624,
+        2275
+      ]
+    },
+    {
+      "component_id": "c_029",
+      "class": "android.widget.TextView",
+      "text": "10",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tv_reddot",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        360,
+        2231,
+        360,
+        2231
+      ]
+    },
+    {
+      "component_id": "c_030",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        720,
+        21,
+        1080,
+        182
+      ]
+    },
+    {
+      "component_id": "c_031",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tab_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        816,
+        2231,
+        984,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_032",
+      "class": "android.widget.TextView",
+      "text": "Messages",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tab_title",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        803,
+        2328,
+        997,
+        2385
+      ]
+    },
+    {
+      "component_id": "c_033",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/image_reddot",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        720,
+        2231,
+        720,
+        2231
+      ]
+    },
+    {
+      "component_id": "c_034",
+      "class": "android.widget.TextView",
+      "text": "10",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tv_reddot",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        720,
+        2231,
+        720,
+        2231
+      ]
+    },
+    {
+      "component_id": "c_035",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1080,
+        21,
+        1440,
+        182
+      ]
+    },
+    {
+      "component_id": "c_036",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tab_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1176,
+        2231,
+        1344,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_037",
+      "class": "android.widget.TextView",
+      "text": "More",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tab_title",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1211,
+        2328,
+        1308,
+        2385
+      ]
+    },
+    {
+      "component_id": "c_038",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/image_reddot",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1080,
+        2231,
+        1080,
+        2231
+      ]
+    },
+    {
+      "component_id": "c_039",
+      "class": "android.widget.TextView",
+      "text": "10",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/tv_reddot",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1080,
+        2231,
+        1080,
+        2231
+      ]
+    },
+    {
+      "component_id": "c_040",
+      "class": "android.widget.TextView",
+      "text": "Cannot connect to network",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/text_network",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ]
+    },
+    {
+      "component_id": "c_041",
+      "class": "com.android.internal.widget.ActionBarContainer",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_bar_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        252
+      ]
+    },
+    {
+      "component_id": "c_042",
+      "class": "com.android.internal.widget.ActionBarView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        252
+      ]
+    },
+    {
+      "component_id": "c_043",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        56,
+        0,
+        370,
+        168
+      ]
+    },
+    {
+      "component_id": "c_044",
+      "class": "com.android.internal.widget.ActionBarView$HomeView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        56,
+        168
+      ]
+    },
+    {
+      "component_id": "c_045",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/up",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        56,
+        140,
+        112,
+        196
+      ]
+    },
+    {
+      "component_id": "c_046",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/home",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        98,
+        168,
+        98,
+        168
+      ]
+    },
+    {
+      "component_id": "c_047",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        41,
+        314,
+        126
+      ]
+    },
+    {
+      "component_id": "c_048",
+      "class": "android.widget.TextView",
+      "text": "Messages",
+      "content_desc": "",
+      "resource_id": "android:id/action_bar_title",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        56,
+        125,
+        342,
+        210
+      ]
+    },
+    {
+      "component_id": "c_049",
+      "class": "android.widget.TextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_bar_subtitle",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        56,
+        125,
+        56,
+        125
+      ]
+    },
+    {
+      "component_id": "c_050",
+      "class": "android.widget.ActionMenuView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1244,
+        0,
+        1440,
+        168
+      ]
+    },
+    {
+      "component_id": "c_051",
+      "class": "com.android.internal.view.menu.ActionMenuItemView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.whova.event:id/compose_new_thread",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1244,
+        84,
+        1440,
+        252
+      ]
+    },
+    {
+      "component_id": "c_052",
+      "class": "com.android.internal.widget.ActionBarContextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_context_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ]
+    },
+    {
+      "component_id": "c_053",
+      "class": "com.android.internal.widget.ActionBarContainer",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/split_action_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

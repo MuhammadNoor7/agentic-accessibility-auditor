@@ -1,0 +1,234 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "welcome_62763",
+  "image_path": "data-masc/data-masc/screenshots/welcome/62763.png",
+  "xml_path": "data-masc/data-masc/xml/welcome/62763.xml",
+  "total_violations": 15,
+  "violations": [
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_013",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & android.support.v7.widget.i",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_013. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_014",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & android.support.v7.widget.i",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_013",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.i",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_013. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_014",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.i",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_013",
+      "class": "android.widget.FrameLayout & android.support.v7.widget.i",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_013. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_014",
+      "class": "android.widget.FrameLayout & android.support.v7.widget.i",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_013",
+      "class": "android.widget.RelativeLayout & android.support.v7.widget.i",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_013. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_014",
+      "class": "android.widget.RelativeLayout & android.support.v7.widget.i",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_006<->c_013",
+      "class": "android.widget.RelativeLayout & android.support.v7.widget.i",
+      "bounds": [
+        53,
+        648,
+        1387,
+        1659
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_006 and c_013. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_006<->c_014",
+      "class": "android.widget.RelativeLayout & android.support.v7.widget.i",
+      "bounds": [
+        53,
+        648,
+        1387,
+        1659
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_006 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_013",
+      "class": "android.widget.RelativeLayout & android.support.v7.widget.i",
+      "bounds": [
+        88,
+        767,
+        1352,
+        1708
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_013. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_014",
+      "class": "android.widget.RelativeLayout & android.support.v7.widget.i",
+      "bounds": [
+        88,
+        767,
+        1352,
+        1708
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_012<->c_013",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.i",
+      "bounds": [
+        352,
+        1408,
+        1087,
+        1531
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_012 and c_013. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_012<->c_014",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.i",
+      "bounds": [
+        352,
+        1408,
+        1087,
+        1531
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_012 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    }
+  ]
+}

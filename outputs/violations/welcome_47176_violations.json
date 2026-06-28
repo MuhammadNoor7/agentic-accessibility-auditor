@@ -1,0 +1,684 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "welcome_47176",
+  "image_path": "data-masc/data-masc/screenshots/welcome/47176.png",
+  "xml_path": "data-masc/data-masc/xml/welcome/47176.xml",
+  "total_violations": 45,
+  "violations": [
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_012",
+      "class": "w.MultiLangTextView",
+      "bounds": [
+        0,
+        50,
+        -121,
+        349
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_013",
+      "class": "w.MultiLangTextView",
+      "bounds": [
+        0,
+        2101,
+        -401,
+        2273
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_026",
+      "class": "w.MultiLangTextView",
+      "bounds": [
+        1561,
+        50,
+        1440,
+        349
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_027",
+      "class": "w.MultiLangTextView",
+      "bounds": [
+        1841,
+        2101,
+        1440,
+        2273
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_029",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        39,
+        1064,
+        172,
+        1327
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_029",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        39,
+        1064,
+        172,
+        1327
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_030",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        1268,
+        1064,
+        1401,
+        1327
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_030",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        1268,
+        1064,
+        1401,
+        1327
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_029",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_030",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_029",
+      "class": "android.widget.LinearLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_030",
+      "class": "android.widget.LinearLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_029",
+      "class": "android.widget.FrameLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_030",
+      "class": "android.widget.FrameLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_029",
+      "class": "android.widget.RelativeLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_030",
+      "class": "android.widget.RelativeLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_006<->c_029",
+      "class": "android.support.v4.view.ViewPager & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_006 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_006<->c_030",
+      "class": "android.support.v4.view.ViewPager & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_006 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_029",
+      "class": "w.FitRatioFrameLayout & android.widget.ImageView",
+      "bounds": [
+        47,
+        0,
+        1392,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_030",
+      "class": "w.FitRatioFrameLayout & android.widget.ImageView",
+      "bounds": [
+        47,
+        0,
+        1392,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_009<->c_029",
+      "class": "w.ChildProportionLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1345,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_009 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_009<->c_030",
+      "class": "w.ChildProportionLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1345,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_009 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_010<->c_029",
+      "class": "android.widget.ImageView & android.widget.ImageView",
+      "bounds": [
+        62,
+        336,
+        1282,
+        2043
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_010 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_010<->c_030",
+      "class": "android.widget.ImageView & android.widget.ImageView",
+      "bounds": [
+        62,
+        336,
+        1282,
+        2043
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_010 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_011<->c_029",
+      "class": "w.ChildProportionLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_011 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_011<->c_030",
+      "class": "w.ChildProportionLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_011 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_015<->c_029",
+      "class": "w.FitRatioFrameLayout & android.widget.ImageView",
+      "bounds": [
+        47,
+        0,
+        1392,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_015 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_015<->c_030",
+      "class": "w.FitRatioFrameLayout & android.widget.ImageView",
+      "bounds": [
+        47,
+        0,
+        1392,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_015 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_016<->c_029",
+      "class": "w.ChildProportionLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1345,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_016 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_016<->c_030",
+      "class": "w.ChildProportionLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1345,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_016 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_017<->c_029",
+      "class": "android.widget.ImageView & android.widget.ImageView",
+      "bounds": [
+        62,
+        336,
+        1282,
+        2043
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_017 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_017<->c_030",
+      "class": "android.widget.ImageView & android.widget.ImageView",
+      "bounds": [
+        62,
+        336,
+        1282,
+        2043
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_017 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_018<->c_029",
+      "class": "w.ChildProportionLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_018 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_018<->c_030",
+      "class": "w.ChildProportionLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_018 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_022<->c_029",
+      "class": "w.FitRatioFrameLayout & android.widget.ImageView",
+      "bounds": [
+        47,
+        0,
+        1392,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_022 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_022<->c_030",
+      "class": "w.FitRatioFrameLayout & android.widget.ImageView",
+      "bounds": [
+        47,
+        0,
+        1392,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_022 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_023<->c_029",
+      "class": "w.ChildProportionLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1345,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_023 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_023<->c_030",
+      "class": "w.ChildProportionLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1345,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_023 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_024<->c_029",
+      "class": "android.widget.ImageView & android.widget.ImageView",
+      "bounds": [
+        62,
+        336,
+        1282,
+        2043
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_024 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_024<->c_030",
+      "class": "android.widget.ImageView & android.widget.ImageView",
+      "bounds": [
+        62,
+        336,
+        1282,
+        2043
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_024 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_025<->c_029",
+      "class": "w.ChildProportionLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_025 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_025<->c_030",
+      "class": "w.ChildProportionLayout & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_025 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_028<->c_029",
+      "class": "android.view.View & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_028 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_028<->c_030",
+      "class": "android.view.View & android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_028 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    }
+  ]
+}

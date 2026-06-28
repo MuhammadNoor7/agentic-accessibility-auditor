@@ -1,0 +1,1194 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "login_67147",
+  "image_path": "data-masc/data-masc/screenshots/login/67147.png",
+  "xml_path": "data-masc/data-masc/xml/login/67147.xml",
+  "total_violations": 79,
+  "violations": [
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_010",
+      "class": "android.widget.ImageButton",
+      "bounds": [
+        0,
+        0,
+        196,
+        196
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_010",
+      "class": "android.widget.ImageButton",
+      "bounds": [
+        0,
+        0,
+        196,
+        196
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_019",
+      "class": "com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        140,
+        525,
+        1384,
+        665
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_020",
+      "class": "android.support.v7.widget.z",
+      "bounds": [
+        56,
+        440,
+        56,
+        440
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_025",
+      "class": "com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        140,
+        792,
+        1384,
+        932
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_026",
+      "class": "android.support.v7.widget.z",
+      "bounds": [
+        56,
+        707,
+        56,
+        707
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R06",
+      "issue": "Disabled control conflict",
+      "component_id": "c_027",
+      "class": "android.support.v7.widget.h",
+      "bounds": [
+        56,
+        974,
+        1384,
+        1114
+      ],
+      "guideline": "G06 \u2014 Disabled control conflict",
+      "severity": "Low",
+      "recommendation": "If a component is disabled, set clickable and focusable to false to prevent screen reader confusion."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_035",
+      "class": "android.support.v7.widget.ViewStubCompat",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_010",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & android.widget.ImageButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_010. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_019",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_019. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_025",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_027",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_028",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_033",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_033. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_034",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_034. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_010",
+      "class": "android.widget.LinearLayout & android.widget.ImageButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_010. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_019",
+      "class": "android.widget.LinearLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_019. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_025",
+      "class": "android.widget.LinearLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_027",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_028",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_033",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_033. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_034",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_034. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_010",
+      "class": "android.widget.FrameLayout & android.widget.ImageButton",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_010. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_019",
+      "class": "android.widget.FrameLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_019. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_025",
+      "class": "android.widget.FrameLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_027",
+      "class": "android.widget.FrameLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_028",
+      "class": "android.widget.FrameLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_033",
+      "class": "android.widget.FrameLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_033. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_034",
+      "class": "android.widget.FrameLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_034. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_010",
+      "class": "android.support.v7.widget.FitWindowsFrameLayout & android.widget.ImageButton",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_010. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_019",
+      "class": "android.support.v7.widget.FitWindowsFrameLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_019. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_025",
+      "class": "android.support.v7.widget.FitWindowsFrameLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_027",
+      "class": "android.support.v7.widget.FitWindowsFrameLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_028",
+      "class": "android.support.v7.widget.FitWindowsFrameLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_033",
+      "class": "android.support.v7.widget.FitWindowsFrameLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_033. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_034",
+      "class": "android.support.v7.widget.FitWindowsFrameLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_034. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_006<->c_010",
+      "class": "android.support.v7.widget.ContentFrameLayout & android.widget.ImageButton",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_006 and c_010. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_006<->c_019",
+      "class": "android.support.v7.widget.ContentFrameLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_006 and c_019. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_006<->c_025",
+      "class": "android.support.v7.widget.ContentFrameLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_006 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_006<->c_027",
+      "class": "android.support.v7.widget.ContentFrameLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_006 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_006<->c_028",
+      "class": "android.support.v7.widget.ContentFrameLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_006 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_006<->c_033",
+      "class": "android.support.v7.widget.ContentFrameLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_006 and c_033. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_006<->c_034",
+      "class": "android.support.v7.widget.ContentFrameLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_006 and c_034. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_010",
+      "class": "android.widget.FrameLayout & android.widget.ImageButton",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_010. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_019",
+      "class": "android.widget.FrameLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_019. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_025",
+      "class": "android.widget.FrameLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_027",
+      "class": "android.widget.FrameLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_028",
+      "class": "android.widget.FrameLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_033",
+      "class": "android.widget.FrameLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_033. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_034",
+      "class": "android.widget.FrameLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_034. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_010",
+      "class": "android.widget.LinearLayout & android.widget.ImageButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_010. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_019",
+      "class": "android.widget.LinearLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_019. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_025",
+      "class": "android.widget.LinearLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_027",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_028",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_033",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_033. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_034",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_034. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_009<->c_010",
+      "class": "android.support.v7.widget.Toolbar & android.widget.ImageButton",
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_009 and c_010. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_010<->c_013",
+      "class": "android.widget.ImageButton & android.widget.LinearLayout",
+      "bounds": [
+        0,
+        0,
+        196,
+        196
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_010 and c_013. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_010<->c_030",
+      "class": "android.widget.ImageButton & com.airfrance.android.totoro.ui.widget.DividerLayout",
+      "bounds": [
+        0,
+        0,
+        196,
+        196
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_010 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_010<->c_037",
+      "class": "android.widget.ImageButton & android.view.View",
+      "bounds": [
+        0,
+        0,
+        196,
+        196
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_010 and c_037. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_012<->c_019",
+      "class": "android.widget.ScrollView & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        196,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_012 and c_019. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_012<->c_025",
+      "class": "android.widget.ScrollView & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        196,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_012 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_012<->c_027",
+      "class": "android.widget.ScrollView & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        196,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_012 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_012<->c_028",
+      "class": "android.widget.ScrollView & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        196,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_012 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_012<->c_033",
+      "class": "android.widget.ScrollView & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        196,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_012 and c_033. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_012<->c_034",
+      "class": "android.widget.ScrollView & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        196,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_012 and c_034. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_013<->c_019",
+      "class": "android.widget.LinearLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        1521
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_013 and c_019. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_013<->c_025",
+      "class": "android.widget.LinearLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        1521
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_013 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_013<->c_027",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.h",
+      "bounds": [
+        0,
+        0,
+        1440,
+        1521
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_013 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_013<->c_028",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        0,
+        1440,
+        1521
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_013 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_013<->c_033",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.z",
+      "bounds": [
+        0,
+        0,
+        1440,
+        1521
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_013 and c_033. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_015<->c_019",
+      "class": "com.airfrance.android.totoro.ui.widget.FormTextField & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        56,
+        440,
+        1384,
+        707
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_015 and c_019. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_017<->c_019",
+      "class": "android.widget.LinearLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        56,
+        525,
+        1384,
+        665
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_017 and c_019. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_021<->c_025",
+      "class": "com.airfrance.android.totoro.ui.widget.FormTextField & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        56,
+        707,
+        1384,
+        974
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_021 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_023<->c_025",
+      "class": "android.widget.LinearLayout & com.airfrance.android.totoro.ui.widget.TrimEditText",
+      "bounds": [
+        56,
+        792,
+        1384,
+        932
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_023 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_029<->c_033",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.z",
+      "bounds": [
+        56,
+        1227,
+        1384,
+        1748
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_029 and c_033. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_029<->c_034",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.h",
+      "bounds": [
+        56,
+        1227,
+        1384,
+        1748
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_029 and c_034. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    }
+  ]
+}

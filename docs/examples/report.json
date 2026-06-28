@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "screen_001",
+  "image_path": "data/screenshots/screen_001.png",
+  "xml_path": "data/xml/window_001.xml",
+  "summary": {
+    "total_issues": 2,
+    "critical": 0,
+    "high": 2,
+    "medium": 0,
+    "low": 0
+  },
+  "violations": [
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_001",
+      "class": "android.widget.ImageButton",
+      "bounds": [32, 50, 80, 98],
+      "severity": "High",
+      "guideline": "G02 — Image button without description",
+      "recommendation": "Add android:contentDescription with the action name, such as Back.",
+      "agent_explanation": "This ImageButton acts as a back button but has no text alternative.",
+      "agent_why_it_matters": "Screen reader users will only hear 'button, unlabelled' and won't know what it does.",
+      "agent_developer_fix": "In your XML layout, add android:contentDescription=\"@string/back_action\" to the ImageButton."
+    },
+    {
+      "rule_id": "R05",
+      "issue": "Unlabeled input field",
+      "component_id": "c_002",
+      "class": "android.widget.EditText",
+      "bounds": [32, 120, 400, 168],
+      "severity": "High",
+      "guideline": "G05 — Unlabeled input field",
+      "recommendation": "Add android:hint or a programmatic label linked via labelFor.",
+      "agent_explanation": "The username field has no hint, text, or associated label.",
+      "agent_why_it_matters": "Users relying on assistive technology cannot tell what information to enter.",
+      "agent_developer_fix": "Add android:hint=\"Username\" or a TextView label with android:labelFor pointing to this EditText."
+    }
+  ]
+}

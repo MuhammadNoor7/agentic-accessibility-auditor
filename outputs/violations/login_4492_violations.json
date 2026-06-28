@@ -1,0 +1,1404 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "login_4492",
+  "image_path": "data-masc/data-masc/screenshots/login/4492.png",
+  "xml_path": "data-masc/data-masc/xml/login/4492.xml",
+  "total_violations": 93,
+  "violations": [
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_006",
+      "class": "android.support.v7.widget.ViewStubCompat",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_011",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        84,
+        304,
+        294
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_022",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        273,
+        0,
+        273
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_023",
+      "class": "com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        238,
+        637,
+        1201,
+        777
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_024",
+      "class": "com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        238,
+        364,
+        238,
+        364
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_025",
+      "class": "com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        238,
+        830,
+        1201,
+        970
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_026",
+      "class": "com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        238,
+        364,
+        238,
+        364
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_011",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & android.widget.LinearLayout",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_011. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_014",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_020",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_023",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_023. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_025",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_027",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_028",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_030",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_011",
+      "class": "android.widget.LinearLayout & android.widget.LinearLayout",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_011. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_014",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_020",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_023",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_023. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_025",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_027",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_028",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_030",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_011",
+      "class": "android.widget.FrameLayout & android.widget.LinearLayout",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_011. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_014",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_020",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_023",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_023. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_025",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_027",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_028",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_004<->c_030",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_004 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_011",
+      "class": "android.support.v7.widget.FitWindowsLinearLayout & android.widget.LinearLayout",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_011. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_014",
+      "class": "android.support.v7.widget.FitWindowsLinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_020",
+      "class": "android.support.v7.widget.FitWindowsLinearLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_023",
+      "class": "android.support.v7.widget.FitWindowsLinearLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_023. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_025",
+      "class": "android.support.v7.widget.FitWindowsLinearLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_027",
+      "class": "android.support.v7.widget.FitWindowsLinearLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_028",
+      "class": "android.support.v7.widget.FitWindowsLinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_005<->c_030",
+      "class": "android.support.v7.widget.FitWindowsLinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_005 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_011",
+      "class": "android.support.v7.widget.ContentFrameLayout & android.widget.LinearLayout",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_011. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_014",
+      "class": "android.support.v7.widget.ContentFrameLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_020",
+      "class": "android.support.v7.widget.ContentFrameLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_023",
+      "class": "android.support.v7.widget.ContentFrameLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_023. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_025",
+      "class": "android.support.v7.widget.ContentFrameLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_027",
+      "class": "android.support.v7.widget.ContentFrameLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_028",
+      "class": "android.support.v7.widget.ContentFrameLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_007<->c_030",
+      "class": "android.support.v7.widget.ContentFrameLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_007 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_011",
+      "class": "android.widget.LinearLayout & android.widget.LinearLayout",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_011. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_014",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_020",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_023",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_023. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_025",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_027",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_028",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_008<->c_030",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2308
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_008 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_009<->c_011",
+      "class": "android.widget.FrameLayout & android.widget.LinearLayout",
+      "bounds": [
+        0,
+        0,
+        1440,
+        210
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_009 and c_011. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_009<->c_014",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        210
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_009 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_010<->c_011",
+      "class": "android.widget.RelativeLayout & android.widget.LinearLayout",
+      "bounds": [
+        0,
+        84,
+        1440,
+        294
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_010 and c_011. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_010<->c_014",
+      "class": "android.widget.RelativeLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        84,
+        1440,
+        294
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_010 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_011<->c_012",
+      "class": "android.widget.LinearLayout & android.support.v7.widget.AppCompatImageView",
+      "bounds": [
+        0,
+        84,
+        304,
+        294
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_011 and c_012. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_011<->c_013",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        84,
+        304,
+        294
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_011 and c_013. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_011<->c_014",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        84,
+        304,
+        294
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_011 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_011<->c_017",
+      "class": "android.widget.LinearLayout & android.widget.LinearLayout",
+      "bounds": [
+        0,
+        84,
+        304,
+        294
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_011 and c_017. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_011<->c_018",
+      "class": "android.widget.LinearLayout & android.widget.FrameLayout",
+      "bounds": [
+        0,
+        84,
+        304,
+        294
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_011 and c_018. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_012<->c_014",
+      "class": "android.support.v7.widget.AppCompatImageView & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        155,
+        40,
+        223
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_012 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_013<->c_014",
+      "class": "com.azubu.azubutv.widgets.font.AzubuTextView & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        75,
+        84,
+        269,
+        294
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_013 and c_014. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_014<->c_017",
+      "class": "com.azubu.azubutv.widgets.font.AzubuTextView & android.widget.LinearLayout",
+      "bounds": [
+        0,
+        84,
+        313,
+        294
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_014 and c_017. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_014<->c_018",
+      "class": "com.azubu.azubutv.widgets.font.AzubuTextView & android.widget.FrameLayout",
+      "bounds": [
+        0,
+        84,
+        313,
+        294
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_014 and c_018. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_016<->c_020",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        294,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_016 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_016<->c_023",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        294,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_016 and c_023. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_016<->c_025",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        294,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_016 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_016<->c_027",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        294,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_016 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_016<->c_028",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        294,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_016 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_016<->c_030",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        294,
+        1440,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_016 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_017<->c_020",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2098
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_017 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_017<->c_023",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2098
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_017 and c_023. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_017<->c_025",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2098
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_017 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_017<->c_027",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2098
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_017 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_017<->c_028",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2098
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_017 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_017<->c_030",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2098
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_017 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_018<->c_020",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2098
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_018 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_018<->c_023",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2098
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_018 and c_023. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_018<->c_025",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2098
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_018 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_018<->c_027",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2098
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_018 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_018<->c_028",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2098
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_018 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_018<->c_030",
+      "class": "android.widget.FrameLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        0,
+        0,
+        1440,
+        2098
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_018 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_019<->c_020",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        238,
+        364,
+        1201,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_019 and c_020. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_019<->c_023",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        238,
+        364,
+        1201,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_019 and c_023. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_019<->c_025",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuEditText",
+      "bounds": [
+        238,
+        364,
+        1201,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_019 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_019<->c_027",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuButton",
+      "bounds": [
+        238,
+        364,
+        1201,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_019 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_019<->c_028",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        238,
+        364,
+        1201,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_019 and c_028. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_019<->c_030",
+      "class": "android.widget.LinearLayout & com.azubu.azubutv.widgets.font.AzubuTextView",
+      "bounds": [
+        238,
+        364,
+        1201,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_019 and c_030. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    }
+  ]
+}

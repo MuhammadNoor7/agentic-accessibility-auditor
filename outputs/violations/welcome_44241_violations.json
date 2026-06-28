@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "welcome_44241",
+  "image_path": "data-masc/data-masc/screenshots/welcome/44241.png",
+  "xml_path": "data-masc/data-masc/xml/welcome/44241.xml",
+  "total_violations": 3,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_003",
+      "class": "android.widget.ListPopupWindow$DropDownListView",
+      "bounds": [
+        0,
+        0,
+        341,
+        448
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_003",
+      "class": "android.widget.PopupWindow$PopupDecorView & android.widget.ListPopupWindow$DropDownListView",
+      "bounds": [
+        0,
+        0,
+        341,
+        448
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_003. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_003",
+      "class": "android.widget.PopupWindow$PopupBackgroundView & android.widget.ListPopupWindow$DropDownListView",
+      "bounds": [
+        0,
+        0,
+        341,
+        448
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_003. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    }
+  ]
+}

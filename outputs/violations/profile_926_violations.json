@@ -1,0 +1,264 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "profile_926",
+  "image_path": "data-masc/data-masc/screenshots/profile/926.png",
+  "xml_path": "data-masc/data-masc/xml/profile/926.xml",
+  "total_violations": 17,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_002",
+      "class": "com.android.internal.view.menu.ExpandedMenuView",
+      "bounds": [
+        282,
+        1192,
+        1157,
+        2392
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add visible text or android:contentDescription for interactive elements."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_006",
+      "class": "android.widget.TextView",
+      "bounds": [
+        338,
+        1233,
+        338,
+        1233
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_010",
+      "class": "android.widget.TextView",
+      "bounds": [
+        338,
+        1405,
+        338,
+        1405
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_014",
+      "class": "android.widget.TextView",
+      "bounds": [
+        338,
+        1577,
+        338,
+        1577
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_018",
+      "class": "android.widget.TextView",
+      "bounds": [
+        338,
+        1749,
+        338,
+        1749
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_022",
+      "class": "android.widget.TextView",
+      "bounds": [
+        338,
+        1921,
+        338,
+        1921
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_026",
+      "class": "android.widget.TextView",
+      "bounds": [
+        338,
+        2093,
+        338,
+        2093
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_030",
+      "class": "android.widget.TextView",
+      "bounds": [
+        338,
+        2265,
+        338,
+        2265
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_001<->c_002",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView & com.android.internal.view.menu.ExpandedMenuView",
+      "bounds": [
+        0,
+        0,
+        875,
+        1200
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_001 and c_002. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_005",
+      "class": "com.android.internal.view.menu.ExpandedMenuView & android.widget.TextView",
+      "bounds": [
+        282,
+        1192,
+        1157,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_005. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_009",
+      "class": "com.android.internal.view.menu.ExpandedMenuView & android.widget.TextView",
+      "bounds": [
+        282,
+        1192,
+        1157,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_009. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_013",
+      "class": "com.android.internal.view.menu.ExpandedMenuView & android.widget.TextView",
+      "bounds": [
+        282,
+        1192,
+        1157,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_013. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_017",
+      "class": "com.android.internal.view.menu.ExpandedMenuView & android.widget.TextView",
+      "bounds": [
+        282,
+        1192,
+        1157,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_017. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_021",
+      "class": "com.android.internal.view.menu.ExpandedMenuView & android.widget.TextView",
+      "bounds": [
+        282,
+        1192,
+        1157,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_021. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_025",
+      "class": "com.android.internal.view.menu.ExpandedMenuView & android.widget.TextView",
+      "bounds": [
+        282,
+        1192,
+        1157,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_025. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_027",
+      "class": "com.android.internal.view.menu.ExpandedMenuView & com.android.internal.view.menu.ListMenuItemView",
+      "bounds": [
+        282,
+        1192,
+        1157,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_027. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Layout overlap detected",
+      "component_id": "c_002<->c_029",
+      "class": "com.android.internal.view.menu.ExpandedMenuView & android.widget.TextView",
+      "bounds": [
+        282,
+        1192,
+        1157,
+        2392
+      ],
+      "guideline": "G08 \u2014 Layout overlap detected",
+      "severity": "Medium",
+      "recommendation": "Review overlap between c_002 and c_029. Adjust layout constraints to prevent interactive or text components from overlapping bounds."
+    }
+  ]
+}

@@ -1,0 +1,840 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "maps_65746",
+  "image_path": "data-masc/data-masc/screenshots/maps/65746.png",
+  "xml_path": "data-masc/data-masc/xml/maps/65746.xml",
+  "components": [
+    {
+      "component_id": "c_001",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_002",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_mode_bar_stub",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_004",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_005",
+      "class": "android.support.v7.widget.ActionBarOverlayLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/decor_content_parent",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_006",
+      "class": "android.support.v7.widget.ContentFrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/content",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_007",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2112
+      ]
+    },
+    {
+      "component_id": "c_008",
+      "class": "com.viewpagerindicator.TabPageIndicator",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/page_indicator",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        1440,
+        435
+      ]
+    },
+    {
+      "component_id": "c_009",
+      "class": "com.viewpagerindicator.IcsLinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        155
+      ]
+    },
+    {
+      "component_id": "c_010",
+      "class": "com.viewpagerindicator.TabPageIndicator$TabView",
+      "text": "Stations",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        0,
+        720,
+        155
+      ]
+    },
+    {
+      "component_id": "c_011",
+      "class": "com.viewpagerindicator.TabPageIndicator$TabView",
+      "text": "System",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        720,
+        0,
+        1440,
+        155
+      ]
+    },
+    {
+      "component_id": "c_012",
+      "class": "com.getgoodcode.bart.widget.InterceptableViewPager",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/pager",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        435,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_013",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1440,
+        0,
+        2880,
+        1957
+      ]
+    },
+    {
+      "component_id": "c_014",
+      "class": "android.webkit.WebView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/map_webview",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1440,
+        435,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_015",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/progress",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1440,
+        1280,
+        1440,
+        1546
+      ]
+    },
+    {
+      "component_id": "c_016",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        1957
+      ]
+    },
+    {
+      "component_id": "c_017",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        344
+      ]
+    },
+    {
+      "component_id": "c_018",
+      "class": "com.getgoodcode.bart.widget.StationSearchLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/origin_text_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        530,
+        470,
+        1405,
+        589
+      ]
+    },
+    {
+      "component_id": "c_019",
+      "class": "android.support.v7.widget.AppCompatCheckedTextView",
+      "text": "12th St. Oakland City Center",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        530,
+        470,
+        1405,
+        589
+      ]
+    },
+    {
+      "component_id": "c_020",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "From",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        35,
+        495,
+        148,
+        561
+      ]
+    },
+    {
+      "component_id": "c_021",
+      "class": "com.getgoodcode.bart.widget.StationSearchLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/destination_text_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        530,
+        625,
+        1405,
+        744
+      ]
+    },
+    {
+      "component_id": "c_022",
+      "class": "android.support.v7.widget.AppCompatCheckedTextView",
+      "text": "San Bruno",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        530,
+        625,
+        1405,
+        744
+      ]
+    },
+    {
+      "component_id": "c_023",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "To",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        35,
+        650,
+        88,
+        716
+      ]
+    },
+    {
+      "component_id": "c_024",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/reverse_button",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        410,
+        547,
+        530,
+        667
+      ]
+    },
+    {
+      "component_id": "c_025",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        344,
+        1440,
+        351
+      ]
+    },
+    {
+      "component_id": "c_026",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/map",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        786,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_027",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        1606
+      ]
+    },
+    {
+      "component_id": "c_028",
+      "class": "com.google.maps.api.android.lib6.gmm6.api.z",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        0,
+        1440,
+        1606
+      ]
+    },
+    {
+      "component_id": "c_029",
+      "class": "com.google.maps.api.android.lib6.impl.fr",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        1606
+      ]
+    },
+    {
+      "component_id": "c_030",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        18,
+        1511,
+        228,
+        1588
+      ]
+    },
+    {
+      "component_id": "c_031",
+      "class": "android.widget.TextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        786,
+        0,
+        786
+      ]
+    },
+    {
+      "component_id": "c_032",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        1606
+      ]
+    },
+    {
+      "component_id": "c_033",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_034",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1405,
+        35,
+        1405,
+        1571
+      ]
+    },
+    {
+      "component_id": "c_035",
+      "class": "com.google.maps.api.android.lib6.impl.cd",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_036",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_037",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_038",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_039",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_040",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_041",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_042",
+      "class": "com.google.maps.api.android.lib6.impl.am",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        35,
+        35,
+        175,
+        175
+      ]
+    },
+    {
+      "component_id": "c_043",
+      "class": "android.support.v7.widget.ActionBarContainer",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/action_bar_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_044",
+      "class": "android.support.v7.widget.Toolbar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/action_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_045",
+      "class": "android.widget.TextView",
+      "text": "Map",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        210,
+        104,
+        348,
+        197
+      ]
+    },
+    {
+      "component_id": "c_046",
+      "class": "android.widget.ImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        0,
+        196,
+        196
+      ]
+    },
+    {
+      "component_id": "c_047",
+      "class": "android.widget.TextView",
+      "text": "BART",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        210,
+        197,
+        322,
+        259
+      ]
+    },
+    {
+      "component_id": "c_048",
+      "class": "android.support.v7.widget.ActionMenuView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1272,
+        0,
+        1440,
+        196
+      ]
+    },
+    {
+      "component_id": "c_049",
+      "class": "android.support.v7.view.menu.ActionMenuItemView",
+      "text": "Go",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/menu_go",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1272,
+        98,
+        1440,
+        266
+      ]
+    },
+    {
+      "component_id": "c_050",
+      "class": "android.support.v7.widget.ActionBarContextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.getgoodcode.bart:id/action_context_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ]
+    },
+    {
+      "component_id": "c_051",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/navigationBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2392,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_052",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/statusBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        84
+      ]
+    }
+  ]
+}

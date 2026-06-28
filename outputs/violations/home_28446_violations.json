@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "home_28446",
+  "image_path": "data-masc/data-masc/screenshots/home/28446.png",
+  "xml_path": "data-masc/data-masc/xml/home/28446.xml",
+  "total_violations": 3,
+  "violations": [
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_011",
+      "class": "android.widget.TextView",
+      "bounds": [
+        577,
+        1887,
+        577,
+        1887
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Zero-size element",
+      "component_id": "c_013",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        577,
+        1887,
+        577,
+        1887
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Ensure the component has non-zero width and height when visible."
+    }
+  ]
+}

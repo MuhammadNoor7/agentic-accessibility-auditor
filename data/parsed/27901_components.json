@@ -1,0 +1,536 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "welcome_27901",
+  "image_path": "data-masc/data-masc/screenshots/welcome/27901.png",
+  "xml_path": "data-masc/data-masc/xml/welcome/27901.xml",
+  "components": [
+    {
+      "component_id": "c_001",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_002",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_mode_bar_stub",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_004",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_005",
+      "class": "android.support.v7.internal.widget.ActionBarOverlayLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/decor_content_parent",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_006",
+      "class": "android.support.v7.internal.widget.ContentFrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/content",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_007",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/view_parent",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_008",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/issue_cover",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_009",
+      "class": "uk.co.economist.view.IssueGallery",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/library_gallery_covers",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_010",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/issue_cover_div",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        485,
+        1440,
+        2186
+      ]
+    },
+    {
+      "component_id": "c_011",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/issue_cover_sub_div",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        485,
+        1440,
+        2186
+      ]
+    },
+    {
+      "component_id": "c_012",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/issue_cover_image",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        112,
+        485,
+        1328,
+        2064
+      ]
+    },
+    {
+      "component_id": "c_013",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/library_cover_ripple_overlay",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        126,
+        485,
+        1310,
+        2043
+      ]
+    },
+    {
+      "component_id": "c_014",
+      "class": "uk.co.economist.view.EcoRegularText",
+      "text": "Downloading ..",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/issue_downloading",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        126,
+        485,
+        1310,
+        2043
+      ]
+    },
+    {
+      "component_id": "c_015",
+      "class": "uk.co.economist.view.IssueDownloadProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/custom_progress_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1118,
+        1854,
+        1272,
+        2008
+      ]
+    },
+    {
+      "component_id": "c_016",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/download_progress_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1118,
+        1854,
+        1272,
+        2008
+      ]
+    },
+    {
+      "component_id": "c_017",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/download_progress_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1118,
+        1854,
+        1272,
+        2008
+      ]
+    },
+    {
+      "component_id": "c_018",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/download_btn",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1128,
+        1864,
+        1261,
+        1997
+      ]
+    },
+    {
+      "component_id": "c_019",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/download_in_progress_btn",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1135,
+        1871,
+        1254,
+        1990
+      ]
+    },
+    {
+      "component_id": "c_020",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/download_finished_btn",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1128,
+        1864,
+        1261,
+        1997
+      ]
+    },
+    {
+      "component_id": "c_021",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/restore_btn",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1128,
+        1864,
+        1261,
+        1997
+      ]
+    },
+    {
+      "component_id": "c_022",
+      "class": "uk.co.economist.view.EcoRegularText",
+      "text": "March 11th 2017",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/issue_cover_caption",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        524,
+        2064,
+        916,
+        2186
+      ]
+    },
+    {
+      "component_id": "c_023",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/fragment_animation_premiumAd",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ]
+    },
+    {
+      "component_id": "c_024",
+      "class": "android.support.v7.internal.widget.ActionBarContainer",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/action_bar_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_025",
+      "class": "android.support.v7.widget.Toolbar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/action_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_026",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        56,
+        0,
+        1300,
+        196
+      ]
+    },
+    {
+      "component_id": "c_027",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1244,
+        196
+      ]
+    },
+    {
+      "component_id": "c_028",
+      "class": "uk.co.economist.view.EcoBoldText",
+      "text": "The Economist",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/actionbar_custom_font",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        84,
+        134,
+        540,
+        229
+      ]
+    },
+    {
+      "component_id": "c_029",
+      "class": "android.support.v7.widget.ActionMenuView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1300,
+        0,
+        1440,
+        196
+      ]
+    },
+    {
+      "component_id": "c_030",
+      "class": "android.support.v7.widget.ActionMenuPresenter$d",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        14,
+        140,
+        182
+      ]
+    },
+    {
+      "component_id": "c_031",
+      "class": "android.support.v7.internal.widget.ActionBarContextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "uk.co.economist:id/action_context_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ]
+    },
+    {
+      "component_id": "c_032",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/navigationBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2392,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_033",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/statusBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        84
+      ]
+    }
+  ]
+}

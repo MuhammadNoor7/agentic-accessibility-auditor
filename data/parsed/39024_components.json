@@ -1,0 +1,680 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "settings_39024",
+  "image_path": "data-masc/data-masc/screenshots/settings/39024.png",
+  "xml_path": "data-masc/data-masc/xml/settings/39024.xml",
+  "components": [
+    {
+      "component_id": "c_001",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_002",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_mode_bar_stub",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_004",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_005",
+      "class": "android.support.v7.internal.widget.ActionBarOverlayLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/decor_content_parent",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_006",
+      "class": "android.support.v7.internal.widget.ContentFrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/content",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_007",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/setup_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_008",
+      "class": "android.support.v4.view.ViewPager",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/pager",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        21,
+        301,
+        1419,
+        2371
+      ]
+    },
+    {
+      "component_id": "c_009",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/LinearLayout1",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1419,
+        301,
+        1419,
+        2371
+      ]
+    },
+    {
+      "component_id": "c_010",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Manage Quotes Database",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tv_title_pref_manage_quote_db",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1422,
+        304,
+        1419,
+        431
+      ]
+    },
+    {
+      "component_id": "c_011",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "The quotes database is not setup. To use the Quotes feature, press the SET UP button, below.",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tvQuoteDBStatus",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1422,
+        431,
+        1419,
+        615
+      ]
+    },
+    {
+      "component_id": "c_012",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Built-in quotes: 0",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tvCountBuiltinQuote",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1422,
+        615,
+        1419,
+        723
+      ]
+    },
+    {
+      "component_id": "c_013",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "User-added quotes: 0",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tvCountUserQuotes",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1422,
+        723,
+        1419,
+        831
+      ]
+    },
+    {
+      "component_id": "c_014",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/function_setup_db",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1422,
+        831,
+        1419,
+        1041
+      ]
+    },
+    {
+      "component_id": "c_015",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Set up quotes database",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tvQFSetupDb",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1443,
+        903,
+        1419,
+        969
+      ]
+    },
+    {
+      "component_id": "c_016",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "Set up",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/buttonQFSetupDB",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        2485,
+        852,
+        1419,
+        1020
+      ]
+    },
+    {
+      "component_id": "c_017",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/function_reset_db",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1422,
+        1041,
+        1419,
+        1251
+      ]
+    },
+    {
+      "component_id": "c_018",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Reset quotes database",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tvQFResetDB",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1443,
+        1113,
+        1419,
+        1179
+      ]
+    },
+    {
+      "component_id": "c_019",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "Reset",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/buttonQFResetDB",
+      "clickable": true,
+      "enabled": false,
+      "focusable": true,
+      "bounds": [
+        2485,
+        1062,
+        1419,
+        1230
+      ]
+    },
+    {
+      "component_id": "c_020",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/function_delete_user_quotes",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1422,
+        1251,
+        1419,
+        1461
+      ]
+    },
+    {
+      "component_id": "c_021",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Delete user quotes",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tvQFDeleteUserQuotes",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1443,
+        1323,
+        1419,
+        1389
+      ]
+    },
+    {
+      "component_id": "c_022",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "Delete",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/buttonQFDeleteUserQuotes",
+      "clickable": true,
+      "enabled": false,
+      "focusable": true,
+      "bounds": [
+        2485,
+        1272,
+        1419,
+        1440
+      ]
+    },
+    {
+      "component_id": "c_023",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        8388,
+        0,
+        9786,
+        2070
+      ]
+    },
+    {
+      "component_id": "c_024",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Set Sponsor Contact",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tv_title_pref_sponsor",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        24,
+        304,
+        1416,
+        431
+      ]
+    },
+    {
+      "component_id": "c_025",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Optional. Select the contact information of your sponsor or a friend, and if you're having a rough time, you can call them using the one-touch call feature.",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tv_desc_pref_sponsor",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        24,
+        431,
+        1416,
+        681
+      ]
+    },
+    {
+      "component_id": "c_026",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/iv1_one_touch_call_feature_icon_",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        636,
+        681,
+        804,
+        849
+      ]
+    },
+    {
+      "component_id": "c_027",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Contact information not set.",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tv_pref_sponsor_name_and_number",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        24,
+        849,
+        679,
+        957
+      ]
+    },
+    {
+      "component_id": "c_028",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "Choose Contact",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/button_choose_contact",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        453,
+        957,
+        987,
+        1125
+      ]
+    },
+    {
+      "component_id": "c_029",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        6990,
+        0,
+        8388,
+        2070
+      ]
+    },
+    {
+      "component_id": "c_030",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Set Email Address",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tv_title_pref_email",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        21,
+        304,
+        18,
+        431
+      ]
+    },
+    {
+      "component_id": "c_031",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Optional. If you would like to send us feedback and would like a response. You can send us feedback without it.",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tv_desc_pref_email",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        21,
+        431,
+        18,
+        681
+      ]
+    },
+    {
+      "component_id": "c_032",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Your email address is not set.",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/tv_email_address",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        21,
+        681,
+        -688,
+        789
+      ]
+    },
+    {
+      "component_id": "c_033",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "Set Email",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/button_pref_set_email",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        21,
+        789,
+        -513,
+        957
+      ]
+    },
+    {
+      "component_id": "c_034",
+      "class": "android.support.v7.internal.widget.ActionBarContainer",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/action_bar_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_035",
+      "class": "android.support.v7.widget.Toolbar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/action_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_036",
+      "class": "android.widget.TextView",
+      "text": "Sobriety Clock",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        56,
+        98,
+        510,
+        191
+      ]
+    },
+    {
+      "component_id": "c_037",
+      "class": "android.widget.TextView",
+      "text": "Setup Wizard (7/10)",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        56,
+        191,
+        553,
+        266
+      ]
+    },
+    {
+      "component_id": "c_038",
+      "class": "android.support.v7.widget.ActionMenuView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1300,
+        0,
+        1440,
+        196
+      ]
+    },
+    {
+      "component_id": "c_039",
+      "class": "android.support.v7.widget.ActionMenuPresenter$OverflowMenuButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        14,
+        140,
+        182
+      ]
+    },
+    {
+      "component_id": "c_040",
+      "class": "android.support.v7.internal.widget.ActionBarContextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.mbtiffany.sobrietyclock:id/action_context_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ]
+    },
+    {
+      "component_id": "c_041",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/navigationBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2392,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_042",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/statusBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        84
+      ]
+    }
+  ]
+}

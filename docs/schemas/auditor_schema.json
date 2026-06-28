@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentic-accessibility-auditor/schemas/auditor_schema.json",
+  "title": "Agentic Accessibility Auditor Data Schemas",
+  "description": "Formal JSON Schema for components.json, violations.json, and report.json (v1.0)",
+  "definitions": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "screen_metadata": {
+      "type": "object",
+      "required": ["screen_id", "image_path", "xml_path"],
+      "properties": {
+        "schema_version": { "$ref": "#/definitions/schema_version" },
+        "screen_id": { "type": "string", "minLength": 1 },
+        "image_path": { "type": "string", "minLength": 1 },
+        "xml_path": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "bounds": {
+      "type": "array",
+      "description": "[left, top, right, bottom] in pixels",
+      "items": { "type": "integer" },
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "component_id": {
+      "type": "string",
+      "pattern": "^c_\\d{3,}$"
+    },
+    "rule_id": {
+      "type": "string",
+      "enum": [
+        "R01", "R02", "R03", "R04", "R05", "R06", "R07", "R08", "R09", "R10",
+        "R11", "R12", "R13", "R14", "R15", "R16", "R17", "R18", "R19", "R20",
+        "R21", "R22", "R23", "R24", "R25", "R26", "R27", "R28", "R29", "R30"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["Critical", "High", "Medium", "Low"]
+    },
+    "component": {
+      "type": "object",
+      "required": [
+        "component_id",
+        "class",
+        "text",
+        "content_desc",
+        "resource_id",
+        "clickable",
+        "enabled",
+        "focusable",
+        "bounds"
+      ],
+      "properties": {
+        "component_id": { "$ref": "#/definitions/component_id" },
+        "class": { "type": "string", "minLength": 1 },
+        "text": { "type": "string" },
+        "content_desc": { "type": "string" },
+        "resource_id": { "type": "string" },
+        "clickable": { "type": "boolean" },
+        "enabled": { "type": "boolean" },
+        "focusable": { "type": "boolean" },
+        "bounds": { "$ref": "#/definitions/bounds" }
+      },
+      "additionalProperties": false
+    },
+    "violation": {
+      "type": "object",
+      "required": [
+        "rule_id",
+        "issue",
+        "component_id",
+        "class",
+        "bounds",
+        "guideline",
+        "severity",
+        "recommendation"
+      ],
+      "properties": {
+        "rule_id": { "$ref": "#/definitions/rule_id" },
+        "issue": { "type": "string", "minLength": 1 },
+        "component_id": { "$ref": "#/definitions/component_id" },
+        "class": { "type": "string", "minLength": 1 },
+        "bounds": { "$ref": "#/definitions/bounds" },
+        "guideline": { "type": "string", "minLength": 1 },
+        "severity": { "$ref": "#/definitions/severity" },
+        "recommendation": { "type": "string", "minLength": 1 },
+        "related_component": { "$ref": "#/definitions/component_id" }
+      },
+      "additionalProperties": false
+    },
+    "enriched_violation": {
+      "allOf": [
+        { "$ref": "#/definitions/violation" },
+        {
+          "type": "object",
+          "required": [
+            "agent_explanation",
+            "agent_why_it_matters",
+            "agent_developer_fix"
+          ],
+          "properties": {
+            "agent_explanation": { "type": "string", "minLength": 1 },
+            "agent_why_it_matters": { "type": "string", "minLength": 1 },
+            "agent_developer_fix": { "type": "string", "minLength": 1 }
+          }
+        }
+      ]
+    },
+    "summary": {
+      "type": "object",
+      "required": ["total_issues", "critical", "high", "medium", "low"],
+      "properties": {
+        "total_issues": { "type": "integer", "minimum": 0 },
+        "critical": { "type": "integer", "minimum": 0 },
+        "high": { "type": "integer", "minimum": 0 },
+        "medium": { "type": "integer", "minimum": 0 },
+        "low": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "title": "components.json",
+      "type": "object",
+      "required": ["screen_id", "image_path", "xml_path", "components"],
+      "properties": {
+        "schema_version": { "$ref": "#/definitions/schema_version" },
+        "screen_id": { "type": "string", "minLength": 1 },
+        "image_path": { "type": "string", "minLength": 1 },
+        "xml_path": { "type": "string", "minLength": 1 },
+        "components": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/component" }
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "title": "violations.json",
+      "type": "object",
+      "required": [
+        "screen_id",
+        "image_path",
+        "xml_path",
+        "total_violations",
+        "violations"
+      ],
+      "properties": {
+        "schema_version": { "$ref": "#/definitions/schema_version" },
+        "screen_id": { "type": "string", "minLength": 1 },
+        "image_path": { "type": "string", "minLength": 1 },
+        "xml_path": { "type": "string", "minLength": 1 },
+        "total_violations": { "type": "integer", "minimum": 0 },
+        "violations": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/violation" }
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "title": "report.json",
+      "type": "object",
+      "required": ["screen_id", "image_path", "xml_path", "summary", "violations"],
+      "properties": {
+        "schema_version": { "$ref": "#/definitions/schema_version" },
+        "screen_id": { "type": "string", "minLength": 1 },
+        "image_path": { "type": "string", "minLength": 1 },
+        "xml_path": { "type": "string", "minLength": 1 },
+        "summary": { "$ref": "#/definitions/summary" },
+        "violations": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/enriched_violation" }
+        }
+      },
+      "additionalProperties": false
+    }
+  ]
+}

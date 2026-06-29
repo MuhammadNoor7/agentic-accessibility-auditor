@@ -1,0 +1,1352 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "search_3033",
+  "image_path": "data/data-masc/screenshots/search/3033.jpg",
+  "xml_path": "data/data-masc/xml/search/3033.xml",
+  "components": [
+    {
+      "component_id": "c_001",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_002",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_mode_bar_stub",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_004",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_005",
+      "class": "android.support.v7.widget.ActionBarOverlayLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/decor_content_parent",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_006",
+      "class": "android.support.v7.widget.ContentFrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/content",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_007",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/FragmentContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_008",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2112
+      ]
+    },
+    {
+      "component_id": "c_009",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/TitleContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        466
+      ]
+    },
+    {
+      "component_id": "c_010",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Find Flight Seatmap",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/TitleText",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        42,
+        322,
+        715,
+        424
+      ]
+    },
+    {
+      "component_id": "c_011",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/TabsContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        466,
+        1440,
+        641
+      ]
+    },
+    {
+      "component_id": "c_012",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "Flight #",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/tab_1",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        466,
+        480,
+        641
+      ]
+    },
+    {
+      "component_id": "c_013",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "Route",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/tab_2",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        480,
+        466,
+        960,
+        641
+      ]
+    },
+    {
+      "component_id": "c_014",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "Airline",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/tab_3",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        960,
+        466,
+        1440,
+        641
+      ]
+    },
+    {
+      "component_id": "c_015",
+      "class": "android.widget.ViewFlipper",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/ViewFlipperSeat",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        641,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_016",
+      "class": "android.widget.ScrollView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/ScrollFlight",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        641,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_017",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        1610
+      ]
+    },
+    {
+      "component_id": "c_018",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Airline",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/AirlineByFlightTextView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        704,
+        265,
+        806
+      ]
+    },
+    {
+      "component_id": "c_019",
+      "class": "com.seatguru.ui.CustomAutoCompleteTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/EditTextAirline",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        841,
+        1387,
+        997
+      ]
+    },
+    {
+      "component_id": "c_020",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1334,
+        156
+      ]
+    },
+    {
+      "component_id": "c_021",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/relativeLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        841,
+        1387,
+        997
+      ]
+    },
+    {
+      "component_id": "c_022",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1387,
+        919,
+        1387,
+        919
+      ]
+    },
+    {
+      "component_id": "c_023",
+      "class": "android.support.v7.widget.AppCompatAutoCompleteTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/autocomplete",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        53,
+        841,
+        1387,
+        997
+      ]
+    },
+    {
+      "component_id": "c_024",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "* Please enter a valid airline",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/warning",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        841,
+        53,
+        841
+      ]
+    },
+    {
+      "component_id": "c_025",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Flight #",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/FlightTextView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        1032,
+        307,
+        1134
+      ]
+    },
+    {
+      "component_id": "c_026",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/FlightNrContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        1169,
+        1387,
+        1339
+      ]
+    },
+    {
+      "component_id": "c_027",
+      "class": "android.support.v7.widget.AppCompatEditText",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/EditTextFlightNr",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        53,
+        1169,
+        403,
+        1339
+      ]
+    },
+    {
+      "component_id": "c_028",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "Don't know your Flight #?",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/FlightHelpTextView",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        438,
+        1170,
+        1387,
+        1338
+      ]
+    },
+    {
+      "component_id": "c_029",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "* Please enter a valid flight number",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/numberWarning",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        641,
+        0,
+        641
+      ]
+    },
+    {
+      "component_id": "c_030",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Departure Date",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/DepartureTextView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        1374,
+        562,
+        1476
+      ]
+    },
+    {
+      "component_id": "c_031",
+      "class": "android.support.v7.widget.AppCompatEditText",
+      "text": "5/21/2017",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/DatePickerBtn",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        1511,
+        463,
+        1703
+      ]
+    },
+    {
+      "component_id": "c_032",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "Find Seatmap",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/FindSeatMapFlightBtn",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        88,
+        1808,
+        1352,
+        2016
+      ]
+    },
+    {
+      "component_id": "c_033",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Recent Searches",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/RecentSearchesTextViewAtSeatByFlight",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        2051,
+        618,
+        2153
+      ]
+    },
+    {
+      "component_id": "c_034",
+      "class": "com.seatguru.ui.RecentSearchesLinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/RecentSearchesListAtSeatByFlight",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        2188,
+        1387,
+        2202
+      ]
+    },
+    {
+      "component_id": "c_035",
+      "class": "android.widget.ScrollView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/ScrollRoute",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        641,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_036",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        1924
+      ]
+    },
+    {
+      "component_id": "c_037",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Airline",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/AirlineByRouteTextView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        641,
+        265,
+        633
+      ]
+    },
+    {
+      "component_id": "c_038",
+      "class": "com.seatguru.ui.CustomAutoCompleteTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/EditTextAirline2",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        668,
+        1387,
+        824
+      ]
+    },
+    {
+      "component_id": "c_039",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1334,
+        156
+      ]
+    },
+    {
+      "component_id": "c_040",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/relativeLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        668,
+        1387,
+        824
+      ]
+    },
+    {
+      "component_id": "c_041",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1387,
+        746,
+        1387,
+        746
+      ]
+    },
+    {
+      "component_id": "c_042",
+      "class": "android.support.v7.widget.AppCompatAutoCompleteTextView",
+      "text": "United",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/autocomplete",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        53,
+        668,
+        1387,
+        824
+      ]
+    },
+    {
+      "component_id": "c_043",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "* Please enter a valid airline",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/warning",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        668,
+        53,
+        668
+      ]
+    },
+    {
+      "component_id": "c_044",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "From",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/FromLocationTextView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        859,
+        229,
+        961
+      ]
+    },
+    {
+      "component_id": "c_045",
+      "class": "com.seatguru.ui.CustomAutoCompleteTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/EditTextFromLocation",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        996,
+        1387,
+        1152
+      ]
+    },
+    {
+      "component_id": "c_046",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1334,
+        156
+      ]
+    },
+    {
+      "component_id": "c_047",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/relativeLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        996,
+        1387,
+        1152
+      ]
+    },
+    {
+      "component_id": "c_048",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/icon",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1271,
+        1016,
+        1387,
+        1132
+      ]
+    },
+    {
+      "component_id": "c_049",
+      "class": "android.support.v7.widget.AppCompatAutoCompleteTextView",
+      "text": "San Francisco, CA - SFO International Airport (SFO)",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/autocomplete",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        53,
+        996,
+        1259,
+        1152
+      ]
+    },
+    {
+      "component_id": "c_050",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "* Please enter a valid origin",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/warning",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        996,
+        53,
+        996
+      ]
+    },
+    {
+      "component_id": "c_051",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "To",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/ToLocationTextView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        1187,
+        137,
+        1289
+      ]
+    },
+    {
+      "component_id": "c_052",
+      "class": "com.seatguru.ui.CustomAutoCompleteTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/EditTextToLocation",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        1324,
+        1387,
+        1480
+      ]
+    },
+    {
+      "component_id": "c_053",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1334,
+        156
+      ]
+    },
+    {
+      "component_id": "c_054",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/relativeLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        1324,
+        1387,
+        1480
+      ]
+    },
+    {
+      "component_id": "c_055",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/icon",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1271,
+        1344,
+        1387,
+        1460
+      ]
+    },
+    {
+      "component_id": "c_056",
+      "class": "android.support.v7.widget.AppCompatAutoCompleteTextView",
+      "text": "New York City, NY - All Airports (NYC)",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/autocomplete",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        53,
+        1324,
+        1259,
+        1480
+      ]
+    },
+    {
+      "component_id": "c_057",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "* Please enter a valid destination",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/warning",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        1324,
+        53,
+        1324
+      ]
+    },
+    {
+      "component_id": "c_058",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Departure Date",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/DepartureRouteTextView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        1515,
+        562,
+        1617
+      ]
+    },
+    {
+      "component_id": "c_059",
+      "class": "android.support.v7.widget.AppCompatEditText",
+      "text": "5/21/2017",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/DatePickerRouteBtn",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        1652,
+        463,
+        1844
+      ]
+    },
+    {
+      "component_id": "c_060",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "Find Seatmap",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/FindSeatMapRouteBtn",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        88,
+        1949,
+        1352,
+        2157
+      ]
+    },
+    {
+      "component_id": "c_061",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Recent Searches",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/RecentSearchesTextViewAtSeatByRoute",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        53,
+        2192,
+        618,
+        2294
+      ]
+    },
+    {
+      "component_id": "c_062",
+      "class": "com.seatguru.ui.RecentSearchesLinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/RecentSearchesListAtSeatByRoute",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        641,
+        0,
+        468
+      ]
+    },
+    {
+      "component_id": "c_063",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_064",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/SearchBoxContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        641,
+        0,
+        641
+      ]
+    },
+    {
+      "component_id": "c_065",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/SearchIcon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        641,
+        0,
+        641
+      ]
+    },
+    {
+      "component_id": "c_066",
+      "class": "android.support.v7.widget.AppCompatEditText",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/EditTextSearchAirline",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        641,
+        0,
+        641
+      ]
+    },
+    {
+      "component_id": "c_067",
+      "class": "android.widget.ListView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/SearchResultsList",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        641,
+        0,
+        641
+      ]
+    },
+    {
+      "component_id": "c_068",
+      "class": "com.seatguru.webview.CustomWebview",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/seatWebview",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_069",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/ProgressBarSeat",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_070",
+      "class": "android.support.v7.widget.ActionBarContainer",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/action_bar_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_071",
+      "class": "android.support.v7.widget.Toolbar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/action_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_072",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        252,
+        37,
+        777,
+        158
+      ]
+    },
+    {
+      "component_id": "c_073",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        777,
+        35,
+        1384,
+        161
+      ]
+    },
+    {
+      "component_id": "c_074",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        73,
+        0,
+        607,
+        126
+      ]
+    },
+    {
+      "component_id": "c_075",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/seat",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        850,
+        119,
+        1010,
+        245
+      ]
+    },
+    {
+      "component_id": "c_076",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        160,
+        0,
+        164,
+        126
+      ]
+    },
+    {
+      "component_id": "c_077",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/flight_status",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1014,
+        119,
+        1206,
+        245
+      ]
+    },
+    {
+      "component_id": "c_078",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        356,
+        0,
+        360,
+        126
+      ]
+    },
+    {
+      "component_id": "c_079",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/flights",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1210,
+        119,
+        1384,
+        245
+      ]
+    },
+    {
+      "component_id": "c_080",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "Navigate up",
+      "content_desc": "Navigate up",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        0,
+        196,
+        196
+      ]
+    },
+    {
+      "component_id": "c_081",
+      "class": "android.support.v7.widget.ActionMenuView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1440,
+        0,
+        1440,
+        196
+      ]
+    },
+    {
+      "component_id": "c_082",
+      "class": "android.support.v7.widget.ActionBarContextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.seatguru:id/action_context_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ]
+    },
+    {
+      "component_id": "c_083",
+      "class": "android.view.View",
+      "text": "java.lang.Object",
+      "content_desc": "",
+      "resource_id": "android:id/navigationBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2392,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_084",
+      "class": "android.view.View",
+      "text": "java.lang.Object",
+      "content_desc": "",
+      "resource_id": "android:id/statusBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        84
+      ]
+    }
+  ]
+}

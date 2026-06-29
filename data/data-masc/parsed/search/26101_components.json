@@ -1,0 +1,936 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "search_26101",
+  "image_path": "data/data-masc/screenshots/search/26101.jpg",
+  "xml_path": "data/data-masc/xml/search/26101.xml",
+  "components": [
+    {
+      "component_id": "c_001",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_002",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_mode_bar_stub",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_004",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_005",
+      "class": "android.support.v7.widget.ActionBarOverlayLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/decor_content_parent",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_006",
+      "class": "android.support.v7.widget.ContentFrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/content",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_007",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/root_layout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_008",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/search_results_fragment",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_009",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/no_results",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_010",
+      "class": "android.widget.TextView",
+      "text": "We were unable to find the items you were searching for. Please change your search query or browse our items below.",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/no_results_text",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_011",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/no_results_layout_fragment_area",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_012",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_013",
+      "class": "android.widget.ScrollView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_014",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/layoutArea",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_015",
+      "class": "fr.castorflex.android.smoothprogressbar.SmoothProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/layout_progress_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_016",
+      "class": "android.widget.TextView",
+      "text": "Unable to connect to network",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/bad_connection",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_017",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/progress",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        448
+      ]
+    },
+    {
+      "component_id": "c_018",
+      "class": "android.widget.GridView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/list",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        1440,
+        1490
+      ]
+    },
+    {
+      "component_id": "c_019",
+      "class": "com.predictspring.mobile.consumer.views.ProductSummaryGridView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        40,
+        150,
+        700,
+        1060
+      ]
+    },
+    {
+      "component_id": "c_020",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/layout_cell",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        40,
+        430,
+        700,
+        1340
+      ]
+    },
+    {
+      "component_id": "c_021",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/full_view",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        40,
+        430,
+        700,
+        1340
+      ]
+    },
+    {
+      "component_id": "c_022",
+      "class": "com.predictspring.mobile.consumer.views.NetworkImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/image",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        40,
+        430,
+        700,
+        1025
+      ]
+    },
+    {
+      "component_id": "c_023",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/price_area",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        195,
+        1025,
+        545,
+        1088
+      ]
+    },
+    {
+      "component_id": "c_024",
+      "class": "com.predictspring.mobile.consumer.views.StyleableTextView",
+      "text": "$19.99",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/sales_price",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        209,
+        1025,
+        363,
+        1088
+      ]
+    },
+    {
+      "component_id": "c_025",
+      "class": "com.predictspring.mobile.consumer.views.StyleableTextView",
+      "text": "$39.50",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/list_price",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        377,
+        1025,
+        531,
+        1088
+      ]
+    },
+    {
+      "component_id": "c_026",
+      "class": "com.predictspring.mobile.consumer.views.StyleableTextView",
+      "text": "extra 15% off in cart",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/promo_title",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        40,
+        1088,
+        700,
+        1142
+      ]
+    },
+    {
+      "component_id": "c_027",
+      "class": "android.widget.TextView",
+      "text": "2 PACK CLASSICS BIG + TALL BOXER BRIEFS",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/title",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        40,
+        1142,
+        700,
+        1281
+      ]
+    },
+    {
+      "component_id": "c_028",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/border_mask_overlay",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        40,
+        430,
+        700,
+        1340
+      ]
+    },
+    {
+      "component_id": "c_029",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/border_overlay",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        40,
+        430,
+        40,
+        430
+      ]
+    },
+    {
+      "component_id": "c_030",
+      "class": "android.widget.HorizontalScrollView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/active_refinements_scroll",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        18,
+        298,
+        1422,
+        298
+      ]
+    },
+    {
+      "component_id": "c_031",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/active_refinements_list",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        18,
+        298,
+        18,
+        298
+      ]
+    },
+    {
+      "component_id": "c_032",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/refinement_bar_layout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2197,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_033",
+      "class": "com.predictspring.mobile.consumer.views.StyleableButtonView",
+      "text": "Sort",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/sort_button",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        36,
+        2233,
+        702,
+        2356
+      ]
+    },
+    {
+      "component_id": "c_034",
+      "class": "com.predictspring.mobile.consumer.views.StyleableButtonView",
+      "text": "Filter",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/filter_button",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        738,
+        2233,
+        1404,
+        2356
+      ]
+    },
+    {
+      "component_id": "c_035",
+      "class": "android.support.v7.widget.ActionBarContainer",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/action_bar_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_036",
+      "class": "android.support.v7.widget.Toolbar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/action_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_037",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        196,
+        0,
+        1384,
+        196
+      ]
+    },
+    {
+      "component_id": "c_038",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/toggleButtonsFrame",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1258,
+        126,
+        1370,
+        238
+      ]
+    },
+    {
+      "component_id": "c_039",
+      "class": "android.widget.ImageView",
+      "text": "Switch to list view",
+      "content_desc": "Switch to list view",
+      "resource_id": "com.calvinKlein.android:id/gridButton",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1258,
+        126,
+        1258,
+        126
+      ]
+    },
+    {
+      "component_id": "c_040",
+      "class": "android.widget.ImageView",
+      "text": "Switch to grid view",
+      "content_desc": "Switch to grid view",
+      "resource_id": "com.calvinKlein.android:id/listButton",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1258,
+        126,
+        1370,
+        238
+      ]
+    },
+    {
+      "component_id": "c_041",
+      "class": "android.widget.ImageView",
+      "text": "Scan barcode",
+      "content_desc": "Scan barcode",
+      "resource_id": "com.calvinKlein.android:id/scanButton",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1146,
+        84,
+        1258,
+        280
+      ]
+    },
+    {
+      "component_id": "c_042",
+      "class": "android.widget.SearchView",
+      "text": "Search query",
+      "content_desc": "Search query",
+      "resource_id": "com.calvinKlein.android:id/search",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        196,
+        84,
+        1146,
+        280
+      ]
+    },
+    {
+      "component_id": "c_043",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/search_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        196,
+        84,
+        1146,
+        280
+      ]
+    },
+    {
+      "component_id": "c_044",
+      "class": "android.widget.TextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/search_badge",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        196,
+        84,
+        196,
+        84
+      ]
+    },
+    {
+      "component_id": "c_045",
+      "class": "android.widget.ImageView",
+      "text": "Search",
+      "content_desc": "Search",
+      "resource_id": "android:id/search_button",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        196,
+        84,
+        196,
+        84
+      ]
+    },
+    {
+      "component_id": "c_046",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/search_edit_frame",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        224,
+        117,
+        1118,
+        247
+      ]
+    },
+    {
+      "component_id": "c_047",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/search_mag_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        252,
+        126,
+        364,
+        238
+      ]
+    },
+    {
+      "component_id": "c_048",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/search_plate",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        364,
+        117,
+        1118,
+        247
+      ]
+    },
+    {
+      "component_id": "c_049",
+      "class": "android.widget.SearchView$SearchAutoComplete",
+      "text": "boxers",
+      "content_desc": "",
+      "resource_id": "android:id/search_src_text",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        364,
+        117,
+        978,
+        243
+      ]
+    },
+    {
+      "component_id": "c_050",
+      "class": "android.widget.ImageView",
+      "text": "Clear query",
+      "content_desc": "Clear query",
+      "resource_id": "android:id/search_close_btn",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        978,
+        117,
+        1118,
+        243
+      ]
+    },
+    {
+      "component_id": "c_051",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/submit_area",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        224,
+        117,
+        224,
+        117
+      ]
+    },
+    {
+      "component_id": "c_052",
+      "class": "android.widget.ImageView",
+      "text": "Submit query",
+      "content_desc": "Submit query",
+      "resource_id": "android:id/search_go_btn",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        224,
+        117,
+        224,
+        117
+      ]
+    },
+    {
+      "component_id": "c_053",
+      "class": "android.widget.ImageView",
+      "text": "Voice search",
+      "content_desc": "Voice search",
+      "resource_id": "android:id/search_voice_btn",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        224,
+        117,
+        224,
+        117
+      ]
+    },
+    {
+      "component_id": "c_054",
+      "class": "android.widget.ImageButton",
+      "text": "Navigate up",
+      "content_desc": "Navigate up",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        0,
+        196,
+        196
+      ]
+    },
+    {
+      "component_id": "c_055",
+      "class": "android.support.v7.widget.ActionMenuView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1440,
+        0,
+        1440,
+        196
+      ]
+    },
+    {
+      "component_id": "c_056",
+      "class": "android.support.v7.widget.ActionBarContextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.calvinKlein.android:id/action_context_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ]
+    },
+    {
+      "component_id": "c_057",
+      "class": "android.view.View",
+      "text": "java.lang.Object",
+      "content_desc": "",
+      "resource_id": "android:id/navigationBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2392,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_058",
+      "class": "android.view.View",
+      "text": "java.lang.Object",
+      "content_desc": "",
+      "resource_id": "android:id/statusBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        84
+      ]
+    }
+  ]
+}

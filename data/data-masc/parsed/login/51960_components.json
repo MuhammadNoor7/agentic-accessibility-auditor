@@ -1,0 +1,344 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "login_51960",
+  "image_path": "data/data-masc/screenshots/login/51960.jpg",
+  "xml_path": "data/data-masc/xml/login/51960.xml",
+  "components": [
+    {
+      "component_id": "c_001",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_002",
+      "class": "com.android.internal.widget.ActionBarOverlayLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/decor_content_parent",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_003",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/content",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_004",
+      "class": "android.widget.ScrollView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2112
+      ]
+    },
+    {
+      "component_id": "c_005",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        1149
+      ]
+    },
+    {
+      "component_id": "c_006",
+      "class": "com.digits.sdk.android.LogoImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.zebstudios.yaxi:id/dgts__logo",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_007",
+      "class": "android.widget.TextView",
+      "text": "Enter your phone number",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        49,
+        385,
+        1391,
+        488
+      ]
+    },
+    {
+      "component_id": "c_008",
+      "class": "com.digits.sdk.android.CountryListSpinner",
+      "text": "United States +1",
+      "content_desc": "",
+      "resource_id": "com.zebstudios.yaxi:id/dgts__countryCode",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        49,
+        572,
+        1391,
+        657
+      ]
+    },
+    {
+      "component_id": "c_009",
+      "class": "android.widget.EditText",
+      "text": "415-340-2067",
+      "content_desc": "",
+      "resource_id": "com.zebstudios.yaxi:id/dgts__phoneNumberEditText",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        49,
+        661,
+        1391,
+        819
+      ]
+    },
+    {
+      "component_id": "c_010",
+      "class": "com.digits.sdk.android.StateButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.zebstudios.yaxi:id/dgts__sendCodeButton",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        49,
+        875,
+        1391,
+        1015
+      ]
+    },
+    {
+      "component_id": "c_011",
+      "class": "android.widget.TextView",
+      "text": "Done",
+      "content_desc": "",
+      "resource_id": "com.zebstudios.yaxi:id/dgts__state_button",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        647,
+        902,
+        793,
+        987
+      ]
+    },
+    {
+      "component_id": "c_012",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.zebstudios.yaxi:id/dgts__state_progress",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        450,
+        896,
+        548,
+        994
+      ]
+    },
+    {
+      "component_id": "c_013",
+      "class": "android.widget.ImageView",
+      "text": "Success Icon",
+      "content_desc": "Success Icon",
+      "resource_id": "com.zebstudios.yaxi:id/dgts__state_success",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        549,
+        896,
+        647,
+        994
+      ]
+    },
+    {
+      "component_id": "c_014",
+      "class": "android.widget.TextView",
+      "text": "By tapping \"Send confirmation code\" above, Digits by Twitter will send you an SMS to confirm your phone number. On the next screen, you can choose \u201cResend code\u201d to receive a new SMS or \u201cCall me\u201d to initiate a phone call to confirm your phone number. Message, call & data rates may apply.",
+      "content_desc": "",
+      "resource_id": "com.zebstudios.yaxi:id/dgts__termsText",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        49,
+        1071,
+        1391,
+        1324
+      ]
+    },
+    {
+      "component_id": "c_015",
+      "class": "com.android.internal.widget.ActionBarContainer",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_bar_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_016",
+      "class": "android.widget.Toolbar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_017",
+      "class": "android.widget.TextView",
+      "text": "Yaxi",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        56,
+        135,
+        188,
+        228
+      ]
+    },
+    {
+      "component_id": "c_018",
+      "class": "android.widget.ActionMenuView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1440,
+        0,
+        1440,
+        196
+      ]
+    },
+    {
+      "component_id": "c_019",
+      "class": "com.android.internal.widget.ActionBarContextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_context_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ]
+    },
+    {
+      "component_id": "c_020",
+      "class": "android.view.View",
+      "text": "java.lang.Object",
+      "content_desc": "",
+      "resource_id": "android:id/navigationBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2392,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_021",
+      "class": "android.view.View",
+      "text": "java.lang.Object",
+      "content_desc": "",
+      "resource_id": "android:id/statusBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        84
+      ]
+    }
+  ]
+}

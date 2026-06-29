@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Accessibility Guidelines &amp; Rule Mapping — Agentic Accessibility Auditor</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; color: #222; line-height: 1.45; }
+    h1, h2, h3 { color: #1a365d; }
+    table { border-collapse: collapse; width: 100%; margin: 1em 0; font-size: 0.9em; }
+    th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
+    th { background: #edf2f7; }
+    .meta { color: #555; font-size: 0.95em; }
+  </style>
+</head>
+<body>
+  <h1>Agentic Accessibility Auditor</h1>
+  <h2>Accessibility Guidelines &amp; Rule Mapping</h2>
+  <p class="meta">FAST University 2025 · Schema v1.0 · Canonical markdown: <code>accessibility_guidelines_report.md</code></p>
+
+  <h2>1. Guidelines G01–G30</h2>
+  <p>30 guidelines covering blind, low vision, color blind, deaf, motor, cognitive, elderly, and all-user accessibility principles. See full tables in <code>docs/accessibility_guidelines_report.md</code>.</p>
+
+  <h2>2. Detection Rules R01–R30</h2>
+  <p>Each rule is a technically detectable XML check with severity and linked guideline IDs. Priority rules for Week 3 acceptance: <strong>R01–R05</strong>.</p>
+
+  <h3>Priority rules (internship plan)</h3>
+  <table>
+    <tr><th>Rule</th><th>Issue</th><th>Severity</th><th>Guidelines</th></tr>
+    <tr><td>R01</td><td>Missing Label</td><td>High</td><td>G01, G02, G30</td></tr>
+    <tr><td>R02</td><td>No Image Desc</td><td>High</td><td>G02, G30</td></tr>
+    <tr><td>R03</td><td>Duplicate Label</td><td>Medium</td><td>G03</td></tr>
+    <tr><td>R04</td><td>Small Touch Target</td><td>High</td><td>G04, G17</td></tr>
+    <tr><td>R05</td><td>Unlabeled Input</td><td>High</td><td>G05, G20</td></tr>
+  </table>
+
+  <h2>3. Pipeline</h2>
+  <p>Parser → <code>components.json</code> → Rule checker → <code>violations.json</code> → Agent → <code>report.json</code> → HTML/PDF report.</p>
+  <p>The agent receives <strong>only</strong> rule-detected violations and must not invent new issues.</p>
+
+  <h2>4. JSON schema</h2>
+  <p><code>rule_id</code>: R01–R30 · <code>guideline</code>: G-ID + description · Formal schema: <code>docs/schemas/auditor_schema.json</code></p>
+
+  <p class="meta">Print this page to PDF, or use the full markdown report for complete G01–G30 / R01–R30 tables.</p>
+</body>
+</html>

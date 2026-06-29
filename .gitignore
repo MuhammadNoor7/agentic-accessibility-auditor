@@ -1,14 +1,31 @@
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 *.pyo
 *.pyd
-.venv/
-node_modules/
-.DS_Store
-.env
-.env.local
+*.egg-info/
 dist/
 build/
+
+# Virtual environments
+venv/
+.venv/
+env/
+node_modules/
+
+# Environment variables / secrets
+.env
+.env.local
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
 
 # Generic runtime uploads / outputs (not for Git)
 data/parsed/
@@ -16,7 +33,10 @@ data/xml/
 data/screenshots/
 outputs/
 
-# MASC — ignore raw dataset; track parser output & splits only
+# Raw Rico source corpus (local only)
+data/final_rico/
+
+# MASC — ignore raw dataset; track parser output & splits only (on azeem branch)
 data/data-masc/*
 !data/data-masc/parsed/
 !data/data-masc/parsed/**
@@ -30,7 +50,6 @@ data/data-rico-holdout/*
 !data/data-rico-holdout/manifest/
 !data/data-rico-holdout/manifest/*.csv
 !data/data-rico-holdout/manifest/*.json
-# Exclude large manifest extras (thumbnails, sheets, xlsx)
 data/data-rico-holdout/manifest/_sheet_thumbs/
 data/data-rico-holdout/manifest/category_sheets/
 data/data-rico-holdout/manifest/google_sheets/

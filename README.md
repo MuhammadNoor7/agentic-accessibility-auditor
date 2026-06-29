@@ -23,7 +23,7 @@ All teammates should use **these paths** so pipeline outputs line up.
 
 ```
 agentic-accessibility-auditor/
-├── app.py                      # Streamlit demo (parse XML → components.json)
+├── app.py                      # Streamlit demo (upload + batch parse)
 ├── test_run.py                 # Batch / single-file parser runner
 ├── requirements.txt
 ├── Dockerfile
@@ -36,32 +36,26 @@ agentic-accessibility-auditor/
 │
 ├── src/
 │   ├── parser.py               # Hybrid Android UI XML → components.json
-│   └── schema_documents.py     # Schema constants + build_components_document()
+│   ├── schema_documents.py     # Schema constants + build_components_document()
+│   └── report_generator.py     # HTML/PDF report (planned wiring)
 │
 ├── scripts/
-│   └── validate_output.py      # Validate JSON against auditor_schema.json
+│   ├── validate_output.py      # Validate JSON against auditor_schema.json
+│   ├── split_masc_dataset.py   # MASC train/val/test splits
+│   ├── build_rico_holdout.py   # Build MASC-disjoint Rico holdout
+│   └── …                       # Other dataset utilities
 │
-├── data/                       # Local only — not committed to Git
+├── data/
 │   ├── screenshots/            # Single-screen uploads (runtime)
-│   ├── xml/                    # Uploaded UIAutomator XML (any app)
-│   ├── parsed/                 # Generic upload output
-│   │
-│   ├── data-masc/              # MASC dataset (7,068 pairs)
-│   │   ├── screenshots/{category}/
-│   │   ├── xml/{category}/
-│   │   ├── json/{category}/
-│   │   ├── parsed/{category}/  # {id}_components.json
-│   │   └── splits/             # train.csv, val.csv, test.csv (70/15/15)
-│   │
-│   └── data-rico-holdout/      # Rico holdout (1,698 pairs) — unseen final eval
-│       ├── screenshots/{category}/
-│       ├── xml/{category}/
-│       ├── json/{category}/
-│       └── parsed/{category}/  # {id}_components.json
+│   ├── xml/                      # Uploaded UIAutomator XML (any app)
+│   ├── parsed/                   # Generic upload output
+│   ├── data-masc/                # MASC dataset (local raw + tracked parsed/splits)
+│   ├── data-rico-holdout/        # Rico holdout (local raw + tracked parsed/manifest)
+│   └── final_rico/               # Raw Rico source (local only)
 │
 ├── outputs/
 │   ├── violations/             # Stage 2: {screen}_violations.json (planned)
-│   └── reports/                # Stage 4: audit_report.html / .pdf (planned)
+│   └── reports/                  # Stage 4: audit_report.html / .pdf (planned)
 │
 └── docs/
     ├── accessibility_guidelines_report.md
@@ -70,7 +64,8 @@ agentic-accessibility-auditor/
     ├── rico_holdout_dataset.md
     ├── windows_setup.md
     ├── schemas/auditor_schema.json
-    └── examples/               # Sample components.json, violations.json, report.json
+    ├── examples/
+    └── progress/
 ```
 
 ### Pipeline → folder mapping
@@ -87,7 +82,7 @@ agentic-accessibility-auditor/
 
 ---
 
-## Parser (Stage 1 — implemented on `azeem`)
+## Parser (Stage 1 — implemented)
 
 `src/parser.py` is a **hybrid parser** — one pass over any Android UI XML dump:
 
@@ -98,13 +93,7 @@ agentic-accessibility-auditor/
 | **Rico** | Layout tags (`LinearLayout`, `TextView`, …) with space-separated bounds |
 | **Generic upload** | Any element with `class` or widget tag + bounds |
 
-**Resilience:**
-
-- Null bytes in XML are stripped before parse (e.g. `chat/49879.xml`).
-- Missing bounds on UIAutomator nodes → `[0,0,0,0]` (TC-01, no crash).
-- Missing bounds on layout elements → skipped.
-
-Screenshots are **referenced by path only** — the parser does not read image files.
+**Resilience:** null-byte sanitization, TC-01 missing-bounds handling, screenshot paths inferred (images not parsed).
 
 ---
 
@@ -119,20 +108,11 @@ pip install -r requirements.txt
 ### Parse XML
 
 ```bash
-# MASC (default dataset)
-python test_run.py
-
-# Single file
-python test_run.py data/data-masc/xml/chat/49879.xml
-
-# Rico holdout (smoke test — limit files)
-python test_run.py --dataset rico --max-files 4
-
-# Generic uploaded XML (any app — place files in data/xml/)
-python test_run.py --dataset upload
-
-# Validate outputs against JSON Schema
-python scripts/validate_output.py
+python test_run.py                                          # MASC batch
+python test_run.py data/data-masc/xml/chat/49879.xml        # single file
+python test_run.py --dataset rico --max-files 4             # Rico smoke test
+python test_run.py --dataset upload                         # generic uploads in data/xml/
+python scripts/validate_output.py                           # schema check
 ```
 
 ### Streamlit demo
@@ -141,40 +121,59 @@ python scripts/validate_output.py
 streamlit run app.py
 ```
 
-Upload an XML file or run the batch parser from the sidebar.
+Upload XML in the main panel, or run batch parse from the sidebar.
 
 ### Docker
 
 ```bash
 docker-compose up --build
 # Backend API: http://localhost:8000
-# Parser batch runs via auditor service (MASC by default)
 ```
 
 ---
 
 ## Dataset
 
-**MASC (Mobile App Screenshots Corpus)** — training & development  
-[Google Drive — MASC dataset](https://drive.google.com/file/d/1kx8qRbOtdQbbewZgfBTeCIj7lNvabFTF/view?usp=sharing)
+**MASC** — [Google Drive](https://drive.google.com/file/d/1kx8qRbOtdQbbewZgfBTeCIj7lNvabFTF/view?usp=sharing)  
+**Rico holdout** — see [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md)
 
-**Rico holdout** — final unseen evaluation (filtered from `final_rico`, zero overlap with MASC)  
-See [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md).
+| Dataset | Location | Use |
+|---------|----------|-----|
+| **MASC** | `data/data-masc/` | Development & tuning (70/15/15 split in `splits/`) |
+| **Rico holdout** | `data/data-rico-holdout/` | Final unseen evaluation only |
+| **final_rico** | `data/final_rico/` | Raw source corpus (not for direct eval) |
+| **Uploads** | `data/xml/` + `data/screenshots/` | Any new app / unknown screen |
 
-| Dataset | Location | Split | Use |
-|---------|----------|-------|-----|
-| **MASC** | `data/data-masc/` | Train 70% / Val 15% / Test 15% | Development & tuning |
-| **Rico holdout** | `data/data-rico-holdout/` | No split (100% held out) | **Final unseen evaluation only** |
-| **Uploads** | `data/xml/` + `data/screenshots/` | N/A | Any new screen / unknown app |
+Regenerate splits / holdout:
 
-Download datasets locally; they are listed in `.gitignore` and are **not** pushed to GitHub.
+```bash
+python scripts/split_masc_dataset.py
+python scripts/build_rico_holdout.py
+python scripts/build_rico_holdout_sheet.py
+```
+
+---
+
+## Scripts (`scripts/`)
+
+| Script | Purpose |
+|--------|---------|
+| `validate_output.py` | Validate `components.json` against JSON Schema |
+| `split_masc_dataset.py` | Create train/val/test CSVs for MASC |
+| `build_rico_holdout.py` | Build MASC-disjoint holdout from `final_rico` |
+| `build_rico_holdout_sheet.py` | Google Sheet import for Rico holdout |
+| `compare_datasets.py` | Compare MASC vs `final_rico` overlap |
+| `check_train_parser.py` | Sample MASC train screens & validate parser output |
+| `convert_json-to-xml.py` | Convert MASC JSON hierarchies to XML |
+| `generate_labels_csv.py` | Generate screenshot labels CSV |
+| `copy_matched_jsons.py` | Copy matched JSON files into dataset folders |
 
 ---
 
 ## Architecture & status
 
-| Stage | Module | Output | Status on `azeem` |
-|-------|--------|--------|-------------------|
+| Stage | Module | Output | Status |
+|-------|--------|--------|--------|
 | 1 | XML parser | `components.json` | **Done** |
 | 2 | Rule checker (R01–R30) | `violations.json` | Planned |
 | 3 | Agent explanation layer | enriched `report.json` | Planned (Intern 3) |
@@ -198,10 +197,8 @@ Download datasets locally; they are listed in `.gitignore` and are **not** pushe
 
 ## What not to commit
 
-- `data/data-masc/xml/`, `screenshots/`, `json/`, `splits/` (raw MASC — download locally)
-- `data/data-rico-holdout/xml/`, `screenshots/`, `json/` (raw Rico — download locally)
-- `data/parsed/`, `data/xml/`, `data/screenshots/` (generic runtime uploads)
-- `outputs/` (generated violations, reports)
-- `.venv/`, `__pycache__/`, `.env`
+- Raw datasets: `data/data-masc/xml|screenshots|json/`, `data/data-rico-holdout/xml|screenshots|json/`, `data/final_rico/`
+- Runtime uploads: `data/parsed/`, `data/xml/`, `data/screenshots/`
+- Generated: `outputs/`, `.venv/`, `__pycache__/`, `.env`
 
-**Tracked on `azeem`:** `data/data-masc/parsed/`, `data/data-masc/splits/`, `data/data-rico-holdout/parsed/`, `data/data-rico-holdout/manifest/`
+**Tracked on `azeem` branch:** `data/data-masc/parsed/`, `data/data-masc/splits/`, `data/data-rico-holdout/parsed/`, `data/data-rico-holdout/manifest/*.csv` + `*.json`

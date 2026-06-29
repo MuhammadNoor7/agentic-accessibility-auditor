@@ -103,8 +103,8 @@ Upload an XML file and click **Parse XML to Components**. A screenshot is option
 ## Verify the parser
 
 ```powershell
-python src/parser.py data/data-masc/xml/chat/49879.xml
-python scripts/batch_parse_xml.py --file data/data-masc/xml/chat/49879.xml
+python test_run.py data/data-masc/xml/chat/49879.xml
+python test_run.py --dataset masc --max-files 10
 ```
 
 Expected output includes something like:
@@ -113,10 +113,10 @@ Expected output includes something like:
 Parsed 22 component(s) from data\data-masc\xml\chat\49879.xml
 ```
 
-Full JSON output:
+Full JSON is written to `data/data-masc/parsed/chat/49879_components.json`.
 
 ```powershell
-python src/parser.py data/data-masc/xml/chat/49879.xml --json
+python test_run.py data/data-masc/xml/chat/49879.xml
 ```
 
 Smoke test:
@@ -223,7 +223,7 @@ python --version
 pip --version
 git --version
 streamlit --version
-python src/parser.py data/data-masc/xml/chat/49879.xml
+python test_run.py data/data-masc/xml/chat/49879.xml
 ```
 
 All commands should succeed without import errors.

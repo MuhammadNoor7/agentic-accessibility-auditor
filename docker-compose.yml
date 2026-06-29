@@ -16,10 +16,10 @@ services:
     command: python /app/test_run.py
     volumes:
       - .:/app
-      - ./data-masc/data-masc:/app/data/dataset
     environment:
       PYTHONUNBUFFERED: "1"
       PARSER_MAX_FILES: "0"
+      DATASET_ROOT: "/app/data/data-masc"
     networks:
       - auditor-network
 

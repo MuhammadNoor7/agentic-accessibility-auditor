@@ -16,10 +16,12 @@ data/xml/
 data/screenshots/
 outputs/
 
-# MASC — ignore raw dataset; track parser output only
+# MASC — ignore raw dataset; track parser output & splits only
 data/data-masc/*
 !data/data-masc/parsed/
 !data/data-masc/parsed/**
+!data/data-masc/splits/
+!data/data-masc/splits/**
 
 # Rico holdout — ignore raw dataset; track parser output + manifest only
 data/data-rico-holdout/*

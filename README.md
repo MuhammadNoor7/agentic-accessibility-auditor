@@ -204,4 +204,4 @@ Download datasets locally; they are listed in `.gitignore` and are **not** pushe
 - `outputs/` (generated violations, reports)
 - `.venv/`, `__pycache__/`, `.env`
 
-**Tracked on `azeem`:** `data/data-masc/parsed/`, `data/data-rico-holdout/parsed/`, `data/data-rico-holdout/manifest/`
+**Tracked on `azeem`:** `data/data-masc/parsed/`, `data/data-masc/splits/`, `data/data-rico-holdout/parsed/`, `data/data-rico-holdout/manifest/`

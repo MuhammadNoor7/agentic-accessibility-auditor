@@ -1,0 +1,7048 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "chat_55630",
+  "image_path": "data/data-masc/screenshots/chat/55630.jpg",
+  "xml_path": "data/data-masc/xml/chat/55630.xml",
+  "components": [
+    {
+      "component_id": "c_001",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_002",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_mode_bar_stub",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_004",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_005",
+      "class": "android.support.v7.widget.FitWindowsFrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/action_bar_root",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_006",
+      "class": "android.support.v7.widget.ContentFrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/content",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_007",
+      "class": "com.cloudmagic.android.view.HackyDrawerLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/inbox_drawer_layout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_008",
+      "class": "com.cloudmagic.android.widget.CMSlideUpPanel",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/sliding_layout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_009",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_010",
+      "class": "android.support.v7.widget.Toolbar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/toolbar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_011",
+      "class": "android.widget.ImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        0,
+        196,
+        196
+      ]
+    },
+    {
+      "component_id": "c_012",
+      "class": "android.support.v7.widget.ActionMenuView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        572,
+        0,
+        1440,
+        196
+      ]
+    },
+    {
+      "component_id": "c_013",
+      "class": "android.support.v7.view.menu.ActionMenuItemView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/menu_delete",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        572,
+        98,
+        740,
+        266
+      ]
+    },
+    {
+      "component_id": "c_014",
+      "class": "android.support.v7.view.menu.ActionMenuItemView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/menu_archive",
+      "clickable": true,
+      "enabled": false,
+      "focusable": true,
+      "bounds": [
+        740,
+        98,
+        908,
+        266
+      ]
+    },
+    {
+      "component_id": "c_015",
+      "class": "android.support.v7.view.menu.ActionMenuItemView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/menu_moveto",
+      "clickable": true,
+      "enabled": false,
+      "focusable": true,
+      "bounds": [
+        908,
+        98,
+        1076,
+        266
+      ]
+    },
+    {
+      "component_id": "c_016",
+      "class": "android.support.v7.view.menu.ActionMenuItemView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/menu_readunread",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1076,
+        98,
+        1244,
+        266
+      ]
+    },
+    {
+      "component_id": "c_017",
+      "class": "android.support.v7.widget.ActionMenuPresenter$OverflowMenuButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        672,
+        0,
+        868,
+        196
+      ]
+    },
+    {
+      "component_id": "c_018",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        196,
+        1440,
+        2308
+      ]
+    },
+    {
+      "component_id": "c_019",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2112
+      ]
+    },
+    {
+      "component_id": "c_020",
+      "class": "android.support.design.widget.CoordinatorLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2112
+      ]
+    },
+    {
+      "component_id": "c_021",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/content_frame",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_022",
+      "class": "android.support.design.widget.CoordinatorLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2112
+      ]
+    },
+    {
+      "component_id": "c_023",
+      "class": "com.cloudmagic.android.view.CustomRelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/root_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_024",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fake_view",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_025",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2112
+      ]
+    },
+    {
+      "component_id": "c_026",
+      "class": "android.support.v4.widget.SwipeRefreshLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/swipe_refresh_layout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_027",
+      "class": "com.cloudmagic.android.view.SwipeListView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/search_list_view",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_028",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        334
+      ]
+    },
+    {
+      "component_id": "c_029",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        334
+      ]
+    },
+    {
+      "component_id": "c_030",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/right_action_view",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        614
+      ]
+    },
+    {
+      "component_id": "c_031",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/right_action_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        63,
+        447,
+        63,
+        447
+      ]
+    },
+    {
+      "component_id": "c_032",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Move to Inbox",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/right_text",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_033",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/left_action_view",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        614
+      ]
+    },
+    {
+      "component_id": "c_034",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Move to Inbox",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/left_text",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_035",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/left_action_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1377,
+        447,
+        1377,
+        447
+      ]
+    },
+    {
+      "component_id": "c_036",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/row",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        614
+      ]
+    },
+    {
+      "component_id": "c_037",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/left_view",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        614
+      ]
+    },
+    {
+      "component_id": "c_038",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Me to appcrawler1",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/from_address_snippet",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1282,
+        416
+      ]
+    },
+    {
+      "component_id": "c_039",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/magic_star_holder",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1282,
+        280,
+        1440,
+        416
+      ]
+    },
+    {
+      "component_id": "c_040",
+      "class": "android.widget.CheckBox",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/magic_star",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1312,
+        336,
+        1400,
+        409
+      ]
+    },
+    {
+      "component_id": "c_041",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "asdasdsad",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/subject",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        416,
+        1282,
+        489
+      ]
+    },
+    {
+      "component_id": "c_042",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/attachment_icon_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1282,
+        416,
+        1440,
+        489
+      ]
+    },
+    {
+      "component_id": "c_043",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/attachment_icon",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1356,
+        452,
+        1356,
+        452
+      ]
+    },
+    {
+      "component_id": "c_044",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "adsadasdasdd dasjdhasdh dlashdkjashdkjashd kjhdkjashdkj\u00e5\u00df\u02d9 d",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/sub_content_preview",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        489,
+        1272,
+        614
+      ]
+    },
+    {
+      "component_id": "c_045",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "19 Nov",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/timestamp",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1272,
+        489,
+        1440,
+        614
+      ]
+    },
+    {
+      "component_id": "c_046",
+      "class": "com.cloudmagic.android.view.ReminderView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminderView",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_047",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_048",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/buttonContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_049",
+      "class": "android.widget.Button",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_custom",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_050",
+      "class": "android.widget.Button",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_1",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_051",
+      "class": "android.widget.Button",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_2",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_052",
+      "class": "android.widget.Button",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_3",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_053",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        332,
+        1440,
+        334
+      ]
+    },
+    {
+      "component_id": "c_054",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/acc_strip",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_055",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1440,
+        0,
+        1440,
+        334
+      ]
+    },
+    {
+      "component_id": "c_056",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/action_pane",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1440,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_057",
+      "class": "android.widget.ImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/action5",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1440,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_058",
+      "class": "android.widget.ImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/action4",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1440,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_059",
+      "class": "android.widget.ImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/action3",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1440,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_060",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/divider_bottom",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1440,
+        445,
+        1440,
+        449
+      ]
+    },
+    {
+      "component_id": "c_061",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        334,
+        1440,
+        668
+      ]
+    },
+    {
+      "component_id": "c_062",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        334
+      ]
+    },
+    {
+      "component_id": "c_063",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/right_action_view",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        614,
+        1440,
+        948
+      ]
+    },
+    {
+      "component_id": "c_064",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/right_action_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        63,
+        781,
+        63,
+        781
+      ]
+    },
+    {
+      "component_id": "c_065",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Move to Inbox",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/right_text",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        614,
+        0,
+        614
+      ]
+    },
+    {
+      "component_id": "c_066",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/left_action_view",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        614,
+        1440,
+        948
+      ]
+    },
+    {
+      "component_id": "c_067",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Move to Inbox",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/left_text",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        614,
+        0,
+        614
+      ]
+    },
+    {
+      "component_id": "c_068",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/left_action_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1377,
+        781,
+        1377,
+        781
+      ]
+    },
+    {
+      "component_id": "c_069",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/row",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        614,
+        1440,
+        948
+      ]
+    },
+    {
+      "component_id": "c_070",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/left_view",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        614,
+        1440,
+        948
+      ]
+    },
+    {
+      "component_id": "c_071",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Me to appcrawler1",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/from_address_snippet",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        614,
+        1282,
+        750
+      ]
+    },
+    {
+      "component_id": "c_072",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/magic_star_holder",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1282,
+        614,
+        1440,
+        750
+      ]
+    },
+    {
+      "component_id": "c_073",
+      "class": "android.widget.CheckBox",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/magic_star",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1312,
+        670,
+        1400,
+        743
+      ]
+    },
+    {
+      "component_id": "c_074",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "asdasd",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/subject",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        750,
+        1282,
+        823
+      ]
+    },
+    {
+      "component_id": "c_075",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/attachment_icon_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1282,
+        750,
+        1440,
+        823
+      ]
+    },
+    {
+      "component_id": "c_076",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/attachment_icon",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1356,
+        786,
+        1356,
+        786
+      ]
+    },
+    {
+      "component_id": "c_077",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "asdasdasd",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/sub_content_preview",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        823,
+        1272,
+        948
+      ]
+    },
+    {
+      "component_id": "c_078",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "18 Nov",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/timestamp",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1272,
+        823,
+        1440,
+        948
+      ]
+    },
+    {
+      "component_id": "c_079",
+      "class": "com.cloudmagic.android.view.ReminderView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminderView",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        614,
+        0,
+        614
+      ]
+    },
+    {
+      "component_id": "c_080",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_081",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/buttonContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        614,
+        0,
+        614
+      ]
+    },
+    {
+      "component_id": "c_082",
+      "class": "android.widget.Button",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_custom",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        614,
+        0,
+        614
+      ]
+    },
+    {
+      "component_id": "c_083",
+      "class": "android.widget.Button",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_1",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        614,
+        0,
+        614
+      ]
+    },
+    {
+      "component_id": "c_084",
+      "class": "android.widget.Button",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_2",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        614,
+        0,
+        614
+      ]
+    },
+    {
+      "component_id": "c_085",
+      "class": "android.widget.Button",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_3",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        614,
+        0,
+        614
+      ]
+    },
+    {
+      "component_id": "c_086",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        332,
+        1440,
+        334
+      ]
+    },
+    {
+      "component_id": "c_087",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/acc_strip",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        614,
+        0,
+        614
+      ]
+    },
+    {
+      "component_id": "c_088",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1440,
+        0,
+        1440,
+        334
+      ]
+    },
+    {
+      "component_id": "c_089",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/action_pane",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1440,
+        614,
+        1440,
+        614
+      ]
+    },
+    {
+      "component_id": "c_090",
+      "class": "android.widget.ImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/action5",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1440,
+        614,
+        1440,
+        614
+      ]
+    },
+    {
+      "component_id": "c_091",
+      "class": "android.widget.ImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/action4",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1440,
+        614,
+        1440,
+        614
+      ]
+    },
+    {
+      "component_id": "c_092",
+      "class": "android.widget.ImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/action3",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1440,
+        614,
+        1440,
+        614
+      ]
+    },
+    {
+      "component_id": "c_093",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/divider_bottom",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_094",
+      "class": "android.support.v4.widget.CircleImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        650,
+        -140,
+        790,
+        0
+      ]
+    },
+    {
+      "component_id": "c_095",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/empty_listview_view",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_096",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/top_part",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_097",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/sync_loader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_098",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/empty_listview_image",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_099",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/empty_listview_text",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_100",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/empty_listview_text_secondary",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_101",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/empty_listview_action",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_102",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folderlist_guide",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_103",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_104",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/outer_circle",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_105",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_106",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folderlist_swipe_arrow",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_107",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/shared_contact_search_tip",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_108",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_109",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_110",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Search for emails and contacts",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_111",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "DISMISS",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_112",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/mode_switch_filter_view_layout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_113",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Sent Mail",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/filter_1",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_114",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Unread",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/filter_2",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_115",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Starred",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/filter_3",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_116",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/navdrawer_guide",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_117",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "text": "Tip: View Folder List by swiping from the left edge of the screen",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_118",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_119",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/navdrawer_guide_close",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_120",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fake_ab_shadow",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        365
+      ]
+    },
+    {
+      "component_id": "c_121",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_122",
+      "class": "android.support.design.widget.FloatingActionButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/compose_fab_button",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1174,
+        2126,
+        1384,
+        2336
+      ]
+    },
+    {
+      "component_id": "c_123",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/preview_fragment_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_124",
+      "class": "android.support.v4.view.ViewPager",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/swipe_email_pager",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_125",
+      "class": "com.cloudmagic.android.view.CustomRelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2112
+      ]
+    },
+    {
+      "component_id": "c_126",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/spinner_loader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        636,
+        1252,
+        804,
+        1420
+      ]
+    },
+    {
+      "component_id": "c_127",
+      "class": "com.cloudmagic.android.view.CustomScrollView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/scrollView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_128",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/conversationLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_129",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/headerView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        557
+      ]
+    },
+    {
+      "component_id": "c_130",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        7,
+        0,
+        1254,
+        277
+      ]
+    },
+    {
+      "component_id": "c_131",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/snooze_info",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        7,
+        280,
+        7,
+        280
+      ]
+    },
+    {
+      "component_id": "c_132",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "asdasdsad",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/subject",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        72,
+        343,
+        378,
+        428
+      ]
+    },
+    {
+      "component_id": "c_133",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Me & appcrawler1",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/recipientsField",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        72,
+        428,
+        436,
+        504
+      ]
+    },
+    {
+      "component_id": "c_134",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/starredViewContainer",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1272,
+        301,
+        1440,
+        469
+      ]
+    },
+    {
+      "component_id": "c_135",
+      "class": "android.support.v7.widget.AppCompatCheckBox",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/starredView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1298,
+        327,
+        1414,
+        443
+      ]
+    },
+    {
+      "component_id": "c_136",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/conversationMessageLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        557,
+        1440,
+        1147
+      ]
+    },
+    {
+      "component_id": "c_137",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/outboxNotification",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        557,
+        0,
+        557
+      ]
+    },
+    {
+      "component_id": "c_138",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_139",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/notificationMessage",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        557,
+        0,
+        557
+      ]
+    },
+    {
+      "component_id": "c_140",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/outboxSpinner",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        557,
+        0,
+        557
+      ]
+    },
+    {
+      "component_id": "c_141",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/subjectSeparatorLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        557,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_142",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/subject_separator",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        557,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_143",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/olderMailsButtonLayout",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        557,
+        0,
+        557
+      ]
+    },
+    {
+      "component_id": "c_144",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fakeYellowLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        557,
+        0,
+        557
+      ]
+    },
+    {
+      "component_id": "c_145",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_146",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_147",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_148",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/olderMailsSpinner",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        557,
+        0,
+        557
+      ]
+    },
+    {
+      "component_id": "c_149",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/messageListContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        1440,
+        1147
+      ]
+    },
+    {
+      "component_id": "c_150",
+      "class": "com.cloudmagic.android.view.PreviewMessageRow",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        579
+      ]
+    },
+    {
+      "component_id": "c_151",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        579
+      ]
+    },
+    {
+      "component_id": "c_152",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/simpleHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_153",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_154",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactImage",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_155",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactInitialsText",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_156",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_157",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_158",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Me",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fromAddress",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_159",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "adsadasdasdd dasjdhasdh dlashdkjashdkjashd kjhdkjashdkj\u00e5\u00df\u02d9 d",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/excerptText",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_160",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/rightContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_161",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/simpleHeaderAttachmentContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_162",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/attachmentView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_163",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "19 Nov",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/dateTimeText",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_164",
+      "class": "com.cloudmagic.android.view.CustomLinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/panelImport",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        1440,
+        1147
+      ]
+    },
+    {
+      "component_id": "c_165",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/detailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        1440,
+        832
+      ]
+    },
+    {
+      "component_id": "c_166",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        264
+      ]
+    },
+    {
+      "component_id": "c_167",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactImageContainerInDetailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        65,
+        624,
+        217,
+        776
+      ]
+    },
+    {
+      "component_id": "c_168",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactImageInDetailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        69,
+        628,
+        213,
+        772
+      ]
+    },
+    {
+      "component_id": "c_169",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "A",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactInitialsTextInDetailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        69,
+        628,
+        213,
+        772
+      ]
+    },
+    {
+      "component_id": "c_170",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/interactionMsgIndicatorInDetailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        65,
+        624,
+        65,
+        624
+      ]
+    },
+    {
+      "component_id": "c_171",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        217,
+        626,
+        1440,
+        773
+      ]
+    },
+    {
+      "component_id": "c_172",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1,
+        865,
+        145
+      ]
+    },
+    {
+      "component_id": "c_173",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Me",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fromAddressInDetailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        242,
+        627,
+        316,
+        698
+      ]
+    },
+    {
+      "component_id": "c_174",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "19 Nov",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/otherDetailsInDetailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        242,
+        698,
+        456,
+        771
+      ]
+    },
+    {
+      "component_id": "c_175",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/actionLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1082,
+        626,
+        1440,
+        773
+      ]
+    },
+    {
+      "component_id": "c_176",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/replyAllButton",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1124,
+        626,
+        1265,
+        773
+      ]
+    },
+    {
+      "component_id": "c_177",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        211,
+        0,
+        358,
+        147
+      ]
+    },
+    {
+      "component_id": "c_178",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/menuButton",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1293,
+        626,
+        1440,
+        773
+      ]
+    },
+    {
+      "component_id": "c_179",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/closeDraft",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1293,
+        626,
+        1293,
+        626
+      ]
+    },
+    {
+      "component_id": "c_180",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/editDraft",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1293,
+        626,
+        1293,
+        626
+      ]
+    },
+    {
+      "component_id": "c_181",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/detailedHeaderSeparator",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_182",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/webviewContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        832,
+        1440,
+        1147
+      ]
+    },
+    {
+      "component_id": "c_183",
+      "class": "android.webkit.WebView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/simple_webview",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        70,
+        881,
+        1370,
+        1035
+      ]
+    },
+    {
+      "component_id": "c_184",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "This email no longer exists",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/doesNotExistText",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        832,
+        0,
+        832
+      ]
+    },
+    {
+      "component_id": "c_185",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/spinner",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        832,
+        0,
+        832
+      ]
+    },
+    {
+      "component_id": "c_186",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/sender_profile_tip",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        832,
+        0,
+        832
+      ]
+    },
+    {
+      "component_id": "c_187",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_188",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_189",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Tap Here to Know more about the Sender",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        832,
+        0,
+        832
+      ]
+    },
+    {
+      "component_id": "c_190",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "GOT IT",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        832,
+        0,
+        832
+      ]
+    },
+    {
+      "component_id": "c_191",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/cards_tip",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        832,
+        0,
+        832
+      ]
+    },
+    {
+      "component_id": "c_192",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_193",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_194",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Cards have moved inside the menu",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        832,
+        0,
+        832
+      ]
+    },
+    {
+      "component_id": "c_195",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "GOT IT",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        832,
+        0,
+        832
+      ]
+    },
+    {
+      "component_id": "c_196",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/showFullMsgButton",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_197",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_198",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Show full message",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/showFullMsg",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_199",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/attachmentTable",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_200",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/headsUpLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_201",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/headsUpMessage",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_202",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/messageDivider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_203",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/messageDivider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        568,
+        0,
+        568
+      ]
+    },
+    {
+      "component_id": "c_204",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/detailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_205",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        264
+      ]
+    },
+    {
+      "component_id": "c_206",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactImageContainerInDetailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        65,
+        280,
+        217,
+        224
+      ]
+    },
+    {
+      "component_id": "c_207",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactImageInDetailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        69,
+        280,
+        213,
+        220
+      ]
+    },
+    {
+      "component_id": "c_208",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactInitialsTextInDetailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        69,
+        280,
+        213,
+        220
+      ]
+    },
+    {
+      "component_id": "c_209",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/interactionMsgIndicatorInDetailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        65,
+        280,
+        65,
+        72
+      ]
+    },
+    {
+      "component_id": "c_210",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        217,
+        280,
+        1440,
+        221
+      ]
+    },
+    {
+      "component_id": "c_211",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1,
+        865,
+        145
+      ]
+    },
+    {
+      "component_id": "c_212",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fromAddressInDetailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        242,
+        280,
+        242,
+        146
+      ]
+    },
+    {
+      "component_id": "c_213",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/otherDetailsInDetailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        242,
+        280,
+        242,
+        219
+      ]
+    },
+    {
+      "component_id": "c_214",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/actionLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1082,
+        280,
+        1440,
+        221
+      ]
+    },
+    {
+      "component_id": "c_215",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/replyAllButton",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1124,
+        280,
+        1265,
+        221
+      ]
+    },
+    {
+      "component_id": "c_216",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        211,
+        0,
+        358,
+        147
+      ]
+    },
+    {
+      "component_id": "c_217",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/menuButton",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1293,
+        280,
+        1440,
+        221
+      ]
+    },
+    {
+      "component_id": "c_218",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/closeDraft",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1293,
+        280,
+        1293,
+        74
+      ]
+    },
+    {
+      "component_id": "c_219",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/editDraft",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1293,
+        280,
+        1293,
+        74
+      ]
+    },
+    {
+      "component_id": "c_220",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/detailedHeaderSeparator",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        16
+      ]
+    },
+    {
+      "component_id": "c_221",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fake_ab_shadow",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        365
+      ]
+    },
+    {
+      "component_id": "c_222",
+      "class": "com.cloudmagic.android.view.ReminderView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminderView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_223",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_224",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/buttonContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_225",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_3",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_226",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_2",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_227",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_1",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_228",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_custom",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_229",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "New email in this conversation. Tap to update.",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/new_mail_notification_button",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_230",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/tablet_separator",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_231",
+      "class": "com.cloudmagic.android.view.CustomRelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        0,
+        2915,
+        2112
+      ]
+    },
+    {
+      "component_id": "c_232",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/spinner_loader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        2111,
+        1252,
+        1440,
+        1420
+      ]
+    },
+    {
+      "component_id": "c_233",
+      "class": "com.cloudmagic.android.view.CustomScrollView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/scrollView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_234",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/conversationLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_235",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/headerView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        557
+      ]
+    },
+    {
+      "component_id": "c_236",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        7,
+        0,
+        1254,
+        277
+      ]
+    },
+    {
+      "component_id": "c_237",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/snooze_info",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1482,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_238",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "asdasd",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/subject",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1547,
+        343,
+        1440,
+        428
+      ]
+    },
+    {
+      "component_id": "c_239",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Me & appcrawler1",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/recipientsField",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1547,
+        428,
+        1440,
+        504
+      ]
+    },
+    {
+      "component_id": "c_240",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/starredViewContainer",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        2747,
+        301,
+        1440,
+        469
+      ]
+    },
+    {
+      "component_id": "c_241",
+      "class": "android.support.v7.widget.AppCompatCheckBox",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/starredView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        2773,
+        327,
+        1440,
+        443
+      ]
+    },
+    {
+      "component_id": "c_242",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/conversationMessageLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        557,
+        1440,
+        1147
+      ]
+    },
+    {
+      "component_id": "c_243",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/outboxNotification",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        557,
+        1440,
+        557
+      ]
+    },
+    {
+      "component_id": "c_244",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_245",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/notificationMessage",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        557,
+        1440,
+        557
+      ]
+    },
+    {
+      "component_id": "c_246",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/outboxSpinner",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        557,
+        1440,
+        557
+      ]
+    },
+    {
+      "component_id": "c_247",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/subjectSeparatorLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        557,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_248",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/subject_separator",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        557,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_249",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/olderMailsButtonLayout",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        557,
+        1440,
+        557
+      ]
+    },
+    {
+      "component_id": "c_250",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fakeYellowLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        557,
+        1440,
+        557
+      ]
+    },
+    {
+      "component_id": "c_251",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_252",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_253",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_254",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/olderMailsSpinner",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        557,
+        1440,
+        557
+      ]
+    },
+    {
+      "component_id": "c_255",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/messageListContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        1147
+      ]
+    },
+    {
+      "component_id": "c_256",
+      "class": "com.cloudmagic.android.view.PreviewMessageRow",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        579
+      ]
+    },
+    {
+      "component_id": "c_257",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        579
+      ]
+    },
+    {
+      "component_id": "c_258",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/simpleHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_259",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_260",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactImage",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_261",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactInitialsText",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_262",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_263",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_264",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Me",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fromAddress",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_265",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "asdasdasd",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/excerptText",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_266",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/rightContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_267",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/simpleHeaderAttachmentContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_268",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/attachmentView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_269",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "18 Nov",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/dateTimeText",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_270",
+      "class": "com.cloudmagic.android.view.CustomLinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/panelImport",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        1147
+      ]
+    },
+    {
+      "component_id": "c_271",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/detailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        832
+      ]
+    },
+    {
+      "component_id": "c_272",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        264
+      ]
+    },
+    {
+      "component_id": "c_273",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactImageContainerInDetailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1540,
+        624,
+        1440,
+        776
+      ]
+    },
+    {
+      "component_id": "c_274",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactImageInDetailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1544,
+        628,
+        1440,
+        772
+      ]
+    },
+    {
+      "component_id": "c_275",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "A",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactInitialsTextInDetailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1544,
+        628,
+        1440,
+        772
+      ]
+    },
+    {
+      "component_id": "c_276",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/interactionMsgIndicatorInDetailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1540,
+        624,
+        1440,
+        624
+      ]
+    },
+    {
+      "component_id": "c_277",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1692,
+        626,
+        1440,
+        773
+      ]
+    },
+    {
+      "component_id": "c_278",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1,
+        865,
+        145
+      ]
+    },
+    {
+      "component_id": "c_279",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Me",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fromAddressInDetailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1717,
+        627,
+        1440,
+        698
+      ]
+    },
+    {
+      "component_id": "c_280",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "18 Nov",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/otherDetailsInDetailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1717,
+        698,
+        1440,
+        771
+      ]
+    },
+    {
+      "component_id": "c_281",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/actionLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        2557,
+        626,
+        1440,
+        773
+      ]
+    },
+    {
+      "component_id": "c_282",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/replyAllButton",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        2599,
+        626,
+        1440,
+        773
+      ]
+    },
+    {
+      "component_id": "c_283",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        211,
+        0,
+        358,
+        147
+      ]
+    },
+    {
+      "component_id": "c_284",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/menuButton",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        2768,
+        626,
+        1440,
+        773
+      ]
+    },
+    {
+      "component_id": "c_285",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/closeDraft",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        2768,
+        626,
+        1440,
+        626
+      ]
+    },
+    {
+      "component_id": "c_286",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/editDraft",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        2768,
+        626,
+        1440,
+        626
+      ]
+    },
+    {
+      "component_id": "c_287",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/detailedHeaderSeparator",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_288",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/webviewContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        832,
+        1440,
+        1147
+      ]
+    },
+    {
+      "component_id": "c_289",
+      "class": "android.webkit.WebView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/simple_webview",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1545,
+        881,
+        1440,
+        881
+      ]
+    },
+    {
+      "component_id": "c_290",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "This email no longer exists",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/doesNotExistText",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        832,
+        1440,
+        832
+      ]
+    },
+    {
+      "component_id": "c_291",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/spinner",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        832,
+        1440,
+        832
+      ]
+    },
+    {
+      "component_id": "c_292",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/sender_profile_tip",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        832,
+        1440,
+        832
+      ]
+    },
+    {
+      "component_id": "c_293",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_294",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_295",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Tap Here to Know more about the Sender",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        832,
+        1440,
+        832
+      ]
+    },
+    {
+      "component_id": "c_296",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "GOT IT",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        832,
+        1440,
+        832
+      ]
+    },
+    {
+      "component_id": "c_297",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/cards_tip",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        832,
+        1440,
+        832
+      ]
+    },
+    {
+      "component_id": "c_298",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_299",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_300",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Cards have moved inside the menu",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        832,
+        1440,
+        832
+      ]
+    },
+    {
+      "component_id": "c_301",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "GOT IT",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        832,
+        1440,
+        832
+      ]
+    },
+    {
+      "component_id": "c_302",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/showFullMsgButton",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_303",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_304",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Show full message",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/showFullMsg",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_305",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/attachmentTable",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_306",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/headsUpLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_307",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/headsUpMessage",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_308",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/messageDivider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_309",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/messageDivider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        568,
+        1440,
+        568
+      ]
+    },
+    {
+      "component_id": "c_310",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/detailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_311",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        264
+      ]
+    },
+    {
+      "component_id": "c_312",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactImageContainerInDetailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1540,
+        280,
+        1440,
+        224
+      ]
+    },
+    {
+      "component_id": "c_313",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactImageInDetailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1544,
+        280,
+        1440,
+        220
+      ]
+    },
+    {
+      "component_id": "c_314",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactInitialsTextInDetailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1544,
+        280,
+        1440,
+        220
+      ]
+    },
+    {
+      "component_id": "c_315",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/interactionMsgIndicatorInDetailedHeader",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1540,
+        280,
+        1440,
+        72
+      ]
+    },
+    {
+      "component_id": "c_316",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1692,
+        280,
+        1440,
+        221
+      ]
+    },
+    {
+      "component_id": "c_317",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1,
+        865,
+        145
+      ]
+    },
+    {
+      "component_id": "c_318",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fromAddressInDetailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1717,
+        280,
+        1440,
+        146
+      ]
+    },
+    {
+      "component_id": "c_319",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/otherDetailsInDetailedHeader",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1717,
+        280,
+        1440,
+        219
+      ]
+    },
+    {
+      "component_id": "c_320",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/actionLayout",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        2557,
+        280,
+        1440,
+        221
+      ]
+    },
+    {
+      "component_id": "c_321",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/replyAllButton",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        2599,
+        280,
+        1440,
+        221
+      ]
+    },
+    {
+      "component_id": "c_322",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        211,
+        0,
+        358,
+        147
+      ]
+    },
+    {
+      "component_id": "c_323",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/menuButton",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        2768,
+        280,
+        1440,
+        221
+      ]
+    },
+    {
+      "component_id": "c_324",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/closeDraft",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        2768,
+        280,
+        1440,
+        74
+      ]
+    },
+    {
+      "component_id": "c_325",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/editDraft",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        2768,
+        280,
+        1440,
+        74
+      ]
+    },
+    {
+      "component_id": "c_326",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/detailedHeaderSeparator",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        16
+      ]
+    },
+    {
+      "component_id": "c_327",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fake_ab_shadow",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        365
+      ]
+    },
+    {
+      "component_id": "c_328",
+      "class": "com.cloudmagic.android.view.ReminderView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminderView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_329",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_330",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/buttonContainer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_331",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_3",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_332",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_2",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_333",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_1",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_334",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/reminder_button_custom",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_335",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "text": "New email in this conversation. Tap to update.",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/new_mail_notification_button",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        280
+      ]
+    },
+    {
+      "component_id": "c_336",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/tablet_separator",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        1475,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_337",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/shared_contact_search_tip",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_338",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_339",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_340",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Search for emails and contacts",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_341",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "DISMISS",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        0,
+        280
+      ]
+    },
+    {
+      "component_id": "c_342",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/overlay_view",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ]
+    },
+    {
+      "component_id": "c_343",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/calendar_view_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_344",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/profile_details_container",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2392,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_345",
+      "class": "android.support.design.widget.NavigationView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        -1050,
+        0,
+        0,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_346",
+      "class": "android.support.design.internal.NavigationMenuView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/design_navigation_view",
+      "clickable": false,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        0,
+        0,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_347",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/navigation_header_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        0,
+        112
+      ]
+    },
+    {
+      "component_id": "c_348",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/menu_frame",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_349",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1050,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_350",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1050,
+        403
+      ]
+    },
+    {
+      "component_id": "c_351",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        86,
+        1050,
+        403
+      ]
+    },
+    {
+      "component_id": "c_352",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/nav_drawer_top_setting_container",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        86,
+        0,
+        401
+      ]
+    },
+    {
+      "component_id": "c_353",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/user_with_account",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        86,
+        0,
+        401
+      ]
+    },
+    {
+      "component_id": "c_354",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/profilePicContainerInNavdrawer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        143,
+        -853,
+        283
+      ]
+    },
+    {
+      "component_id": "c_355",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/contactImage",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        143,
+        -853,
+        283
+      ]
+    },
+    {
+      "component_id": "c_356",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/userInitialsTextInNavDrawer",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        143,
+        -993,
+        143
+      ]
+    },
+    {
+      "component_id": "c_357",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        56,
+        197,
+        1050,
+        285
+      ]
+    },
+    {
+      "component_id": "c_358",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Hi App!",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/title",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        283,
+        -161,
+        371
+      ]
+    },
+    {
+      "component_id": "c_359",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/settings_button",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        283,
+        -17,
+        367
+      ]
+    },
+    {
+      "component_id": "c_360",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        35,
+        0,
+        119,
+        84
+      ]
+    },
+    {
+      "component_id": "c_361",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/user_without_account",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        86,
+        -1049,
+        86
+      ]
+    },
+    {
+      "component_id": "c_362",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_363",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_364",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_365",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_366",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Create a Newton ID",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        86,
+        -1049,
+        86
+      ]
+    },
+    {
+      "component_id": "c_367",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Sync accounts and preferences across all your devices",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        86,
+        -1049,
+        86
+      ]
+    },
+    {
+      "component_id": "c_368",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/fl_settings_button",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        86,
+        -1049,
+        86
+      ]
+    },
+    {
+      "component_id": "c_369",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_370",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        315,
+        1050,
+        317
+      ]
+    },
+    {
+      "component_id": "c_371",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        403,
+        1050,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_372",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/yellow_header",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        403,
+        0,
+        637
+      ]
+    },
+    {
+      "component_id": "c_373",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Subscribe Now",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/yellow_header_title",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        449,
+        -614,
+        525
+      ]
+    },
+    {
+      "component_id": "c_374",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "On free trial. 14 days left.",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/yellow_header_summary",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        525,
+        -446,
+        591
+      ]
+    },
+    {
+      "component_id": "c_375",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        234,
+        1050,
+        1989
+      ]
+    },
+    {
+      "component_id": "c_376",
+      "class": "android.widget.ExpandableListView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_list_view",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        0,
+        637,
+        0,
+        2182
+      ]
+    },
+    {
+      "component_id": "c_377",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        -94,
+        1050,
+        102
+      ]
+    },
+    {
+      "component_id": "c_378",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/mainView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        637,
+        0,
+        739
+      ]
+    },
+    {
+      "component_id": "c_379",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        637,
+        -923,
+        672
+      ]
+    },
+    {
+      "component_id": "c_380",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Starred",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_name",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        637,
+        -692,
+        739
+      ]
+    },
+    {
+      "component_id": "c_381",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_unread_count",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        637,
+        -993,
+        543
+      ]
+    },
+    {
+      "component_id": "c_382",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/bottom_divider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        637,
+        -1049,
+        543
+      ]
+    },
+    {
+      "component_id": "c_383",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        102,
+        1050,
+        298
+      ]
+    },
+    {
+      "component_id": "c_384",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/mainView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        739,
+        0,
+        935
+      ]
+    },
+    {
+      "component_id": "c_385",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        804,
+        -923,
+        869
+      ]
+    },
+    {
+      "component_id": "c_386",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Important",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_name",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        739,
+        -626,
+        935
+      ]
+    },
+    {
+      "component_id": "c_387",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_unread_count",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        739,
+        -993,
+        739
+      ]
+    },
+    {
+      "component_id": "c_388",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/bottom_divider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        739,
+        -1049,
+        739
+      ]
+    },
+    {
+      "component_id": "c_389",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        298,
+        1050,
+        494
+      ]
+    },
+    {
+      "component_id": "c_390",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/mainView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        935,
+        0,
+        1131
+      ]
+    },
+    {
+      "component_id": "c_391",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1000,
+        -923,
+        1065
+      ]
+    },
+    {
+      "component_id": "c_392",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Sent Mail",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_name",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        935,
+        -641,
+        1131
+      ]
+    },
+    {
+      "component_id": "c_393",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_unread_count",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        935,
+        -993,
+        935
+      ]
+    },
+    {
+      "component_id": "c_394",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/bottom_divider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        935,
+        -1049,
+        935
+      ]
+    },
+    {
+      "component_id": "c_395",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        494,
+        1050,
+        690
+      ]
+    },
+    {
+      "component_id": "c_396",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/mainView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1131,
+        0,
+        1327
+      ]
+    },
+    {
+      "component_id": "c_397",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1196,
+        -923,
+        1262
+      ]
+    },
+    {
+      "component_id": "c_398",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Drafts",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_name",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1131,
+        -720,
+        1327
+      ]
+    },
+    {
+      "component_id": "c_399",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_unread_count",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1131,
+        -993,
+        1131
+      ]
+    },
+    {
+      "component_id": "c_400",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/bottom_divider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1131,
+        -1049,
+        1131
+      ]
+    },
+    {
+      "component_id": "c_401",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        690,
+        1050,
+        886
+      ]
+    },
+    {
+      "component_id": "c_402",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/mainView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1327,
+        0,
+        1523
+      ]
+    },
+    {
+      "component_id": "c_403",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1392,
+        -923,
+        1457
+      ]
+    },
+    {
+      "component_id": "c_404",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Outbox",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_name",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1327,
+        -695,
+        1523
+      ]
+    },
+    {
+      "component_id": "c_405",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_unread_count",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1327,
+        -993,
+        1327
+      ]
+    },
+    {
+      "component_id": "c_406",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/bottom_divider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1327,
+        -1049,
+        1327
+      ]
+    },
+    {
+      "component_id": "c_407",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        886,
+        1050,
+        1082
+      ]
+    },
+    {
+      "component_id": "c_408",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/mainView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1523,
+        0,
+        1719
+      ]
+    },
+    {
+      "component_id": "c_409",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1588,
+        -923,
+        1653
+      ]
+    },
+    {
+      "component_id": "c_410",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "All Mail",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_name",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1523,
+        -691,
+        1719
+      ]
+    },
+    {
+      "component_id": "c_411",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_unread_count",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1523,
+        -993,
+        1523
+      ]
+    },
+    {
+      "component_id": "c_412",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/bottom_divider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1523,
+        -1049,
+        1523
+      ]
+    },
+    {
+      "component_id": "c_413",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1082,
+        1050,
+        1278
+      ]
+    },
+    {
+      "component_id": "c_414",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/mainView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1719,
+        0,
+        1915
+      ]
+    },
+    {
+      "component_id": "c_415",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1782,
+        -923,
+        1852
+      ]
+    },
+    {
+      "component_id": "c_416",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Spam",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_name",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1719,
+        -726,
+        1915
+      ]
+    },
+    {
+      "component_id": "c_417",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_unread_count",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1719,
+        -993,
+        1719
+      ]
+    },
+    {
+      "component_id": "c_418",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/bottom_divider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1719,
+        -1049,
+        1719
+      ]
+    },
+    {
+      "component_id": "c_419",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1278,
+        1050,
+        1475
+      ]
+    },
+    {
+      "component_id": "c_420",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/mainView",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1915,
+        0,
+        2111
+      ]
+    },
+    {
+      "component_id": "c_421",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1980,
+        -923,
+        2045
+      ]
+    },
+    {
+      "component_id": "c_422",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Trash",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_name",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1915,
+        -732,
+        2111
+      ]
+    },
+    {
+      "component_id": "c_423",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "10",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_unread_count",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        1975,
+        -646,
+        2051
+      ]
+    },
+    {
+      "component_id": "c_424",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/bottom_divider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2111,
+        0,
+        2112
+      ]
+    },
+    {
+      "component_id": "c_425",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_list_sticky_header",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        637,
+        0,
+        849
+      ]
+    },
+    {
+      "component_id": "c_426",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_list_sticky_header_row",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        637,
+        0,
+        849
+      ]
+    },
+    {
+      "component_id": "c_427",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/top_view",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        637,
+        0,
+        847
+      ]
+    },
+    {
+      "component_id": "c_428",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_list_header_text_container",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        701,
+        0,
+        782
+      ]
+    },
+    {
+      "component_id": "c_429",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Gmail",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_list_header_primary_text",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        701,
+        -813,
+        782
+      ]
+    },
+    {
+      "component_id": "c_430",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "10",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_list_header_unread_count",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        701,
+        0,
+        782
+      ]
+    },
+    {
+      "component_id": "c_431",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_list_header_divider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        637,
+        -1049,
+        637
+      ]
+    },
+    {
+      "component_id": "c_432",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/team_supported_icon",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        637,
+        -1049,
+        637
+      ]
+    },
+    {
+      "component_id": "c_433",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_list_header_chevron",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        637,
+        -1049,
+        637
+      ]
+    },
+    {
+      "component_id": "c_434",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/folder_list_header_chevron_img",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        637,
+        -1049,
+        637
+      ]
+    },
+    {
+      "component_id": "c_435",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/bottom_divider",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        847,
+        0,
+        849
+      ]
+    },
+    {
+      "component_id": "c_436",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/calendar_button",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2182,
+        0,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_437",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1050,
+        2
+      ]
+    },
+    {
+      "component_id": "c_438",
+      "class": "com.cloudmagic.android.view.CustomTextView",
+      "text": "Calendar",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/calendar_text",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2182,
+        0,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_439",
+      "class": "android.support.v7.widget.ViewStubCompat",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "com.cloudmagic.mail:id/action_mode_bar_stub",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_440",
+      "class": "android.view.View",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/navigationBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2392,
+        1440,
+        2560
+      ]
+    }
+  ]
+}

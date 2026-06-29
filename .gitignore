@@ -10,8 +10,20 @@ node_modules/
 dist/
 build/
 
-# Local datasets and generated pipeline outputs (not for Git)
-data/data-masc/
-data/data-rico-holdout/
+# Generic runtime uploads / outputs (not for Git)
 data/parsed/
+data/xml/
+data/screenshots/
 outputs/
+
+# MASC — ignore raw dataset; track parser output only
+data/data-masc/*
+!data/data-masc/parsed/
+!data/data-masc/parsed/**
+
+# Rico holdout — ignore raw dataset; track parser output + manifest only
+data/data-rico-holdout/*
+!data/data-rico-holdout/parsed/
+!data/data-rico-holdout/parsed/**
+!data/data-rico-holdout/manifest/
+!data/data-rico-holdout/manifest/**

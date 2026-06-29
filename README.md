@@ -198,6 +198,10 @@ Download datasets locally; they are listed in `.gitignore` and are **not** pushe
 
 ## What not to commit
 
-- `data/data-masc/`, `data/data-rico-holdout/`, `data/parsed/`
+- `data/data-masc/xml/`, `screenshots/`, `json/`, `splits/` (raw MASC — download locally)
+- `data/data-rico-holdout/xml/`, `screenshots/`, `json/` (raw Rico — download locally)
+- `data/parsed/`, `data/xml/`, `data/screenshots/` (generic runtime uploads)
 - `outputs/` (generated violations, reports)
 - `.venv/`, `__pycache__/`, `.env`
+
+**Tracked on `azeem`:** `data/data-masc/parsed/`, `data/data-rico-holdout/parsed/`, `data/data-rico-holdout/manifest/`

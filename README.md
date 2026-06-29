@@ -1,150 +1,194 @@
 # Agentic Accessibility Auditor
 
-An automated accessibility auditing tool for Android mobile UIs.  
-Accepts a **screenshot + UIAutomator XML**, parses UI components, detects violations (R01–R30), maps them to guidelines (G01–G30), explains issues via an LLM, and generates HTML/PDF reports.
-
-**Branch `azeem` (Intern 1):** Stage 1 parser pipeline — hybrid XML parsing, batch runner, schema validation, Docker.
+Automated accessibility auditing for **Android mobile UIs**.  
+Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `components.json`, rule-based `violations.json`, LLM-enriched explanations, and HTML/PDF reports mapped to **G01–G30** guidelines and **R01–R30** detection rules.
 
 ---
 
-## Team
+## Team & branches
 
-| Intern | Branch | Responsibilities |
-|--------|--------|------------------|
-| **Azeem (Intern 1)** | `azeem` | Data collection, XML parsing, rule checker, Docker |
-| **Ayesha (Intern 2)** | `ayesha` | JSON schemas, Figma design, React UI dashboard |
-| **Noor (Intern 3, Lead)** | `noor` | Project lead, LLM agent layer, CNN (optional), report generation |
+| Intern | Branch | Focus |
+|--------|--------|-------|
+| **Azeem** | [`azeem`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/azeem) | Data, hybrid XML parser, rule checker, Docker |
+| **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | JSON schemas, Figma, React dashboard |
+| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | LLM agent, reports, project coordination |
 
 ---
 
-## Project structure
+## Pipeline
 
-All teammates should use **these paths** so pipeline outputs line up.
+```
+Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
+                      │              │              │          │
+               components.json  violations.json  report.json  HTML/PDF
+```
+
+| Stage | Owner | Output | Status |
+|-------|-------|--------|--------|
+| 1 — Parser | Intern 1 | `components.json` | **Done** |
+| 2 — Rules (R01–R30) | Intern 1 | `violations.json` | Planned |
+| 3 — Agent layer | Intern 3 | enriched `report.json` | Planned |
+| 4 — Report | Intern 3 | `audit_report.html` / PDF | Planned |
+
+---
+
+## Project layout
 
 ```
 agentic-accessibility-auditor/
-├── app.py                      # Streamlit demo (upload + batch parse)
-├── test_run.py                 # Batch / single-file parser runner
+├── app.py                  # Streamlit: upload XML + batch parse
+├── test_run.py             # CLI batch / single-file parser
 ├── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yml
 │
-├── backend/                    # FastAPI service (Docker)
-│   ├── Dockerfile
-│   ├── main.py
-│   └── requirements.txt
-│
+├── backend/                # FastAPI (Docker) — health check API
 ├── src/
-│   ├── parser.py               # Hybrid Android UI XML → components.json
-│   ├── schema_documents.py     # Schema constants + build_components_document()
-│   └── report_generator.py     # HTML/PDF report (planned wiring)
+│   ├── parser.py           # Hybrid Android UI XML → components.json
+│   └── schema_documents.py
 │
-├── scripts/
-│   ├── validate_output.py      # Validate JSON against auditor_schema.json
-│   ├── split_masc_dataset.py   # MASC train/val/test splits
-│   ├── build_rico_holdout.py   # Build MASC-disjoint Rico holdout
-│   └── …                       # Other dataset utilities
+├── scripts/                # Dataset utilities + validate_output.py
 │
-├── data/
-│   ├── screenshots/            # Single-screen uploads (runtime)
-│   ├── xml/                      # Uploaded UIAutomator XML (any app)
-│   ├── parsed/                   # Generic upload output
-│   ├── data-masc/                # MASC dataset (local raw + tracked parsed/splits)
-│   ├── data-rico-holdout/        # Rico holdout (local raw + tracked parsed/manifest)
-│   └── final_rico/               # Raw Rico source (local only)
+├── data/                   # See “Datasets” — mostly local / selective Git
+│   ├── xml/                # Generic uploads (any app)
+│   ├── screenshots/
+│   ├── parsed/             # Generic upload parser output
+│   ├── data-masc/           # MASC train/dev (7,068 screens)
+│   ├── data-rico-holdout/  # Unseen final eval (1,698 screens)
+│   └── final_rico/         # Raw Rico source corpus
 │
 ├── outputs/
-│   ├── violations/             # Stage 2: {screen}_violations.json (planned)
-│   └── reports/                  # Stage 4: audit_report.html / .pdf (planned)
+│   ├── violations/         # Stage 2 (planned)
+│   └── reports/            # Stage 4 (planned)
 │
-└── docs/
-    ├── accessibility_guidelines_report.md
-    ├── json_schemas.md
-    ├── qa_test_plan.md
-    ├── rico_holdout_dataset.md
-    ├── windows_setup.md
-    ├── schemas/auditor_schema.json
-    ├── examples/
-    └── progress/
+└── docs/                   # Schemas, guidelines, QA plan, setup guide
 ```
 
-### Pipeline → folder mapping
+### Where parser output goes
 
-| Stage | Producer | Output path | File pattern |
-|-------|----------|-------------|--------------|
-| Input | ADB / upload | `data/screenshots/`, `data/xml/` | `{category}/{id}.jpg` + `.xml` |
-| 1 — Parser | Intern 1 | `data/parsed/` or `data/data-masc/parsed/` or `data/data-rico-holdout/parsed/` | `{id}_components.json` |
-| 2 — Rule checker | Intern 1 | `outputs/violations/` | `{screen}_violations.json` |
-| 3 — Agent | Intern 3 | (enriches violations) | fields in final `report.json` |
-| 4 — Report | Intern 3 | `outputs/reports/` | `audit_report.html`, `.pdf` |
+| Input | Parser output |
+|-------|----------------|
+| `data/xml/{screen}.xml` | `data/parsed/{screen}_components.json` |
+| `data/data-masc/xml/{cat}/{id}.xml` | `data/data-masc/parsed/{cat}/{id}_components.json` |
+| `data/data-rico-holdout/xml/{cat}/{id}.xml` | `data/data-rico-holdout/parsed/{cat}/{id}_components.json` |
 
-**Naming rule:** Screenshot and XML for the same screen share the same base name (e.g. `chat/49879.jpg` + `chat/49879.xml`).
+**Naming:** screenshot and XML for the same screen share the same stem (e.g. `chat/49879.jpg` + `chat/49879.xml`).
 
 ---
 
-## Parser (Stage 1 — implemented)
+## Hybrid parser (Stage 1)
 
-`src/parser.py` is a **hybrid parser** — one pass over any Android UI XML dump:
+`src/parser.py` handles **any Android UI hierarchy XML** in a single pass:
 
-| Format | How it is detected |
-|--------|-------------------|
-| **UIAutomator** | `<node class="..." bounds="[x,y][x,y]">` |
-| **MASC** | UIAutomator nodes + `<wrapper>` child bounds |
-| **Rico** | Layout tags (`LinearLayout`, `TextView`, …) with space-separated bounds |
-| **Generic upload** | Any element with `class` or widget tag + bounds |
+| Format | Recognition |
+|--------|-------------|
+| UIAutomator | `<node class="…" bounds="[l,t][r,b]">` |
+| MASC | UIAutomator nodes + `<wrapper>` numeric bounds |
+| Rico | Widget tags (`LinearLayout`, `TextView`, …) + space-separated bounds |
+| Generic upload | Any element with `class` / widget tag + bounds |
 
-**Resilience:** null-byte sanitization, TC-01 missing-bounds handling, screenshot paths inferred (images not parsed).
+**Built-in resilience**
+
+- Strips null bytes before parse (e.g. corrupt `chat/49879.xml`)
+- TC-01: missing bounds on UIAutomator nodes → `[0,0,0,0]` (no crash)
+- Missing bounds on layout-only tags → skipped
+- Screenshots referenced by path only (images are not parsed)
+
+**Minimal output shape** (`components.json`):
+
+```json
+{
+  "schema_version": "1.0",
+  "screen_id": "chat_49879",
+  "image_path": "data/data-masc/screenshots/chat/49879.jpg",
+  "xml_path": "data/data-masc/xml/chat/49879.xml",
+  "components": [
+    {
+      "component_id": "c_001",
+      "class": "android.widget.TextView",
+      "text": "Send",
+      "content_desc": "",
+      "resource_id": "com.example:id/send",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [0, 120, 200, 180]
+    }
+  ]
+}
+```
+
+Formal contract: [`docs/json_schemas.md`](docs/json_schemas.md) · [`docs/schemas/auditor_schema.json`](docs/schemas/auditor_schema.json)
 
 ---
 
 ## Quick start
 
+### 1. Install
+
 ```bash
 python -m venv venv
-venv\Scripts\activate          # Windows
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # macOS / Linux
 pip install -r requirements.txt
 ```
 
-### Parse XML
+### 2. Add data locally
 
-```bash
-python test_run.py                                          # MASC batch
-python test_run.py data/data-masc/xml/chat/49879.xml        # single file
-python test_run.py --dataset rico --max-files 4             # Rico smoke test
-python test_run.py --dataset upload                         # generic uploads in data/xml/
-python scripts/validate_output.py                           # schema check
+Download datasets (not in Git — see [MASC Drive](https://drive.google.com/file/d/1kx8qRbOtdQbbewZgfBTeCIj7lNvabFTF/view?usp=sharing) and [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md)):
+
+```
+data/data-masc/xml/{category}/{id}.xml
+data/data-masc/screenshots/{category}/{id}.jpg
 ```
 
-### Streamlit demo
+### 3. Parse
+
+```bash
+# MASC — full batch (default dataset)
+python test_run.py
+
+# Single screen (known edge case: null bytes in XML)
+python test_run.py data/data-masc/xml/chat/49879.xml
+
+# Rico holdout — smoke test only (do not tune on this)
+python test_run.py --dataset rico --max-files 4
+
+# Any uploaded / unknown app XML
+python test_run.py --dataset upload
+
+# Validate against JSON Schema
+python scripts/validate_output.py
+```
+
+### 4. Streamlit UI
 
 ```bash
 streamlit run app.py
 ```
 
-Upload XML in the main panel, or run batch parse from the sidebar.
+Upload XML in the main panel; run dataset batch parse from the sidebar.
 
-### Docker
+### 5. Docker
 
 ```bash
 docker-compose up --build
-# Backend API: http://localhost:8000
+# FastAPI health: http://localhost:8000/health
+# Auditor service runs test_run.py on MASC by default
 ```
 
 ---
 
-## Dataset
+## Datasets
 
-**MASC** — [Google Drive](https://drive.google.com/file/d/1kx8qRbOtdQbbewZgfBTeCIj7lNvabFTF/view?usp=sharing)  
-**Rico holdout** — see [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md)
+| Dataset | Path | Split | Purpose |
+|---------|------|-------|---------|
+| **MASC** | `data/data-masc/` | 70% train / 15% val / 15% test (`splits/`) | Development & tuning |
+| **Rico holdout** | `data/data-rico-holdout/` | 100% held out | **Final unseen evaluation** |
+| **final_rico** | `data/final_rico/` | — | Source corpus only (302/2000 overlap MASC) |
+| **Uploads** | `data/xml/` + `data/screenshots/` | — | New / unknown apps |
 
-| Dataset | Location | Use |
-|---------|----------|-----|
-| **MASC** | `data/data-masc/` | Development & tuning (70/15/15 split in `splits/`) |
-| **Rico holdout** | `data/data-rico-holdout/` | Final unseen evaluation only |
-| **final_rico** | `data/final_rico/` | Raw source corpus (not for direct eval) |
-| **Uploads** | `data/xml/` + `data/screenshots/` | Any new app / unknown screen |
-
-Regenerate splits / holdout:
+Regenerate splits or holdout:
 
 ```bash
 python scripts/split_masc_dataset.py
@@ -154,51 +198,64 @@ python scripts/build_rico_holdout_sheet.py
 
 ---
 
-## Scripts (`scripts/`)
+## Scripts
 
 | Script | Purpose |
 |--------|---------|
-| `validate_output.py` | Validate `components.json` against JSON Schema |
-| `split_masc_dataset.py` | Create train/val/test CSVs for MASC |
-| `build_rico_holdout.py` | Build MASC-disjoint holdout from `final_rico` |
-| `build_rico_holdout_sheet.py` | Google Sheet import for Rico holdout |
-| `compare_datasets.py` | Compare MASC vs `final_rico` overlap |
-| `check_train_parser.py` | Sample MASC train screens & validate parser output |
-| `convert_json-to-xml.py` | Convert MASC JSON hierarchies to XML |
-| `generate_labels_csv.py` | Generate screenshot labels CSV |
-| `copy_matched_jsons.py` | Copy matched JSON files into dataset folders |
-
----
-
-## Architecture & status
-
-| Stage | Module | Output | Status |
-|-------|--------|--------|--------|
-| 1 | XML parser | `components.json` | **Done** |
-| 2 | Rule checker (R01–R30) | `violations.json` | Planned |
-| 3 | Agent explanation layer | enriched `report.json` | Planned (Intern 3) |
-| 4 | Report generator | `audit_report.html` / PDF | Planned (Intern 3) |
+| [`validate_output.py`](scripts/validate_output.py) | Validate `components.json` / `violations.json` against schema |
+| [`check_train_parser.py`](scripts/check_train_parser.py) | Sample MASC train screens & check parser output |
+| [`split_masc_dataset.py`](scripts/split_masc_dataset.py) | Create train / val / test CSVs |
+| [`build_rico_holdout.py`](scripts/build_rico_holdout.py) | Build MASC-disjoint Rico holdout |
+| [`build_rico_holdout_sheet.py`](scripts/build_rico_holdout_sheet.py) | Export holdout sheet for review |
+| [`compare_datasets.py`](scripts/compare_datasets.py) | Byte-level overlap check vs MASC |
+| [`convert_json-to-xml.py`](scripts/convert_json-to-xml.py) | MASC JSON → XML conversion |
+| [`generate_labels_csv.py`](scripts/generate_labels_csv.py) | Screenshot label export |
+| [`copy_matched_jsons.py`](scripts/copy_matched_jsons.py) | Copy matched JSON into dataset tree |
 
 ---
 
 ## Documentation
 
-| Doc | Description |
-|-----|-------------|
+| Document | Contents |
+|----------|----------|
 | [`docs/windows_setup.md`](docs/windows_setup.md) | Windows install & onboarding |
 | [`docs/accessibility_guidelines_report.md`](docs/accessibility_guidelines_report.md) | G01–G30 guidelines, R01–R30 rules |
-| [`docs/json_schemas.md`](docs/json_schemas.md) | JSON schemas between modules |
-| [`docs/schemas/auditor_schema.json`](docs/schemas/auditor_schema.json) | Formal JSON Schema v1.0 |
-| [`docs/qa_test_plan.md`](docs/qa_test_plan.md) | QA test cases & sign-off criteria |
-| [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md) | Rico holdout filtering & layout |
-| [`docs/examples/`](docs/examples/) | Sample JSON for all pipeline stages |
+| [`docs/json_schemas.md`](docs/json_schemas.md) | Inter-module JSON contracts |
+| [`docs/qa_test_plan.md`](docs/qa_test_plan.md) | TC-01–TC-06 test cases |
+| [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md) | Holdout filtering methodology |
+| [`docs/examples/`](docs/examples/) | Sample JSON for each pipeline stage |
 
 ---
 
-## What not to commit
+## Git: what to commit
 
-- Raw datasets: `data/data-masc/xml|screenshots|json/`, `data/data-rico-holdout/xml|screenshots|json/`, `data/final_rico/`
-- Runtime uploads: `data/parsed/`, `data/xml/`, `data/screenshots/`
-- Generated: `outputs/`, `.venv/`, `__pycache__/`, `.env`
+**Always commit:** source code, `docs/`, `scripts/`, Docker files, `requirements.txt`
 
-**Tracked on `azeem` branch:** `data/data-masc/parsed/`, `data/data-masc/splits/`, `data/data-rico-holdout/parsed/`, `data/data-rico-holdout/manifest/*.csv` + `*.json`
+**Never commit:** `.venv/`, `__pycache__/`, `.env`, raw `xml/` / `screenshots/` / `json/` trees, `outputs/`
+
+**Tracked on `azeem` (parser artifacts & metadata):**
+
+- `data/data-masc/parsed/`
+- `data/data-masc/splits/`
+- `data/data-rico-holdout/parsed/` (smoke samples)
+- `data/data-rico-holdout/manifest/*.csv` and `*.json` only  
+  (not `_sheet_thumbs/`, `category_sheets/`, `google_sheets/`, or `.xlsx`)
+
+---
+
+## Troubleshooting
+
+| Problem | Fix |
+|---------|-----|
+| `ParseError` on XML | File may contain null bytes — current parser strips `\x00` automatically |
+| 0 components parsed | Check XML has `class` + `bounds` (UIAutomator) or layout tags + bounds (Rico) |
+| Screenshot path wrong | Ensure `{id}.jpg` sits under `screenshots/{category}/` mirroring `xml/{category}/` |
+| `DATASET_ROOT` on Windows | Prefer `python test_run.py --dataset rico` over env vars in cmd |
+| Schema validation fails | Run `python scripts/validate_output.py` and compare with [`docs/examples/components.json`](docs/examples/components.json) |
+
+---
+
+## License & attribution
+
+Internship project — **Agentic Accessibility Auditor**.  
+Datasets: [MASC](https://drive.google.com/file/d/1kx8qRbOtdQbbewZgfBTeCIj7lNvabFTF/view?usp=sharing), Rico (see `docs/rico_holdout_dataset.md`).

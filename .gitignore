@@ -23,9 +23,15 @@ data/data-masc/*
 !data/data-masc/splits/
 !data/data-masc/splits/**
 
-# Rico holdout — ignore raw dataset; track parser output + manifest only
+# Rico holdout — ignore raw dataset; track parser output + manifest metadata only
 data/data-rico-holdout/*
 !data/data-rico-holdout/parsed/
 !data/data-rico-holdout/parsed/**
 !data/data-rico-holdout/manifest/
-!data/data-rico-holdout/manifest/**
+!data/data-rico-holdout/manifest/*.csv
+!data/data-rico-holdout/manifest/*.json
+# Exclude large manifest extras (thumbnails, sheets, xlsx)
+data/data-rico-holdout/manifest/_sheet_thumbs/
+data/data-rico-holdout/manifest/category_sheets/
+data/data-rico-holdout/manifest/google_sheets/
+data/data-rico-holdout/manifest/*.xlsx

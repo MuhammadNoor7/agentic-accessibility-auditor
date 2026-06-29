@@ -1,0 +1,936 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "search_1105",
+  "image_path": "data/data-masc/screenshots/search/1105.jpg",
+  "xml_path": "data/data-masc/xml/search/1105.xml",
+  "components": [
+    {
+      "component_id": "c_001",
+      "class": "com.android.internal.policy.PhoneWindow$DecorView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_002",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/action_mode_bar_stub",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_004",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "android:id/content",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_005",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/pick_location_lyt",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ]
+    },
+    {
+      "component_id": "c_006",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/location_lyt",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        180,
+        444,
+        1260,
+        2032
+      ]
+    },
+    {
+      "component_id": "c_007",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "Select Location",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/select_location_label",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        270,
+        534,
+        1170,
+        610
+      ]
+    },
+    {
+      "component_id": "c_008",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/search_location_lyt",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        270,
+        610,
+        1170,
+        960
+      ]
+    },
+    {
+      "component_id": "c_009",
+      "class": "android.widget.EditText",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/search_destination_list",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        270,
+        790,
+        1170,
+        911
+      ]
+    },
+    {
+      "component_id": "c_010",
+      "class": "android.view.View",
+      "text": "java.lang.Object",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/sep_1",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        270,
+        911,
+        1170,
+        915
+      ]
+    },
+    {
+      "component_id": "c_011",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/current_location_lyt",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        270,
+        960,
+        1170,
+        1053
+      ]
+    },
+    {
+      "component_id": "c_012",
+      "class": "android.widget.ImageButton",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/invisible_back_button",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        270,
+        960,
+        366,
+        1053
+      ]
+    },
+    {
+      "component_id": "c_013",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "Current Location",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        401,
+        968,
+        1170,
+        1044
+      ]
+    },
+    {
+      "component_id": "c_014",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/city_list_lyt",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        270,
+        1053,
+        1170,
+        1987
+      ]
+    },
+    {
+      "component_id": "c_015",
+      "class": "android.widget.ListView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/location_list",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        270,
+        1053,
+        1170,
+        1987
+      ]
+    },
+    {
+      "component_id": "c_016",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/hotel_destination_item_lyt",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1143,
+        1170,
+        1264
+      ]
+    },
+    {
+      "component_id": "c_017",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/text_header",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1143,
+        292,
+        1143
+      ]
+    },
+    {
+      "component_id": "c_018",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "Abohar",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/destination_item",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1143,
+        474,
+        1264
+      ]
+    },
+    {
+      "component_id": "c_019",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/selected_location",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1143,
+        292,
+        1143
+      ]
+    },
+    {
+      "component_id": "c_020",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/recent_search_arrow",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1143,
+        292,
+        1143
+      ]
+    },
+    {
+      "component_id": "c_021",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/hotel_destination_item_lyt",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1263,
+        1170,
+        1429
+      ]
+    },
+    {
+      "component_id": "c_022",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/text_header",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1263,
+        292,
+        1263
+      ]
+    },
+    {
+      "component_id": "c_023",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "Achampet",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/destination_item",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1263,
+        549,
+        1429
+      ]
+    },
+    {
+      "component_id": "c_024",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/selected_location",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1263,
+        292,
+        1263
+      ]
+    },
+    {
+      "component_id": "c_025",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/recent_search_arrow",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1263,
+        292,
+        1263
+      ]
+    },
+    {
+      "component_id": "c_026",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/hotel_destination_item_lyt",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1428,
+        1170,
+        1594
+      ]
+    },
+    {
+      "component_id": "c_027",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/text_header",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1428,
+        292,
+        1428
+      ]
+    },
+    {
+      "component_id": "c_028",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "Adilabad",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/destination_item",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1428,
+        513,
+        1594
+      ]
+    },
+    {
+      "component_id": "c_029",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/selected_location",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1428,
+        292,
+        1428
+      ]
+    },
+    {
+      "component_id": "c_030",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/recent_search_arrow",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1428,
+        292,
+        1428
+      ]
+    },
+    {
+      "component_id": "c_031",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/hotel_destination_item_lyt",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1593,
+        1170,
+        1759
+      ]
+    },
+    {
+      "component_id": "c_032",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/text_header",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1593,
+        292,
+        1593
+      ]
+    },
+    {
+      "component_id": "c_033",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "Adipur",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/destination_item",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1593,
+        458,
+        1759
+      ]
+    },
+    {
+      "component_id": "c_034",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/selected_location",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1593,
+        292,
+        1593
+      ]
+    },
+    {
+      "component_id": "c_035",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/recent_search_arrow",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1593,
+        292,
+        1593
+      ]
+    },
+    {
+      "component_id": "c_036",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/hotel_destination_item_lyt",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1758,
+        1170,
+        1924
+      ]
+    },
+    {
+      "component_id": "c_037",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/text_header",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1758,
+        292,
+        1758
+      ]
+    },
+    {
+      "component_id": "c_038",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "Adoni",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/destination_item",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1758,
+        438,
+        1924
+      ]
+    },
+    {
+      "component_id": "c_039",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/selected_location",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1758,
+        292,
+        1758
+      ]
+    },
+    {
+      "component_id": "c_040",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/recent_search_arrow",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1758,
+        292,
+        1758
+      ]
+    },
+    {
+      "component_id": "c_041",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/hotel_destination_item_lyt",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1923,
+        1170,
+        1987
+      ]
+    },
+    {
+      "component_id": "c_042",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/text_header",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1923,
+        292,
+        1923
+      ]
+    },
+    {
+      "component_id": "c_043",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "Agra",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/destination_item",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1923,
+        410,
+        1987
+      ]
+    },
+    {
+      "component_id": "c_044",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/selected_location",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1923,
+        292,
+        1923
+      ]
+    },
+    {
+      "component_id": "c_045",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/recent_search_arrow",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        292,
+        1923,
+        292,
+        1923
+      ]
+    },
+    {
+      "component_id": "c_046",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/no_suggestion_lyt",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        270,
+        1053,
+        270,
+        1053
+      ]
+    },
+    {
+      "component_id": "c_047",
+      "class": "android.widget.ImageView",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_048",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "Sorry, no matching results found for %1s",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/error_text_quote",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        270,
+        1053,
+        270,
+        1053
+      ]
+    },
+    {
+      "component_id": "c_049",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "Make sure your search is spelled correctly or try a different search",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        270,
+        1053,
+        270,
+        1053
+      ]
+    },
+    {
+      "component_id": "c_050",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/progress_bar",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        636,
+        1436,
+        804,
+        1604
+      ]
+    },
+    {
+      "component_id": "c_051",
+      "class": "android.widget.LinearLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/no_network",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        270,
+        1053,
+        270,
+        1053
+      ]
+    },
+    {
+      "component_id": "c_052",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "Can't connect",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        270,
+        1053,
+        270,
+        1053
+      ]
+    },
+    {
+      "component_id": "c_053",
+      "class": "net.one97.paytm.widget.RoboTextView",
+      "text": "Check your network and try again.",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/check_connection_txt",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        270,
+        1053,
+        270,
+        1053
+      ]
+    },
+    {
+      "component_id": "c_054",
+      "class": "android.widget.Button",
+      "text": "Retry",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/network_retry_btn",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        270,
+        1053,
+        270,
+        1053
+      ]
+    },
+    {
+      "component_id": "c_055",
+      "class": "android.widget.RelativeLayout",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "net.one97.paytm:id/next_page_loading_progress",
+      "clickable": true,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ]
+    },
+    {
+      "component_id": "c_056",
+      "class": "android.widget.ProgressBar",
+      "text": "",
+      "content_desc": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "component_id": "c_057",
+      "class": "android.view.View",
+      "text": "java.lang.Object",
+      "content_desc": "",
+      "resource_id": "android:id/navigationBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        2392,
+        1440,
+        2560
+      ]
+    },
+    {
+      "component_id": "c_058",
+      "class": "android.view.View",
+      "text": "java.lang.Object",
+      "content_desc": "",
+      "resource_id": "android:id/statusBarBackground",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1440,
+        84
+      ]
+    }
+  ]
+}

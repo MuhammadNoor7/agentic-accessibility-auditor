@@ -9,7 +9,7 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 | Intern | Branch | Focus |
 |--------|--------|-------|
-| **Azeem** | [`azeem`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/azeem) | Data, hybrid XML parser, rule checker, Docker |
+| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | Data, hybrid XML parser, rule checker, Docker |
 | **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | JSON schemas, Figma, React dashboard |
 | **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | LLM agent, reports, project coordination |
 
@@ -25,10 +25,10 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 
 | Stage | Owner | Output | Status |
 |-------|-------|--------|--------|
-| 1 — Parser | Intern 1 | `components.json` | **Done** |
-| 2 — Rules (R01–R30) | Intern 1 | `violations.json` | Planned |
-| 3 — Agent layer | Intern 3 | enriched `report.json` | Planned |
-| 4 — Report | Intern 3 | `audit_report.html` / PDF | Planned |
+| 1 — Parser | Salar | `components.json` | **Done** |
+| 2 — Rules (R01–R30) | Salar | `violations.json` | Planned |
+| 3 — Agent layer | Noor | enriched `report.json` | Planned |
+| 4 — Report | Noor | `audit_report.html` / PDF | Planned |
 
 ---
 

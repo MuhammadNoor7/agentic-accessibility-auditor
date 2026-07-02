@@ -1,4 +1,4 @@
-"""Stage 2 rule checker: evaluates parsed UI components against accessibility rules R01-R10.
+"""Stage 2 rule checker: evaluates parsed UI components against accessibility rules R01-R12.
 
 Consumes a components.json-shaped dict (see docs/json_schemas.md) and produces a
 violations.json-shaped dict validated by docs/schemas/auditor_schema.json.
@@ -411,6 +411,53 @@ def check_text_overflow(components: list[dict]) -> list[dict]:
     return violations
 
 
+# --- R11-R12: media/state rules (Ayesha) -----------------------------------------
+
+def check_color_only_info(components: list[dict]) -> list[dict]:
+    """R11: flag state changes shown only via color with no icon or text indicator.
+
+    Input: components - parsed component dicts.
+    Output: list of R11 violation dicts.
+
+    Stub: real detection needs state/color-change metadata (e.g., a component's
+    color before/after a state change) that the current components.json schema
+    does not carry. Returns no violations until that data is available.
+    """
+    # TODO: implement once color/state-change data is exposed by the parser.
+    violations = []
+    return violations
+
+
+def check_missing_captions(components: list[dict]) -> list[dict]:
+    """R12: flag VideoView/media player components with no caption toggle found nearby.
+
+    Input: components - parsed component dicts.
+    Output: list of R12 violation dicts.
+
+    Stub: flags every VideoView/MediaPlayer component found, since sibling/
+    adjacency data needed to confirm the absence of a caption toggle isn't
+    available yet. Will be refined once that data exists.
+    """
+    violations = []
+    for component in components:
+        class_name = component.get("class", "")
+        if "VideoView" not in class_name and "MediaPlayer" not in class_name:
+            continue
+        # TODO: check sibling components for a caption/CC toggle once
+        # adjacency data is available — for now, flag every media player found.
+        violations.append(
+            _make_violation(
+                rule_id="R12",
+                issue="Missing captions",
+                component=component,
+                guideline="G12 — Missing captions",
+                severity="High",
+                recommendation="Add a caption/CC toggle control near the video player.",
+            )
+        )
+    return violations
+
+
 # --- Entry point -----------------------------------------------------------------
 
 RULES = (
@@ -424,11 +471,13 @@ RULES = (
     check_layout_overlap,
     check_low_contrast,
     check_text_overflow,
+    check_color_only_info,
+    check_missing_captions,
 )
 
 
 def check(components_json: dict) -> dict:
-    """Run all R01-R10 rules over a components.json document and build violations.json.
+    """Run all R01-R12 rules over a components.json document and build violations.json.
 
     Input: components_json - dict matching the components.json schema
         (schema_version, screen_id, image_path, xml_path, components[]).

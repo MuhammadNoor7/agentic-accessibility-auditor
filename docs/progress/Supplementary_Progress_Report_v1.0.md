@@ -246,20 +246,24 @@ Config: `data/data-masc/splits/split_summary.json`
 
 ---
 
-### Week 3 — Ayesha (`ayesha` branch)
+Week 3 — Ayesha (`ayesha` branch)
+Pushed by: Ayesha Naveed
 
-**Pushed by:** _[Ayesha — fill in after your push]_
+Completed:
+* Set up React frontend project (Vite + Tailwind CSS) under `frontend/`
+* Built folder structure: `pages/`, `components/`, layout wrapper, reusable UI components (Button, Input, Divider, Logo)
+* Implemented 6 auth screens matching Figma designs: Sign Up, Log In, Forgot Password, Verify Code, Set Password, Password Reset Success
+* Corrected route paths to match SDS §9.3 (`/verify-otp`, `/reset-password`, `/dashboard/:auditId`, `/report/:auditId`, added `/records`)
+* Pulled `src/rules.py` from `salar` branch; added R11 (Color-Only Info) and R12 (Missing Captions) detection stub functions
+* Opened PR #3 "Add R11/R12 detection stubs"
 
-**Completed:**
-- _[List files, screens, commits]_
+Pending:
 
-**Pending:**
-- _[List]_
+* Updated `frontend/` folder not yet pushed on github.
+* Agent/model prompt experiment session with Noor — not yet scheduled
+* Remaining screens (Upload, Dashboard, Report, Records) — next phase
 
-**Blockers:**
-- _[None / describe]_
-
----
+Blockers:None
 
 ### Week 3 — Noor (`noor` branch)
 

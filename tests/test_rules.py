@@ -12,7 +12,7 @@ from pathlib import Path
 import pytest
 
 from src.parser import load_xml_root, parse_xml_tree
-from src.rules import check
+from src.rules import check, check_small_touch_target
 from src.schema_documents import build_components_document
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "rules"
@@ -63,6 +63,7 @@ def test_rule_triggers_on_fail_fixture(filename: str, expected_rule: str) -> Non
         ("r02_image_button_pass.xml", "R02"),
         ("r04_small_target_pass.xml", "R04"),
         ("r05_unlabeled_input_pass.xml", "R05"),
+        ("r05_unlabeled_input_hint_pass.xml", "R05"),
     ],
 )
 def test_rule_does_not_trigger_on_pass_fixture(filename: str, absent_rule: str) -> None:
@@ -102,3 +103,32 @@ def test_layout_overlap_references_related_component() -> None:
     result = _violations_for("r08_layout_overlap_fail.xml")
     overlap = next(v for v in result["violations"] if v["rule_id"] == "R08")
     assert "related_component" in overlap
+
+
+def test_layout_overlap_ignores_zero_size_elements() -> None:
+    """R08 must not crash or falsely flag a pair of zero-size (0-area) elements."""
+    result = _violations_for("r08_zero_size_no_crash.xml")
+    rule_ids = {violation["rule_id"] for violation in result["violations"]}
+    assert "R08" not in rule_ids
+
+
+def test_small_touch_target_respects_dpi_parameter() -> None:
+    """R04 must scale its 48dp threshold by whatever dpi is passed in, not a fixed 160."""
+    component = {
+        "component_id": "c_001",
+        "class": "android.widget.Button",
+        "text": "OK",
+        "content_desc": "",
+        "hint": "",
+        "resource_id": "com.example.app:id/btn_ok",
+        "clickable": True,
+        "enabled": True,
+        "focusable": True,
+        "bounds": [0, 0, 100, 100],
+    }
+    # At the 160dpi baseline, 100px == 100dp — comfortably above the 48dp minimum.
+    assert check_small_touch_target([component], dpi=160) == []
+    # At 420dpi, 100px == 100 * 160/420 =~ 38dp — below the 48dp minimum.
+    violations = check_small_touch_target([component], dpi=420)
+    assert len(violations) == 1
+    assert violations[0]["rule_id"] == "R04"

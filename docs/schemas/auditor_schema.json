@@ -60,11 +60,22 @@
         "class": { "type": "string", "minLength": 1 },
         "text": { "type": "string" },
         "content_desc": { "type": "string" },
+        "hint": { "type": "string" },
         "resource_id": { "type": "string" },
         "clickable": { "type": "boolean" },
         "enabled": { "type": "boolean" },
         "focusable": { "type": "boolean" },
         "bounds": { "$ref": "#/definitions/bounds" }
+      },
+      "additionalProperties": false
+    },
+    "device_info": {
+      "type": "object",
+      "required": ["dpi", "width_px", "height_px"],
+      "properties": {
+        "dpi": { "type": "integer", "minimum": 1 },
+        "width_px": { "type": "integer", "minimum": 0 },
+        "height_px": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": false
     },
@@ -134,6 +145,7 @@
         "screen_id": { "type": "string", "minLength": 1 },
         "image_path": { "type": "string", "minLength": 1 },
         "xml_path": { "type": "string", "minLength": 1 },
+        "device_info": { "$ref": "#/definitions/device_info" },
         "components": {
           "type": "array",
           "items": { "$ref": "#/definitions/component" }

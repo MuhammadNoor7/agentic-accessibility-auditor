@@ -25,6 +25,9 @@ SPACE_BOUNDS_RE = re.compile(r"^(\d+)\s+(\d+)\s+(\d+)\s+(\d+)$")
 
 SKIP_TAGS = {"hierarchy", "wrapper"}
 
+# TBD-03 baseline density, used when the XML root carries no density metadata.
+DEFAULT_DENSITY_DPI = 160
+
 
 def resolve_dataset_root(dataset_root: Path | None = None) -> Path | None:
     if dataset_root is not None:
@@ -176,6 +179,16 @@ def _get_content_desc(elem: etree._Element) -> str:
     return ""
 
 
+def _get_hint(elem: etree._Element) -> str:
+    """Extract an input field's hint text, if present.
+
+    Input: elem - the source XML element.
+    Output: normalized hint string from the `hint` or `android:hint`
+        attribute, or "" if neither is present.
+    """
+    return _normalize_string(elem.get("hint") or elem.get("android:hint"))
+
+
 def _tag_to_class(tag: str) -> str:
     if tag in SKIP_TAGS or tag == "node":
         return ""
@@ -239,6 +252,7 @@ def _element_to_component(elem: etree._Element, component_index: int) -> dict | 
         "class": class_name,
         "text": _get_text(elem),
         "content_desc": _get_content_desc(elem),
+        "hint": _get_hint(elem),
         "resource_id": _normalize_string(elem.get("resource-id") or elem.get("resource_id")),
         "clickable": _parse_bool(elem.get("clickable")),
         "enabled": _parse_bool(elem.get("enabled"), default=True),
@@ -356,6 +370,30 @@ def _parsed_output_path(xml_path: Path, output_dir: Path, dataset_root: Path | N
     return category_dir / f"{xml_path.stem}_components.json"
 
 
+def _extract_device_info(root: etree._Element) -> dict:
+    """Extract screen density and dimensions from the XML root element's attributes.
+
+    Input: root - the top-level parsed XML element (e.g. <hierarchy>).
+    Output: {"dpi": int, "width_px": int, "height_px": int}. Falls back to
+        DEFAULT_DENSITY_DPI and 0x0 dimensions when the XML carries no such
+        metadata, which is true for standard UIAutomator dumps (TBD-03).
+    """
+    dpi_raw = root.get("density") or root.get("android:density")
+    try:
+        dpi = int(float(dpi_raw)) if dpi_raw else DEFAULT_DENSITY_DPI
+    except ValueError:
+        dpi = DEFAULT_DENSITY_DPI
+
+    width_px = height_px = 0
+    root_bounds = _parse_bounds_attr(root.get("bounds"))
+    if root_bounds is not None:
+        left, top, right, bottom = root_bounds
+        width_px = max(0, right - left)
+        height_px = max(0, bottom - top)
+
+    return {"dpi": dpi, "width_px": width_px, "height_px": height_px}
+
+
 def build_screen_document(
     xml_path: Path,
     xml_root_dir: Path,
@@ -370,6 +408,7 @@ def build_screen_document(
         image_path=infer_image_path(xml_path) if dataset_root is None else _screenshot_path(xml_path, dataset_root),
         xml_path=_xml_relative_path(xml_path, dataset_root),
         components=parse_xml_tree(tree_root),
+        device_info=_extract_device_info(tree_root),
     )
 
 

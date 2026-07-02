@@ -25,8 +25,13 @@ This folder holds the **living supplementary progress report** for the Agentic A
 | Ayesha | `ayesha` | Schemas, Figma, React UI |
 | Noor | `noor` | Agent, reports, SRS/SDS, QA, coordination |
 
-## Canonical specs (do not duplicate here)
+## Canonical specs (in this repo)
 
-- SRS: `d:\internship\srs\SRS_Agentic_Accessibility_Auditor_v2.0.md`
-- SDS: `d:\internship\sds\SDS_Agentic_Accessibility_Auditor_v2.0.md`
-- Weekly plan: `d:\internship\updated_plan.md` (local) or ask Noor for latest
+| Document | Path |
+|----------|------|
+| SRS v2.0 (markdown) | `srs/SRS_Agentic_Accessibility_Auditor_v2.0.md` |
+| SRS v2.0 (formatted) | `srs/SRS_Agentic_Accessibility_Auditor_v2.0_formatted.docx` / `.pdf` |
+| SDS v2.0 (markdown) | `sds/SDS_Agentic_Accessibility_Auditor_v2.0.md` |
+| SDS v2.0 (formatted) | `sds/SDS_Agentic_Accessibility_Auditor_v2.0_formatted.docx` / `.pdf` |
+| 8-week plan | `updated_plan.md` |
+| Figma screenshots | `docs/assets/figma/` |

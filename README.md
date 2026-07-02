@@ -15,6 +15,20 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 ---
 
+## Project documentation
+
+| Document | Path |
+|----------|------|
+| **SRS v2.0** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.0.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.md) |
+| **SDS v2.0** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) |
+| **8-week plan** | [`updated_plan.md`](updated_plan.md) |
+| **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) |
+| **Figma screenshots** | `docs/assets/figma/` |
+
+Formatted Word/PDF exports are in `srs/` and `sds/`.
+
+---
+
 ## Pipeline
 
 ```
@@ -26,7 +40,7 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 | Stage | Owner | Output | Status |
 |-------|-------|--------|--------|
 | 1 — Parser | Salar | `components.json` | **Done** |
-| 2 — Rules (R01–R30) | Salar | `violations.json` | Planned |
+| 2 — Rules (R01–R30) | Salar | `violations.json` | **R01–R10 done** (on `salar` / synced to `noor`) |
 | 3 — Agent layer | Noor | enriched `report.json` | Planned |
 | 4 — Report | Noor | `audit_report.html` / PDF | Planned |
 

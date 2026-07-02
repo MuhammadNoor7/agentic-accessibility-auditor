@@ -11,7 +11,7 @@
 | Prepared by | Muhammad Noor (Lead) |
 | Team | Salar (Parser/Rules/Docker), Ayesha (UI/Schemas/Figma), Noor (Agent/Reports/QA) |
 | Repository | [MuhammadNoor7/agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor) |
-| Canonical specs | `srs/SRS_Agentic_Accessibility_Auditor_v2.0.md` · `sds/SDS_Agentic_Accessibility_Auditor_v2.0.md` |
+| Canonical specs | In repo: `srs/` · `sds/` · `updated_plan.md` |
 
 ---
 

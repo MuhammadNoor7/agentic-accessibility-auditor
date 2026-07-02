@@ -16,8 +16,10 @@ from src.parser import (
     resolve_parsed_root,
     _parsed_output_path,
 )
+from src.rules import check as check_rules
 
 ROOT = Path(__file__).resolve().parent
+VIOLATIONS_OUTPUT_ROOT = ROOT / "outputs" / "violations"
 
 DATASET_ALIASES = {
     "masc": ROOT / "data" / "data-masc",
@@ -48,7 +50,26 @@ def resolve_dataset_arg(dataset: str | None) -> Path | None:
     return path
 
 
-def run_batch(dataset: str | None = None, max_files: int | None = None) -> dict:
+def write_violations(doc: dict, output_root: Path | None = None) -> dict:
+    """Run the Stage 2 rule checker on a components.json doc and write violations.json.
+
+    Input: doc - components.json-shaped dict returned by parse_xml_file();
+        output_root - directory to write into (default outputs/violations/).
+    Output: the violations.json-shaped dict that was written to disk.
+    """
+    output_root = output_root or VIOLATIONS_OUTPUT_ROOT
+    output_root.mkdir(parents=True, exist_ok=True)
+    violations_doc = check_rules(doc)
+    output_file = output_root / f"{doc['screen_id']}_violations.json"
+    output_file.write_text(json.dumps(violations_doc, indent=2), encoding="utf-8")
+    return violations_doc
+
+
+def run_batch(
+    dataset: str | None = None,
+    max_files: int | None = None,
+    skip_rules: bool = False,
+) -> dict:
     dataset_root = resolve_dataset_arg(dataset)
     if dataset_root is not None and not dataset_root.exists():
         raise FileNotFoundError(f"Dataset root not found: {dataset_root}")
@@ -70,12 +91,16 @@ def run_batch(dataset: str | None = None, max_files: int | None = None) -> dict:
     errors: list[str] = []
     processed = 0
     total_components = 0
+    total_violations = 0
 
     for xml_path in xml_files:
         try:
             doc = parse_xml_file(xml_path, output_root, xml_root, dataset_root)
             processed += 1
             total_components += len(doc.get("components", []))
+            if not skip_rules:
+                violations_doc = write_violations(doc)
+                total_violations += violations_doc["total_violations"]
         except Exception as exc:
             errors.append(f"{xml_path.name}: {exc}")
 
@@ -83,6 +108,7 @@ def run_batch(dataset: str | None = None, max_files: int | None = None) -> dict:
         "processed_files": processed,
         "failed_files": len(errors),
         "total_components": total_components,
+        "total_violations": None if skip_rules else total_violations,
         "source_root": xml_root.as_posix(),
         "output_root": output_root.as_posix(),
         "dataset_root": dataset_root.as_posix() if dataset_root else None,
@@ -90,7 +116,7 @@ def run_batch(dataset: str | None = None, max_files: int | None = None) -> dict:
     }
 
 
-def run_single(xml_arg: str) -> int:
+def run_single(xml_arg: str, skip_rules: bool = False) -> int:
     xml_path = Path(xml_arg)
     if not xml_path.is_absolute():
         xml_path = (ROOT / xml_path).resolve()
@@ -114,6 +140,12 @@ def run_single(xml_arg: str) -> int:
     print(f"image_path: {doc['image_path']}")
     print(f"xml_path:   {doc['xml_path']}")
     print(f"written:    {output_file}")
+
+    if not skip_rules:
+        violations_doc = write_violations(doc)
+        violations_file = VIOLATIONS_OUTPUT_ROOT / f"{doc['screen_id']}_violations.json"
+        print(f"violations: {violations_doc['total_violations']} found")
+        print(f"written:    {violations_file}")
     return 0
 
 
@@ -139,6 +171,11 @@ def build_parser() -> argparse.ArgumentParser:
         metavar="N",
         help="Limit batch size (default: all, or PARSER_MAX_FILES env var)",
     )
+    parser.add_argument(
+        "--skip-rules",
+        action="store_true",
+        help="Skip running the Stage 2 rule checker after parsing.",
+    )
     return parser
 
 
@@ -146,10 +183,10 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
 
     if args.xml_file:
-        return run_single(args.xml_file)
+        return run_single(args.xml_file, skip_rules=args.skip_rules)
 
     try:
-        result = run_batch(dataset=args.dataset, max_files=args.max_files)
+        result = run_batch(dataset=args.dataset, max_files=args.max_files, skip_rules=args.skip_rules)
     except FileNotFoundError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return 1

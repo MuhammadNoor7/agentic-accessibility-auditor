@@ -436,37 +436,80 @@ def check_text_overflow(components: list[dict]) -> list[dict]:
 # --- R11-R12: media/state rules (Ayesha) -----------------------------------------
 
 def check_color_only_info(components: list[dict]) -> list[dict]:
-    """R11: flag state changes shown only via color with no icon or text indicator.
+    """R11: flag state changes/meaning conveyed by color alone, with no icon or text.
+
+    What it detects: interactive or status-bearing elements (e.g. a toggle,
+    checkbox, form field, or status chip) whose only indicator of state
+    (on/off, valid/invalid, selected/unselected) is a change in color, with no
+    accompanying icon, text label, or shape change. Per G11 (WCAG 1.4.1),
+    color alone must never be the sole carrier of meaning.
+
+    Why it matters: colorblind users (and anyone using a grayscale/high-
+    contrast display mode) cannot perceive a color-only state change at all —
+    a red/green "invalid/valid" field with no icon or message is invisible to
+    them, so they can't tell the form failed validation.
+
+    Detection logic when implemented: a single static UIAutomator XML snapshot
+    has no notion of "before/after a state change" — this needs either (a) two
+    component snapshots of the same screen (before/after a state-changing
+    interaction) diffed against each other by resource_id, so only the color-
+    coded delta is inspected for an accompanying text/content_desc/icon-class
+    change, or (b) screenshot pixel analysis (similar in spirit to R09) to spot
+    same-shape/same-position elements that differ only in color across two
+    captures. Neither input is available to this rule checker today.
 
     Input: components - parsed component dicts.
-    Output: list of R11 violation dicts.
-
-    Stub: real detection needs state/color-change metadata (e.g., a component's
-    color before/after a state change) that the current components.json schema
-    does not carry. Returns no violations until that data is available.
+    Output: list of R11 violation dicts. Currently always [] — see TODO.
     """
-    # TODO: implement once color/state-change data is exposed by the parser.
-    violations = []
+    # TODO(R11 implementation plan):
+    #   1. Extend components.json to optionally carry paired before/after
+    #      component snapshots (or a `state` field) keyed by resource_id.
+    #   2. For each pair where bounds/class/resource_id match but a color-
+    #      coded style differs, check whether text/content_desc/class also
+    #      changed; if not, flag R11.
+    #   3. Until that data exists, this stays a documented no-op stub.
+    violations: list[dict] = []
     return violations
 
 
 def check_missing_captions(components: list[dict]) -> list[dict]:
     """R12: flag VideoView/media player components with no caption toggle found nearby.
 
+    What it detects: any video/media-playback widget (VideoView, MediaPlayer,
+    or similar) present on screen. Per G12 (WCAG 1.2.2), video with spoken
+    audio must offer captions/subtitles.
+
+    Why it matters: Deaf and hard-of-hearing users get no equivalent to the
+    audio track if there's no caption/CC control — the video is effectively
+    inaccessible to them regardless of how well everything else on the screen
+    is labeled.
+
+    Detection logic when implemented: components.json is currently a flat
+    list with no parent/sibling/adjacency information, so "is there a caption
+    toggle near this video" can't be answered precisely yet. Today this stub
+    conservatively flags every VideoView/MediaPlayer component it finds
+    (a coarse approximation that will over-flag videos that do have a caption
+    toggle elsewhere on screen). Once the parser preserves tree adjacency (or
+    at minimum simple bounds-proximity), this should instead only flag a video
+    when no sibling component within a reasonable distance has a resource_id/
+    content_desc suggesting "caption"/"cc"/"subtitle".
+
     Input: components - parsed component dicts.
     Output: list of R12 violation dicts.
-
-    Stub: flags every VideoView/MediaPlayer component found, since sibling/
-    adjacency data needed to confirm the absence of a caption toggle isn't
-    available yet. Will be refined once that data exists.
     """
+    # TODO(R12 implementation plan):
+    #   1. Preserve XML tree adjacency (parent/sibling relationships, or at
+    #      least bounds-proximity) in components.json so nearby elements can
+    #      be inspected instead of guessed at.
+    #   2. Before flagging, search siblings/nearby components for a
+    #      resource_id/content_desc/text containing "caption"/"cc"/"subtitle".
+    #   3. Only flag if no such control is found — replacing today's
+    #      unconditional flag-every-media-player behavior below.
     violations = []
     for component in components:
         class_name = component.get("class", "")
         if "VideoView" not in class_name and "MediaPlayer" not in class_name:
             continue
-        # TODO: check sibling components for a caption/CC toggle once
-        # adjacency data is available — for now, flag every media player found.
         violations.append(
             _make_violation(
                 rule_id="R12",

@@ -256,12 +256,11 @@ Completed:
 * Corrected route paths to match SDS §9.3 (`/verify-otp`, `/reset-password`, `/dashboard/:auditId`, `/report/:auditId`, added `/records`)
 * Pulled `src/rules.py` from `salar` branch; added R11 (Color-Only Info) and R12 (Missing Captions) detection stub functions
 * Opened PR #3 "Add R11/R12 detection stubs"
+* Updated `frontend/` folder pushed on github.
 
 Pending:
-
-* Updated `frontend/` folder not yet pushed on github.
 * Agent/model prompt experiment session with Noor — not yet scheduled
-* Remaining screens (Upload, Dashboard, Report, Records) — next phase
+* Making necessary changes to frontend
 
 Blockers:None
 

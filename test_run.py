@@ -124,13 +124,14 @@ def run_single(xml_arg: str, skip_rules: bool = False) -> int:
         print(f"Error: file not found: {xml_path}", file=sys.stderr)
         return 1
 
-    dataset_root = infer_dataset_root_for_xml(xml_path) or resolve_dataset_root()
+    dataset_root = infer_dataset_root_for_xml(xml_path)
     if dataset_root is not None:
         xml_root = dataset_root / "xml"
         output_root = resolve_parsed_root(dataset_root)
     else:
+        dataset_root = None
         xml_root = xml_path.parent
-        output_root = resolve_parsed_root()
+        output_root = resolve_parsed_root(None)
 
     doc = parse_xml_file(xml_path, output_root, xml_root, dataset_root)
     output_file = _parsed_output_path(xml_path, output_root, dataset_root)

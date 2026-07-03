@@ -121,9 +121,9 @@ The Agentic Accessibility Auditor is a **standalone prototype tool** targeting *
 
 | Tier | Scope |
 |------|-------|
-| **Must Have (MVP)** | Parser → R01–R10 rule engine → LLM explanations → HTML/PDF report → Axion Upload + Issues + Report screens → Docker Compose → evaluation on 25–40 screens |
+| **Must Have (MVP)** | Parser → R01–R10 rule engine → LLM explanations → HTML/PDF report → Axion Upload + Issues + Report screens → **Auth + Records** → Docker Compose → evaluation on 25–40 screens |
 | **Should Have** | R11–R20 rules; Issues dashboard filtering; batch CLI/API; annotated screenshot regions in UI; Figma-approved Axion branding |
-| **Stretch** | R21–R30 rules; CV contrast (R09); legacy CNN classifier signal; interactive click-to-highlight in HTML report; full auth flow (Sign Up / OTP); benchmark dataset export |
+| **Stretch** | R21–R30 rules; CV contrast (R09); legacy CNN classifier signal; interactive click-to-highlight in HTML report; benchmark dataset export |
 
 #### 1.4.3 Out of scope
 
@@ -826,12 +826,19 @@ Minimum API contract for Axion ↔ FastAPI (normative OpenAPI in SDS):
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/health` | Health check |
-| POST | `/api/v1/audit` | Upload screenshot + XML; returns `{ audit_id, status }` |
-| GET | `/api/v1/audit/{audit_id}/status` | Pipeline status: `pending`, `parsing`, `checking`, `explaining`, `reporting`, `complete`, `error` |
-| GET | `/api/v1/audit/{audit_id}/violations` | Returns violations JSON |
-| GET | `/api/v1/audit/{audit_id}/report` | Returns report JSON |
-| GET | `/api/v1/audit/{audit_id}/report/download?format=html\|pdf` | File download |
+| POST | `/api/v1/audit` | Upload XML; returns `{ audit_id, status }` (**Week 3 implemented**) |
+| GET | `/api/v1/audit/{audit_id}/status` | Pipeline status: `pending`, `parsing`, `checking`, `complete`, `error` |
+| GET | `/api/v1/audit/{audit_id}/violations` | Returns violations JSON (**Week 3 implemented**) |
+| GET | `/api/v1/audit/{audit_id}/report` | Returns report JSON (**Week 4+ — not yet implemented**) |
+| GET | `/api/v1/audit/{audit_id}/report/download?format=html\|pdf` | File download (**Week 4+ — not yet implemented**) |
 | POST | `/api/v1/audit/batch` | Batch run over server-side dataset path (**Should**) |
+| POST | `/api/v1/auth/signup` | Register account (**Must**) |
+| POST | `/api/v1/auth/login` | Login → JWT (**Must**) |
+| POST | `/api/v1/auth/forgot-password` | Send OTP email (**Must**) |
+| POST | `/api/v1/auth/verify-otp` | Verify 6-digit code (**Must**) |
+| POST | `/api/v1/auth/reset-password` | Set new password (**Must**) |
+| GET | `/api/v1/records` | List authenticated user's audit history (**Must**) |
+| GET | `/api/v1/records/{record_id}` | Fetch one saved audit record (**Must**) |
 
 **Error responses:** JSON body with `detail` message; 400 invalid pair; 422 validation; 500 pipeline failure.
 
@@ -1000,7 +1007,7 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 | TBD-03 | dp/density strategy for R04 on static XML without ADB metadata | Week 2 |
 | TBD-04 | Screenshot storage for deployed demo (local vs cloud) | Week 2 |
 | TBD-05 | Severity mapping: rule High/Medium/Low → UI Critical/Serious/Moderate/Minor | Week 2 |
-| TBD-06 | Auth flow in or out of MVP | Week 1 (supervisor) |
+| TBD-06 | Auth flow in or out of MVP | **Resolved — Must Have** (SRS §4.9, Appendix F; see §9 auth endpoints) |
 | TBD-07 | `schema_version` numbering convention | Week 1 |
 | TBD-08 | OpenAPI spec publication path | SDS |
 

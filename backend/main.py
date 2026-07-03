@@ -1,16 +1,44 @@
-from fastapi import FastAPI
-import uvicorn
+"""FastAPI gateway — health + audit pipeline stub (Week 3)."""
 
-app = FastAPI(title="Agentic Accessibility Auditor API")
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from backend.routers.audit import router as audit_router
+
+app = FastAPI(
+    title="Agentic Accessibility Auditor API",
+    version="0.3.0",
+    description="Week 3: POST /api/v1/audit runs parse → rules → violations (R01–R12).",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(audit_router)
+
 
 @app.get("/")
-def read_root():
-    return {"status": "success", "message": "Backend container is running and connected!"}
+def read_root() -> dict:
+    return {
+        "status": "success",
+        "message": "Agentic Accessibility Auditor API",
+    }
+
 
 @app.get("/health")
-def health_check():
+def health_check() -> dict:
     return {"status": "healthy"}
-
-if __name__ == "__main__":
-    # This ensures the app runs when the container executes this file
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

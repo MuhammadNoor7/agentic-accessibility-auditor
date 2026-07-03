@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r08_layout_overlap_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r08_layout_overlap_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r08_layout_overlap_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_002",
+      "class": "android.widget.Button",
+      "bounds": [
+        50,
+        50,
+        250,
+        170
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_003"
+    }
+  ]
+}

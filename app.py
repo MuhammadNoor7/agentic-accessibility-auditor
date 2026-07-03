@@ -9,6 +9,7 @@ from src.parser import (
     resolve_dataset_root,
     resolve_parsed_root,
 )
+from test_run import write_violations
 
 ROOT = Path(__file__).resolve().parent
 UPLOAD_XML = ROOT / "data" / "xml"
@@ -75,6 +76,21 @@ if st.button("Parse XML to Components", type="primary"):
             st.session_state["output_path"] = str(UPLOAD_PARSED / f"{xml_path.stem}_components.json")
             st.session_state["base_name"] = xml_path.stem
 
+            # Stage 2: run the rule checker immediately after parsing. Failures
+            # here must not crash the app — components.json already parsed fine
+            # and should still be shown even if the rule checker has a problem.
+            try:
+                violations_doc = write_violations(components_doc)
+                st.session_state["violations_doc"] = violations_doc
+                st.session_state["violations_path"] = str(
+                    Path("outputs") / "violations" / f"{components_doc['screen_id']}_violations.json"
+                )
+                st.session_state["violations_error"] = None
+            except Exception as exc:
+                st.session_state["violations_doc"] = None
+                st.session_state["violations_path"] = None
+                st.session_state["violations_error"] = f"{type(exc).__name__}: {exc}"
+
 if "components_doc" in st.session_state:
     components_doc = st.session_state["components_doc"]
     output_path = st.session_state["output_path"]
@@ -101,3 +117,39 @@ if "components_doc" in st.session_state:
         file_name=f"{base_name}_components.json",
         mime="application/json",
     )
+
+    st.subheader("Accessibility violations (Stage 2)")
+    violations_error = st.session_state.get("violations_error")
+    violations_doc = st.session_state.get("violations_doc")
+
+    if violations_error:
+        st.error(f"Rule checker failed: {violations_error}")
+    elif violations_doc is not None:
+        total_violations = violations_doc["total_violations"]
+        st.metric("Total Violations", total_violations)
+        st.caption(f"Saved to `{st.session_state.get('violations_path')}`")
+
+        if total_violations == 0:
+            st.success("No violations found")
+        else:
+            violations_table = [
+                {
+                    "rule_id": violation["rule_id"],
+                    "issue": violation["issue"],
+                    "severity": violation["severity"],
+                    "component_id": violation["component_id"],
+                    "recommendation": violation["recommendation"],
+                }
+                for violation in violations_doc["violations"]
+            ]
+            st.dataframe(violations_table, use_container_width=True)
+
+        st.subheader("violations.json preview")
+        st.json(violations_doc)
+
+        st.download_button(
+            label="Download violations.json",
+            data=json.dumps(violations_doc, indent=2),
+            file_name=f"{base_name}_violations.json",
+            mime="application/json",
+        )

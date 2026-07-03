@@ -12,7 +12,7 @@ from pathlib import Path
 import pytest
 
 from src.parser import load_xml_root, parse_xml_tree
-from src.rules import check
+from src.rules import check, check_color_only_info, check_missing_captions, check_small_touch_target
 from src.schema_documents import build_components_document
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "rules"
@@ -63,6 +63,7 @@ def test_rule_triggers_on_fail_fixture(filename: str, expected_rule: str) -> Non
         ("r02_image_button_pass.xml", "R02"),
         ("r04_small_target_pass.xml", "R04"),
         ("r05_unlabeled_input_pass.xml", "R05"),
+        ("r05_unlabeled_input_hint_pass.xml", "R05"),
     ],
 )
 def test_rule_does_not_trigger_on_pass_fixture(filename: str, absent_rule: str) -> None:
@@ -102,3 +103,100 @@ def test_layout_overlap_references_related_component() -> None:
     result = _violations_for("r08_layout_overlap_fail.xml")
     overlap = next(v for v in result["violations"] if v["rule_id"] == "R08")
     assert "related_component" in overlap
+
+
+def test_layout_overlap_ignores_zero_size_elements() -> None:
+    """R08 must not crash or falsely flag a pair of zero-size (0-area) elements."""
+    result = _violations_for("r08_zero_size_no_crash.xml")
+    rule_ids = {violation["rule_id"] for violation in result["violations"]}
+    assert "R08" not in rule_ids
+
+
+def test_r11_stub_returns_empty_list() -> None:
+    """R11 (check_color_only_info) is a documented no-op stub; it must always return []."""
+    components = [
+        {
+            "component_id": "c_001",
+            "class": "android.widget.EditText",
+            "text": "",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "com.example.app:id/email",
+            "clickable": True,
+            "enabled": True,
+            "focusable": True,
+            "bounds": [0, 0, 400, 100],
+        }
+    ]
+    assert check_color_only_info(components) == []
+
+
+def test_r12_stub_returns_empty_list_for_non_media_components() -> None:
+    """R12 (check_missing_captions) only matches VideoView/MediaPlayer classes;
+    it must return [] when no such component is present."""
+    components = [
+        {
+            "component_id": "c_001",
+            "class": "android.widget.Button",
+            "text": "Play",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "com.example.app:id/play_button",
+            "clickable": True,
+            "enabled": True,
+            "focusable": True,
+            "bounds": [0, 0, 200, 100],
+        }
+    ]
+    assert check_missing_captions(components) == []
+
+
+def test_check_handles_missing_image_path_gracefully() -> None:
+    """check() must not crash when image_path points to a nonexistent file;
+    R09 (check_low_contrast) in particular must gracefully return [] rather
+    than trying to open a screenshot that isn't there."""
+    components_json = build_components_document(
+        screen_id="missing_image_test",
+        image_path="data/screenshots/does_not_exist.jpg",
+        xml_path="tests/fixtures/rules/does_not_matter.xml",
+        components=[
+            {
+                "component_id": "c_001",
+                "class": "android.widget.Button",
+                "text": "Continue",
+                "content_desc": "",
+                "hint": "",
+                "resource_id": "com.example.app:id/continue_button",
+                "clickable": True,
+                "enabled": True,
+                "focusable": True,
+                "bounds": [0, 0, 300, 120],
+            }
+        ],
+    )
+    result = check(components_json)
+    rule_ids = {violation["rule_id"] for violation in result["violations"]}
+    assert "R09" not in rule_ids
+    assert result["total_violations"] == 0
+
+
+def test_small_touch_target_respects_dpi_parameter() -> None:
+    """R04 must scale its 48dp threshold by whatever dpi is passed in, not a fixed 160."""
+    component = {
+        "component_id": "c_001",
+        "class": "android.widget.Button",
+        "text": "OK",
+        "content_desc": "",
+        "hint": "",
+        "resource_id": "com.example.app:id/btn_ok",
+        "clickable": True,
+        "enabled": True,
+        "focusable": True,
+        "bounds": [0, 0, 100, 100],
+    }
+    # At the 160dpi baseline, 100px == 100dp — comfortably above the 48dp minimum.
+    assert check_small_touch_target([component], dpi=160) == []
+    # At 420dpi, 100px == 100 * 160/420 =~ 38dp — below the 48dp minimum.
+    violations = check_small_touch_target([component], dpi=420)
+    assert len(violations) == 1
+    assert violations[0]["rule_id"] == "R04"

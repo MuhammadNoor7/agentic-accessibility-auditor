@@ -48,7 +48,18 @@ Adopt the **teammate's screen wrapper** for stages 1 and 2, and keep the **origi
 | `screen_id` | **Yes** | string | Unique screen identifier, e.g. `screen_001` |
 | `image_path` | **Yes** | string | Relative path to screenshot |
 | `xml_path` | **Yes** | string | Relative path to UIAutomator XML |
+| `device_info` | Optional | object | Screen density/size — see below. Omitted only in legacy files; the parser always includes it. |
 | `components` | **Yes** | array | Parsed UI elements (may be empty) |
+
+### Device info (`components.json.device_info`)
+
+Resolves **TBD-03** (the rule checker previously always assumed 160dpi with no way to override it).
+
+| Field | Required | Type | Description |
+|-------|----------|------|-------------|
+| `dpi` | Optional (defaults to `160`) | integer | Screen density in dots-per-inch. Read from the XML root's `density`/`android:density` attribute when present; most UIAutomator dumps don't carry this, so `160` is the common case. Used by R04 (small touch target) to convert bounds from px to dp. |
+| `width_px` | Optional (defaults to `0`) | integer | Screen width in pixels, read from the XML root's `bounds` attribute when present. |
+| `height_px` | Optional (defaults to `0`) | integer | Screen height in pixels, read from the XML root's `bounds` attribute when present. |
 
 ### Per component (`components[]`)
 
@@ -58,6 +69,7 @@ Adopt the **teammate's screen wrapper** for stages 1 and 2, and keep the **origi
 | `class` | **Yes** | string | Android widget class |
 | `text` | **Yes** | string | Visible text; use `""` if none |
 | `content_desc` | **Yes** | string | Accessibility label; use `""` if none |
+| `hint` | Optional | string | Input field hint text, from `hint`/`android:hint`; use `""` if none. Used by R05 (unlabeled input). |
 | `resource_id` | **Yes** | string | Android resource ID; use `""` if none |
 | `clickable` | **Yes** | boolean | Whether the element is clickable |
 | `enabled` | **Yes** | boolean | Whether the element is enabled |

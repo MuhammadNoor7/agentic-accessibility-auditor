@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  /* Axion color tokens - exact hex from Figma design doc */
+  --color-page-bg: #f4f6fb;
+  --color-navy: #0f1422;
+  --color-navy-button: #1a2240;
+  --color-green: #1D9E75;
+  --color-green-dark: #0f6e56;
+  --color-green-bg: #e8f5f0;
+  --color-green-fix-bg: #f0fdf8;
+  --color-green-fix-text: #085041;
+  --color-white: #ffffff;
+  --color-border: #e2e6f0;
+  --color-border-alt: #dde2f0;
+  --color-row-divider: #f0f2f8;
+  --color-gray-text: #5a6a8a;
+  --color-muted-text: #4a5a7a;
+  --color-light-gray-text: #e2e6f0;
+  --color-critical-text: #7A1C1C;
+  --color-critical-bg: #fdf0ef;
+  --color-serious-text: #7A4000;
+  --color-serious-bg: #fef6ed;
+  --color-minor-text: #3D4043;
+  --color-minor-bg: #f4f6fb;
+
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--color-page-bg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Always-visible keyboard focus ring for accessibility (WCAG 2.4.7) */
+:focus-visible {
+  outline: 3px solid var(--color-green);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+* {
+  box-sizing: border-box;
+}

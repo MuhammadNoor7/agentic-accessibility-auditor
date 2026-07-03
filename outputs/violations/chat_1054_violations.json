@@ -1,0 +1,462 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "chat_1054",
+  "image_path": "data/data-masc/screenshots/chat/1054.jpg",
+  "xml_path": "data/data-masc/xml/chat/1054.xml",
+  "total_violations": 30,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_040",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "bounds": [
+        0,
+        476,
+        0,
+        476
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_040",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "bounds": [
+        0,
+        476,
+        0,
+        476
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R03",
+      "issue": "Duplicate labels",
+      "component_id": "c_052",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "bounds": [
+        0,
+        2189,
+        1440,
+        2392
+      ],
+      "guideline": "G03 \u2014 Duplicate labels",
+      "severity": "Medium",
+      "recommendation": "Give each control a unique, specific label (e.g., include the item name) so screen reader users can tell them apart.",
+      "related_component": "c_031"
+    },
+    {
+      "rule_id": "R03",
+      "issue": "Duplicate labels",
+      "component_id": "c_054",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "bounds": [
+        0,
+        2392,
+        0,
+        2392
+      ],
+      "guideline": "G03 \u2014 Duplicate labels",
+      "severity": "Medium",
+      "recommendation": "Give each control a unique, specific label (e.g., include the item name) so screen reader users can tell them apart.",
+      "related_component": "c_033"
+    },
+    {
+      "rule_id": "R03",
+      "issue": "Duplicate labels",
+      "component_id": "c_033",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "bounds": [
+        0,
+        2392,
+        -1439,
+        2392
+      ],
+      "guideline": "G03 \u2014 Duplicate labels",
+      "severity": "Medium",
+      "recommendation": "Give each control a unique, specific label (e.g., include the item name) so screen reader users can tell them apart.",
+      "related_component": "c_019"
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_013",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        476,
+        0,
+        2392
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_014",
+      "class": "android.support.v4.widget.SwipeRefreshLayout",
+      "bounds": [
+        0,
+        476,
+        0,
+        2392
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_016",
+      "class": "android.support.v7.widget.RecyclerView",
+      "bounds": [
+        0,
+        476,
+        0,
+        2392
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_017",
+      "class": "android.widget.FrameLayout",
+      "bounds": [
+        0,
+        476,
+        0,
+        512
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_018",
+      "class": "android.widget.ProgressBar",
+      "bounds": [
+        0,
+        476,
+        -1439,
+        476
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_019",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "bounds": [
+        0,
+        476,
+        -1439,
+        476
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_020",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        476,
+        0,
+        2392
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_021",
+      "class": "android.widget.ProgressBar",
+      "bounds": [
+        0,
+        476,
+        -649,
+        616
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_022",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        0,
+        476,
+        -1439,
+        476
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_023",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        476,
+        0,
+        2392
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_025",
+      "class": "android.widget.FrameLayout",
+      "bounds": [
+        0,
+        476,
+        0,
+        2189
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_027",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        0,
+        1122,
+        -55,
+        1406
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_028",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        0,
+        1476,
+        -55,
+        1543
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_029",
+      "class": "android.support.v7.widget.Toolbar",
+      "bounds": [
+        0,
+        476,
+        -1439,
+        476
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_031",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "bounds": [
+        0,
+        2189,
+        0,
+        2392
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_032",
+      "class": "com.jaumo.view.Ripple",
+      "bounds": [
+        0,
+        1916,
+        1440,
+        1916
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_033",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "bounds": [
+        0,
+        2392,
+        -1439,
+        2392
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_039",
+      "class": "android.widget.ProgressBar",
+      "bounds": [
+        0,
+        476,
+        0,
+        476
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_040",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "bounds": [
+        0,
+        476,
+        0,
+        476
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_043",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        0,
+        476,
+        0,
+        476
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_050",
+      "class": "android.support.v7.widget.Toolbar",
+      "bounds": [
+        0,
+        476,
+        0,
+        476
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_053",
+      "class": "com.jaumo.view.Ripple",
+      "bounds": [
+        0,
+        1916,
+        1440,
+        1916
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_054",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "bounds": [
+        0,
+        2392,
+        0,
+        2392
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_061",
+      "class": "android.support.v7.widget.ActionBarContextView",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    }
+  ]
+}

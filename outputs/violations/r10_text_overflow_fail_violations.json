@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r10_text_overflow_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r10_text_overflow_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r10_text_overflow_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R10",
+      "issue": "Text overflow",
+      "component_id": "c_002",
+      "class": "android.widget.TextView",
+      "bounds": [
+        0,
+        0,
+        10,
+        10
+      ],
+      "guideline": "G10 \u2014 Text overflow",
+      "severity": "Low",
+      "recommendation": "Shrink the text, wrap it across multiple lines, or enlarge the container so the full string is visible."
+    }
+  ]
+}

@@ -1,0 +1,269 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "chat_10560",
+  "image_path": "data/data-masc/screenshots/chat/10560.jpg",
+  "xml_path": "data/data-masc/xml/chat/10560.xml",
+  "total_violations": 17,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_015",
+      "class": "com.apptentive.android.sdk.module.messagecenter.view.MessageCenterListView",
+      "bounds": [
+        0,
+        280,
+        1440,
+        2392
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_034",
+      "class": "android.support.v7.widget.AppCompatEditText",
+      "bounds": [
+        84,
+        1128,
+        1384,
+        1422
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_035",
+      "class": "com.apptentive.android.sdk.util.image.ApptentiveImageGridView",
+      "bounds": [
+        28,
+        1076,
+        28,
+        1072
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_036",
+      "class": "android.support.design.widget.FloatingActionButton",
+      "bounds": [
+        1286,
+        2238,
+        1286,
+        2238
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R05",
+      "issue": "Unlabeled input field",
+      "component_id": "c_034",
+      "class": "android.support.v7.widget.AppCompatEditText",
+      "bounds": [
+        84,
+        1128,
+        1384,
+        1422
+      ],
+      "guideline": "G05 \u2014 Unlabeled input field",
+      "severity": "High",
+      "recommendation": "Add android:hint or a programmatic label linked via labelFor."
+    },
+    {
+      "rule_id": "R06",
+      "issue": "Disabled important control",
+      "component_id": "c_029",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "bounds": [
+        1216,
+        922,
+        1412,
+        1062
+      ],
+      "guideline": "G06 \u2014 Disabled important control",
+      "severity": "Medium",
+      "recommendation": "Explain why the control is disabled (e.g., helper text) or re-enable it once its prerequisites are met."
+    },
+    {
+      "rule_id": "R06",
+      "issue": "Disabled important control",
+      "component_id": "c_036",
+      "class": "android.support.design.widget.FloatingActionButton",
+      "bounds": [
+        1286,
+        2238,
+        1286,
+        2238
+      ],
+      "guideline": "G06 \u2014 Disabled important control",
+      "severity": "Medium",
+      "recommendation": "Explain why the control is disabled (e.g., helper text) or re-enable it once its prerequisites are met."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_011",
+      "class": "android.support.v7.widget.ActionMenuView",
+      "bounds": [
+        1440,
+        0,
+        1440,
+        196
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_035",
+      "class": "com.apptentive.android.sdk.util.image.ApptentiveImageGridView",
+      "bounds": [
+        28,
+        1076,
+        28,
+        1072
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_036",
+      "class": "android.support.design.widget.FloatingActionButton",
+      "bounds": [
+        1286,
+        2238,
+        1286,
+        2238
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_037",
+      "class": "android.support.v7.widget.ViewStubCompat",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_023",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "bounds": [
+        1188,
+        712,
+        1356,
+        880
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_015"
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_027",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "bounds": [
+        28,
+        922,
+        203,
+        1062
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_015"
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_029",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "bounds": [
+        1216,
+        922,
+        1412,
+        1062
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_015"
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_030",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "bounds": [
+        1132,
+        908,
+        1216,
+        1076
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_015"
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_034",
+      "class": "android.support.v7.widget.AppCompatEditText",
+      "bounds": [
+        84,
+        1128,
+        1384,
+        1422
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_015"
+    }
+  ]
+}

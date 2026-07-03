@@ -1,0 +1,358 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "chat_11729",
+  "image_path": "data/data-masc/screenshots/chat/11729.jpg",
+  "xml_path": "data/data-masc/xml/chat/11729.xml",
+  "total_violations": 23,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_020",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "bounds": [
+        769,
+        1595,
+        955,
+        1781
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_027",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        2231,
+        1440,
+        2392
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_028",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "bounds": [
+        0,
+        2272,
+        161,
+        2360
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_030",
+      "class": "com.toome.ui.controls.ExtEditText",
+      "bounds": [
+        161,
+        2252,
+        1170,
+        2371
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_031",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "bounds": [
+        1170,
+        2276,
+        1244,
+        2350
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_032",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "bounds": [
+        1279,
+        2267,
+        1440,
+        2357
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_020",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "bounds": [
+        769,
+        1595,
+        955,
+        1781
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_028",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "bounds": [
+        0,
+        2272,
+        161,
+        2360
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_031",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "bounds": [
+        1170,
+        2276,
+        1244,
+        2350
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_032",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "bounds": [
+        1279,
+        2267,
+        1440,
+        2357
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R05",
+      "issue": "Unlabeled input field",
+      "component_id": "c_030",
+      "class": "com.toome.ui.controls.ExtEditText",
+      "bounds": [
+        161,
+        2252,
+        1170,
+        2371
+      ],
+      "guideline": "G05 \u2014 Unlabeled input field",
+      "severity": "High",
+      "recommendation": "Add android:hint or a programmatic label linked via labelFor."
+    },
+    {
+      "rule_id": "R06",
+      "issue": "Disabled important control",
+      "component_id": "c_032",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "bounds": [
+        1279,
+        2267,
+        1440,
+        2357
+      ],
+      "guideline": "G06 \u2014 Disabled important control",
+      "severity": "Medium",
+      "recommendation": "Explain why the control is disabled (e.g., helper text) or re-enable it once its prerequisites are met."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_006",
+      "class": "android.support.v7.widget.ViewStubCompat",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_014",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "bounds": [
+        0,
+        750,
+        0,
+        750
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_018",
+      "class": "android.view.View",
+      "bounds": [
+        0,
+        0,
+        485,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_021",
+      "class": "android.view.View",
+      "bounds": [
+        955,
+        0,
+        1440,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_033",
+      "class": "android.widget.FrameLayout",
+      "bounds": [
+        0,
+        2392,
+        1440,
+        2392
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_028",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "bounds": [
+        0,
+        2272,
+        161,
+        2360
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_027"
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_030",
+      "class": "com.toome.ui.controls.ExtEditText",
+      "bounds": [
+        161,
+        2252,
+        1170,
+        2371
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_027"
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_031",
+      "class": "android.support.v7.widget.AppCompatImageView",
+      "bounds": [
+        1170,
+        2276,
+        1244,
+        2350
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_027"
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_032",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "bounds": [
+        1279,
+        2267,
+        1440,
+        2357
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_027"
+    },
+    {
+      "rule_id": "R12",
+      "issue": "Missing captions",
+      "component_id": "c_011",
+      "class": "android.widget.VideoView",
+      "bounds": [
+        0,
+        750,
+        1440,
+        1560
+      ],
+      "guideline": "G12 \u2014 Missing captions",
+      "severity": "High",
+      "recommendation": "Add a caption/CC toggle control near the video player."
+    }
+  ]
+}

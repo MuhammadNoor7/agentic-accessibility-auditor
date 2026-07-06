@@ -41,7 +41,7 @@ This document gathers what has actually been built, run, and produced so far. It
 | FastAPI audit API | **Partial** — violations-only (`POST /audit` → `GET …/violations`); `/report` → 404 |
 | Auth + Records | Specified in SRS v2.0; not implemented in code |
 | Docker | Partial — `docker-compose.yml` runs backend + batch auditor |
-| Documentation | SRS v2.0, **SDS v2.1** (R01–R20), progress report v1.4 |
+| Documentation | SRS v2.0, **SDS v2.1** (R01–R20), progress report v1.5 |
 
 **Bottom line (6 Jul):** Parser and rule engine through **R20** are implemented and validated on full MASC. Next: LLM agent wiring, report generator, frontend↔API.
 
@@ -357,7 +357,8 @@ Config: `data/data-masc/splits/split_summary.json`
 | Block | Rule lead | Guideline validation | Reviewers |
 |-------|-----------|----------------------|-----------|
 | R01–R10 / G01–G10 | **Salar** | **Noor** | Ayesha |
-| R11–R20 / G11–G20 | **Ayesha** | **Salar** | Noor |
+| R11–R12 / G11–G12 | **Ayesha** | **Salar** | Noor |
+| R13–R20 / G13–G20 | **Noor** | **Salar** | Ayesha |
 | R21–R30 / G21–G30 | **Noor** | **Ayesha** | Salar |
 
 ### Per-rule tracker
@@ -376,14 +377,14 @@ Config: `data/data-masc/splits/split_summary.json`
 | R10 | G10, G28, G29 | Salar | ✅ Done | |
 | R11 | G11 | Ayesha | 🟡 Stub | Documented no-op; needs before/after or pixel diff |
 | R12 | G12 | Ayesha | ✅ Done | `media_type` + caption heuristics |
-| R13 | G13 | Ayesha | ✅ Done | 1,055 violations / 118 MASC screens |
-| R14 | G14 | Ayesha | ✅ Done | 1,873 / 667 screens |
-| R15 | G15, G16 | Ayesha | ✅ Done | 3,860 / 3,860 screens |
-| R16 | G16 | Ayesha | ✅ Done | 130 / 115 screens |
-| R17 | G17 | Ayesha | ✅ Done | `related_component`; 9,327 / 1,697 |
-| R18 | G18 | Ayesha | ✅ Done | 13,529 / 3,945 screens |
-| R19 | G19 | Ayesha | ✅ Done | 758 / 416 screens |
-| R20 | G05, G20 | Ayesha | ✅ Done | Unit tests pass; 0 MASC hits |
+| R13 | G13 | Noor | ✅ Done | 1,055 violations / 118 MASC screens |
+| R14 | G14 | Noor | ✅ Done | 1,873 / 667 screens |
+| R15 | G15, G16 | Noor | ✅ Done | 3,860 / 3,860 screens |
+| R16 | G16 | Noor | ✅ Done | 130 / 115 screens |
+| R17 | G17 | Noor | ✅ Done | `related_component`; 9,327 / 1,697 |
+| R18 | G18 | Noor | ✅ Done | 13,529 / 3,945 screens |
+| R19 | G19 | Noor | ✅ Done | 758 / 416 screens |
+| R20 | G05, G20 | Noor | ✅ Done | Unit tests pass; 0 MASC hits |
 | R21 | G21 | Noor | ⬜ Week 4+ | |
 | R22 | G22 | Noor | ⬜ Week 4+ | |
 | R23 | G01, G23 | Noor | ⬜ Week 5+ | |
@@ -401,7 +402,7 @@ Config: `data/data-masc/splits/split_summary.json`
 
 ## 14. Recommended next steps (updated 6 July 2026)
 
-1. **Ayesha:** Review R13–R20 on `noor`; wire `frontend/` to violations API
+1. **Ayesha:** Wire `frontend/` to violations API; review R11–R12 stubs
 2. **Noor:** Wire live LLM into `src/agent.py`; add `src/report.py`; Rico holdout eval
 3. **Salar:** Tune R07 false positives; implement R09 contrast when screenshots available
 4. **All:** Demo — XML upload → API → violations → agent-enriched report on one screen
@@ -519,6 +520,7 @@ Blockers:None
 | 1.2 | 3 Jul 2026 | Noor | Frontend sync on `noor`, Noor validation logs, violations-only API push |
 | 1.3 | 3 Jul 2026 | Noor | §4 project folder structure updated for Week 3 repo layout |
 | 1.4 | 6 Jul 2026 | Noor | R13–R20 parser/rules, full MASC re-parse, SDS v2.1, validation sign-off |
+| 1.5 | 6 Jul 2026 | Noor | R13–R20 rule lead → Noor; DOCX regenerated |
 
 ---
 

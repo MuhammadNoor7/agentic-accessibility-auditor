@@ -229,26 +229,15 @@ npm run dev
 # http://localhost:5173 — UI scaffold only; not wired to FastAPI yet
 ```
 
-### 7. Docker (local images)
+### 7. Docker / API
 
 ```bash
-# Build both images and tag locally (axion-api:local, axion-auditor:local)
-docker compose build
-
-# Run API — upload XML → violations (R01–R20)
-docker compose up api
-# http://localhost:8000/health
-# POST http://localhost:8000/api/v1/audit  (multipart XML)
-
-# Run batch auditor (mount MASC data; parses full dataset by default)
-docker compose run --rm auditor
-
-# Build + run everything
-docker compose up --build
+docker-compose up --build
+# Health: http://localhost:8000/health
+# Audit:  POST /api/v1/audit  →  GET /api/v1/audit/{id}/violations
 ```
 
-**Local image names:** `axion-api:local` · `axion-auditor:local`  
-MASC XML/screenshots are not baked into the image — mount `data/data-masc` for batch runs.
+Upload XML via multipart form to `POST /api/v1/audit`. Report endpoint (`/report`) is not implemented yet.
 
 ---
 

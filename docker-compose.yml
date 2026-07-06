@@ -1,29 +1,25 @@
 services:
-  api:
+  backend:
     build:
-      context: .
-      dockerfile: Dockerfile.api
-    image: axion-api:local
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     volumes:
-      - ./outputs/violations:/app/outputs/violations
-    environment:
-      PYTHONUNBUFFERED: "1"
+      - .:/app
+    working_dir: /app/backend
     networks:
       - auditor-network
 
   auditor:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: axion-auditor:local
+    build: .
+    command: python /app/test_run.py
     volumes:
-      - ./data/data-masc:/app/data/data-masc:ro
-      - ./outputs/violations:/app/outputs/violations
+      - .:/app
     environment:
       PYTHONUNBUFFERED: "1"
       PARSER_MAX_FILES: "0"
+      DATASET_ROOT: "/app/data/data-masc"
     networks:
       - auditor-network
 

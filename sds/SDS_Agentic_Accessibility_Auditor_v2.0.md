@@ -20,6 +20,7 @@
 |---------|------|--------|---------|
 | 1.0 | 2026 | Team | Initial SDS from merged SRS v1.x |
 | **2.0** | 2026 | Team | Aligned to SRS v2.0 with embedded Figma screenshots; auth, Records, Dashboard flows |
+| **2.1** | 2026-07-06 | Noor / Salar | Parser R13–R20 fields; rules R01–R20; MASC re-parse sign-off; audit API violations-only |
 
 ---
 
@@ -70,7 +71,7 @@ This document provides:
 | FastAPI orchestrator + Axion React UI | Clinical accessibility research |
 | Auth + Records persistence | Production HIPAA / enterprise SSO |
 | Docker Compose topology | Play Store / APK crawling |
-| R01–R10 rule pseudocode (R11+ summarized) | Full R21–R30 implementation detail |
+| R01–R20 rule pseudocode + parser extensions | Full R21–R30 implementation detail |
 
 ### 1.3 Design principles
 
@@ -88,17 +89,17 @@ This document provides:
 
 | Module | Path | Owner | Status |
 |--------|------|-------|--------|
-| Hybrid XML parser | `src/parser.py` | Salar | **Done** |
+| Hybrid XML parser | `src/parser.py` | Salar / Noor | **Done** (R13–R20 fields) |
 | Schema helpers | `src/schema_documents.py` | Salar | **Done** |
-| JSON Schema | `docs/schemas/auditor_schema.json` | Ayesha | **Done** |
-| Validation script | `scripts/validate_output.py` | Salar | **Done** |
-| FastAPI shell | `backend/main.py` | Salar | **Partial** |
-| Rule engine | `src/rules.py` | Salar | Planned |
-| Agent layer | `src/agent.py` | Noor | Planned |
+| JSON Schema | `docs/schemas/auditor_schema.json` | Ayesha / Noor | **Done** |
+| Validation scripts | `scripts/validate_output.py`, `scripts/noor_week3_validate.py`, `scripts/masc_parse_signoff.py` | Noor / Salar | **Done** |
+| FastAPI audit API | `backend/routers/audit.py` | Noor | **Partial** (violations-only; no report/agent) |
+| Rule engine | `src/rules.py` | Salar / Noor | **Done** (R01–R20; R11 stub; R09 needs screenshot) |
+| Agent layer | `src/agent.py` | Noor | **Partial** (score + template scaffold; not wired to API) |
 | Report generator | `src/report.py` | Noor | Planned |
 | Auth service | `backend/services/auth.py` | Salar | Planned |
 | Records store | `backend/services/records.py` | Salar / Ayesha | Planned |
-| Axion React UI | `frontend/` | Ayesha | Planned |
+| Axion React UI | `frontend/` | Ayesha | **Partial** (UI scaffold; no live API) |
 | Docker Compose | `docker-compose.yml` | Salar | **Partial** |
 
 ---
@@ -219,52 +220,66 @@ extract_bounds(element):
   return None
 ```
 
+#### 3.1.5 Extended component fields (R13–R20)
+
+Depth-first traversal preserves `parent_id` and assigns `focus_order` in document order. MASC `<wrapper>` nodes are descended into (widgets are nested inside wrappers).
+
+| Field | Used by | Notes |
+|-------|---------|-------|
+| `focus_order` | R15 | 1-based traversal index |
+| `parent_id` | R15, hierarchy | `component_id` of parent or `""` |
+| `long_clickable`, `scrollable` | R18 | Gesture heuristics |
+| `media_type` | R12, R13 | `""`, `video`, `audio`, `animation` |
+| `is_dialog` | R19 | Confirmation dialog detection |
+| `label_for`, `hint`, `input_type`, `password` | R05, R20 | Input labelling |
+| `important_for_accessibility` | R16 | Decorative vs focusable |
+
+Also emitted: `selected`, `checked`, `text_all_caps`, `device_info.dpi` on screen document.
+
 #### 3.1.4 Screenshot pairing
 
 Mirror XML path under `screenshots/` with same stem; try `.jpg`, `.jpeg`, `.png`.
 
 ---
 
-### 3.2 Rule engine module (`src/rules.py` — planned)
+### 3.2 Rule engine module (`src/rules.py`)
 
-**SRS:** FR-RU.1–FR-RU.18 | **Owner:** Salar
+**SRS:** FR-RU.1–FR-RU.20 | **Owner:** Salar / Noor | **Status:** Implemented (R01–R20)
 
-#### 3.2.1 Class design
+#### 3.2.1 Public API
 
-```python
-@dataclass
-class RuleContext:
-    components: list[dict]
-    screen_density: float = 2.0
-    image_path: str | None = None
+| Function | Input | Output |
+|----------|-------|--------|
+| `check(components_json)` | `components.json` dict | `violations.json` dict |
+| `check_*` per rule | `list[dict]` components | `list[dict]` violations |
 
-class Rule(Protocol):
-    rule_id: str
-    def evaluate(self, ctx: RuleContext) -> list[ViolationDict]: ...
-
-class RuleEngine:
-    def __init__(self, rules: list[Rule]): ...
-    def run(self, components_doc: dict) -> dict: ...
-```
+Implementation uses plain functions (not a `RuleEngine` class). Entry point `check()` chains R01–R20 checkers, reads `device_info.dpi` for dp rules (R04, R17), and returns schema-shaped output.
 
 #### 3.2.2 Processing flow
 
-1. Build `RuleContext` from `components.json`
-2. Run enabled rules (R01–R10 MVP)
-3. Denormalize `class`, `bounds` on each violation
-4. Sort by `(rule_id, component_id)`
-5. Write `violations.json`; assert `total_violations == len(violations)`
+1. Load `components[]` and `device_info.dpi` (default 160)
+2. Run R01–R20 check functions in order
+3. Each violation includes denormalized `class`, `bounds`; pair rules add `related_component` (R03, R08, R17)
+4. Return dict with `total_violations == len(violations)`
 
-#### 3.2.3 dp conversion
+#### 3.2.3 Rule status (Week 3+)
+
+| Rules | Status |
+|-------|--------|
+| R01–R08, R10, R12–R20 | Implemented |
+| R09 | Implemented but inactive without screenshot `contrast_score` |
+| R11 | Documented stub (`check_color_only_info` returns `[]`; needs before/after or pixel diff) |
+
+#### 3.2.4 dp conversion
 
 ```
 width_dp  = (bounds[2] - bounds[0]) / density
 height_dp = (bounds[3] - bounds[1]) / density
 ```
 
-Default `density = 2.0` when ADB metadata absent.
+Default `dpi = 160` when `device_info` absent (TBD-03).
 
-#### 3.2.4 Severity mapping (engine → UI)
+#### 3.2.5 Severity mapping (engine → UI)
 
 | Engine | Axion badge |
 |--------|-------------|
@@ -275,9 +290,9 @@ Default `density = 2.0` when ADB metadata absent.
 
 ---
 
-### 3.3 Agent module (`src/agent.py` — planned)
+### 3.3 Agent module (`src/agent.py`)
 
-**SRS:** FR-AG.1–FR-AG.8 | **Owner:** Noor
+**SRS:** FR-AG.1–FR-AG.8 | **Owner:** Noor | **Status:** Partial (unit-tested scaffold; not in API pipeline)
 
 ```python
 class AgenticEnricher:
@@ -372,7 +387,11 @@ User (user_id)
 | `xml_path` | string | Yes |
 | `components` | array | Yes |
 
-**Component:** `component_id`, `class`, `text`, `content_desc`, `resource_id`, `clickable`, `enabled`, `focusable`, `bounds[4]`
+**Component (required):** `component_id`, `class`, `text`, `content_desc`, `resource_id`, `clickable`, `enabled`, `focusable`, `bounds[4]`
+
+**Component (optional, R13–R20):** `hint`, `focus_order`, `parent_id`, `long_clickable`, `scrollable`, `selected`, `checked`, `password`, `text_all_caps`, `input_type`, `important_for_accessibility`, `media_type`, `is_dialog`, `label_for`
+
+**Screen:** optional `device_info` with `dpi`, `width_px`, `height_px`
 
 Pattern: `component_id` matches `^c_\d{3,}$`
 
@@ -427,10 +446,23 @@ Adds `summary` object and agent fields per violation:
 ### 4.7 Validation
 
 ```bash
-python scripts/validate_output.py path/to/artifact.json
+python test_run.py --dataset masc          # batch parse + rules → parsed/ + outputs/violations/
+python scripts/validate_output.py          # JSON Schema spot-check
+python scripts/masc_parse_signoff.py       # train/val/test parse sign-off + R13–R20 counts
+python scripts/noor_week3_validate.py      # full pipeline: re-parse, pytest, API smoke, MASC scan
 ```
 
-Run after each pipeline stage.
+MASC artefacts:
+
+| Path | Purpose |
+|------|---------|
+| `data/data-masc/parsed/*_components.json` | Re-parsed components (all categories) |
+| `data/data-masc/parsed/batch_parse_masc_full.log` | Full batch parse terminal log |
+| `data/data-masc/parsed/masc_parse_signoff_report.json` | Parse sign-off + R01–R20 aggregate counts |
+| `outputs/violations/*_violations.json` | Per-screen rule output |
+| `outputs/validation_logs/noor_week3_validation_log.txt` | Noor validation run log (appended) |
+
+Run after each pipeline stage or via `python scripts/noor_week3_validate.py`.
 
 ---
 
@@ -589,6 +621,46 @@ Screenshot crop + WCAG contrast ratio; requires `src/contrast.py`.
 ### 6.11 R10 — Text overflow
 
 Heuristic: TextView height < estimated text height (MVP: height < 24px with non-empty text).
+
+### 6.12 R11 — Color-only information (stub)
+
+`check_color_only_info()` returns `[]` until before/after snapshots or screenshot colour diff is available.
+
+### 6.13 R12 — Missing captions
+
+`media_type in (video, audio)` and no nearby caption/subtitle token in sibling text.
+
+### 6.14 R13 — Audio without transcript
+
+`media_type == audio` and no transcript/caption affordance nearby.
+
+### 6.15 R14 — Audio-only notification
+
+Notification-style text with no visible icon/banner nearby.
+
+### 6.16 R15 — Bad focus order
+
+Focusable components: `focus_order` traversal disagrees with top-to-bottom `bounds` order.
+
+### 6.17 R16 — Decorative in focus tree
+
+Likely decorative `ImageView` (no text/desc) remains `focusable`.
+
+### 6.18 R17 — Insufficient spacing
+
+Adjacent clickables with edge gap `< 8dp`; emit `related_component` for the paired control.
+
+### 6.19 R18 — Multi-gesture only
+
+Text/content describes pinch/zoom/multi-touch-only interaction without single-finger alternative.
+
+### 6.20 R19 — Destructive without confirmation
+
+Clickable destructive token (delete/remove) and no `is_dialog` / confirm text on screen.
+
+### 6.21 R20 — Hint-only label
+
+`EditText` with `hint` but no `text`, `content_desc`, `label_for`, or nearby label TextView.
 
 ---
 
@@ -817,30 +889,36 @@ docker-compose up --build
 
 | Layer | Tool | Scope |
 |-------|------|-------|
-| Unit | pytest | Parser bounds, R01–R05 |
-| Schema | `validate_output.py` | All JSON artefacts |
-| API | pytest + TestClient | Auth, audit, records |
-| Integration | pytest | Full pipeline golden files |
-| E2E | Manual / Playwright | Axion upload → Records |
-| Evaluation | Scripts | MASC val, Rico holdout |
+| Unit | pytest | Parser (incl. MASC wrappers), R01–R20 |
+| Schema | `validate_output.py` | `components.json` / `violations.json` artefacts |
+| API | pytest + TestClient | Audit violations-only (`test_audit.py`) |
+| Integration | `noor_week3_validate.py`, `masc_parse_signoff.py` | Full MASC re-parse + R01–R20 scan |
+| E2E | Manual / Playwright | Axion upload → Records (planned) |
+| Evaluation | MASC train/val/test splits | 7,068 screens, sign-off JSON |
 
 ### 13.1 Golden files
 
 ```
 tests/fixtures/rules/
-├── r01_missing_label.xml
-├── r04_small_target.xml
-└── expected/
-    └── r01_violations.json
+├── r01_missing_label_fail.xml / r01_missing_label_pass.xml
+├── r02_image_button_fail.xml / …
+├── … (R03–R10 fail/pass fixtures)
+└── clean_no_violations.xml
+
+tests/test_parser.py     # extended fields + MASC wrapper nesting
+tests/test_rules.py        # R01–R10 fixtures + R11/R12 stubs + R13–R20 unit cases
+tests/test_audit.py        # API parse→rules parity on R01
+tests/test_agent.py        # score formula scaffold
 ```
 
 ### 13.2 Sign-off tests (from SRS §10)
 
 - TC-01: missing bounds → no crash
-- R01–R05 on 10–15 controlled cases
-- Zero hallucinated violations from agent
-- Records saved per user after audit
-- Docker `/health` responds
+- R01–R10 on controlled fail/pass fixtures
+- R13–R20 on controlled component dicts + MASC full-dataset scan
+- `masc_parse_signoff_report.json` → PASS (7,068 screens, 0 extended-field misses)
+- API `POST /audit` → `GET .../violations` matches CLI on R01 fixture
+- `/report` returns 404 (violations-only API scope)
 
 ---
 
@@ -849,12 +927,13 @@ tests/fixtures/rules/
 | SRS requirement | SDS section | Implementation |
 |-----------------|-------------|----------------|
 | FR-PS.1–9 | §3.1, §4 | `src/parser.py` |
-| FR-RU.1–10 | §3.2, §6 | `src/rules.py` |
-| FR-AG.1–8 | §7 | `src/agent.py` |
+| FR-RU.1–20 | §3.2, §6 | `src/rules.py` |
+| FR-AG.1–8 | §7 | `src/agent.py` (scaffold) |
 | FR-RP.1–7 | §8 | `src/report.py` |
 | FR-UI.* | §9, Appendix D | `frontend/` |
-| FR-AUTH.* | §10.1, §5.1 | `backend/routers/auth.py` |
-| FR-REC.* | §10.2, §5.3 | `backend/services/records.py` |
+| FR-AUTH.* | §10.1, §5.1 | `backend/routers/auth.py` (planned) |
+| FR-REC.* | §10.2, §5.3 | `backend/services/records.py` (planned) |
+| Audit API (violations) | §5.2 | `backend/routers/audit.py` |
 | FR-DK.* | §11 | `docker-compose.yml` |
 | NFR-1–20 | §2, §7, §11, §12 | Cross-cutting |
 | §8 JSON schemas | §4 | `auditor_schema.json` |
@@ -953,11 +1032,17 @@ components:
 |------|------|
 | `src/parser.py` | Hybrid XML parser (**Done**) |
 | `src/schema_documents.py` | JSON envelope builders |
-| `src/rules.py` | Rule engine (planned) |
-| `src/agent.py` | LLM enricher (planned) |
+| `src/rules.py` | Rule engine R01–R20 (**Done**; R11 stub) |
+| `src/agent.py` | LLM enricher scaffold (**Partial**) |
 | `src/report.py` | HTML/PDF generator (planned) |
 | `backend/main.py` | FastAPI entry |
-| `backend/routers/` | REST routes (planned) |
+| `backend/routers/audit.py` | Violations-only audit API (**Partial**) |
+| `backend/routers/` | Auth, records (planned) |
+| `scripts/noor_week3_validate.py` | Full validation pipeline |
+| `scripts/masc_parse_signoff.py` | MASC parse sign-off |
+| `tests/test_parser.py` | Parser unit tests |
+| `tests/test_rules.py` | Rules R01–R20 unit tests |
+| `tests/test_audit.py` | Audit API tests |
 | `frontend/src/` | Axion React app (planned) |
 | `docs/schemas/auditor_schema.json` | Normative JSON Schema |
 | `docs/json_schemas.md` | Schema documentation |

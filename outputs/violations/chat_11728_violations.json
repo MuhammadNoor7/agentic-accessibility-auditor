@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_11728",
-  "image_path": "data/data-masc/screenshots/chat/11728.jpg",
-  "xml_path": "data/data-masc/xml/chat/11728.xml",
-  "total_violations": 20,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/11728.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/11728.xml",
+  "total_violations": 21,
   "violations": [
     {
       "rule_id": "R01",
@@ -308,6 +308,21 @@
       "guideline": "G12 \u2014 Missing captions",
       "severity": "High",
       "recommendation": "Add a caption/CC toggle control near the video player."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_030",
+      "class": "com.toome.ui.controls.ExtEditText",
+      "bounds": [
+        161,
+        2252,
+        1170,
+        2371
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

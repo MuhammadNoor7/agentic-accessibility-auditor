@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_1967",
-  "image_path": "data/data-masc/screenshots/chat/1967.jpg",
-  "xml_path": "data/data-masc/xml/chat/1967.xml",
-  "total_violations": 72,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/1967.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/1967.xml",
+  "total_violations": 82,
   "violations": [
     {
       "rule_id": "R01",
@@ -1089,6 +1089,164 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_139"
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_005",
+      "class": "android.support.v4.view.ViewPager",
+      "bounds": [
+        0,
+        420,
+        1440,
+        2392
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_134"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_139",
+      "class": "com.android.internal.widget.ScrollingTabContainerView$TabView",
+      "bounds": [
+        0,
+        0,
+        537,
+        168
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_141"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_141",
+      "class": "com.android.internal.widget.ScrollingTabContainerView$TabView",
+      "bounds": [
+        539,
+        0,
+        1076,
+        168
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_143"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_143",
+      "class": "com.android.internal.widget.ScrollingTabContainerView$TabView",
+      "bounds": [
+        1078,
+        0,
+        1615,
+        168
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_145"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_145",
+      "class": "com.android.internal.widget.ScrollingTabContainerView$TabView",
+      "bounds": [
+        1617,
+        0,
+        2154,
+        168
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_147"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_147",
+      "class": "com.android.internal.widget.ScrollingTabContainerView$TabView",
+      "bounds": [
+        2156,
+        0,
+        2693,
+        168
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_149"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_149",
+      "class": "com.android.internal.widget.ScrollingTabContainerView$TabView",
+      "bounds": [
+        2695,
+        0,
+        3232,
+        168
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_151"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_151",
+      "class": "com.android.internal.widget.ScrollingTabContainerView$TabView",
+      "bounds": [
+        3234,
+        0,
+        3771,
+        168
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_153"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_134",
+      "class": "com.android.internal.view.menu.ActionMenuItemView",
+      "bounds": [
+        0,
+        0,
+        196,
+        168
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_135",
+      "class": "com.android.internal.view.menu.ActionMenuItemView",
+      "bounds": [
+        196,
+        0,
+        392,
+        168
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

@@ -189,6 +189,65 @@ def _get_hint(elem: etree._Element) -> str:
     return _normalize_string(elem.get("hint") or elem.get("android:hint"))
 
 
+def _get_first_attr(elem: etree._Element, *names: str) -> str:
+    """Return the first present XML attribute value from a list of aliases."""
+    for name in names:
+        value = elem.get(name)
+        if value is not None and str(value).strip():
+            return _normalize_string(value)
+    return ""
+
+
+def _get_input_type(elem: etree._Element) -> str:
+    return _get_first_attr(elem, "input-type", "inputType", "android:inputType")
+
+
+def _is_password_input(elem: etree._Element, input_type: str) -> bool:
+    if _parse_bool(elem.get("password")):
+        return True
+    lowered = input_type.lower()
+    return "password" in lowered or "textpassword" in lowered.replace(" ", "")
+
+
+def _get_important_for_accessibility(elem: etree._Element) -> str:
+    return _get_first_attr(
+        elem,
+        "important-for-accessibility",
+        "importantForAccessibility",
+        "android:importantForAccessibility",
+    ).lower()
+
+
+def _get_label_for(elem: etree._Element) -> str:
+    return _get_first_attr(elem, "label-for", "labelFor", "android:labelFor")
+
+
+def _infer_media_type(class_name: str, resource_id: str) -> str:
+    """Classify media-bearing widgets for R12/R13/R25 rule mapping."""
+    if any(marker in class_name for marker in ("VideoView", "ExoPlayer", "StyledPlayerView")):
+        return "video"
+    if any(
+        marker in class_name
+        for marker in ("AudioView", "SoundRecorder", "VoiceRecorder", "MediaRecorder", "MediaPlayer")
+    ):
+        return "audio"
+    if any(marker in class_name for marker in ("AnimationView", "LottieAnimationView")):
+        return "animation"
+    resource_lower = resource_id.lower()
+    if any(token in resource_lower for token in ("videoview", "video_player", "player_view")):
+        return "video"
+    if any(token in resource_lower for token in ("audio", "podcast", "voice_memo", "sound_recorder")):
+        return "audio"
+    return ""
+
+
+def _is_dialog_class(class_name: str) -> bool:
+    return any(
+        marker in class_name
+        for marker in ("Dialog", "AlertDialog", "BottomSheetDialog", "DialogTitle")
+    )
+
+
 def _tag_to_class(tag: str) -> str:
     if tag in SKIP_TAGS or tag == "node":
         return ""
@@ -228,7 +287,12 @@ def _extract_bounds(elem: etree._Element) -> list[int] | None:
     return _parse_masc_bounds(elem)
 
 
-def _element_to_component(elem: etree._Element, component_index: int) -> dict | None:
+def _element_to_component(
+    elem: etree._Element,
+    component_index: int,
+    *,
+    parent_component_id: str | None = None,
+) -> dict | None:
     if elem.tag in SKIP_TAGS:
         return None
 
@@ -247,30 +311,84 @@ def _element_to_component(elem: etree._Element, component_index: int) -> dict | 
         else:
             return None
 
+    resource_id = _normalize_string(elem.get("resource-id") or elem.get("resource_id"))
+    input_type = _get_input_type(elem)
+
     return {
         "component_id": f"c_{component_index:03d}",
         "class": class_name,
         "text": _get_text(elem),
         "content_desc": _get_content_desc(elem),
         "hint": _get_hint(elem),
-        "resource_id": _normalize_string(elem.get("resource-id") or elem.get("resource_id")),
+        "resource_id": resource_id,
         "clickable": _parse_bool(elem.get("clickable")),
         "enabled": _parse_bool(elem.get("enabled"), default=True),
         "focusable": _parse_bool(elem.get("focusable")),
         "bounds": bounds,
+        "focus_order": component_index,
+        "parent_id": parent_component_id or "",
+        "long_clickable": _parse_bool(elem.get("long-clickable") or elem.get("longClickable")),
+        "scrollable": _parse_bool(elem.get("scrollable")),
+        "selected": _parse_bool(elem.get("selected")),
+        "checked": _parse_bool(elem.get("checked")),
+        "password": _is_password_input(elem, input_type),
+        "text_all_caps": _parse_bool(
+            elem.get("textAllCaps") or elem.get("text-all-caps") or elem.get("android:textAllCaps")
+        ),
+        "input_type": input_type,
+        "important_for_accessibility": _get_important_for_accessibility(elem),
+        "media_type": _infer_media_type(class_name, resource_id),
+        "is_dialog": _is_dialog_class(class_name),
+        "label_for": _get_label_for(elem),
     }
+
+
+def _walk_xml_tree(
+    elem: etree._Element,
+    components: list[dict],
+    component_index: int,
+    parent_component_id: str | None,
+) -> int:
+    """Depth-first walk that preserves parent links and document order."""
+    component = _element_to_component(
+        elem,
+        component_index,
+        parent_component_id=parent_component_id,
+    )
+    current_parent_id = parent_component_id
+    if component is not None:
+        components.append(component)
+        current_parent_id = component["component_id"]
+        component_index += 1
+
+    for child in elem:
+        if child.tag == "wrapper":
+            # MASC nests real widgets inside <wrapper> blocks; descend without
+            # emitting a component for the wrapper itself.
+            component_index = _walk_xml_tree(
+                child,
+                components,
+                component_index,
+                current_parent_id,
+            )
+            continue
+        if child.tag in SKIP_TAGS:
+            continue
+        component_index = _walk_xml_tree(
+            child,
+            components,
+            component_index,
+            current_parent_id,
+        )
+    return component_index
 
 
 def parse_xml_tree(root: etree._Element) -> list[dict]:
     """Hybrid parser: UIAutomator, MASC, Rico, and generic layout XML in one pass."""
     components: list[dict] = []
-    component_index = 1
-    for elem in root.iter():
-        component = _element_to_component(elem, component_index)
-        if component is None:
-            continue
-        components.append(component)
-        component_index += 1
+    _walk_xml_tree(root, components, 1, None)
+    for index, component in enumerate(components, start=1):
+        component["focus_order"] = index
     return components
 
 

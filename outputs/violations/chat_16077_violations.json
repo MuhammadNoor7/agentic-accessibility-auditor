@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_16077",
-  "image_path": "data/data-masc/screenshots/chat/16077.jpg",
-  "xml_path": "data/data-masc/xml/chat/16077.xml",
-  "total_violations": 442,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/16077.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/16077.xml",
+  "total_violations": 460,
   "violations": [
     {
       "rule_id": "R01",
@@ -6620,34 +6620,306 @@
       "related_component": "c_236"
     },
     {
-      "rule_id": "R12",
-      "issue": "Missing captions",
-      "component_id": "c_497",
-      "class": "com.snapchat.android.ui.SnapVideoView",
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_460",
+      "class": "android.view.View",
       "bounds": [
-        0,
-        0,
-        0,
-        0
+        327,
+        2234,
+        434,
+        2341
       ],
-      "guideline": "G12 \u2014 Missing captions",
-      "severity": "High",
-      "recommendation": "Add a caption/CC toggle control near the video player."
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
     },
     {
-      "rule_id": "R12",
-      "issue": "Missing captions",
-      "component_id": "c_502",
-      "class": "com.snapchat.android.ui.SnapVideoView",
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_462",
+      "class": "android.view.View",
+      "bounds": [
+        341,
+        2248,
+        418,
+        2325
+      ],
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
+    },
+    {
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_470",
+      "class": "android.view.View",
+      "bounds": [
+        999,
+        2234,
+        1106,
+        2341
+      ],
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
+    },
+    {
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_472",
+      "class": "android.view.View",
+      "bounds": [
+        1014,
+        2248,
+        1091,
+        2325
+      ],
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_259",
+      "class": "com.snapchat.android.app.feature.messaging.feed.ui.FeedRecyclerView",
       "bounds": [
         0,
-        0,
-        0,
-        0
+        252,
+        1440,
+        1299
       ],
-      "guideline": "G12 \u2014 Missing captions",
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_307"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_298",
+      "class": "com.snapchat.android.framework.ui.views.ScFontButton",
+      "bounds": [
+        370,
+        644,
+        1070,
+        819
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_228"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_163",
+      "class": "com.snapchat.android.app.feature.messaging.chat.view2.CursorCallbackEditTextV2",
+      "bounds": [
+        0,
+        2132,
+        0,
+        2262
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
       "severity": "High",
-      "recommendation": "Add a caption/CC toggle control near the video player."
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_216",
+      "class": "com.snapchat.android.framework.ui.views.ScFontEditText",
+      "bounds": [
+        0,
+        282,
+        -27,
+        381
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_220",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        56,
+        113,
+        1384,
+        281
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_228",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        56,
+        475,
+        1384,
+        643
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_236",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        56,
+        643,
+        1384,
+        811
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_336",
+      "class": "android.support.v7.widget.RecyclerView",
+      "bounds": [
+        2880,
+        256,
+        1440,
+        2392
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_351",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        2880,
+        589,
+        1440,
+        820
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_353",
+      "class": "android.widget.FrameLayout",
+      "bounds": [
+        2936,
+        589,
+        1440,
+        820
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_396",
+      "class": "com.snapchat.android.app.feature.broadcast.core.tiles.view.UnreadTileView",
+      "bounds": [
+        4320,
+        256,
+        1440,
+        1858
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_402",
+      "class": "com.snapchat.android.app.feature.broadcast.core.tiles.view.UnreadTileView",
+      "bounds": [
+        5281,
+        256,
+        1440,
+        1056
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_408",
+      "class": "com.snapchat.android.app.feature.broadcast.core.tiles.view.UnreadTileView",
+      "bounds": [
+        5281,
+        1058,
+        1440,
+        1858
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_415",
+      "class": "com.snapchat.android.app.feature.broadcast.core.tiles.view.UnreadTileView",
+      "bounds": [
+        4320,
+        1860,
+        1440,
+        2392
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_421",
+      "class": "com.snapchat.android.app.feature.broadcast.core.tiles.view.UnreadTileView",
+      "bounds": [
+        5041,
+        1860,
+        1440,
+        2392
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R19",
+      "issue": "No destructive confirmation",
+      "component_id": "c_174",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        0,
+        2132,
+        -1439,
+        2132
+      ],
+      "guideline": "G19 \u2014 No destructive confirmation",
+      "severity": "Medium",
+      "recommendation": "Show a confirmation dialog before irreversible actions such as delete or remove."
     }
   ]
 }

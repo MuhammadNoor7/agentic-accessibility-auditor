@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_17125",
-  "image_path": "data/data-masc/screenshots/chat/17125.jpg",
-  "xml_path": "data/data-masc/xml/chat/17125.xml",
-  "total_violations": 114,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/17125.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/17125.xml",
+  "total_violations": 123,
   "violations": [
     {
       "rule_id": "R01",
@@ -1748,6 +1748,149 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_127"
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_019",
+      "class": "android.widget.ScrollView",
+      "bounds": [
+        0,
+        289,
+        1080,
+        2100
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_074"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_025",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        554,
+        724,
+        731
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_029"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_034",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        912,
+        724,
+        1089
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_040"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_048",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        1447,
+        724,
+        1624
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_053"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_083",
+      "class": "android.widget.RadioButton",
+      "bounds": [
+        0,
+        242,
+        720,
+        400
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_088"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_133",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        1282,
+        86,
+        1440,
+        240
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_083"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_084",
+      "class": "android.widget.RadioButton",
+      "bounds": [
+        720,
+        242,
+        1440,
+        400
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_088"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_133",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        1282,
+        86,
+        1440,
+        240
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_084"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_122",
+      "class": "android.widget.EditText",
+      "bounds": [
+        1440,
+        400,
+        1440,
+        558
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

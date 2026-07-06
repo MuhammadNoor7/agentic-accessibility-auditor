@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_18483",
-  "image_path": "data/data-masc/screenshots/chat/18483.jpg",
-  "xml_path": "data/data-masc/xml/chat/18483.xml",
-  "total_violations": 218,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/18483.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/18483.xml",
+  "total_violations": 227,
   "violations": [
     {
       "rule_id": "R01",
@@ -3293,6 +3293,142 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_102"
+    },
+    {
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_135",
+      "class": "com.mikepenz.iconics.view.IconicsImageView",
+      "bounds": [
+        2736,
+        420,
+        1440,
+        490
+      ],
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
+    },
+    {
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_204",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        4514,
+        593,
+        1440,
+        669
+      ],
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
+    },
+    {
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_208",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        4514,
+        758,
+        1440,
+        834
+      ],
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_010",
+      "class": "android.support.design.widget.TabLayout",
+      "bounds": [
+        0,
+        84,
+        1440,
+        280
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_012"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_052",
+      "class": "app.honestly.EllipsizingTextView",
+      "bounds": [
+        56,
+        280,
+        1384,
+        558
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_077",
+      "class": "app.honestly.EllipsizingTextView",
+      "bounds": [
+        56,
+        1090,
+        1384,
+        1550
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_102",
+      "class": "app.honestly.EllipsizingTextView",
+      "bounds": [
+        56,
+        2082,
+        1384,
+        2392
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_130",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        1440,
+        283,
+        1440,
+        570
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_176",
+      "class": "app.honestly.EllipsizingTextView",
+      "bounds": [
+        2936,
+        1228,
+        1440,
+        1304
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

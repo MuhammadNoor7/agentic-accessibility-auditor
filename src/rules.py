@@ -1,4 +1,4 @@
-"""Stage 2 rule checker: evaluates parsed UI components against accessibility rules R01-R12.
+"""Stage 2 rule checker: evaluates parsed UI components against accessibility rules R01-R20.
 
 Consumes a components.json-shaped dict (see docs/json_schemas.md) and produces a
 violations.json-shaped dict validated by docs/schemas/auditor_schema.json.
@@ -19,9 +19,51 @@ MIN_TOUCH_TARGET_DP = 48
 ASSUMED_DENSITY_DPI = 160
 TEXT_OVERFLOW_CHARS_PER_PX2 = 0.15
 CONTRAST_RATIO_THRESHOLD = 4.5
+MIN_SPACING_DP = 8
+NEARBY_LABEL_PX = 250
+NEARBY_TRANSCRIPT_PX = 400
+NEARBY_NOTIFICATION_ICON_PX = 350
 # R05: widget classes treated as text-input fields, beyond plain EditText, to
 # also cover custom/cross-platform input widgets.
 INPUT_CLASSES = ("EditText", "InputField", "TextField", "TextInput")
+
+TRANSCRIPT_TOKENS = ("transcript", "subtitle", "caption", "cc", "audio_description", "audiodesc")
+NOTIFICATION_TOKENS = ("notification", "notified", "incoming call", "missed call", "alert tone", "new message alert")
+DESTRUCTIVE_TOKENS = (
+    "delete",
+    "remove",
+    "clear all",
+    "erase",
+    "trash",
+    "discard",
+    "unsubscribe",
+    "permanently delete",
+    "delete account",
+)
+CONFIRM_TOKENS = (
+    "confirm",
+    "are you sure",
+    "delete anyway",
+    "yes, delete",
+    "yes delete",
+    "cannot be undone",
+    "permanently remove",
+)
+GESTURE_TOKENS = (
+    "pinch",
+    "two finger",
+    "two-finger",
+    "multitouch",
+    "multi-touch",
+    "rotate with two",
+    "spread to zoom",
+    "use two fingers",
+)
+AUDIO_CLASS_MARKERS = ("AudioView", "SoundRecorder", "VoiceRecorder", "MediaRecorder")
+AUDIO_RESOURCE_TOKENS = ("audio", "podcast", "voice_memo", "voice_message", "voicemessage", "sound_recorder")
+DECORATIVE_CLASS_MARKERS = ("ImageView", "android.view.View", "FrameLayout", "Space", "ViewStub")
+LABEL_CLASS_MARKERS = ("TextView", "AppCompatTextView", "FontTextView")
+DIALOG_CLASS_MARKERS = ("Dialog", "AlertDialog", "BottomSheetDialog")
 
 
 # --- Helpers -------------------------------------------------------------------
@@ -100,6 +142,160 @@ def _make_violation(
         violation["related_component"] = related_component
     return violation
 
+
+def _combined_text(component: dict) -> str:
+    """Lowercase concatenation of text-like fields for token matching."""
+    parts = (
+        component.get("text", ""),
+        component.get("content_desc", ""),
+        component.get("hint", ""),
+        component.get("resource_id", ""),
+    )
+    return " ".join(str(part) for part in parts if part).lower()
+
+
+def _contains_token(text: str, tokens: tuple[str, ...]) -> bool:
+    return any(token in text for token in tokens)
+
+
+def _is_input_field(component: dict) -> bool:
+    class_name = component.get("class", "")
+    return any(input_class in class_name for input_class in INPUT_CLASSES)
+
+
+def _edge_gap(bounds_a: list[int], bounds_b: list[int]) -> int:
+    """Minimum pixel gap between two non-overlapping axis-aligned rectangles."""
+    left_a, top_a, right_a, bottom_a = bounds_a
+    left_b, top_b, right_b, bottom_b = bounds_b
+    if right_a <= left_b:
+        dx = left_b - right_a
+    elif right_b <= left_a:
+        dx = left_a - right_b
+    else:
+        dx = 0
+    if bottom_a <= top_b:
+        dy = top_b - bottom_a
+    elif bottom_b <= top_a:
+        dy = top_a - bottom_b
+    else:
+        dy = 0
+    if dx == 0 and dy == 0:
+        return 0
+    if dx == 0:
+        return dy
+    if dy == 0:
+        return dx
+    return min(dx, dy)
+
+
+def _is_nearby(bounds_a: list[int], bounds_b: list[int], max_px: int) -> bool:
+    """True when rectangle centers are within max_px (cheap proximity check)."""
+    ax = (bounds_a[0] + bounds_a[2]) // 2
+    ay = (bounds_a[1] + bounds_a[3]) // 2
+    bx = (bounds_b[0] + bounds_b[2]) // 2
+    by = (bounds_b[1] + bounds_b[3]) // 2
+    return abs(ax - bx) <= max_px and abs(ay - by) <= max_px
+
+
+def _has_nearby_label(input_component: dict, components: list[dict]) -> bool:
+    """True when a TextView-like label sits near an input field."""
+    if input_component.get("label_for"):
+        return True
+    if _has_parent_sibling_label(input_component, components):
+        return True
+    for candidate in components:
+        class_name = candidate.get("class", "")
+        if not any(marker in class_name for marker in LABEL_CLASS_MARKERS):
+            continue
+        if not candidate.get("text"):
+            continue
+        if _is_nearby(input_component["bounds"], candidate["bounds"], NEARBY_LABEL_PX):
+            return True
+    return False
+
+
+def _has_parent_sibling_label(input_component: dict, components: list[dict]) -> bool:
+    """True when a sibling TextView under the same parent sits above the input."""
+    parent_id = input_component.get("parent_id", "")
+    if not parent_id:
+        return False
+    input_top = input_component["bounds"][1]
+    for candidate in components:
+        if candidate["component_id"] == input_component["component_id"]:
+            continue
+        if candidate.get("parent_id") != parent_id:
+            continue
+        class_name = candidate.get("class", "")
+        if not any(marker in class_name for marker in LABEL_CLASS_MARKERS):
+            continue
+        if not candidate.get("text"):
+            continue
+        if candidate["bounds"][3] <= input_top + 30:
+            return True
+    return False
+
+
+def _is_audio_component(component: dict, *, has_video: bool) -> bool:
+    if component.get("media_type") == "audio":
+        return True
+    class_name = component.get("class", "")
+    resource_text = _combined_text(component)
+    if any(marker in class_name for marker in AUDIO_CLASS_MARKERS):
+        return True
+    if "MediaPlayer" in class_name and not has_video:
+        return True
+    return _contains_token(resource_text, AUDIO_RESOURCE_TOKENS)
+
+
+def _is_video_component(component: dict) -> bool:
+    if component.get("media_type") == "video":
+        return True
+    class_name = component.get("class", "")
+    return "VideoView" in class_name or "MediaPlayer" in class_name
+
+
+def _is_decorative_focusable(component: dict) -> bool:
+    important = component.get("important_for_accessibility", "").lower()
+    if important in {"no", "nohideDescendants", "no_hide_descendants"}:
+        return True
+    if not component.get("focusable") or component.get("clickable"):
+        return False
+    if component.get("text") or component.get("content_desc"):
+        return False
+    class_name = component.get("class", "")
+    return any(marker in class_name for marker in DECORATIVE_CLASS_MARKERS) and _area(component) > 0
+
+
+def _screen_has_token(components: list[dict], tokens: tuple[str, ...]) -> bool:
+    return any(_contains_token(_combined_text(component), tokens) for component in components)
+
+
+def _has_nearby_token(
+    anchor: dict,
+    components: list[dict],
+    tokens: tuple[str, ...],
+    max_px: int,
+) -> bool:
+    for candidate in components:
+        if candidate["component_id"] == anchor["component_id"]:
+            continue
+        if not _contains_token(_combined_text(candidate), tokens):
+            continue
+        if _is_nearby(anchor["bounds"], candidate["bounds"], max_px):
+            return True
+    return False
+
+
+def _has_nearby_image(anchor: dict, components: list[dict], max_px: int) -> bool:
+    for candidate in components:
+        class_name = candidate.get("class", "")
+        if "ImageView" not in class_name and "ImageButton" not in class_name:
+            continue
+        if _area(candidate) <= 0:
+            continue
+        if _is_nearby(anchor["bounds"], candidate["bounds"], max_px):
+            return True
+    return False
 
 # --- R01-R05: high priority rules ----------------------------------------------
 
@@ -507,8 +703,11 @@ def check_missing_captions(components: list[dict]) -> list[dict]:
     #      unconditional flag-every-media-player behavior below.
     violations = []
     for component in components:
-        class_name = component.get("class", "")
-        if "VideoView" not in class_name and "MediaPlayer" not in class_name:
+        if not _is_video_component(component):
+            continue
+        if _screen_has_token(components, TRANSCRIPT_TOKENS):
+            continue
+        if _has_nearby_token(component, components, TRANSCRIPT_TOKENS, NEARBY_TRANSCRIPT_PX):
             continue
         violations.append(
             _make_violation(
@@ -523,13 +722,288 @@ def check_missing_captions(components: list[dict]) -> list[dict]:
     return violations
 
 
+# --- R13-R20: extended rules (Ayesha lead block, Week 4) -----------------------
+
+def check_audio_without_transcript(components: list[dict]) -> list[dict]:
+    """R13: flag audio-only media widgets with no transcript/subtitle affordance nearby.
+
+    Input: components - parsed component dicts.
+    Output: list of R13 violation dicts.
+    """
+    has_video = any(_is_video_component(component) for component in components)
+    violations = []
+    for component in components:
+        if not _is_audio_component(component, has_video=has_video):
+            continue
+        if _screen_has_token(components, TRANSCRIPT_TOKENS):
+            continue
+        if _has_nearby_token(component, components, TRANSCRIPT_TOKENS, NEARBY_TRANSCRIPT_PX):
+            continue
+        violations.append(
+            _make_violation(
+                rule_id="R13",
+                issue="Audio-only media without transcript",
+                component=component,
+                guideline="G13 — Audio-only without transcript",
+                severity="High",
+                recommendation=(
+                    "Provide a transcript link or on-screen text alternative for audio-only content."
+                ),
+            )
+        )
+    return violations
+
+
+def check_audio_only_notification(components: list[dict]) -> list[dict]:
+    """R14: flag notification-style text with no nearby visible icon/banner.
+
+    Input: components - parsed component dicts.
+    Output: list of R14 violation dicts.
+    """
+    violations = []
+    for component in components:
+        text_blob = _combined_text(component)
+        class_name = component.get("class", "")
+        is_notification = (
+            _contains_token(text_blob, NOTIFICATION_TOKENS)
+            or "Notification" in class_name
+        )
+        if not is_notification:
+            continue
+        if _has_nearby_image(component, components, NEARBY_NOTIFICATION_ICON_PX):
+            continue
+        violations.append(
+            _make_violation(
+                rule_id="R14",
+                issue="Audio-only notification",
+                component=component,
+                guideline="G14 — Audio-only notification",
+                severity="Medium",
+                recommendation=(
+                    "Pair notification text with a visible icon or banner, not sound alone."
+                ),
+            )
+        )
+    return violations
+
+
+def check_bad_focus_order(components: list[dict]) -> list[dict]:
+    """R15: flag when focusable traversal order disagrees with top-to-bottom layout.
+
+    Uses document order in components[] as a proxy for focus traversal order.
+    Input: components - parsed component dicts.
+    Output: list of R15 violation dicts.
+    """
+    focusable = [
+        component
+        for component in components
+        if component.get("focusable") and _area(component) > 0
+    ]
+    if len(focusable) < 2:
+        return []
+
+    document_ids = [
+        component["component_id"]
+        for component in sorted(
+            focusable,
+            key=lambda item: (item.get("focus_order", 0), item["component_id"]),
+        )
+    ]
+    visual_ids = [
+        component["component_id"]
+        for component in sorted(
+            focusable,
+            key=lambda item: (item["bounds"][1], item["bounds"][0], item["component_id"]),
+        )
+    ]
+    if document_ids == visual_ids:
+        return []
+
+    out_of_order_id = next(
+        doc_id for doc_id, vis_id in zip(document_ids, visual_ids) if doc_id != vis_id
+    )
+    offender = next(component for component in focusable if component["component_id"] == out_of_order_id)
+    expected = visual_ids[document_ids.index(out_of_order_id)]
+    return [
+        _make_violation(
+            rule_id="R15",
+            issue="Bad focus order",
+            component=offender,
+            guideline="G15 — Logical focus order",
+            severity="Medium",
+            recommendation=(
+                "Reorder focusable elements so traversal follows the visual top-to-bottom layout."
+            ),
+            related_component=expected,
+        )
+    ]
+
+
+def check_decorative_in_focus_tree(components: list[dict]) -> list[dict]:
+    """R16: flag likely decorative elements that remain in the focus tree.
+
+    Input: components - parsed component dicts.
+    Output: list of R16 violation dicts.
+    """
+    violations = []
+    for component in components:
+        if not _is_decorative_focusable(component):
+            continue
+        violations.append(
+            _make_violation(
+                rule_id="R16",
+                issue="Decorative element in focus tree",
+                component=component,
+                guideline="G16 — Decorative element in focus tree",
+                severity="Low",
+                recommendation=(
+                    "Remove decorative elements from the focus order (android:focusable=false "
+                    "and android:importantForAccessibility=no)."
+                ),
+            )
+        )
+    return violations
+
+
+def check_insufficient_spacing(components: list[dict], dpi: int = ASSUMED_DENSITY_DPI) -> list[dict]:
+    """R17: flag clickable pairs whose edge gap is below 8dp.
+
+    Input: components - parsed component dicts; dpi - screen density for dp conversion.
+    Output: list of R17 violation dicts.
+    """
+    clickable = [
+        component
+        for component in components
+        if component.get("clickable") and _area(component) > 0
+    ]
+    violations = []
+    for i, first in enumerate(clickable):
+        for second in clickable[i + 1:]:
+            gap_px = _edge_gap(first["bounds"], second["bounds"])
+            if gap_px <= 0:
+                continue
+            gap_dp = _px_to_dp(gap_px, dpi=dpi)
+            if gap_dp >= MIN_SPACING_DP:
+                continue
+            smaller, larger = (first, second) if _area(first) <= _area(second) else (second, first)
+            violations.append(
+                _make_violation(
+                    rule_id="R17",
+                    issue="Insufficient spacing",
+                    component=smaller,
+                    guideline="G17 — Insufficient spacing",
+                    severity="Medium",
+                    recommendation=(
+                        f"Increase spacing between adjacent controls to at least {MIN_SPACING_DP}dp."
+                    ),
+                    related_component=larger["component_id"],
+                )
+            )
+    return violations
+
+
+def check_multi_gesture_only(components: list[dict]) -> list[dict]:
+    """R18: flag features described as multi-touch/pinch-only interactions.
+
+    Input: components - parsed component dicts.
+    Output: list of R18 violation dicts.
+    """
+    violations = []
+    for component in components:
+        text_blob = _combined_text(component)
+        if not (
+            _contains_token(text_blob, GESTURE_TOKENS)
+            or component.get("long_clickable")
+        ):
+            continue
+        violations.append(
+            _make_violation(
+                rule_id="R18",
+                issue="Multi-gesture only",
+                component=component,
+                guideline="G18 — Multi-finger gesture",
+                severity="High",
+                recommendation=(
+                    "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+                ),
+            )
+        )
+    return violations
+
+
+def check_destructive_without_confirmation(components: list[dict]) -> list[dict]:
+    """R19: flag destructive actions when no confirmation dialog/text is present.
+
+    Input: components - parsed component dicts.
+    Output: list of R19 violation dicts.
+    """
+    has_dialog = any(component.get("is_dialog") for component in components) or any(
+        any(marker in component.get("class", "") for marker in DIALOG_CLASS_MARKERS)
+        for component in components
+    )
+    has_confirm_text = _screen_has_token(components, CONFIRM_TOKENS)
+    if has_dialog or has_confirm_text:
+        return []
+
+    violations = []
+    for component in components:
+        if not component.get("clickable"):
+            continue
+        if not _contains_token(_combined_text(component), DESTRUCTIVE_TOKENS):
+            continue
+        violations.append(
+            _make_violation(
+                rule_id="R19",
+                issue="No destructive confirmation",
+                component=component,
+                guideline="G19 — No destructive confirmation",
+                severity="Medium",
+                recommendation=(
+                    "Show a confirmation dialog before irreversible actions such as delete or remove."
+                ),
+            )
+        )
+    return violations
+
+
+def check_hint_only_label(components: list[dict]) -> list[dict]:
+    """R20: flag input fields that rely on hint text without a visible paired label.
+
+    Input: components - parsed component dicts.
+    Output: list of R20 violation dicts.
+    """
+    violations = []
+    for component in components:
+        if not _is_input_field(component):
+            continue
+        if not component.get("hint"):
+            continue
+        if component.get("text") or component.get("content_desc") or component.get("label_for"):
+            continue
+        if _has_nearby_label(component, components):
+            continue
+        violations.append(
+            _make_violation(
+                rule_id="R20",
+                issue="Hint-only label",
+                component=component,
+                guideline="G20 — Label disappears on focus",
+                severity="Medium",
+                recommendation=(
+                    "Add a persistent visible label (TextView or labelFor) instead of hint-only labeling."
+                ),
+            )
+        )
+    return violations
+
+
 # --- Entry point -----------------------------------------------------------------
 #
 # check_small_touch_target() needs a `dpi` argument (from device_info), so it's
 # called out explicitly below rather than folded into a uniform RULES tuple.
 
 def check(components_json: dict) -> dict:
-    """Run all R01-R12 rules over a components.json document and build violations.json.
+    """Run all R01-R20 rules over a components.json document and build violations.json.
 
     Input: components_json - dict matching the components.json schema
         (schema_version, screen_id, image_path, xml_path, device_info,
@@ -556,6 +1030,14 @@ def check(components_json: dict) -> dict:
     violations.extend(check_text_overflow(components))
     violations.extend(check_color_only_info(components))
     violations.extend(check_missing_captions(components))
+    violations.extend(check_audio_without_transcript(components))
+    violations.extend(check_audio_only_notification(components))
+    violations.extend(check_bad_focus_order(components))
+    violations.extend(check_decorative_in_focus_tree(components))
+    violations.extend(check_insufficient_spacing(components, dpi=dpi))
+    violations.extend(check_multi_gesture_only(components))
+    violations.extend(check_destructive_without_confirmation(components))
+    violations.extend(check_hint_only_label(components))
 
     return {
         "schema_version": components_json.get("schema_version", SCHEMA_VERSION),

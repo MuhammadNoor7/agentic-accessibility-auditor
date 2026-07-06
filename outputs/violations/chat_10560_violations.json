@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_10560",
-  "image_path": "data/data-masc/screenshots/chat/10560.jpg",
-  "xml_path": "data/data-masc/xml/chat/10560.xml",
-  "total_violations": 17,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/10560.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/10560.xml",
+  "total_violations": 19,
   "violations": [
     {
       "rule_id": "R01",
@@ -264,6 +264,37 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_015"
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_027",
+      "class": "android.support.v7.widget.AppCompatImageButton",
+      "bounds": [
+        28,
+        922,
+        203,
+        1062
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_030"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_034",
+      "class": "android.support.v7.widget.AppCompatEditText",
+      "bounds": [
+        84,
+        1128,
+        1384,
+        1422
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

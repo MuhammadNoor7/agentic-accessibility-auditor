@@ -200,3 +200,181 @@ def test_small_touch_target_respects_dpi_parameter() -> None:
     violations = check_small_touch_target([component], dpi=420)
     assert len(violations) == 1
     assert violations[0]["rule_id"] == "R04"
+
+
+@pytest.mark.parametrize(
+    "checker,component,rule_id",
+    [
+        (
+            "check_audio_without_transcript",
+            {
+                "component_id": "c_001",
+                "class": "android.media.SoundRecorder",
+                "text": "",
+                "content_desc": "",
+                "hint": "",
+                "resource_id": "com.example:id/recorder",
+                "clickable": True,
+                "enabled": True,
+                "focusable": True,
+                "bounds": [0, 0, 200, 100],
+            },
+            "R13",
+        ),
+        (
+            "check_audio_only_notification",
+            {
+                "component_id": "c_001",
+                "class": "android.widget.TextView",
+                "text": "New notification received",
+                "content_desc": "",
+                "hint": "",
+                "resource_id": "",
+                "clickable": False,
+                "enabled": True,
+                "focusable": False,
+                "bounds": [0, 0, 400, 80],
+            },
+            "R14",
+        ),
+        (
+            "check_bad_focus_order",
+            {
+                "component_id": "c_002",
+                "class": "android.widget.Button",
+                "text": "Bottom",
+                "content_desc": "",
+                "hint": "",
+                "resource_id": "",
+                "clickable": True,
+                "enabled": True,
+                "focusable": True,
+                "bounds": [0, 500, 200, 600],
+            },
+            "R15",
+        ),
+        (
+            "check_decorative_in_focus_tree",
+            {
+                "component_id": "c_001",
+                "class": "android.widget.ImageView",
+                "text": "",
+                "content_desc": "",
+                "hint": "",
+                "resource_id": "",
+                "clickable": False,
+                "enabled": True,
+                "focusable": True,
+                "bounds": [0, 0, 100, 100],
+            },
+            "R16",
+        ),
+        (
+            "check_multi_gesture_only",
+            {
+                "component_id": "c_001",
+                "class": "android.widget.TextView",
+                "text": "Pinch to zoom the map",
+                "content_desc": "",
+                "hint": "",
+                "resource_id": "",
+                "clickable": False,
+                "enabled": True,
+                "focusable": False,
+                "bounds": [0, 0, 300, 80],
+            },
+            "R18",
+        ),
+        (
+            "check_destructive_without_confirmation",
+            {
+                "component_id": "c_001",
+                "class": "android.widget.Button",
+                "text": "Delete chat",
+                "content_desc": "",
+                "hint": "",
+                "resource_id": "",
+                "clickable": True,
+                "enabled": True,
+                "focusable": True,
+                "bounds": [0, 0, 200, 100],
+            },
+            "R19",
+        ),
+        (
+            "check_hint_only_label",
+            {
+                "component_id": "c_001",
+                "class": "android.widget.EditText",
+                "text": "",
+                "content_desc": "",
+                "hint": "Email address",
+                "resource_id": "",
+                "clickable": True,
+                "enabled": True,
+                "focusable": True,
+                "bounds": [0, 200, 400, 280],
+            },
+            "R20",
+        ),
+    ],
+)
+def test_r13_to_r20_trigger_on_controlled_components(checker: str, component: dict, rule_id: str) -> None:
+    from src import rules as rules_module
+
+    checker_fn = getattr(rules_module, checker)
+    if rule_id == "R15":
+        components = [
+            {**component, "focus_order": 1},
+            {
+                "component_id": "c_001",
+                "class": "android.widget.Button",
+                "text": "Top",
+                "content_desc": "",
+                "hint": "",
+                "resource_id": "",
+                "clickable": True,
+                "enabled": True,
+                "focusable": True,
+                "bounds": [0, 0, 200, 100],
+                "focus_order": 2,
+            },
+        ]
+    else:
+        components = [component]
+
+    violations = checker_fn(components)
+    assert any(violation["rule_id"] == rule_id for violation in violations)
+
+
+def test_r17_insufficient_spacing() -> None:
+    from src.rules import check_insufficient_spacing
+
+    components = [
+        {
+            "component_id": "c_001",
+            "class": "android.widget.Button",
+            "text": "A",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "",
+            "clickable": True,
+            "enabled": True,
+            "focusable": True,
+            "bounds": [0, 0, 200, 100],
+        },
+        {
+            "component_id": "c_002",
+            "class": "android.widget.Button",
+            "text": "B",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "",
+            "clickable": True,
+            "enabled": True,
+            "focusable": True,
+            "bounds": [205, 0, 405, 100],
+        },
+    ]
+    violations = check_insufficient_spacing(components, dpi=160)
+    assert any(violation["rule_id"] == "R17" for violation in violations)

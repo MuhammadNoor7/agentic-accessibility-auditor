@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_19617",
-  "image_path": "data/data-masc/screenshots/chat/19617.jpg",
-  "xml_path": "data/data-masc/xml/chat/19617.xml",
-  "total_violations": 63,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/19617.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/19617.xml",
+  "total_violations": 66,
   "violations": [
     {
       "rule_id": "R01",
@@ -952,6 +952,52 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_065"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_073",
+      "class": "android.widget.TextView",
+      "bounds": [
+        400,
+        259,
+        1288,
+        334
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_047"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_065",
+      "class": "android.widget.ListView",
+      "bounds": [
+        0,
+        252,
+        1440,
+        2392
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R19",
+      "issue": "No destructive confirmation",
+      "component_id": "c_085",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ],
+      "guideline": "G19 \u2014 No destructive confirmation",
+      "severity": "Medium",
+      "recommendation": "Show a confirmation dialog before irreversible actions such as delete or remove."
     }
   ]
 }

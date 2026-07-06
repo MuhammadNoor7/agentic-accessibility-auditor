@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_17123",
-  "image_path": "data/data-masc/screenshots/chat/17123.jpg",
-  "xml_path": "data/data-masc/xml/chat/17123.xml",
-  "total_violations": 31,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/17123.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/17123.xml",
+  "total_violations": 36,
   "violations": [
     {
       "rule_id": "R01",
@@ -478,6 +478,82 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_021"
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_007",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        158,
+        242
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_011"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_013",
+      "class": "android.widget.EditText",
+      "bounds": [
+        43,
+        405,
+        1397,
+        528
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_016",
+      "class": "android.widget.EditText",
+      "bounds": [
+        43,
+        659,
+        1397,
+        782
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_028",
+      "class": "android.widget.EditText",
+      "bounds": [
+        25,
+        267,
+        25,
+        267
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_034",
+      "class": "android.widget.EditText",
+      "bounds": [
+        25,
+        267,
+        25,
+        267
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

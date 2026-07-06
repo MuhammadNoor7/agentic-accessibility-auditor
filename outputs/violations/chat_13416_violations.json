@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_13416",
-  "image_path": "data/data-masc/screenshots/chat/13416.jpg",
-  "xml_path": "data/data-masc/xml/chat/13416.xml",
-  "total_violations": 70,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/13416.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/13416.xml",
+  "total_violations": 75,
   "violations": [
     {
       "rule_id": "R01",
@@ -1056,6 +1056,82 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_077"
+    },
+    {
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_038",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        2184,
+        1440,
+        2184
+      ],
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
+    },
+    {
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_040",
+      "class": "android.widget.TextSwitcher",
+      "bounds": [
+        70,
+        2184,
+        1275,
+        2184
+      ],
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_007",
+      "class": "android.support.v4.widget.DrawerLayout",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2392
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_014"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_022",
+      "class": "com.groupme.android.chat.ChatListView",
+      "bounds": [
+        0,
+        280,
+        1440,
+        2184
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_077",
+      "class": "com.groupme.android.chat.emoji.ComposeMessageEditText",
+      "bounds": [
+        253,
+        2206,
+        1254,
+        2374
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

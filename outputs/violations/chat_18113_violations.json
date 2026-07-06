@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_18113",
-  "image_path": "data/data-masc/screenshots/chat/18113.jpg",
-  "xml_path": "data/data-masc/xml/chat/18113.xml",
-  "total_violations": 19,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/18113.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/18113.xml",
+  "total_violations": 22,
   "violations": [
     {
       "rule_id": "R01",
@@ -290,6 +290,52 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_030"
+    },
+    {
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_022",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        927,
+        335,
+        1233,
+        392
+      ],
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_012",
+      "class": "android.support.v7.view.menu.ActionMenuItemView",
+      "bounds": [
+        1244,
+        98,
+        1440,
+        266
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_017"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_012",
+      "class": "android.support.v7.view.menu.ActionMenuItemView",
+      "bounds": [
+        1244,
+        98,
+        1440,
+        266
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

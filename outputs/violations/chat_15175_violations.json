@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_15175",
-  "image_path": "data/data-masc/screenshots/chat/15175.jpg",
-  "xml_path": "data/data-masc/xml/chat/15175.xml",
-  "total_violations": 128,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/15175.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/15175.xml",
+  "total_violations": 135,
   "violations": [
     {
       "rule_id": "R01",
@@ -1953,6 +1953,117 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_116"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_018",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        360,
+        280,
+        720,
+        427
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_029"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_018",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        360,
+        280,
+        720,
+        427
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_043"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_018",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        360,
+        280,
+        720,
+        427
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_057"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_019",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        720,
+        280,
+        1080,
+        427
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_025"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_019",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        720,
+        280,
+        1080,
+        427
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_036"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_019",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        720,
+        280,
+        1080,
+        427
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_050"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_014",
+      "class": "android.support.v7.view.menu.ActionMenuItemView",
+      "bounds": [
+        1244,
+        98,
+        1440,
+        266
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

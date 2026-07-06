@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_1593",
-  "image_path": "data/data-masc/screenshots/chat/1593.jpg",
-  "xml_path": "data/data-masc/xml/chat/1593.xml",
-  "total_violations": 365,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/1593.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/1593.xml",
+  "total_violations": 388,
   "violations": [
     {
       "rule_id": "R01",
@@ -5529,6 +5529,352 @@
       "guideline": "G07 \u2014 Invisible or zero-size component",
       "severity": "Medium",
       "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_291",
+      "class": "android.support.v7.widget.AppCompatTextView",
+      "bounds": [
+        0,
+        252,
+        1440,
+        1037
+      ],
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_016",
+      "class": "com.ninegag.android.chat.ui.NoSwipePagerSlidingTabStripWithState",
+      "bounds": [
+        0,
+        84,
+        1440,
+        2196
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_020"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_012",
+      "class": "android.support.v7.view.menu.ActionMenuItemView",
+      "bounds": [
+        1440,
+        84,
+        1440,
+        84
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_101",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        84,
+        -1439,
+        364
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_103",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        84,
+        -1719,
+        364
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_117",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        364,
+        -1439,
+        644
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_119",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        364,
+        -1719,
+        644
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_133",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        644,
+        -1439,
+        924
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_135",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        644,
+        -1439,
+        924
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_149",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        924,
+        -1439,
+        1204
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_151",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        924,
+        -1439,
+        1204
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_165",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        1204,
+        -1439,
+        1484
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_167",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        1204,
+        -1719,
+        1484
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_181",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        1484,
+        -1439,
+        1764
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_183",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        1484,
+        -1439,
+        1764
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_197",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        1764,
+        -1439,
+        2044
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_199",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        1764,
+        -1719,
+        2044
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_213",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        2044,
+        -1439,
+        2196
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_215",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        2044,
+        -1719,
+        2196
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_390",
+      "class": "com.roughike.bottombar.BottomBarTab",
+      "bounds": [
+        6,
+        2196,
+        363,
+        2392
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_393",
+      "class": "com.roughike.bottombar.BottomBarTab",
+      "bounds": [
+        363,
+        2196,
+        720,
+        2392
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_396",
+      "class": "com.roughike.bottombar.BottomBarTab",
+      "bounds": [
+        720,
+        2196,
+        1077,
+        2392
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_399",
+      "class": "com.roughike.bottombar.BottomBarTab",
+      "bounds": [
+        1077,
+        2196,
+        1434,
+        2392
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_16085",
-  "image_path": "data/data-masc/screenshots/chat/16085.jpg",
-  "xml_path": "data/data-masc/xml/chat/16085.xml",
-  "total_violations": 22,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/16085.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/16085.xml",
+  "total_violations": 31,
   "violations": [
     {
       "rule_id": "R01",
@@ -335,6 +335,142 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_035"
+    },
+    {
+      "rule_id": "R13",
+      "issue": "Audio-only media without transcript",
+      "component_id": "c_043",
+      "class": "android.widget.ImageButton",
+      "bounds": [
+        804,
+        0,
+        972,
+        168
+      ],
+      "guideline": "G13 \u2014 Audio-only without transcript",
+      "severity": "High",
+      "recommendation": "Provide a transcript link or on-screen text alternative for audio-only content."
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_012",
+      "class": "android.support.v7.widget.RecyclerView",
+      "bounds": [
+        0,
+        84,
+        1440,
+        1982
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_052"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_024",
+      "class": "com.android.messaging.ui.PlainTextEditText",
+      "bounds": [
+        0,
+        1982,
+        0,
+        1982
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_030",
+      "class": "com.android.messaging.ui.PlainTextEditText",
+      "bounds": [
+        224,
+        2038,
+        1251,
+        2335
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_034",
+      "class": "com.android.messaging.ui.conversation.SimIconView",
+      "bounds": [
+        1251,
+        2038,
+        1398,
+        2185
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_035",
+      "class": "android.widget.ImageButton",
+      "bounds": [
+        1251,
+        2038,
+        1398,
+        2185
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_050",
+      "class": "android.support.v7.internal.view.menu.ActionMenuItemView",
+      "bounds": [
+        1132,
+        98,
+        1300,
+        266
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R19",
+      "issue": "No destructive confirmation",
+      "component_id": "c_022",
+      "class": "android.widget.ImageButton",
+      "bounds": [
+        0,
+        1982,
+        0,
+        1982
+      ],
+      "guideline": "G19 \u2014 No destructive confirmation",
+      "severity": "Medium",
+      "recommendation": "Show a confirmation dialog before irreversible actions such as delete or remove."
+    },
+    {
+      "rule_id": "R19",
+      "issue": "No destructive confirmation",
+      "component_id": "c_025",
+      "class": "android.widget.ImageButton",
+      "bounds": [
+        0,
+        1982,
+        0,
+        1940
+      ],
+      "guideline": "G19 \u2014 No destructive confirmation",
+      "severity": "Medium",
+      "recommendation": "Show a confirmation dialog before irreversible actions such as delete or remove."
     }
   ]
 }

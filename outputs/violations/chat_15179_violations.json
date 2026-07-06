@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_15179",
-  "image_path": "data/data-masc/screenshots/chat/15179.jpg",
-  "xml_path": "data/data-masc/xml/chat/15179.xml",
-  "total_violations": 113,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/15179.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/15179.xml",
+  "total_violations": 115,
   "violations": [
     {
       "rule_id": "R01",
@@ -1720,6 +1720,36 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_111"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_014",
+      "class": "android.support.v7.view.menu.ActionMenuItemView",
+      "bounds": [
+        1244,
+        98,
+        1440,
+        266
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_031",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        300,
+        1440,
+        612
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_1054",
-  "image_path": "data/data-masc/screenshots/chat/1054.jpg",
-  "xml_path": "data/data-masc/xml/chat/1054.xml",
-  "total_violations": 30,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/1054.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/1054.xml",
+  "total_violations": 32,
   "violations": [
     {
       "rule_id": "R01",
@@ -457,6 +457,37 @@
       "guideline": "G07 \u2014 Invisible or zero-size component",
       "severity": "Medium",
       "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_008",
+      "class": "com.astuetz.PagerSlidingTabStrip",
+      "bounds": [
+        0,
+        280,
+        1440,
+        476
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_058"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_060",
+      "class": "android.support.v7.view.menu.ActionMenuItemView",
+      "bounds": [
+        1244,
+        98,
+        1440,
+        266
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

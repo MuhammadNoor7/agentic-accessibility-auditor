@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_15164",
-  "image_path": "data/data-masc/screenshots/chat/15164.jpg",
-  "xml_path": "data/data-masc/xml/chat/15164.xml",
-  "total_violations": 18,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/15164.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/15164.xml",
+  "total_violations": 21,
   "violations": [
     {
       "rule_id": "R01",
@@ -274,6 +274,52 @@
       "guideline": "G07 \u2014 Invisible or zero-size component",
       "severity": "Medium",
       "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_026",
+      "class": "android.support.v7.widget.AppCompatButton",
+      "bounds": [
+        12,
+        2229,
+        719,
+        2378
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_028"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_018",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        11,
+        1509,
+        1429,
+        1933
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_031",
+      "class": "android.support.v7.widget.AppCompatEditText",
+      "bounds": [
+        0,
+        2217,
+        0,
+        2217
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

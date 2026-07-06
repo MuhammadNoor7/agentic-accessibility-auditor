@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_18677",
-  "image_path": "data/data-masc/screenshots/chat/18677.jpg",
-  "xml_path": "data/data-masc/xml/chat/18677.xml",
-  "total_violations": 35,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/18677.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/18677.xml",
+  "total_violations": 37,
   "violations": [
     {
       "rule_id": "R01",
@@ -541,6 +541,37 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_027"
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_004",
+      "class": "android.support.v4.widget.DrawerLayout",
+      "bounds": [
+        0,
+        252,
+        1440,
+        2392
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_010"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_063",
+      "class": "com.android.internal.view.menu.ActionMenuItemView",
+      "bounds": [
+        1244,
+        84,
+        1440,
+        252
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r01_missing_label_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r01_missing_label_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r01_missing_label_fail.xml",
+  "device_info": {
+    "dpi": 160,
+    "width_px": 0,
+    "height_px": 0
+  },
+  "components": [
+    {
+      "component_id": "c_001",
+      "class": "android.widget.FrameLayout",
+      "text": "",
+      "content_desc": "",
+      "hint": "",
+      "resource_id": "",
+      "clickable": false,
+      "enabled": true,
+      "focusable": false,
+      "bounds": [
+        0,
+        0,
+        1080,
+        1920
+      ],
+      "focus_order": 1,
+      "parent_id": "",
+      "long_clickable": false,
+      "scrollable": false,
+      "selected": false,
+      "checked": false,
+      "password": false,
+      "text_all_caps": false,
+      "input_type": "",
+      "important_for_accessibility": "",
+      "media_type": "",
+      "is_dialog": false,
+      "label_for": ""
+    },
+    {
+      "component_id": "c_002",
+      "class": "android.widget.Button",
+      "text": "",
+      "content_desc": "",
+      "hint": "",
+      "resource_id": "com.example.app:id/mystery_button",
+      "clickable": true,
+      "enabled": true,
+      "focusable": true,
+      "bounds": [
+        100,
+        100,
+        300,
+        220
+      ],
+      "focus_order": 2,
+      "parent_id": "c_001",
+      "long_clickable": false,
+      "scrollable": false,
+      "selected": false,
+      "checked": false,
+      "password": false,
+      "text_all_caps": false,
+      "input_type": "",
+      "important_for_accessibility": "",
+      "media_type": "",
+      "is_dialog": false,
+      "label_for": ""
+    }
+  ]
+}

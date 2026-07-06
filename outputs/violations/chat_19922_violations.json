@@ -1,9 +1,9 @@
 {
   "schema_version": "1.0",
   "screen_id": "chat_19922",
-  "image_path": "data/data-masc/screenshots/chat/19922.jpg",
-  "xml_path": "data/data-masc/xml/chat/19922.xml",
-  "total_violations": 147,
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/19922.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/19922.xml",
+  "total_violations": 151,
   "violations": [
     {
       "rule_id": "R01",
@@ -2216,6 +2216,67 @@
       "severity": "Medium",
       "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
       "related_component": "c_013"
+    },
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_010",
+      "class": "android.support.v7.widget.AppCompatEditText",
+      "bounds": [
+        175,
+        2234,
+        1282,
+        2392
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_167"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_010",
+      "class": "android.support.v7.widget.AppCompatEditText",
+      "bounds": [
+        175,
+        2234,
+        1282,
+        2392
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_013",
+      "class": "android.widget.ListView",
+      "bounds": [
+        0,
+        280,
+        1440,
+        2234
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_167",
+      "class": "android.support.v7.view.menu.ActionMenuItemView",
+      "bounds": [
+        1272,
+        98,
+        1440,
+        266
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
     }
   ]
 }

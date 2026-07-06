@@ -59,8 +59,6 @@ agentic-accessibility-auditor/
 ├── app.py                  # Streamlit: upload XML + violations preview
 ├── test_run.py             # CLI batch parse + rules
 ├── requirements.txt
-├── Dockerfile
-├── docker-compose.yml
 ├── conftest.py
 │
 ├── src/
@@ -229,10 +227,11 @@ npm run dev
 # http://localhost:5173 — UI scaffold only; not wired to FastAPI yet
 ```
 
-### 7. Docker / API
+### 7. FastAPI (local)
 
 ```bash
-docker-compose up --build
+# From repo root
+python -m uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 # Health: http://localhost:8000/health
 # Audit:  POST /api/v1/audit  →  GET /api/v1/audit/{id}/violations
 ```
@@ -295,7 +294,7 @@ python scripts/build_rico_holdout_sheet.py
 
 ## Git: what to commit
 
-**Always commit:** source code, `docs/`, `scripts/`, `tests/`, `frontend/`, Docker files, `requirements.txt`
+**Always commit:** source code, `docs/`, `scripts/`, `tests/`, `frontend/`, `requirements.txt`
 
 **Never commit:** `.venv/`, `__pycache__/`, `.env`, raw `xml/` / `screenshots/` trees, most of `outputs/violations/`
 

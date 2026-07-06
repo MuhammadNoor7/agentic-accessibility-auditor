@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.api
-    image: ghcr.io/muhammadnoor7/agentic-accessibility-auditor:api-noor
+    image: axion-api:local
     ports:
       - "8000:8000"
     volumes:
@@ -17,7 +17,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ghcr.io/muhammadnoor7/agentic-accessibility-auditor:auditor-noor
+    image: axion-auditor:local
     volumes:
       - ./data/data-masc:/app/data/data-masc:ro
       - ./outputs/violations:/app/outputs/violations

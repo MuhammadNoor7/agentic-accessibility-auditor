@@ -229,24 +229,26 @@ npm run dev
 # http://localhost:5173 — UI scaffold only; not wired to FastAPI yet
 ```
 
-### 7. Docker / API
+### 7. Docker (local images)
 
 ```bash
-# Build and run locally (mount MASC data for batch auditor)
-docker compose up --build
+# Build both images and tag locally (axion-api:local, axion-auditor:local)
+docker compose build
 
-# API only — upload XML → violations (R01–R20)
-docker compose up api --build
+# Run API — upload XML → violations (R01–R20)
+docker compose up api
 # http://localhost:8000/health
 # POST http://localhost:8000/api/v1/audit  (multipart XML)
 
-# Pull published images from GitHub Container Registry (noor branch)
-docker pull ghcr.io/muhammadnoor7/agentic-accessibility-auditor:api-noor
-docker pull ghcr.io/muhammadnoor7/agentic-accessibility-auditor:auditor-noor
+# Run batch auditor (mount MASC data; parses full dataset by default)
+docker compose run --rm auditor
+
+# Build + run everything
+docker compose up --build
 ```
 
-**Images:** `auditor-noor` = batch parse + rules · `api-noor` = FastAPI upload API.  
-Raw MASC XML/screenshots are not in the image — mount `data/data-masc` for batch runs.
+**Local image names:** `axion-api:local` · `axion-auditor:local`  
+MASC XML/screenshots are not baked into the image — mount `data/data-masc` for batch runs.
 
 ---
 

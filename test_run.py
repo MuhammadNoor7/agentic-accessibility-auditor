@@ -29,7 +29,6 @@ DATASET_ALIASES = {
     "generic": ROOT / "data",
 }
 
-
 def resolve_dataset_arg(dataset: str | None) -> Path | None:
     if not dataset:
         dataset_env = os.environ.get("DATASET_ROOT")
@@ -48,7 +47,6 @@ def resolve_dataset_arg(dataset: str | None) -> Path | None:
     if not path.is_absolute():
         path = (ROOT / path).resolve()
     return path
-
 
 def write_violations(doc: dict, output_root: Path | None = None) -> dict:
     """Run the Stage 2 rule checker on a components.json doc and write violations.json.

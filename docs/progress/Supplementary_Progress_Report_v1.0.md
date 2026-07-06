@@ -2,7 +2,7 @@
 
 ## Agentic Accessibility Auditor (Axion)
 
-**Practical work completed — Weeks 1–2 (baseline 1 July 2026)**  
+**Practical work completed — Weeks 1–3+ (baseline 1 July 2026; updated 6 July 2026)**  
 **Living document — see §15 for team updates; §12–§13 for literature + rule ownership**
 
 | Field | Value |
@@ -31,45 +31,46 @@ This document gathers what has actually been built, run, and produced so far. It
 
 > **Note:** Baseline below is as of **1 July 2026**. For current status after team pushes, see **§15 Team weekly updates**.
 
-| Area | Result (1 Jul baseline) |
-|------|-------------------------|
-| Parser (Stage 1) | **Complete** — hybrid XML parser; 7,068 / 7,068 MASC screens parsed with PASS sign-off |
-| Rule engine (Stage 2) | **In progress** — R01–R10 done; R11–R12 stubs |
-| Agent layer (Stage 3) | **Scaffolded** — `src/agent.py` template enrichment |
+| Area | Result (6 Jul on `noor`) |
+|------|--------------------------|
+| Parser (Stage 1) | **Complete** — hybrid XML parser; **7,068 / 7,068** MASC screens re-parsed with **R13–R20 extended fields**; MASC `<wrapper>` traversal fix |
+| Rule engine (Stage 2) | **R01–R20 implemented** — `check()` wired; R11 stub; R09 needs screenshot; **38 pytest** |
+| Agent layer (Stage 3) | **Scaffolded** — `src/agent.py` score formula + template enrichment (not API-wired) |
 | Report generator (Stage 4) | Not started |
-| Axion React UI | **On `noor` branch** — Ayesha `frontend/` synced (auth + Upload/Dashboard/Report/Records); backend not wired yet |
+| Axion React UI | **On `noor` branch** — Ayesha `frontend/` synced; backend not wired yet |
+| FastAPI audit API | **Partial** — violations-only (`POST /audit` → `GET …/violations`); `/report` → 404 |
 | Auth + Records | Specified in SRS v2.0; not implemented in code |
 | Docker | Partial — `docker-compose.yml` runs backend + batch auditor |
-| Documentation | SRS v2.0 (cleaned §9/TBD-06), SDS v2.0, progress report v1.1 |
+| Documentation | SRS v2.0, **SDS v2.1** (R01–R20), progress report v1.4 |
 
-**Bottom line (1 Jul):** The data and parsing foundation is strong. The team was ready to begin Week 3 (rule engine).
+**Bottom line (6 Jul):** Parser and rule engine through **R20** are implemented and validated on full MASC. Next: LLM agent wiring, report generator, frontend↔API.
 
 ---
 
 ## 3. Pipeline status (actual vs planned)
 
-| Stage | Owner | Output artefact | Status (1 Jul) | Evidence |
+| Stage | Owner | Output artefact | Status (6 Jul) | Evidence |
 |-------|-------|-----------------|----------------|----------|
-| 1 — Parser | Salar | `*_components.json` | **Done** | `data/data-masc/parsed/` (7,068 files) |
-| 2 — Rules | Salar | `violations.json` | Planned at baseline | See §15 |
-| 3 — Agent | Noor | enriched `report.json` | Planned | No `src/agent.py` |
+| 1 — Parser | Salar / Noor | `*_components.json` | **Done** (R13–R20 fields) | `data/data-masc/parsed/` (7,068 files, sign-off PASS) |
+| 2 — Rules | Salar / Noor | `violations.json` | **Done** R01–R20 | `src/rules.py`; 462,542 violations on full MASC |
+| 3 — Agent | Noor | enriched `report.json` | **Scaffold** | `src/agent.py` + 2 tests; not in API |
 | 4 — Report | Noor | HTML/PDF | Planned | No `src/report.py` |
-| UI — Axion | Ayesha | React dashboard | Planned | No `frontend/` folder |
-| API | Salar / Noor | FastAPI routes | Partial | `backend/main.py` — health only |
+| UI — Axion | Ayesha | React dashboard | **Scaffold** | `frontend/` on `noor`; no API calls |
+| API | Noor | FastAPI audit routes | **Partial** | `backend/routers/audit.py` — violations only |
 | Auth/Records | Ayesha / Salar | JWT + per-user history | Planned | SRS §4.9 only |
 
 ---
 
 ## 4. Project folder structure (repository root)
 
-> **As of 3 July 2026** on branch `noor` — canonical repo: [agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor)
+> **As of 6 July 2026** on branch `noor` — canonical repo: [agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor)
 
 ```
 agentic-accessibility-auditor/          ← repo root (clone / _noor_push locally)
 │
 ├── src/                                ← Stage 1–3 Python core
-│   ├── parser.py                       ← XML → components.json (Stage 1)
-│   ├── rules.py                        ← R01–R12 rule checker (Stage 2)
+│   ├── parser.py                       ← XML → components.json (Stage 1; R13–R20 fields)
+│   ├── rules.py                        ← R01–R20 rule checker (Stage 2)
 │   ├── agent.py                        ← Agent scaffold / score formula (Stage 3, not API-wired)
 │   └── schema_documents.py             ← JSON envelope builders
 │
@@ -100,14 +101,17 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │           └── main/Placeholder.jsx
 │
 ├── tests/                              ← pytest suite
-│   ├── test_rules.py                   ← 23 tests (R01–R12)
+│   ├── test_parser.py                  ← 3 tests (extended fields + MASC wrappers)
+│   ├── test_rules.py                   ← 31 tests (R01–R20)
 │   ├── test_agent.py                   ← 2 tests (agent scaffold)
 │   ├── test_audit.py                   ← 2 tests (FastAPI violations API)
 │   └── fixtures/rules/                 ← XML fixtures per rule (16 files)
 │
 ├── data/                               ← datasets + local uploads
 │   ├── data-masc/
-│   │   ├── parsed/                     ← 7,068 MASC components.json (10 categories)
+│   │   ├── parsed/                     ← 7,068 MASC components.json (re-parsed Jul 2026)
+│   │   │   ├── masc_parse_signoff_report.json
+│   │   │   └── batch_parse_masc_full.log
 │   │   └── splits/                     ← train / val / test split JSON
 │   ├── data-rico-holdout/              ← 1,698-screen holdout + manifest
 │   ├── xml/                            ← generic upload XML drops
@@ -119,8 +123,9 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │   └── validation_logs/
 │       ├── week3_summary.md            ← Salar Week 3 validation summary
 │       ├── week3_validation_log.txt    ← Salar full terminal log
-│       ├── noor_week3_summary.md       ← Noor Week 3 validation summary
-│       └── noor_week3_validation_log.txt
+│       ├── noor_week3_summary.md       ← Noor Week 3+ validation summary
+│       ├── noor_week3_validation_log.txt
+│       └── masc_reparse_log.txt        ← MASC batch re-parse log
 │
 ├── docs/                               ← project documentation
 │   ├── progress/
@@ -134,13 +139,13 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │
 ├── scripts/                            ← batch + validation utilities
 │   ├── validate_output.py              ← JSON schema checker
-│   ├── noor_week3_validate.py          ← Noor Week 3 re-runnable validation
-│   ├── masc_parse_signoff.py
+│   ├── noor_week3_validate.py          ← Full pipeline: re-parse + pytest + MASC scan
+│   ├── masc_parse_signoff.py           ← MASC parse sign-off + R13–R20 counts
 │   ├── split_masc_dataset.py
 │   └── build_rico_holdout.py
 │
 ├── srs/                                ← SRS v2.0 (md + docx)
-├── sds/                                ← SDS v2.0 (md + docx)
+├── sds/                                ← SDS v2.1 (md + docx)
 │
 ├── app.py                              ← Streamlit dev UI (parse + violations preview)
 ├── test_run.py                         ← CLI batch / single-file parser + rules
@@ -181,19 +186,25 @@ d:\internship\
 
 ## 5. Parser deliverables (Salar)
 
-### 5.1 Sign-off result
+### 5.1 Sign-off result (re-parse 6 July 2026)
 
 | Metric | Value |
 |--------|-------|
 | Dataset | MASC |
 | Total screens | 7,068 |
 | Categories | 10 |
+| Components parsed | **640,563** |
+| Violations (R01–R20) | **462,542** |
+| Extended parser fields | **0 missing** (all 13 R13–R20 fields) |
 | Parse OK | 7,068 |
 | Parse errors | 0 |
 | Sign-off | **PASS** |
 
 Source: `data/data-masc/parsed/masc_parse_signoff_report.json`  
-Script: `scripts/masc_parse_signoff.py` (29 June 2026)
+Scripts: `python test_run.py --dataset masc` · `python scripts/masc_parse_signoff.py`  
+Commit: `f7bcac9` on branch `noor`
+
+**Parser fix (Jul 2026):** MASC widgets nest inside `<wrapper>` nodes; depth-first walk now descends into wrappers (previously ~1 component/screen).
 
 ### 5.2 MASC train / val / test split
 
@@ -315,24 +326,25 @@ Config: `data/data-masc/splits/split_summary.json`
 
 **Why it matters for Axion:** The paper studies **86,767 issue-level findings** from **2,270 Android apps** using automated exploration (tool: **Xbot**). This validates our approach of rule-based, violation-level auditing rather than only screen-level pass/fail.
 
-### Top real-world issue types (literature + our Week 3 validation)
+### Top real-world issue types (literature + full MASC validation, Jul 2026)
 
-| Rank | Issue type (literature) | Our rule(s) | Week 3 evidence |
-|------|-------------------------|-------------|-----------------|
-| 1 | Small touch target | **R04**, R17 | 3 hits on 20 MASC screens (Salar validation) |
-| 2 | Missing label / content description | **R01**, R02, R30 | 261 R01 + 28 R02 on 20 MASC screens |
-| 3 | Low contrast | **R09** | Placeholder — needs screenshot CV (Stretch) |
-| 4 | Unlabeled input | **R05**, R20 | 9 R05 hits on validation sample |
-| 5 | Image/icon without text alternative | **R02**, R30 | Covered by R02 |
+| Rank | Issue type (literature) | Our rule(s) | MASC evidence (7,068 screens) |
+|------|-------------------------|-------------|-------------------------------|
+| 1 | Missing label / content description | **R01**, R02, R30 | R01: 60,112 violations / 6,185 screens |
+| 2 | Layout / focus order issues | **R07**, R08, **R15** | R07: 266,393; R15: 3,860 screens |
+| 3 | Small touch target / spacing | **R04**, **R17** | R17: 9,327 violations / 1,697 screens |
+| 4 | Multi-gesture only | **R18** | R18: 13,529 violations / 3,945 screens |
+| 5 | Unlabeled input | **R05**, **R20** | R05: 3,797; R20: 0 (no hint-only inputs in MASC) |
+| 6 | Low contrast | **R09** | 0 — needs screenshot CV |
 
 ### Findings we apply directly
 
 1. **Prioritize R01–R05** in MVP — highest frequency in literature and in our MASC sample.
-2. **Investigate R07 dominance** — 65% of violations in Salar's 20-screen run; may include parser `[0,0,0,0]` bounds fallback (follow-up needed).
-3. **Issue-level JSON** (`violations.json` → `report.json`) matches research direction — enables severity stats and guideline mapping.
-4. **Fixing gap** — Chen et al. report many apps do not improve accessibility across versions; our agent layer should produce actionable developer fixes, not just detection counts.
+2. **R07 remains dominant** on full MASC — review false-positive rate (bounds fallback).
+3. **R13–R20 are active** on real data after parser re-parse (audio, focus order, spacing, gestures).
+4. **Issue-level JSON** enables severity stats and guideline mapping per Chen et al.
 
-**Source for our validation counts:** `outputs/validation_logs/week3_summary.md` (Salar, `salar` branch).
+**Sources:** `outputs/validation_logs/noor_week3_summary.md` · `data/data-masc/parsed/masc_parse_signoff_report.json`
 
 ---
 
@@ -362,16 +374,16 @@ Config: `data/data-masc/splits/split_summary.json`
 | R08 | G08, G15 | Salar | ✅ Done | Zero-area guard added |
 | R09 | G09, G11 | Salar | 🟡 Stub | Needs screenshot contrast |
 | R10 | G10, G28, G29 | Salar | ✅ Done | |
-| R11 | G11 | Ayesha | 🟡 Stub | `docs/r11_r12_design.md` |
-| R12 | G12 | Ayesha | 🟡 Stub | Flags VideoView only |
-| R13 | G13 | Ayesha | ⬜ Week 4+ | |
-| R14 | G14 | Ayesha | ⬜ Week 4+ | |
-| R15 | G15, G16 | Ayesha | ⬜ Week 4+ | |
-| R16 | G16 | Ayesha | ⬜ Week 4+ | |
-| R17 | G17 | Ayesha | ⬜ Week 4+ | Pairs with R04 |
-| R18 | G18 | Ayesha | ⬜ Week 4+ | |
-| R19 | G19 | Ayesha | ⬜ Week 4+ | |
-| R20 | G05, G20 | Ayesha | ⬜ Week 4+ | |
+| R11 | G11 | Ayesha | 🟡 Stub | Documented no-op; needs before/after or pixel diff |
+| R12 | G12 | Ayesha | ✅ Done | `media_type` + caption heuristics |
+| R13 | G13 | Ayesha | ✅ Done | 1,055 violations / 118 MASC screens |
+| R14 | G14 | Ayesha | ✅ Done | 1,873 / 667 screens |
+| R15 | G15, G16 | Ayesha | ✅ Done | 3,860 / 3,860 screens |
+| R16 | G16 | Ayesha | ✅ Done | 130 / 115 screens |
+| R17 | G17 | Ayesha | ✅ Done | `related_component`; 9,327 / 1,697 |
+| R18 | G18 | Ayesha | ✅ Done | 13,529 / 3,945 screens |
+| R19 | G19 | Ayesha | ✅ Done | 758 / 416 screens |
+| R20 | G05, G20 | Ayesha | ✅ Done | Unit tests pass; 0 MASC hits |
 | R21 | G21 | Noor | ⬜ Week 4+ | |
 | R22 | G22 | Noor | ⬜ Week 4+ | |
 | R23 | G01, G23 | Noor | ⬜ Week 5+ | |
@@ -387,18 +399,45 @@ Config: `data/data-masc/splits/split_summary.json`
 
 ---
 
-## 14. Recommended next steps (updated Week 3)
+## 14. Recommended next steps (updated 6 July 2026)
 
-1. **Salar:** Tune R07 false positives; begin R13–R15 with team
-2. **Ayesha:** Push `frontend/`; refine R11/R12 stubs; connect to audit API
-3. **Noor:** Wire LLM into `src/agent.py`; add `src/report.py`; Rico holdout eval design
-4. **All:** Demo — XML upload → API → violations → report.json on one screen
+1. **Ayesha:** Review R13–R20 on `noor`; wire `frontend/` to violations API
+2. **Noor:** Wire live LLM into `src/agent.py`; add `src/report.py`; Rico holdout eval
+3. **Salar:** Tune R07 false positives; implement R09 contrast when screenshots available
+4. **All:** Demo — XML upload → API → violations → agent-enriched report on one screen
 
 ---
 
 ## 15. Team weekly updates
 
 > **Instructions:** Each intern adds a dated entry after pushing work. Newest week at the top. Keep entries factual — file names, test counts, branch commits.
+
+### Week 3+ — Noor (`noor` branch, commit `f7bcac9`)
+
+**Pushed by:** Muhammad Noor  
+**Date:** 6 July 2026
+
+**Completed:**
+- **Parser R13–R20 extension** — 13 new component fields (`focus_order`, `parent_id`, `media_type`, etc.)
+- **MASC `<wrapper>` fix** — full widget extraction (640,563 components vs ~1/screen before)
+- **Rules R13–R20** wired in `check()`; **31** rule tests + **3** parser tests (**38** total with agent/audit)
+- **Full MASC re-parse** — 7,068 XML → `data/data-masc/parsed/`; **462,542** violations
+- **`scripts/noor_week3_validate.py`** — re-parse + pytest + random 20-screen MASC sample + schema check
+- **`scripts/masc_parse_signoff.py`** — extended-field validation + R13–R20 aggregate counts
+- **SDS v2.1** — R01–R20 parser/rules design, validation artefact paths
+- **`auditor_schema.json`** — optional R13–R20 component fields
+- Validation logs: `noor_week3_summary.md`, `noor_week3_validation_log.txt`, `masc_reparse_log.txt`
+- Sign-off: `masc_parse_signoff_report.json` → **PASS** (0 extended-field misses)
+
+**Pending:**
+- Wire live LLM into agent (Week 4)
+- Connect frontend to FastAPI
+- `src/report.py` HTML/PDF generation
+- Auth + Records API
+
+**Blockers:** None
+
+---
 
 ### Week 3 — Salar (`salar` branch, commits `c46b4da` → `712dbd8`)
 
@@ -479,6 +518,7 @@ Blockers:None
 | 1.1 | 3 Jul 2026 | Noor | Literature insights, R01–R30 ownership table, Noor Week 3 deliverables |
 | 1.2 | 3 Jul 2026 | Noor | Frontend sync on `noor`, Noor validation logs, violations-only API push |
 | 1.3 | 3 Jul 2026 | Noor | §4 project folder structure updated for Week 3 repo layout |
+| 1.4 | 6 Jul 2026 | Noor | R13–R20 parser/rules, full MASC re-parse, SDS v2.1, validation sign-off |
 
 ---
 

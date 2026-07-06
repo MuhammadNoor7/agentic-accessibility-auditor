@@ -232,12 +232,21 @@ npm run dev
 ### 7. Docker / API
 
 ```bash
-docker-compose up --build
-# Health: http://localhost:8000/health
-# Audit:  POST /api/v1/audit  →  GET /api/v1/audit/{id}/violations
+# Build and run locally (mount MASC data for batch auditor)
+docker compose up --build
+
+# API only — upload XML → violations (R01–R20)
+docker compose up api --build
+# http://localhost:8000/health
+# POST http://localhost:8000/api/v1/audit  (multipart XML)
+
+# Pull published images from GitHub Container Registry (noor branch)
+docker pull ghcr.io/muhammadnoor7/agentic-accessibility-auditor:api-noor
+docker pull ghcr.io/muhammadnoor7/agentic-accessibility-auditor:auditor-noor
 ```
 
-Upload XML via multipart form to `POST /api/v1/audit`. Report endpoint (`/report`) is not implemented yet.
+**Images:** `auditor-noor` = batch parse + rules · `api-noor` = FastAPI upload API.  
+Raw MASC XML/screenshots are not in the image — mount `data/data-masc` for batch runs.
 
 ---
 

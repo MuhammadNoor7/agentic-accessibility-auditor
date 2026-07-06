@@ -64,7 +64,7 @@ def _run_pipeline(audit_id: str, xml_path: Path) -> None:
 
 @router.post("", response_model=AuditCreateResponse, status_code=202)
 async def create_audit(xml: UploadFile = File(...)) -> AuditCreateResponse:
-    """Upload a UIAutomator XML file and run parse + rules (R01–R12)."""
+    """Upload a UIAutomator XML file and run parse + rules (R01–R20)."""
     if not xml.filename or not xml.filename.lower().endswith(".xml"):
         raise HTTPException(status_code=400, detail="Upload must be a .xml file")
 

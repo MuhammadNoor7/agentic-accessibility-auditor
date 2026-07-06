@@ -1,25 +1,29 @@
 services:
-  backend:
+  api:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.api
+    image: ghcr.io/muhammadnoor7/agentic-accessibility-auditor:api-noor
     ports:
       - "8000:8000"
     volumes:
-      - .:/app
-    working_dir: /app/backend
+      - ./outputs/violations:/app/outputs/violations
+    environment:
+      PYTHONUNBUFFERED: "1"
     networks:
       - auditor-network
 
   auditor:
-    build: .
-    command: python /app/test_run.py
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ghcr.io/muhammadnoor7/agentic-accessibility-auditor:auditor-noor
     volumes:
-      - .:/app
+      - ./data/data-masc:/app/data/data-masc:ro
+      - ./outputs/violations:/app/outputs/violations
     environment:
       PYTHONUNBUFFERED: "1"
       PARSER_MAX_FILES: "0"
-      DATASET_ROOT: "/app/data/data-masc"
     networks:
       - auditor-network
 

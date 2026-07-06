@@ -1,0 +1,23 @@
+# FastAPI audit API — parse + R01–R20 rules (upload XML → violations)
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libxml2 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY backend/requirements.txt /tmp/backend-requirements.txt
+COPY requirements.txt /tmp/root-requirements.txt
+RUN pip install --no-cache-dir \
+    -r /tmp/backend-requirements.txt \
+    jsonschema>=4.23.0
+
+COPY src/ ./src/
+COPY backend/ ./backend/
+COPY docs/schemas/ ./docs/schemas/
+
+ENV PYTHONUNBUFFERED=1
+EXPOSE 8000
+
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]

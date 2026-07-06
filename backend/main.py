@@ -17,7 +17,7 @@ from backend.routers.audit import router as audit_router
 app = FastAPI(
     title="Agentic Accessibility Auditor API",
     version="0.3.0",
-    description="Week 3: POST /api/v1/audit runs parse → rules → violations (R01–R12).",
+    description="POST /api/v1/audit runs parse → rules → violations (R01–R20).",
 )
 
 app.add_middleware(

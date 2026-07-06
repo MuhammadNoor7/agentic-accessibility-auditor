@@ -1,7 +1,9 @@
-# Agentic Accessibility Auditor
+# Agentic Accessibility Auditor (Axion)
 
 Automated accessibility auditing for **Android mobile UIs**.  
 Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `components.json`, rule-based `violations.json`, LLM-enriched explanations, and HTML/PDF reports mapped to **G01–G30** guidelines and **R01–R30** detection rules.
+
+**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — parser + rules through **R20**, MASC re-parse, validation logs, React UI scaffold, partial FastAPI audit API (6 Jul 2026).
 
 ---
 
@@ -9,9 +11,9 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 | Intern | Branch | Focus |
 |--------|--------|-------|
-| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | Data, hybrid XML parser, rule checker, Docker |
-| **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | JSON schemas, Figma, React dashboard |
-| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | LLM agent, reports, project coordination |
+| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | Data, hybrid XML parser, rule checker (R01–R10), Docker |
+| **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | JSON schemas, Figma, React dashboard (auth + app pages) |
+| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | R13–R20 rules, LLM agent, reports, API, QA, coordination |
 
 ---
 
@@ -20,16 +22,16 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 | Document | Path |
 |----------|------|
 | **SRS v2.0** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.0.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.md) |
-| **SDS v2.0** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) |
-| **8-week plan** | [`updated_plan.md`](updated_plan.md) |
-| **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) |
+| **SDS v2.1** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) |
+| **8-week plan** | [`updated_plan.md`](updated_plan.md) · [`docs/updated_plan_v2.0.docx`](docs/updated_plan_v2.0.docx) |
+| **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) (+ formatted DOCX in same folder) |
 | **Figma screenshots** | `docs/assets/figma/` |
 
-Formatted Word/PDF exports are in `srs/` and `sds/`.
+Formatted Word exports live in `srs/`, `sds/`, and `docs/progress/`.
 
 ---
 
-## Pipeline
+## Pipeline status (`noor`, 6 Jul 2026)
 
 ```
 Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
@@ -39,10 +41,14 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 
 | Stage | Owner | Output | Status |
 |-------|-------|--------|--------|
-| 1 — Parser | Salar | `components.json` | **Done** |
-| 2 — Rules (R01–R30) | Salar | `violations.json` | **R01–R10 done** (on `salar` / synced to `noor`) |
-| 3 — Agent layer | Noor | enriched `report.json` | Planned |
-| 4 — Report | Noor | `audit_report.html` / PDF | Planned |
+| 1 — Parser | Salar / Noor | `components.json` | **Done** — 7,068 MASC screens; R13–R20 extended fields |
+| 2 — Rules | Salar / Noor | `violations.json` | **R01–R20** in `check()`; R09 needs screenshot; R11 stub |
+| 3 — Agent | Noor | enriched `report.json` | **Scaffold** — `src/agent.py` (not API-wired) |
+| 4 — Report | Noor | HTML/PDF | Planned |
+| UI — Axion | Ayesha | React dashboard | **Scaffold** — `frontend/` (no API calls yet) |
+| API | Noor | FastAPI | **Partial** — violations-only audit routes |
+
+**MASC sign-off (Jul 2026):** 640,563 components · 462,542 violations (R01–R20) · 0 parse errors — see `data/data-masc/parsed/masc_parse_signoff_report.json`.
 
 ---
 
@@ -50,32 +56,52 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 
 ```
 agentic-accessibility-auditor/
-├── app.py                  # Streamlit: upload XML + batch parse
-├── test_run.py             # CLI batch / single-file parser
+├── app.py                  # Streamlit: upload XML + violations preview
+├── test_run.py             # CLI batch parse + rules
 ├── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yml
+├── conftest.py
 │
-├── backend/                # FastAPI (Docker) — health check API
 ├── src/
-│   ├── parser.py           # Hybrid Android UI XML → components.json
+│   ├── parser.py           # Hybrid XML → components.json (R13–R20 fields)
+│   ├── rules.py            # R01–R20 rule checker
+│   ├── agent.py            # Agent scaffold / score formula
 │   └── schema_documents.py
 │
-├── scripts/                # Dataset utilities + validate_output.py
+├── backend/                # FastAPI gateway
+│   ├── main.py
+│   └── routers/audit.py    # POST /api/v1/audit → GET …/violations
 │
-├── data/                   # See “Datasets” — mostly local / selective Git
-│   ├── xml/                # Generic uploads (any app)
-│   ├── screenshots/
-│   ├── parsed/             # Generic upload parser output
-│   ├── data-masc/           # MASC train/dev (7,068 screens)
-│   ├── data-rico-holdout/  # Unseen final eval (1,698 screens)
-│   └── final_rico/         # Raw Rico source corpus
+├── frontend/               # Axion React UI (Vite + React 19 + Tailwind 4)
+│
+├── tests/                  # 38 pytest (parser, rules, agent, audit API)
+│   ├── test_parser.py
+│   ├── test_rules.py
+│   ├── test_agent.py
+│   ├── test_audit.py
+│   └── fixtures/rules/
+│
+├── scripts/
+│   ├── validate_output.py          # JSON Schema spot-check
+│   ├── noor_week3_validate.py      # Full QA pipeline (re-parse + pytest + MASC scan)
+│   ├── masc_parse_signoff.py       # Parse sign-off + R13–R20 counts
+│   ├── split_masc_dataset.py
+│   └── build_rico_holdout.py
+│
+├── data/
+│   ├── data-masc/          # 7,068 screens — parsed JSON tracked on noor
+│   ├── data-rico-holdout/  # 1,698-screen unseen eval
+│   ├── xml/ / screenshots/ / parsed/   # Generic uploads
+│   └── final_rico/
 │
 ├── outputs/
-│   ├── violations/         # Stage 2 (planned)
-│   └── reports/            # Stage 4 (planned)
+│   ├── violations/         # Stage 2 outputs (mostly gitignored)
+│   └── validation_logs/    # week3 + noor_week3 + masc_reparse logs
 │
-└── docs/                   # Schemas, guidelines, QA plan, setup guide
+├── docs/                   # Schemas, guidelines, QA plan, progress report
+├── srs/                    # SRS v2.0
+└── sds/                    # SDS v2.1
 ```
 
 ### Where parser output goes
@@ -97,9 +123,11 @@ agentic-accessibility-auditor/
 | Format | Recognition |
 |--------|-------------|
 | UIAutomator | `<node class="…" bounds="[l,t][r,b]">` |
-| MASC | UIAutomator nodes + `<wrapper>` numeric bounds |
+| MASC | UIAutomator nodes + `<wrapper>` numeric bounds (depth-first into wrappers) |
 | Rico | Widget tags (`LinearLayout`, `TextView`, …) + space-separated bounds |
 | Generic upload | Any element with `class` / widget tag + bounds |
+
+**R13–R20 extended fields** (Jul 2026): `focus_order`, `parent_id`, `long_clickable`, `scrollable`, `selected`, `checked`, `password`, `text_all_caps`, `input_type`, `important_for_accessibility`, `media_type`, `is_dialog`, `label_for`.
 
 **Built-in resilience**
 
@@ -108,31 +136,23 @@ agentic-accessibility-auditor/
 - Missing bounds on layout-only tags → skipped
 - Screenshots referenced by path only (images are not parsed)
 
-**Minimal output shape** (`components.json`):
-
-```json
-{
-  "schema_version": "1.0",
-  "screen_id": "chat_49879",
-  "image_path": "data/data-masc/screenshots/chat/49879.jpg",
-  "xml_path": "data/data-masc/xml/chat/49879.xml",
-  "components": [
-    {
-      "component_id": "c_001",
-      "class": "android.widget.TextView",
-      "text": "Send",
-      "content_desc": "",
-      "resource_id": "com.example:id/send",
-      "clickable": true,
-      "enabled": true,
-      "focusable": true,
-      "bounds": [0, 120, 200, 180]
-    }
-  ]
-}
-```
-
 Formal contract: [`docs/json_schemas.md`](docs/json_schemas.md) · [`docs/schemas/auditor_schema.json`](docs/schemas/auditor_schema.json)
+
+---
+
+## Rule checker (Stage 2)
+
+`src/rules.py` — `check(components_json)` runs **R01–R20** and returns `violations.json`.
+
+| Rule | Status | Notes |
+|------|--------|-------|
+| R01–R10 | Done | Core accessibility checks (labels, touch targets, overlap, …) |
+| R11 | Stub | Color-only info — needs before/after or pixel diff |
+| R12 | Done | Missing captions (`media_type` heuristics) |
+| R13–R20 | Done | Audio, focus order, spacing, gestures, hint-only labels |
+| R09 | Partial | Needs screenshot contrast analysis |
+
+Run rules via CLI: `python test_run.py` (parse + rules) or import `src.rules.check`.
 
 ---
 
@@ -149,18 +169,20 @@ pip install -r requirements.txt
 
 ### 2. Add data locally
 
-Download datasets (not in Git — see [MASC Drive](https://drive.google.com/file/d/1kx8qRbOtdQbbewZgfBTeCIj7lNvabFTF/view?usp=sharing) and [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md)):
+Download datasets (raw XML/screenshots not always in Git — see [MASC Drive](https://drive.google.com/file/d/1kx8qRbOtdQbbewZgfBTeCIj7lNvabFTF/view?usp=sharing) and [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md)):
 
 ```
 data/data-masc/xml/{category}/{id}.xml
 data/data-masc/screenshots/{category}/{id}.jpg
 ```
 
-### 3. Parse
+Parsed `components.json` for all 7,068 MASC screens is tracked on `noor`.
+
+### 3. Parse + rules
 
 ```bash
 # MASC — full batch (default dataset)
-python test_run.py
+python test_run.py --dataset masc
 
 # Single screen (known edge case: null bytes in XML)
 python test_run.py data/data-masc/xml/chat/49879.xml
@@ -171,11 +193,26 @@ python test_run.py --dataset rico --max-files 4
 # Any uploaded / unknown app XML
 python test_run.py --dataset upload
 
-# Validate against JSON Schema
+# Validate sample outputs against JSON Schema
 python scripts/validate_output.py
 ```
 
-### 4. Streamlit UI
+### 4. Tests & validation
+
+```bash
+# Unit tests (38 total)
+python -m pytest tests/ -q
+
+# Full Week 3+ pipeline: re-parse → pytest → schema → MASC R01–R20 scan
+python scripts/noor_week3_validate.py
+
+# MASC parse sign-off + R13–R20 aggregate counts
+python scripts/masc_parse_signoff.py
+```
+
+Validation summaries: `outputs/validation_logs/noor_week3_summary.md`
+
+### 5. Streamlit UI
 
 ```bash
 streamlit run app.py
@@ -183,13 +220,24 @@ streamlit run app.py
 
 Upload XML in the main panel; run dataset batch parse from the sidebar.
 
-### 5. Docker
+### 6. React frontend (Axion)
+
+```bash
+cd frontend
+npm ci
+npm run dev
+# http://localhost:5173 — UI scaffold only; not wired to FastAPI yet
+```
+
+### 7. Docker / API
 
 ```bash
 docker-compose up --build
-# FastAPI health: http://localhost:8000/health
-# Auditor service runs test_run.py on MASC by default
+# Health: http://localhost:8000/health
+# Audit:  POST /api/v1/audit  →  GET /api/v1/audit/{id}/violations
 ```
+
+Upload XML via multipart form to `POST /api/v1/audit`. Report endpoint (`/report`) is not implemented yet.
 
 ---
 
@@ -217,6 +265,8 @@ python scripts/build_rico_holdout_sheet.py
 | Script | Purpose |
 |--------|---------|
 | [`validate_output.py`](scripts/validate_output.py) | Validate `components.json` / `violations.json` against schema |
+| [`noor_week3_validate.py`](scripts/noor_week3_validate.py) | Full QA: MASC re-parse, pytest, API smoke, schema, R01–R20 scan |
+| [`masc_parse_signoff.py`](scripts/masc_parse_signoff.py) | MASC parse sign-off + extended-field checks + R13–R20 counts |
 | [`check_train_parser.py`](scripts/check_train_parser.py) | Sample MASC train screens & check parser output |
 | [`split_masc_dataset.py`](scripts/split_masc_dataset.py) | Create train / val / test CSVs |
 | [`build_rico_holdout.py`](scripts/build_rico_holdout.py) | Build MASC-disjoint Rico holdout |
@@ -237,23 +287,25 @@ python scripts/build_rico_holdout_sheet.py
 | [`docs/json_schemas.md`](docs/json_schemas.md) | Inter-module JSON contracts |
 | [`docs/qa_test_plan.md`](docs/qa_test_plan.md) | TC-01–TC-06 test cases |
 | [`docs/rico_holdout_dataset.md`](docs/rico_holdout_dataset.md) | Holdout filtering methodology |
+| [`docs/r11_r12_design.md`](docs/r11_r12_design.md) | R11/R12 stub design notes |
+| [`docs/progress/`](docs/progress/) | Living supplementary progress report |
 | [`docs/examples/`](docs/examples/) | Sample JSON for each pipeline stage |
 
 ---
 
 ## Git: what to commit
 
-**Always commit:** source code, `docs/`, `scripts/`, Docker files, `requirements.txt`
+**Always commit:** source code, `docs/`, `scripts/`, `tests/`, `frontend/`, Docker files, `requirements.txt`
 
-**Never commit:** `.venv/`, `__pycache__/`, `.env`, raw `xml/` / `screenshots/` / `json/` trees, `outputs/`
+**Never commit:** `.venv/`, `__pycache__/`, `.env`, raw `xml/` / `screenshots/` trees, most of `outputs/violations/`
 
-**Tracked on `azeem` (parser artifacts & metadata):**
+**Tracked on `noor` (parser artifacts & metadata):**
 
-- `data/data-masc/parsed/`
+- `data/data-masc/parsed/` (7,068 `*_components.json` + sign-off logs)
 - `data/data-masc/splits/`
 - `data/data-rico-holdout/parsed/` (smoke samples)
-- `data/data-rico-holdout/manifest/*.csv` and `*.json` only  
-  (not `_sheet_thumbs/`, `category_sheets/`, `google_sheets/`, or `.xlsx`)
+- `data/data-rico-holdout/manifest/*.csv` and `*.json` only
+- `outputs/validation_logs/` (week3 + noor_week3 summaries)
 
 ---
 
@@ -261,15 +313,17 @@ python scripts/build_rico_holdout_sheet.py
 
 | Problem | Fix |
 |---------|-----|
-| `ParseError` on XML | File may contain null bytes — current parser strips `\x00` automatically |
+| `ParseError` on XML | File may contain null bytes — parser strips `\x00` automatically |
+| ~1 component per MASC screen | Ensure parser descends into `<wrapper>` nodes (fixed Jul 2026) |
 | 0 components parsed | Check XML has `class` + `bounds` (UIAutomator) or layout tags + bounds (Rico) |
 | Screenshot path wrong | Ensure `{id}.jpg` sits under `screenshots/{category}/` mirroring `xml/{category}/` |
-| `DATASET_ROOT` on Windows | Prefer `python test_run.py --dataset rico` over env vars in cmd |
+| `DATASET_ROOT` on Windows | Prefer `python test_run.py --dataset masc` over env vars in cmd |
 | Schema validation fails | Run `python scripts/validate_output.py` and compare with [`docs/examples/components.json`](docs/examples/components.json) |
+| R09 / R11 always 0 on MASC | Expected — R09 needs screenshots; R11 is a documented stub |
 
 ---
 
 ## License & attribution
 
-Internship project — **Agentic Accessibility Auditor**.  
+Internship project — **Agentic Accessibility Auditor (Axion)**.  
 Datasets: [MASC](https://drive.google.com/file/d/1kx8qRbOtdQbbewZgfBTeCIj7lNvabFTF/view?usp=sharing), Rico (see `docs/rico_holdout_dataset.md`).

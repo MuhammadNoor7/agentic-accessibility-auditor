@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -26,21 +26,84 @@ const SEV_LABEL = { high: 'high', med: 'med', low: 'low' }
 
 export default function AuditHistory() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [severityFilter, setSeverityFilter] = useState('All')
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '')
 
-  const filtered = severityFilter === 'All'
-    ? AUDITS
-    : AUDITS.filter(a => a[severityFilter.toLowerCase()] > 0)
+  useEffect(() => {
+    const q = searchParams.get('q')
+    if (q) setSearchQuery(q)
+  }, [searchParams])
+
+  const filtered = AUDITS
+    .filter(a => severityFilter === 'All' || a[severityFilter.toLowerCase()] > 0)
+    .filter(a => a.id.toLowerCase().includes(searchQuery.trim().toLowerCase()))
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f4f6fb' }}>
       <Sidebar activePage="records" />
 
+      <style>{`
+        .axion-topbar {
+          padding: 16px 32px;
+        }
+        .axion-topbar-actions {
+          display: flex; align-items: center; gap: 14px;
+        }
+        .axion-search-input {
+          width: 210px;
+        }
+        .axion-heading-row {
+          flex-wrap: wrap;
+          gap: 16px;
+        }
+        .axion-stat-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+        .axion-filter-row {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+        .axion-table-scroll {
+          overflow-x: auto;
+        }
+        .axion-bottom-bar {
+          flex-wrap: wrap;
+        }
+
+        @media (max-width: 900px) {
+          .axion-stat-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+        @media (max-width: 640px) {
+          .axion-topbar {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px 20px;
+          }
+          .axion-topbar-actions {
+            width: 100%;
+          }
+          .axion-search-input {
+            width: 100%;
+          }
+          .axion-heading-row {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .axion-stat-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }} aria-label="Audit History">
 
         {/* ── TOPBAR ── */}
-        <div style={{
-          background: '#fff', padding: '16px 32px', display: 'flex',
+        <div className="axion-topbar" style={{
+          background: '#fff', display: 'flex',
           alignItems: 'center', justifyContent: 'space-between',
           borderBottom: '0.5px solid #e2e6f0',
         }}>
@@ -48,13 +111,16 @@ export default function AuditHistory() {
             <p style={{ fontSize: 15, color: '#5a6a8a', margin: 0 }}>Workspace</p>
             <p style={{ fontSize: 20, fontWeight: 700, color: '#1a2240', margin: 0 }}>Audit History</p>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div className="axion-topbar-actions">
             <input
-              type="search" placeholder="Search audits…" aria-label="Search audits"
+              type="search" placeholder="Search by screen ID…" aria-label="Search audits by screen ID"
+              className="axion-search-input"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
               style={{
                 background: '#f4f6fb', border: '0.5px solid #dde2f0',
                 borderRadius: 6, padding: '9px 16px', fontSize: 15,
-                color: '#1a2240', width: 210,
+                color: '#1a2240',
               }}
             />
             <div
@@ -74,7 +140,7 @@ export default function AuditHistory() {
         <div style={{ flex: 1, padding: '32px', display: 'flex', flexDirection: 'column', gap: 24 }}>
 
           {/* Heading row */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          <div className="axion-heading-row" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
             <div>
               <span style={{
                 background: '#e8f5f0', color: '#0f6e56', fontSize: 13,
@@ -104,7 +170,7 @@ export default function AuditHistory() {
           </div>
 
           {/* STAT CARDS */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
+          <div className="axion-stat-grid" style={{ display: 'grid', gap: 14 }}>
             <div style={{ background: '#fff', border: '0.5px solid #e2e6f0', borderRadius: 14, padding: '18px 20px' }}>
               <p style={{ fontSize: 11, color: '#5a6a8a', fontWeight: 700, letterSpacing: '0.6px', textTransform: 'uppercase', margin: '0 0 8px' }}>Total audits</p>
               <p style={{ fontSize: 30, fontWeight: 700, color: '#0f1422', margin: 0 }}>{AUDITS.length}</p>
@@ -125,7 +191,7 @@ export default function AuditHistory() {
           </div>
 
           {/* Filter row */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div className="axion-filter-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <select
               value={severityFilter}
               onChange={e => setSeverityFilter(e.target.value)}
@@ -145,6 +211,7 @@ export default function AuditHistory() {
 
           {/* TABLE */}
           <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #e2e6f0', overflow: 'hidden' }}>
+            <div className="axion-table-scroll">
             <table style={{ width: '100%', borderCollapse: 'collapse' }} aria-label="Audit history records">
               <thead>
                 <tr style={{ background: '#f8fafc' }}>
@@ -208,18 +275,21 @@ export default function AuditHistory() {
                 {filtered.length === 0 && (
                   <tr>
                     <td colSpan={7} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8', fontSize: 14 }}>
-                      No audits match this filter.
+                      {searchQuery.trim()
+                        ? `No audits match "${searchQuery}".`
+                        : 'No audits match this filter.'}
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
 
         {/* BOTTOM BAR */}
         <div style={{ padding: '0 32px 32px' }}>
-          <div style={{
+          <div className="axion-bottom-bar" style={{
             background: '#0f1422', borderRadius: 14, padding: '18px 28px',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20,
           }}>

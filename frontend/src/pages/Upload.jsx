@@ -1,6 +1,30 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
+import { setAuditFiles } from '../state/auditFiles';
+
+// ── Responsive rules (inline styles can't do @media, so inject CSS) ───────────
+const injectResponsiveStyles = (() => {
+  let injected = false;
+  return () => {
+    if (injected) return;
+    injected = true;
+    const style = document.createElement('style');
+    style.textContent = `
+    @media (max-width: 767px) {
+      .axion-topbar { padding: 14px 16px 14px 64px !important; flex-wrap: wrap; gap: 10px; }
+      .axion-search { display: none !important; }
+      .axion-content { padding: 16px !important; }
+      .axion-upload-zone { padding: 28px 18px 22px !important; }
+      .axion-cta-bar { flex-direction: column !important; align-items: stretch !important; }
+      .axion-cta-button { width: 100%; justify-content: center; }
+      .axion-heading { font-size: 22px !important; }
+      .axion-audit-steps { grid-template-columns: 1fr !important; }
+    }
+  `;
+    document.head.appendChild(style);
+  };
+})();
 
 // ── Keyframe injection (once) ─────────────────────────────────────────────────
 const injectKeyframes = (() => {
@@ -140,7 +164,6 @@ function FilePreviewPopup({ screenshot, xml, onClose }) {
   const [xmlText, setXmlText] = useState('');
   const [loadingXml, setLoadingXml] = useState(false);
 
-  // Generate object URL for image preview
   useEffect(() => {
     if (!screenshot) return;
     const url = URL.createObjectURL(screenshot);
@@ -148,7 +171,6 @@ function FilePreviewPopup({ screenshot, xml, onClose }) {
     return () => URL.revokeObjectURL(url);
   }, [screenshot]);
 
-  // Read XML file as text
   useEffect(() => {
     if (!xml) return;
     setLoadingXml(true);
@@ -187,7 +209,6 @@ function FilePreviewPopup({ screenshot, xml, onClose }) {
           animation: 'pulseIn 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards',
         }}
       >
-        {/* Header */}
         <div style={{
           background: '#0f1422',
           padding: '18px 24px',
@@ -219,7 +240,6 @@ function FilePreviewPopup({ screenshot, xml, onClose }) {
           </button>
         </div>
 
-        {/* Tabs */}
         <div style={{
           display: 'flex',
           borderBottom: '1px solid #e2e8f0',
@@ -254,17 +274,16 @@ function FilePreviewPopup({ screenshot, xml, onClose }) {
           ))}
         </div>
 
-        {/* Content */}
         <div style={{ flex: 1, overflow: 'auto', padding: '24px' }}>
 
           {tab === 'screenshot' && (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
-              {/* File info strip */}
               <div style={{
                 width: '100%', background: '#f8fafc',
                 border: '1px solid #e2e8f0', borderRadius: 10,
                 padding: '10px 16px',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                flexWrap: 'wrap', gap: 6,
               }}>
                 <span style={{ fontSize: 13, color: '#0f1422', fontWeight: 600 }}>{screenshot?.name}</span>
                 <span style={{ fontSize: 12, color: '#64748b' }}>
@@ -291,12 +310,12 @@ function FilePreviewPopup({ screenshot, xml, onClose }) {
 
           {tab === 'xml' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              {/* File info strip */}
               <div style={{
                 background: '#f8fafc',
                 border: '1px solid #e2e8f0', borderRadius: 10,
                 padding: '10px 16px',
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                flexWrap: 'wrap', gap: 6,
               }}>
                 <span style={{ fontSize: 13, color: '#0f1422', fontWeight: 600 }}>{xml?.name}</span>
                 <span style={{ fontSize: 12, color: '#64748b' }}>
@@ -331,13 +350,13 @@ function FilePreviewPopup({ screenshot, xml, onClose }) {
           )}
         </div>
 
-        {/* Footer */}
         <div style={{
           padding: '14px 24px',
           borderTop: '1px solid #e2e8f0',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           flexShrink: 0,
           background: '#f8fafc',
+          flexWrap: 'wrap', gap: 10,
         }}>
           <span style={{ fontSize: 13, color: '#64748b' }}>
             Both files look correct? Close this and click <strong>Start Audit</strong>.
@@ -371,6 +390,7 @@ function ValidationPopup({ result, screenshotName, xmlName, onClose }) {
         backdropFilter: 'blur(3px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         zIndex: 1000, animation: 'fadeIn 0.2s ease',
+        padding: '16px',
       }}
     >
       <div
@@ -434,7 +454,7 @@ function ValidationPopup({ result, screenshotName, xmlName, onClose }) {
                 background: ok ? '#dcfce7' : '#fee2e2',
                 color: ok ? '#16a34a' : '#ef4444',
               }}>
-                {ok ? '✓ OK' : '✗ ID mismatch'}
+                {ok ? '✓' : '✗ ID mismatch'}
               </span>
             </div>
           ))}
@@ -499,7 +519,7 @@ function AuditPopup({ onViewDashboard }) {
       justifyContent: 'center', zIndex: 1000, animation: 'fadeIn 0.2s ease', padding: '20px',
     }}>
       <div style={{
-        background: '#fff', borderRadius: 18, width: '100%', maxWidth: 460,
+        background: '#fff', borderRadius: 18, width: '100%', maxWidth: 760,
         overflow: 'hidden', boxShadow: '0 24px 64px rgba(0,0,0,0.22)',
         animation: 'pulseIn 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards',
       }}>
@@ -536,7 +556,7 @@ function AuditPopup({ onViewDashboard }) {
           <p style={{ fontSize: 13, color: '#0f1422', fontWeight: 700, letterSpacing: '0.8px', margin: '0 0 14px', textTransform: 'uppercase' }}>
             Audit steps
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className="axion-audit-steps" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             {AUDIT_STEPS.map((s, i) => {
               const isComplete = completedSteps.includes(i);
               const isActive   = activeStep === i && !isComplete && !done;
@@ -567,35 +587,36 @@ function AuditPopup({ onViewDashboard }) {
         </div>
 
         {done ? (
-          <div style={{ padding: '20px 24px 24px' }}>
-            <div style={{
-              background: '#f0fdf8', border: '1px solid #6ee7b7', borderRadius: 10,
-              padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16,
-            }}>
-              <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#1D9E75', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, animation: 'checkPop 0.4s ease forwards' }}>
-                {Icon.check('#fff', 17)}
-              </div>
-              <div>
-                <p style={{ fontSize: 15, fontWeight: 700, color: '#0f1422', margin: 0 }}>Audit finished</p>
-                <p style={{ fontSize: 13, color: '#065f46', margin: '4px 0 0', fontWeight: 500 }}>Violations detected — ranked by severity and ready to review</p>
-              </div>
-            </div>
-            <button
-              onClick={onViewDashboard}
-              style={{
-                width: '100%', background: '#1D9E75', color: '#fff', border: 'none',
-                borderRadius: 10, padding: '15px', fontSize: 16, fontWeight: 700, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontFamily: 'inherit',
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = '#17876a'}
-              onMouseLeave={e => e.currentTarget.style.background = '#1D9E75'}
-            >
-              View issues dashboard {Icon.arrow('#fff', 17)}
-            </button>
-          </div>
-        ) : (
-          <div style={{ height: 20 }} />
-        )}
+  <div style={{ padding: '20px 24px 24px' }}>
+    <div style={{
+      background: '#f0fdf8', border: '1px solid #6ee7b7', borderRadius: 10,
+      padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center',
+      textAlign: 'center', gap: 10, marginBottom: 16,
+    }}>
+      <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#1D9E75', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, animation: 'checkPop 0.4s ease forwards' }}>
+        {Icon.check('#fff', 22)}
+      </div>
+      <div>
+        <p style={{ fontSize: 16, fontWeight: 700, color: '#0f1422', margin: 0 }}>Audit finished</p>
+        <p style={{ fontSize: 13.5, color: '#065f46', margin: '5px 0 0', fontWeight: 500 }}>Violations detected — ranked by severity and ready to review</p>
+      </div>
+    </div>
+    <button
+      onClick={onViewDashboard}
+      style={{
+        width: '100%', background: '#1D9E75', color: '#fff', border: 'none',
+        borderRadius: 10, padding: '15px', fontSize: 16, fontWeight: 700, cursor: 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontFamily: 'inherit',
+      }}
+      onMouseEnter={e => e.currentTarget.style.background = '#17876a'}
+      onMouseLeave={e => e.currentTarget.style.background = '#1D9E75'}
+    >
+      View issues dashboard {Icon.arrow('#fff', 17)}
+    </button>
+  </div>
+) : (
+  <div style={{ height: 20 }} />
+)}
       </div>
     </div>
   );
@@ -604,6 +625,7 @@ function AuditPopup({ onViewDashboard }) {
 // ── Main Upload Page ──────────────────────────────────────────────────────────
 export default function Upload() {
   injectKeyframes();
+  injectResponsiveStyles();
   const navigate = useNavigate();
 
   const [screenshot,       setScreenshot]       = useState(null);
@@ -612,7 +634,12 @@ export default function Upload() {
   const [showPopup,        setShowPopup]        = useState(false);
   const [showAuditPopup,   setShowAuditPopup]   = useState(false);
   const [showPreview,      setShowPreview]      = useState(false);
+  const [searchQuery,      setSearchQuery]      = useState('');
 
+   useEffect(() => {
+    setAuditFiles(screenshot, xml);
+  }, [screenshot, xml]);
+  
   const screenshotRef = useRef(null);
   const xmlRef        = useRef(null);
 
@@ -682,10 +709,10 @@ export default function Upload() {
       <input ref={screenshotRef} type="file" accept=".png,.jpg,.jpeg" style={{ display: 'none' }} onChange={handleScreenshotChange} />
       <input ref={xmlRef}        type="file" accept=".xml"            style={{ display: 'none' }} onChange={handleXmlChange} />
 
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }} aria-label="Upload Audit Assets">
+      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }} aria-label="Upload Audit Assets">
 
         {/* Topbar */}
-        <div style={{
+        <div className="axion-topbar" style={{
           background: '#fff', padding: '16px 32px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           borderBottom: '0.5px solid #e2e6f0',
@@ -695,32 +722,39 @@ export default function Upload() {
             <p style={{ fontSize: 20, fontWeight: 700, color: '#1a2240', margin: 0 }}>New Audit</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <input type="search" placeholder="Search audits…" aria-label="Search audits"
+            <input type="search" placeholder="Search past audits…" aria-label="Search past audits" className="axion-search"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && searchQuery.trim()) {
+                  navigate(`/audit-history?q=${encodeURIComponent(searchQuery.trim())}`);
+                }
+              }}
               style={{ background: '#f4f6fb', border: '0.5px solid #dde2f0', borderRadius: 6, padding: '9px 16px', fontSize: 15, color: '#1a2240', width: 210 }}
             />
             <div role="img" aria-label="User: Ayesha Naveed" title="Ayesha Naveed"
-              style={{ width: 42, height: 42, borderRadius: '50%', background: '#1D9E75', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 15, fontWeight: 700 }}>
+              style={{ width: 42, height: 42, borderRadius: '50%', background: '#1D9E75', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 15, fontWeight: 700, flexShrink: 0 }}>
               <span aria-hidden="true">AN</span>
             </div>
           </div>
         </div>
 
         {/* Content */}
-        <div style={{ flex: 1, padding: '32px', display: 'flex', flexDirection: 'column', gap: 24, justifyContent: 'space-between' }}>
+        <div className="axion-content" style={{ flex: 1, padding: '32px', display: 'flex', flexDirection: 'column', gap: 24, justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
 
             <div>
               <span style={{ background: '#e8f5f0', color: '#0f6e56', fontSize: 13, fontWeight: 700, padding: '4px 12px', borderRadius: 4, letterSpacing: '0.5px' }}>
                 AI-POWERED AUDIT
               </span>
-              <h1 style={{ fontSize: 30, fontWeight: 700, color: '#0f1422', margin: '10px 0 4px' }}>Upload Audit Assets</h1>
+              <h1 className="axion-heading" style={{ fontSize: 30, fontWeight: 700, color: '#0f1422', margin: '10px 0 4px' }}>Upload Audit Assets</h1>
               <p style={{ fontSize: 15, color: '#5a6a8a', margin: 0 }}>
                 Upload your Android screenshot and UIAutomator XML separately. We'll validate them as a matching pair.
               </p>
             </div>
 
             {/* Upload Zone */}
-            <div style={{
+            <div className="axion-upload-zone" style={{
               background: zoneBg, border: zoneBorder, borderRadius: 14,
               padding: '44px 32px 32px',
               display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -737,7 +771,7 @@ export default function Upload() {
                 {step === 'mismatched' && Icon.alert('#ef4444', 26)}
               </div>
 
-              <p style={{ fontSize: 17, fontWeight: 700, color: '#0f1422', margin: '0 0 6px' }}>
+              <p style={{ fontSize: 17, fontWeight: 700, color: '#0f1422', margin: '0 0 6px', textAlign: 'center', wordBreak: 'break-word' }}>
                 {step === 'empty'      && 'Upload files'}
                 {step === 'waiting'    && screenshot?.name}
                 {step === 'matched'    && 'Files matched'}
@@ -797,19 +831,18 @@ export default function Upload() {
                     onClick={() => setShowPopup(true)}
                     style={{
                       display: 'inline-flex', alignItems: 'center', gap: 6,
-                      border: `1px solid ${canAudit ? '#0f6e56' : '#fca5a5'}`,
+                      border: '1px solid #1a2240',
                       borderRadius: 99, fontSize: 13, fontWeight: 600,
                       padding: '5px 14px', cursor: 'pointer',
-                      background: canAudit ? '#e8f5f0' : '#fee2e2',
-                      color: canAudit ? '#0f6e56' : '#ef4444',
+                      background: '#f1f5f9',
+                      color: '#1a2240',
                       fontFamily: 'inherit',
                     }}
                   >
-                    {Icon.eye(canAudit ? '#0f6e56' : '#ef4444', 14)}
+                    {Icon.eye('#1a2240', 14)}
                     View validation status
                   </button>
 
-                  {/* ── Preview files button — only shows when matched ── */}
                   {canAudit && (
                     <button
                       onClick={() => setShowPreview(true)}
@@ -833,7 +866,7 @@ export default function Upload() {
           </div>
 
           {/* CTA bar */}
-          <div style={{
+          <div className="axion-cta-bar" style={{
             background: '#0f1422', borderRadius: 14, padding: '18px 28px',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20,
           }}>
@@ -844,6 +877,7 @@ export default function Upload() {
               </p>
             </div>
             <button
+              className="axion-cta-button"
               disabled={!canAudit}
               aria-label="Start accessibility audit"
               onClick={() => canAudit && setShowAuditPopup(true)}
@@ -877,7 +911,7 @@ export default function Upload() {
         <AuditPopup
           onViewDashboard={() => {
             setShowAuditPopup(false);
-            navigate('/dashboard');
+            navigate('/dashboard', { state: { screenshot, xml } });
           }}
         />
       )}

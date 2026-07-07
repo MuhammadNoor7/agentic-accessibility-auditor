@@ -4,7 +4,7 @@ export default function Logo({ size = 'md', showTagline = true, light = false, a
   const sizes = {
     sm: { icon: 34, word: 'text-xl', tagline: 'text-[10px]', gap: 'gap-2' },
     md: { icon: 40, word: 'text-2xl', tagline: 'text-[11px]', gap: 'gap-2.5' },
-    lg: { icon: 52, word: 'text-3xl', tagline: 'text-xs', gap: 'gap-3' },
+    lg: { icon: 140, word: 'text-4xl', tagline: 'text-sm', gap: 'gap-3.5' },
   };
   const s = sizes[size];
   const wordColor = light ? 'text-white' : 'text-[var(--color-navy)]';

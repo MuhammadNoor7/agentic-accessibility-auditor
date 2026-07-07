@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getAuditFiles } from '../state/auditFiles'
 import Sidebar from '../components/Sidebar'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -337,8 +338,9 @@ function IssueDrawer({ issue, onClose }) {
     >
       <div
         onClick={e => e.stopPropagation()}
+        className="axion-drawer"
         style={{
-          width: '440px', height: '100%', background: '#fff',
+          height: '100%', background: '#fff',
           display: 'flex', flexDirection: 'column',
           boxShadow: '-8px 0 32px rgba(0,0,0,0.12)',
           animation: 'slideIn 0.25s ease',
@@ -443,13 +445,20 @@ function IssueDrawer({ issue, onClose }) {
 /* ── Main Dashboard ────────────────────────────────────────────────────── */
 export default function Dashboard() {
   const navigate = useNavigate()
+  const { screenshot, xml } = getAuditFiles()
   const [severityFilter, setSeverityFilter] = useState('All')
+  const [searchQuery, setSearchQuery] = useState('')
   const [selectedIssue,  setSelectedIssue]  = useState(null)
   const [showAuditPopup, setShowAuditPopup] = useState(false)
 
-  const filtered = severityFilter === 'All'
-    ? violations
-    : violations.filter(v => v.severity === severityFilter)
+  const filtered = violations
+    .filter(v => severityFilter === 'All' || v.severity === severityFilter)
+    .filter(v => {
+      const q = searchQuery.trim().toLowerCase()
+      if (!q) return true
+      return [v.rule_id, v.issue, v.class, v.resource_id, v.guideline]
+        .some(field => field?.toLowerCase().includes(q))
+    })
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f4f6fb' }}>
@@ -460,13 +469,64 @@ export default function Dashboard() {
         @keyframes slideIn { from { transform:translateX(40px); opacity:0 } to { transform:translateX(0); opacity:1 } }
         @keyframes pulseIn { 0% { transform: scale(0.85); opacity: 0; } 60% { transform: scale(1.04); } 100% { transform: scale(1); opacity: 1; } }
         @keyframes spin { to { transform: rotate(360deg); } }
+
+        .axion-topbar {
+          padding: 16px 32px;
+        }
+        .axion-heading-row {
+          flex-wrap: wrap;
+          gap: 16px;
+        }
+        .axion-stat-grid {
+          grid-template-columns: 220px 1fr 1fr 1fr;
+        }
+        .axion-search-input {
+          width: 210px;
+        }
+        .axion-table-scroll {
+          overflow-x: auto;
+        }
+        .axion-drawer {
+          width: 440px;
+        }
+
+        @media (max-width: 900px) {
+          .axion-stat-grid {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+        @media (max-width: 640px) {
+          .axion-topbar {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px 20px;
+          }
+          .axion-heading-row {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .axion-topbar-actions {
+            width: 100%;
+          }
+          .axion-stat-grid {
+            grid-template-columns: 1fr;
+          }
+          .axion-search-input {
+            width: 100%;
+          }
+          .axion-drawer {
+            width: 100vw;
+            max-width: 100vw;
+          }
+        }
       `}</style>
 
       <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }} aria-label="Issues Dashboard">
 
         {/* TOPBAR */}
-        <div style={{
-          background: '#fff', padding: '16px 32px',
+        <div className="axion-topbar" style={{
+          background: '#fff',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           borderBottom: '0.5px solid #e2e6f0',
         }}>
@@ -474,13 +534,16 @@ export default function Dashboard() {
             <p style={{ fontSize: 15, color: '#5a6a8a', margin: 0 }}>Workspace</p>
             <p style={{ fontSize: 20, fontWeight: 700, color: '#1a2240', margin: 0 }}>Issues Dashboard</p>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div className="axion-topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <input
-              type="search" placeholder="Search audits…" aria-label="Search audits"
+              type="search" placeholder="Search issues, rule ID…" aria-label="Search detected issues"
+              className="axion-search-input"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
               style={{
                 background: '#f4f6fb', border: '0.5px solid #dde2f0',
                 borderRadius: 6, padding: '9px 16px', fontSize: 15,
-                color: '#1a2240', width: 210,
+                color: '#1a2240',
               }}
             />
             <div
@@ -500,7 +563,7 @@ export default function Dashboard() {
         <div style={{ flex: 1, padding: '32px', display: 'flex', flexDirection: 'column', gap: 24 }}>
 
           {/* Heading row */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          <div className="axion-heading-row" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
             <div>
               <span style={{
                 background: '#e8f5f0', color: '#0f6e56', fontSize: 13,
@@ -515,22 +578,37 @@ export default function Dashboard() {
                 screen_014.png &nbsp;·&nbsp; 47 components scanned &nbsp;·&nbsp; Audited 3 minutes ago
               </p>
             </div>
-            <button
-              aria-label="Re-run accessibility audit"
-              onClick={() => setShowAuditPopup(true)}
-              style={{
-                background: '#1a2240', color: '#fff', border: 'none',
-                borderRadius: 8, padding: '12px 22px', fontSize: 15,
-                fontWeight: 600, cursor: 'pointer', marginTop: 4,
-                display: 'flex', alignItems: 'center', gap: 6,
-              }}
-            >
-              <span aria-hidden="true" style={{ fontSize: 16 }}>↺</span> Re-run Audit
-            </button>
+           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4 }}>
+  <button
+  aria-label="Start a new audit"
+  onClick={() => navigate('/upload')}
+  style={{
+    background: '#1a2240', color: '#fff', border: 'none',
+    borderRadius: 8, padding: '12px 22px', fontSize: 15,
+    fontWeight: 600, cursor: 'pointer',
+    display: 'flex', alignItems: 'center', gap: 6,
+  }}
+>
+  <span aria-hidden="true" style={{ fontSize: 16 }}>+</span> New Audit
+</button>
+
+  <button
+    aria-label="Re-run accessibility audit"
+    onClick={() => setShowAuditPopup(true)}
+    style={{
+      background: '#1a2240', color: '#fff', border: 'none',
+      borderRadius: 8, padding: '12px 22px', fontSize: 15,
+      fontWeight: 600, cursor: 'pointer',
+      display: 'flex', alignItems: 'center', gap: 6,
+    }}
+  >
+    <span aria-hidden="true" style={{ fontSize: 16 }}>↺</span> Re-run Audit
+  </button>
+</div>
           </div>
 
           {/* STAT CARDS */}
-          <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr 1fr 1fr', gap: 14 }}>
+          <div className="axion-stat-grid" style={{ display: 'grid', gap: 14 }}>
 
             <div
               role="img"
@@ -658,6 +736,7 @@ export default function Dashboard() {
               </div>
             </div>
 
+            <div className="axion-table-scroll">
             <table style={{ width: '100%', borderCollapse: 'collapse' }} aria-label="Detected accessibility issues">
               <thead>
                 <tr style={{ background: '#f8fafc' }}>
@@ -720,12 +799,15 @@ export default function Dashboard() {
                 {filtered.length === 0 && (
                   <tr>
                     <td colSpan={5} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8', fontSize: 14 }}>
-                      No issues found for "{severityFilter}"
+                      {searchQuery.trim()
+                        ? `No issues match "${searchQuery}"`
+                        : `No issues found for "${severityFilter}"`}
                     </td>
                   </tr>
                 )}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
 
@@ -745,7 +827,7 @@ export default function Dashboard() {
             </div>
             <button
               aria-label="Generate accessibility report"
-              onClick={() => navigate('/report')}
+              onClick={() => navigate('/report', { state: { screenshot, xml } })}
               style={{
                 background: '#1D9E75', color: '#fff', border: 'none',
                 borderRadius: 10, padding: '14px 30px',

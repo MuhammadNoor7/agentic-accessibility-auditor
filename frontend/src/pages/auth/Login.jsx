@@ -34,7 +34,7 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate()) navigate('/dashboard');
+    if (validate()) navigate('/upload');
   };
 
   return (
@@ -78,7 +78,7 @@ export default function Login() {
         <div className="h-px flex-1 bg-[var(--color-border)]" />
       </div>
 
-      <GoogleButton onClick={() => navigate('/dashboard')} />
+      <GoogleButton onClick={() => navigate('/upload')} />
 
       <FooterLink text="Don't have an account?" linkText="Sign up" to="/signup" />
     </AuthLayout>

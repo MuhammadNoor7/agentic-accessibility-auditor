@@ -92,6 +92,21 @@ The pipeline maps each detected violation to one or more guideline IDs, a severi
 
 Pair-based rules may include `related_component`: **R03**, **R08**, **R17**.
 
+**Implementation notes (R21, R30):** `src/rules.py` deliberately diverges from
+this table's shorthand in two places, both to avoid false positives:
+
+- **R21** flags only when an error label's `text` AND `content_desc` are
+  *both* empty (matching R01/R05's own empty-label convention), not when
+  *either* is empty. A plain error TextView that sets `text` and leaves
+  `content_desc` unset (the normal, correct way to label a TextView) is not
+  vague — flagging on content_desc alone would misfire on nearly every
+  correctly-implemented error message.
+- **R30** additionally requires `content_desc==''` (not just `text==''`), so
+  it doesn't flag an icon-only control that already carries a real
+  content_desc. This keeps R30's stated intent ("no text alternative")
+  consistent with R01/R02's own AND-both-empty convention for the same
+  underlying "unlabeled control" case.
+
 ---
 
 ## 4. Guideline → Rule Mapping (quick reference)

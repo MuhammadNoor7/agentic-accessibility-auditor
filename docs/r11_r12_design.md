@@ -1,8 +1,23 @@
 # R11 / R12 Stub Design
 
 > Shared with Ayesha for frontend stub design — Week 3
+>
+> **Update — both rules moved past the stub design below.** R11
+> (`check_color_only_info`) now flags checkable-state widgets (CheckBox/
+> Switch/ToggleButton/RadioButton) with no text and no content_desc — a
+> real, data-grounded check using fields this pipeline actually has, scoped
+> to the "no non-visual state indicator exists at all" case. It does **not**
+> do true before/after color-diffing (a *changing* color on an otherwise-
+> labeled element) — that part of the original design below (paired
+> snapshots / cross-capture screenshot diffing) is still unimplemented; see
+> the TODO in `check_color_only_info`'s docstring. R12 (`check_missing_captions`)
+> now also checks `parent_id`-based sibling adjacency (not just bounds-
+> proximity) — the "components.json is a flat list with no adjacency" premise
+> below is now out of date; `parent_id` has been on every component for a
+> while. The rest of this document is kept as-is for historical context on
+> why these two were originally scoped as stubs.
 
-**Status:** both rules are implemented in `src/rules.py` as documented stubs
+**Status (original, Week 3):** both rules are implemented in `src/rules.py` as documented stubs
 (`check_color_only_info` for R11, `check_missing_captions` for R12), wired
 into `check()` after R10. Neither is feature-complete yet — see "Known
 limitations" below for exactly what's missing and why.

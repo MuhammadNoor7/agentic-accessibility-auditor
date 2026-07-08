@@ -2,7 +2,7 @@
 
 Fixtures live in tests/fixtures/rules/ and map to TC-02 (R01), TC-03 (R04), and
 TC-04 (R05) in docs/qa_test_plan.md, plus additional coverage for R02, R03,
-R06, R07, R08, R10, and a negative/regression case.
+R06, R07, R08, R10, a negative/regression case, and R21-R30 (Week 4/5).
 """
 
 from __future__ import annotations
@@ -12,7 +12,14 @@ from pathlib import Path
 import pytest
 
 from src.parser import load_xml_root, parse_xml_tree
-from src.rules import check, check_color_only_info, check_missing_captions, check_small_touch_target
+from src.rules import (
+    check,
+    check_color_only_info,
+    check_font_scale_overflow,
+    check_low_contrast,
+    check_missing_captions,
+    check_small_touch_target,
+)
 from src.schema_documents import build_components_document
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "rules"
@@ -47,6 +54,16 @@ def _violations_for(filename: str) -> dict:
         ("r07_zero_size_fail.xml", "R07"),
         ("r08_layout_overlap_fail.xml", "R08"),
         ("r10_text_overflow_fail.xml", "R10"),
+        ("r21_vague_error_fail.xml", "R21"),
+        ("r22_no_password_toggle_fail.xml", "R22"),
+        ("r23_unlabeled_nav_fail.xml", "R23"),
+        ("r24_missing_title_fail.xml", "R24"),
+        ("r25_uncontrolled_animation_fail.xml", "R25"),
+        ("r26_no_timeout_warning_fail.xml", "R26"),
+        ("r27_complex_label_fail.xml", "R27"),
+        ("r29_all_caps_fail.xml", "R29"),
+        ("r30_icon_only_fail.xml", "R30"),
+        ("r11_color_only_fail.xml", "R11"),
     ],
 )
 def test_rule_triggers_on_fail_fixture(filename: str, expected_rule: str) -> None:
@@ -64,6 +81,16 @@ def test_rule_triggers_on_fail_fixture(filename: str, expected_rule: str) -> Non
         ("r04_small_target_pass.xml", "R04"),
         ("r05_unlabeled_input_pass.xml", "R05"),
         ("r05_unlabeled_input_hint_pass.xml", "R05"),
+        ("r21_vague_error_pass.xml", "R21"),
+        ("r22_no_password_toggle_pass.xml", "R22"),
+        ("r23_unlabeled_nav_pass.xml", "R23"),
+        ("r24_missing_title_pass.xml", "R24"),
+        ("r25_uncontrolled_animation_pass.xml", "R25"),
+        ("r26_no_timeout_warning_pass.xml", "R26"),
+        ("r27_complex_label_pass.xml", "R27"),
+        ("r29_all_caps_pass.xml", "R29"),
+        ("r30_icon_only_pass.xml", "R30"),
+        ("r11_color_only_pass.xml", "R11"),
     ],
 )
 def test_rule_does_not_trigger_on_pass_fixture(filename: str, absent_rule: str) -> None:
@@ -112,8 +139,9 @@ def test_layout_overlap_ignores_zero_size_elements() -> None:
     assert "R08" not in rule_ids
 
 
-def test_r11_stub_returns_empty_list() -> None:
-    """R11 (check_color_only_info) is a documented no-op stub; it must always return []."""
+def test_color_only_info_ignores_non_checkable_widgets() -> None:
+    """R11 only targets checkable-state widgets (CheckBox/Switch/ToggleButton/
+    RadioButton); an unlabeled EditText is R05's/R20's concern, not R11's."""
     components = [
         {
             "component_id": "c_001",
@@ -129,6 +157,198 @@ def test_r11_stub_returns_empty_list() -> None:
         }
     ]
     assert check_color_only_info(components) == []
+
+
+def test_low_contrast_returns_empty_without_declared_colors() -> None:
+    """R09 only fires when the parser extracted BOTH text_color and
+    background_color from the source XML; neither UIAutomator nor MASC
+    dumps declare colors, so this must return [] with those fields absent."""
+    components = [
+        {
+            "component_id": "c_001",
+            "class": "android.widget.TextView",
+            "text": "Hello",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "com.example.app:id/label",
+            "clickable": False,
+            "enabled": True,
+            "focusable": False,
+            "bounds": [0, 0, 100, 30],
+            "text_color": None,
+            "background_color": None,
+        }
+    ]
+    assert check_low_contrast(components) == []
+
+
+def test_low_contrast_flags_low_contrast_declared_colors() -> None:
+    """R09 must fire when declared text_color/background_color give a
+    contrast ratio below 4.5:1 (two close shades of gray)."""
+    component = {
+        "component_id": "c_001",
+        "class": "android.widget.TextView",
+        "text": "Hello",
+        "content_desc": "",
+        "hint": "",
+        "resource_id": "com.example.app:id/label",
+        "clickable": False,
+        "enabled": True,
+        "focusable": False,
+        "bounds": [0, 0, 100, 30],
+        "text_color": "#AAAAAA",
+        "background_color": "#B4B4B4",
+    }
+    violations = check_low_contrast([component])
+    assert len(violations) == 1
+    assert violations[0]["rule_id"] == "R09"
+
+
+def test_low_contrast_ignores_high_contrast_declared_colors() -> None:
+    """R09 must not fire for clearly high-contrast declared colors (black
+    text on a white background, ratio far above 4.5:1)."""
+    component = {
+        "component_id": "c_001",
+        "class": "android.widget.TextView",
+        "text": "Hello",
+        "content_desc": "",
+        "hint": "",
+        "resource_id": "com.example.app:id/label",
+        "clickable": False,
+        "enabled": True,
+        "focusable": False,
+        "bounds": [0, 0, 100, 30],
+        "text_color": "#000000",
+        "background_color": "#FFFFFF",
+    }
+    assert check_low_contrast([component]) == []
+
+
+def test_font_scale_overflow_returns_empty_without_declared_text_size() -> None:
+    """R28 only fires when the parser extracted a text_size_sp value from the
+    source XML; neither UIAutomator nor MASC dumps declare one, so this must
+    return [] with that field absent, even for cramped-looking bounds."""
+    components = [
+        {
+            "component_id": "c_001",
+            "class": "android.widget.TextView",
+            "text": "Some fairly long paragraph of body text",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "com.example.app:id/body_text",
+            "clickable": False,
+            "enabled": True,
+            "focusable": False,
+            "bounds": [0, 0, 400, 20],
+            "text_size_sp": None,
+        }
+    ]
+    assert check_font_scale_overflow(components) == []
+
+
+def test_font_scale_overflow_flags_cramped_declared_text_size() -> None:
+    """R28 must fire when the declared text_size_sp, doubled (~200% scale)
+    with a standard line-height factor, wouldn't fit the bounds height.
+
+    At the 160dpi baseline, 16sp needs ~16 * 1.2 * 2.0 = 38.4px; a 20px
+    bounds height can't fit that.
+    """
+    component = {
+        "component_id": "c_001",
+        "class": "android.widget.TextView",
+        "text": "Cramped text",
+        "content_desc": "",
+        "hint": "",
+        "resource_id": "com.example.app:id/label",
+        "clickable": False,
+        "enabled": True,
+        "focusable": False,
+        "bounds": [0, 0, 200, 20],
+        "text_size_sp": 16,
+    }
+    violations = check_font_scale_overflow([component], dpi=160)
+    assert len(violations) == 1
+    assert violations[0]["rule_id"] == "R28"
+
+
+def test_font_scale_overflow_ignores_roomy_declared_text_size() -> None:
+    """R28 must not fire when the bounds height comfortably fits the
+    declared text size doubled."""
+    component = {
+        "component_id": "c_001",
+        "class": "android.widget.TextView",
+        "text": "Roomy text",
+        "content_desc": "",
+        "hint": "",
+        "resource_id": "com.example.app:id/label",
+        "clickable": False,
+        "enabled": True,
+        "focusable": False,
+        "bounds": [0, 0, 200, 80],
+        "text_size_sp": 16,
+    }
+    assert check_font_scale_overflow([component], dpi=160) == []
+
+
+def test_font_scale_overflow_respects_dpi_parameter() -> None:
+    """R28 must scale its sp-to-px conversion by whatever dpi is passed in,
+    same convention as R04/check_small_touch_target."""
+    component = {
+        "component_id": "c_001",
+        "class": "android.widget.TextView",
+        "text": "Dpi-sensitive text",
+        "content_desc": "",
+        "hint": "",
+        "resource_id": "com.example.app:id/label",
+        "clickable": False,
+        "enabled": True,
+        "focusable": False,
+        "bounds": [0, 0, 200, 40],
+        "text_size_sp": 16,
+    }
+    # At 160dpi, 16sp needs ~38.4px — comfortably fits a 40px bounds height.
+    assert check_font_scale_overflow([component], dpi=160) == []
+    # At 320dpi (2x), the same 16sp needs ~76.8px — no longer fits.
+    violations = check_font_scale_overflow([component], dpi=320)
+    assert len(violations) == 1
+    assert violations[0]["rule_id"] == "R28"
+
+
+def test_missing_captions_uses_sibling_over_bounds_distance() -> None:
+    """R12 must recognize a caption toggle sharing the video's parent_id (a
+    genuine tree sibling) even when it's far outside NEARBY_TRANSCRIPT_PX in
+    bounds-distance — proving the new sibling check adds real coverage
+    bounds-proximity alone would miss."""
+    components = [
+        {
+            "component_id": "c_001",
+            "class": "android.widget.VideoView",
+            "text": "",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "com.example.app:id/video_player",
+            "clickable": False,
+            "enabled": True,
+            "focusable": False,
+            "bounds": [0, 0, 200, 200],
+            "parent_id": "c_parent",
+        },
+        {
+            "component_id": "c_002",
+            "class": "android.widget.ImageButton",
+            "text": "",
+            "content_desc": "Toggle captions",
+            "hint": "",
+            "resource_id": "com.example.app:id/cc_toggle",
+            "clickable": True,
+            "enabled": True,
+            "focusable": True,
+            # Far away in bounds-distance (> NEARBY_TRANSCRIPT_PX=400 on both axes).
+            "bounds": [900, 900, 950, 950],
+            "parent_id": "c_parent",
+        },
+    ]
+    assert check_missing_captions(components) == []
 
 
 def test_r12_stub_returns_empty_list_for_non_media_components() -> None:
@@ -202,159 +422,129 @@ def test_small_touch_target_respects_dpi_parameter() -> None:
     assert violations[0]["rule_id"] == "R04"
 
 
-@pytest.mark.parametrize(
-    "checker,component,rule_id",
-    [
-        (
-            "check_audio_without_transcript",
-            {
-                "component_id": "c_001",
-                "class": "android.media.SoundRecorder",
-                "text": "",
-                "content_desc": "",
-                "hint": "",
-                "resource_id": "com.example:id/recorder",
-                "clickable": True,
-                "enabled": True,
-                "focusable": True,
-                "bounds": [0, 0, 200, 100],
-            },
-            "R13",
-        ),
-        (
-            "check_audio_only_notification",
-            {
-                "component_id": "c_001",
-                "class": "android.widget.TextView",
-                "text": "New notification received",
-                "content_desc": "",
-                "hint": "",
-                "resource_id": "",
-                "clickable": False,
-                "enabled": True,
-                "focusable": False,
-                "bounds": [0, 0, 400, 80],
-            },
-            "R14",
-        ),
-        (
-            "check_bad_focus_order",
-            {
-                "component_id": "c_002",
-                "class": "android.widget.Button",
-                "text": "Bottom",
-                "content_desc": "",
-                "hint": "",
-                "resource_id": "",
-                "clickable": True,
-                "enabled": True,
-                "focusable": True,
-                "bounds": [0, 500, 200, 600],
-            },
-            "R15",
-        ),
-        (
-            "check_decorative_in_focus_tree",
-            {
-                "component_id": "c_001",
-                "class": "android.widget.ImageView",
-                "text": "",
-                "content_desc": "",
-                "hint": "",
-                "resource_id": "",
-                "clickable": False,
-                "enabled": True,
-                "focusable": True,
-                "bounds": [0, 0, 100, 100],
-            },
-            "R16",
-        ),
-        (
-            "check_multi_gesture_only",
-            {
-                "component_id": "c_001",
-                "class": "android.widget.TextView",
-                "text": "Pinch to zoom the map",
-                "content_desc": "",
-                "hint": "",
-                "resource_id": "",
-                "clickable": False,
-                "enabled": True,
-                "focusable": False,
-                "bounds": [0, 0, 300, 80],
-            },
-            "R18",
-        ),
-        (
-            "check_destructive_without_confirmation",
-            {
-                "component_id": "c_001",
-                "class": "android.widget.Button",
-                "text": "Delete chat",
-                "content_desc": "",
-                "hint": "",
-                "resource_id": "",
-                "clickable": True,
-                "enabled": True,
-                "focusable": True,
-                "bounds": [0, 0, 200, 100],
-            },
-            "R19",
-        ),
-        (
-            "check_hint_only_label",
-            {
-                "component_id": "c_001",
-                "class": "android.widget.EditText",
-                "text": "",
-                "content_desc": "",
-                "hint": "Email address",
-                "resource_id": "",
-                "clickable": True,
-                "enabled": True,
-                "focusable": True,
-                "bounds": [0, 200, 400, 280],
-            },
-            "R20",
-        ),
-    ],
-)
-def test_r13_to_r20_trigger_on_controlled_components(checker: str, component: dict, rule_id: str) -> None:
-    from src import rules as rules_module
+def test_parser_device_info_falls_back_to_component_bounds() -> None:
+    """Neither UIAutomator's nor MASC's <hierarchy> root ever carries a `bounds`
+    attribute, so device_info.width_px/height_px used to stay 0 even though real
+    screen content exists. build_screen_document() must fall back to the union
+    of parsed components' bounds so R24 has a real screen height to work with."""
+    from src.parser import build_screen_document
 
-    checker_fn = getattr(rules_module, checker)
-    if rule_id == "R15":
-        components = [
-            {**component, "focus_order": 1},
-            {
-                "component_id": "c_001",
-                "class": "android.widget.Button",
-                "text": "Top",
-                "content_desc": "",
-                "hint": "",
-                "resource_id": "",
-                "clickable": True,
-                "enabled": True,
-                "focusable": True,
-                "bounds": [0, 0, 200, 100],
-                "focus_order": 2,
-            },
-        ]
-    else:
-        components = [component]
-
-    violations = checker_fn(components)
-    assert any(violation["rule_id"] == rule_id for violation in violations)
+    xml_path = FIXTURES_DIR / "r24_missing_title_fail.xml"
+    doc = build_screen_document(xml_path, FIXTURES_DIR, dataset_root=None)
+    assert doc["device_info"]["width_px"] == 1080
+    assert doc["device_info"]["height_px"] == 1920
 
 
-def test_r17_insufficient_spacing() -> None:
-    from src.rules import check_insufficient_spacing
+def test_missing_screen_title_fires_through_check_with_position_heuristic() -> None:
+    """R24 must also fire via check() using the position heuristic alone (no
+    toolbar/title naming hint), once device_info.height_px is populated."""
+    components = [
+        {
+            "component_id": "c_001",
+            "class": "android.widget.FrameLayout",
+            "text": "",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "",
+            "clickable": False,
+            "enabled": True,
+            "focusable": False,
+            "bounds": [0, 0, 1080, 1920],
+        },
+        {
+            "component_id": "c_002",
+            "class": "android.widget.TextView",
+            "text": "",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "com.example.app:id/header_label",
+            "clickable": False,
+            "enabled": True,
+            "focusable": False,
+            "bounds": [40, 20, 600, 90],
+        },
+    ]
+    components_json = build_components_document(
+        screen_id="position_heuristic_test",
+        image_path="",
+        xml_path="",
+        components=components,
+        device_info={"dpi": 160, "width_px": 1080, "height_px": 1920},
+    )
+    result = check(components_json)
+    rule_ids = {violation["rule_id"] for violation in result["violations"]}
+    assert "R24" in rule_ids
 
+
+def test_icon_only_no_label_does_not_flag_properly_labeled_icon() -> None:
+    """R30 must not fire on a clickable icon-class element that already has a
+    content_desc — only the fully-unlabeled case should be flagged."""
+    from src.rules import check_icon_only_no_label
+
+    component = {
+        "component_id": "c_001",
+        "class": "android.widget.ImageButton",
+        "text": "",
+        "content_desc": "Add to favorites",
+        "hint": "",
+        "resource_id": "com.example.app:id/btn_favorite",
+        "clickable": True,
+        "enabled": True,
+        "focusable": True,
+        "bounds": [0, 0, 100, 100],
+    }
+    assert check_icon_only_no_label([component]) == []
+
+
+def test_check_filters_hidden_components_before_running_rules() -> None:
+    """check() must exclude visible=False components before any rule runs —
+    a clickable, unlabeled button that's hidden must not produce an R01
+    violation, even though the identical visible button does."""
+    hidden_button = {
+        "component_id": "c_001",
+        "class": "android.widget.Button",
+        "text": "",
+        "content_desc": "",
+        "hint": "",
+        "resource_id": "com.example.app:id/hidden_btn",
+        "clickable": True,
+        "enabled": True,
+        "focusable": True,
+        "bounds": [0, 0, 200, 100],
+        "visible": False,
+    }
+    visible_button = {
+        "component_id": "c_002",
+        "class": "android.widget.Button",
+        "text": "",
+        "content_desc": "",
+        "hint": "",
+        "resource_id": "com.example.app:id/visible_btn",
+        "clickable": True,
+        "enabled": True,
+        "focusable": True,
+        "bounds": [300, 0, 500, 100],
+        "visible": True,
+    }
+    components_json = build_components_document(
+        screen_id="visibility_filter_test",
+        image_path="",
+        xml_path="",
+        components=[hidden_button, visible_button],
+    )
+    result = check(components_json)
+    r01_component_ids = {v["component_id"] for v in result["violations"] if v["rule_id"] == "R01"}
+    assert r01_component_ids == {"c_002"}
+
+
+def test_check_reports_component_and_hidden_counts() -> None:
+    """check() must report component_count (total before filtering) and
+    hidden_component_count (how many were excluded) as diagnostics."""
     components = [
         {
             "component_id": "c_001",
             "class": "android.widget.Button",
-            "text": "A",
+            "text": "Visible",
             "content_desc": "",
             "hint": "",
             "resource_id": "",
@@ -362,19 +552,63 @@ def test_r17_insufficient_spacing() -> None:
             "enabled": True,
             "focusable": True,
             "bounds": [0, 0, 200, 100],
+            "visible": True,
         },
         {
             "component_id": "c_002",
-            "class": "android.widget.Button",
-            "text": "B",
+            "class": "android.widget.TextView",
+            "text": "Hidden one",
             "content_desc": "",
             "hint": "",
             "resource_id": "",
-            "clickable": True,
+            "clickable": False,
             "enabled": True,
-            "focusable": True,
-            "bounds": [205, 0, 405, 100],
+            "focusable": False,
+            "bounds": [0, 0, 0, 0],
+            "visible": False,
+        },
+        {
+            "component_id": "c_003",
+            "class": "android.widget.TextView",
+            "text": "Hidden two",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "",
+            "clickable": False,
+            "enabled": True,
+            "focusable": False,
+            "bounds": [0, 0, 0, 0],
+            "visible": False,
         },
     ]
-    violations = check_insufficient_spacing(components, dpi=160)
-    assert any(violation["rule_id"] == "R17" for violation in violations)
+    components_json = build_components_document(
+        screen_id="diagnostic_count_test", image_path="", xml_path="", components=components
+    )
+    result = check(components_json)
+    assert result["component_count"] == 3
+    assert result["hidden_component_count"] == 2
+
+
+def test_check_defaults_to_visible_when_field_absent() -> None:
+    """Components without a `visible` key at all (e.g. real UIAutomator data,
+    which never sets it) must be treated as visible, not filtered out."""
+    component = {
+        "component_id": "c_001",
+        "class": "android.widget.Button",
+        "text": "",
+        "content_desc": "",
+        "hint": "",
+        "resource_id": "com.example.app:id/btn",
+        "clickable": True,
+        "enabled": True,
+        "focusable": True,
+        "bounds": [0, 0, 200, 100],
+        # no "visible" key at all
+    }
+    components_json = build_components_document(
+        screen_id="no_visible_field_test", image_path="", xml_path="", components=[component]
+    )
+    result = check(components_json)
+    assert result["component_count"] == 1
+    assert result["hidden_component_count"] == 0
+    assert any(v["rule_id"] == "R01" for v in result["violations"])

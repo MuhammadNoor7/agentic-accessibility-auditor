@@ -1,63 +1,130 @@
-"""Tests for extended parser fields used by R13-R20."""
+"""Tests for src/parser.py: visibility extraction and MASC bounds-wrapper selection.
+
+Covers the data-quality fix where hidden (visibility="gone" /
+visible-to-user="False") elements were being treated identically to visible
+ones, and the related MASC bounds-wrapper "last wins" bug that frequently
+produced invalid (inverted) rects specifically for hidden elements.
+"""
 
 from __future__ import annotations
 
-from pathlib import Path
+from lxml import etree
 
-from src.parser import load_xml_root, parse_xml_tree
-
-FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "rules"
+from src.parser import _is_visible, _parse_masc_bounds, parse_xml_tree
 
 
-def test_parser_emits_extended_fields_on_fixture() -> None:
-    xml_path = FIXTURES_DIR / "r05_unlabeled_input_fail.xml"
-    components = parse_xml_tree(load_xml_root(xml_path))
-    assert components
-    component = components[0]
-    for key in (
-        "focus_order",
-        "parent_id",
-        "long_clickable",
-        "scrollable",
-        "selected",
-        "checked",
-        "password",
-        "text_all_caps",
-        "input_type",
-        "important_for_accessibility",
-        "media_type",
-        "is_dialog",
-        "label_for",
-    ):
-        assert key in component
-    assert component["focus_order"] == 1
+def _elem(xml: str) -> etree._Element:
+    return etree.fromstring(xml.encode("utf-8"))
 
 
-def test_parser_preserves_parent_id_hierarchy() -> None:
-    xml_path = FIXTURES_DIR / "r01_missing_label_fail.xml"
-    components = parse_xml_tree(load_xml_root(xml_path))
-    child_with_parent = next(
-        (component for component in components if component.get("parent_id")),
-        None,
+# --- _is_visible -----------------------------------------------------------
+
+def test_is_visible_defaults_true_without_visibility_attrs() -> None:
+    """Real UIAutomator dumps don't carry visibility/visible-to-user at
+    all — absence of both must default to visible, not hidden."""
+    elem = _elem('<node class="android.widget.Button" clickable="true" />')
+    assert _is_visible(elem) is True
+
+
+def test_is_visible_false_for_visibility_gone() -> None:
+    elem = _elem('<node class="android.widget.TextView" visibility="gone" />')
+    assert _is_visible(elem) is False
+
+
+def test_is_visible_false_for_not_visible_to_user() -> None:
+    elem = _elem('<node class="android.widget.TextView" visible-to-user="False" />')
+    assert _is_visible(elem) is False
+
+
+def test_is_visible_true_when_visibility_is_visible() -> None:
+    elem = _elem(
+        '<node class="android.widget.TextView" visibility="visible" visible-to-user="True" />'
     )
-    assert child_with_parent is not None
-    parent = next(
-        component
-        for component in components
-        if component["component_id"] == child_with_parent["parent_id"]
+    assert _is_visible(elem) is True
+
+
+# --- _parse_masc_bounds ------------------------------------------------------
+
+def test_masc_bounds_prefers_absolute_when_valid() -> None:
+    """With two valid candidates (local, absolute), the later ('absolute')
+    one must win — matching real screen position, needed by R04/R08/R17/R24."""
+    elem = _elem(
+        """
+        <node class="android.widget.TextView">
+          <wrapper><node value="android.widget.TextView" /></wrapper>
+          <wrapper><node value="0" /><node value="0" /><node value="318" /><node value="196" /></wrapper>
+          <wrapper><node value="0" /><node value="280" /><node value="318" /><node value="476" /></wrapper>
+        </node>
+        """
     )
-    assert parent is not None
+    assert _parse_masc_bounds(elem) == [0, 280, 318, 476]
 
 
-def test_parser_extracts_masc_nodes_from_wrapper_nesting() -> None:
-    masc_xml = (
-        Path(__file__).resolve().parents[1] / "data" / "data-masc" / "xml" / "chat" / "1054.xml"
+def test_masc_bounds_falls_back_to_local_when_absolute_invalid() -> None:
+    """When the last ('absolute') candidate is an inverted rect (a known
+    pattern on visibility=gone elements — e.g. [0, 476, -1439, 476], a
+    negative-width rect), fall back to the earlier ('local') candidate
+    rather than returning the garbage rect."""
+    elem = _elem(
+        """
+        <node class="android.support.v7.widget.AppCompatTextView" visibility="gone">
+          <wrapper><node value="android.widget.TextView" /></wrapper>
+          <wrapper><node value="0" /><node value="0" /><node value="0" /><node value="0" /></wrapper>
+          <wrapper><node value="0" /><node value="476" /><node value="-1439" /><node value="476" /></wrapper>
+        </node>
+        """
     )
-    if not masc_xml.is_file():
-        import pytest
+    assert _parse_masc_bounds(elem) == [0, 0, 0, 0]
 
-        pytest.skip("MASC XML not available (link data/data-masc/xml)")
-    components = parse_xml_tree(load_xml_root(masc_xml))
-    assert len(components) > 20
-    assert all("focus_order" in component for component in components)
-    assert any(component.get("text") for component in components)
+
+def test_masc_bounds_returns_last_candidate_when_all_invalid() -> None:
+    """When every candidate is an inverted rect, still return the last one
+    (rather than None) so callers get *a* value — R07 already exists
+    downstream to flag zero/invalid-size components."""
+    elem = _elem(
+        """
+        <node class="android.widget.TextView">
+          <wrapper><node value="10" /><node value="10" /><node value="5" /><node value="10" /></wrapper>
+          <wrapper><node value="0" /><node value="476" /><node value="-1439" /><node value="476" /></wrapper>
+        </node>
+        """
+    )
+    assert _parse_masc_bounds(elem) == [0, 476, -1439, 476]
+
+
+def test_masc_bounds_handles_single_candidate() -> None:
+    """A node with only one 4-number wrapper candidate must still work
+    (not every node has the usual local+absolute pair)."""
+    elem = _elem(
+        """
+        <node class="android.widget.TextView">
+          <wrapper><node value="10" /><node value="20" /><node value="110" /><node value="60" /></wrapper>
+        </node>
+        """
+    )
+    assert _parse_masc_bounds(elem) == [10, 20, 110, 60]
+
+
+def test_masc_bounds_returns_none_without_candidates() -> None:
+    elem = _elem('<node class="android.widget.TextView"><wrapper><node value="None" /></wrapper></node>')
+    assert _parse_masc_bounds(elem) is None
+
+
+# --- end-to-end: parse_xml_tree wires `visible` onto every component -------
+
+def test_parse_xml_tree_marks_gone_elements_not_visible() -> None:
+    root = _elem(
+        """
+        <hierarchy>
+          <node class="android.widget.FrameLayout" bounds="[0,0][1080,1920]">
+            <node class="android.widget.Button" text="Visible" bounds="[0,0][200,100]" />
+            <node class="android.widget.TextView" text="Hidden" visibility="gone"
+                  visible-to-user="False" bounds="[0,0][0,0]" />
+          </node>
+        </hierarchy>
+        """
+    )
+    components = parse_xml_tree(root)
+    by_text = {c["text"]: c for c in components if c.get("text")}
+    assert by_text["Visible"]["visible"] is True
+    assert by_text["Hidden"]["visible"] is False

@@ -1,4 +1,4 @@
-"""Audit pipeline API — parse → rules → violations (SRS §9, Week 3)."""
+"""Audit pipeline API — parse → rules → agent report (SRS §9)."""
 
 from __future__ import annotations
 
@@ -8,19 +8,21 @@ import tempfile
 import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, File, HTTPException, UploadFile
+from fastapi import APIRouter, File, HTTPException, Query, UploadFile
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from backend.models.audit import AuditCreateResponse, AuditStatusResponse
+from src.agent import build_audit_report
 from src.parser import build_screen_document
 from src.rules import check as check_rules
 
 router = APIRouter(prefix="/api/v1/audit", tags=["audit"])
 
 VIOLATIONS_OUTPUT_ROOT = ROOT / "outputs" / "violations"
+REPORTS_OUTPUT_ROOT = ROOT / "outputs" / "reports"
 
 # In-memory job store for MVP stub (Week 5+: persist to outputs/records/)
 _AUDIT_JOBS: dict[str, dict] = {}
@@ -40,8 +42,15 @@ def _write_violations(components_doc: dict, violations_doc: dict) -> None:
     output_file.write_text(json.dumps(violations_doc, indent=2), encoding="utf-8")
 
 
-def _run_pipeline(audit_id: str, xml_path: Path) -> None:
-    """Synchronous pipeline: parsing → checking → complete."""
+def _write_report(report_doc: dict) -> None:
+    """Persist report.json under outputs/reports/."""
+    REPORTS_OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
+    output_file = REPORTS_OUTPUT_ROOT / f"{report_doc['screen_id']}_report.json"
+    output_file.write_text(json.dumps(report_doc, indent=2), encoding="utf-8")
+
+
+def _run_pipeline(audit_id: str, xml_path: Path, *, use_llm: bool | None) -> None:
+    """Synchronous pipeline: parsing → checking → explaining → complete."""
     try:
         _set_status(audit_id, "parsing")
         components_doc = build_screen_document(
@@ -57,14 +66,26 @@ def _run_pipeline(audit_id: str, xml_path: Path) -> None:
         job["violations"] = violations_doc
         _write_violations(components_doc, violations_doc)
 
+        _set_status(audit_id, "explaining")
+        report_doc = build_audit_report(violations_doc, components_doc, use_llm=use_llm)
+        job["report"] = report_doc
+        _write_report(report_doc)
+
         _set_status(audit_id, "complete", "Pipeline finished")
     except Exception as exc:
         _set_status(audit_id, "error", f"{type(exc).__name__}: {exc}")
 
 
 @router.post("", response_model=AuditCreateResponse, status_code=202)
-async def create_audit(xml: UploadFile = File(...)) -> AuditCreateResponse:
-    """Upload a UIAutomator XML file and run parse + rules (R01–R30)."""
+async def create_audit(
+    xml: UploadFile = File(...),
+    use_llm: bool | None = Query(
+        default=None,
+        description="Use live LLM for explanations (default: auto-detect API key; "
+        "falls back to templates when no key is set).",
+    ),
+) -> AuditCreateResponse:
+    """Upload a UIAutomator XML file and run parse → rules → report (R01–R30)."""
     if not xml.filename or not xml.filename.lower().endswith(".xml"):
         raise HTTPException(status_code=400, detail="Upload must be a .xml file")
 
@@ -74,12 +95,14 @@ async def create_audit(xml: UploadFile = File(...)) -> AuditCreateResponse:
         "message": None,
         "components": None,
         "violations": None,
+        "report": None,
+        "use_llm": use_llm,
     }
 
     with tempfile.TemporaryDirectory() as tmp:
         xml_path = Path(tmp) / xml.filename
         xml_path.write_bytes(await xml.read())
-        _run_pipeline(audit_id, xml_path)
+        _run_pipeline(audit_id, xml_path, use_llm=use_llm)
 
     job = _AUDIT_JOBS[audit_id]
     if job["status"] == "error":
@@ -108,3 +131,22 @@ async def get_audit_violations(audit_id: str) -> dict:
     if job["violations"] is None:
         raise HTTPException(status_code=409, detail="Violations not ready")
     return job["violations"]
+
+
+@router.get("/{audit_id}/report")
+async def get_audit_report(audit_id: str) -> dict:
+    """Return agent-enriched report.json for a completed audit."""
+    job = _AUDIT_JOBS.get(audit_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="Audit not found")
+    if job["report"] is None:
+        if job["violations"] is None or job["components"] is None:
+            raise HTTPException(status_code=409, detail="Report not ready")
+        report_doc = build_audit_report(
+            job["violations"],
+            job["components"],
+            use_llm=job.get("use_llm"),
+        )
+        job["report"] = report_doc
+        _write_report(report_doc)
+    return job["report"]

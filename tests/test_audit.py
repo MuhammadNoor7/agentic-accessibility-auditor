@@ -1,4 +1,4 @@
-"""Tests for backend audit API — parse + rules only (no agent/report)."""
+"""Tests for backend audit API — parse + rules + agent report."""
 
 from __future__ import annotations
 
@@ -8,6 +8,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from backend.main import app
+from src.agent import build_audit_report, compute_accessibility_score
 from src.parser import load_xml_root, parse_xml_tree
 from src.rules import check
 from src.schema_documents import build_components_document
@@ -66,7 +67,49 @@ def test_audit_pipeline_r01_fixture(client: TestClient) -> None:
     assert violations_doc["total_violations"] == len(violations_doc["violations"])
 
 
-def test_audit_report_endpoint_removed(client: TestClient) -> None:
-    """Report endpoint must not exist — pipeline stops at violations."""
+def test_audit_report_endpoint_returns_enriched_report(client: TestClient) -> None:
+    """POST fixture XML → GET report returns report.json with agent fields."""
+    with R01_FIXTURE.open("rb") as handle:
+        response = client.post(
+            "/api/v1/audit?use_llm=false",
+            files={"xml": (R01_FIXTURE.name, handle, "application/xml")},
+        )
+
+    assert response.status_code == 202
+    audit_id = response.json()["audit_id"]
+
+    report_response = client.get(f"/api/v1/audit/{audit_id}/report")
+    assert report_response.status_code == 200
+    report_doc = report_response.json()
+
+    assert report_doc["enrichment_mode"] == "template"
+    assert "accessibility_score" in report_doc
+    assert 0 <= report_doc["accessibility_score"] <= 100
+    assert report_doc["summary"]["total_issues"] == len(report_doc["violations"])
+    assert report_doc["summary"]["total_issues"] >= 1
+
+    first = report_doc["violations"][0]
+    assert first["rule_id"] == "R01"
+    for field in ("agent_explanation", "agent_why_it_matters", "agent_developer_fix"):
+        assert field in first
+        assert first[field]
+
+
+def test_audit_report_not_found(client: TestClient) -> None:
     response = client.get("/api/v1/audit/00000000-0000-0000-0000-000000000000/report")
     assert response.status_code == 404
+
+
+def test_build_audit_report_template_mode() -> None:
+    violations_doc = _expected_violations_for_fixture(R01_FIXTURE)
+    components = parse_xml_tree(load_xml_root(R01_FIXTURE))
+    components_doc = build_components_document(
+        screen_id=R01_FIXTURE.stem,
+        image_path="",
+        xml_path=str(R01_FIXTURE),
+        components=components,
+    )
+    report_doc = build_audit_report(violations_doc, components_doc, use_llm=False)
+
+    assert report_doc["enrichment_mode"] == "template"
+    assert report_doc["accessibility_score"] == compute_accessibility_score(report_doc["violations"])

@@ -1,13 +1,15 @@
 """Stage 3 agent layer: enrich rule violations with explanations for report.json.
 
-MVP uses template-based enrichment (no live LLM call). Wire OpenAI/Gemini in Week 4.
-See SDS §7 and docs/examples/report.json for the target output shape.
+Uses src/explainer.py (live LLM) when an API key is configured; otherwise falls
+back to template enrichment (SRS FR-AG.6). See docs/examples/report.json.
 """
 
 from __future__ import annotations
 
 from copy import deepcopy
 
+from src.explainer import build_components_by_id, explain_violations
+from src.llm_providers import llm_configured
 from src.schema_documents import SCHEMA_VERSION
 
 # SDS §8.2 — TBD-02 resolved (Week 3, Noor)
@@ -58,46 +60,84 @@ def _template_enrichment(violation: dict, component: dict | None) -> dict:
     }
 
 
-class AgenticEnricher:
-    """Enrich violations.json into report.json (SRS FR-AG.1–FR-AG.8 scaffold)."""
+def _recommendation_lookup(recommendations_doc: dict) -> dict[tuple[str, str], dict]:
+    """Map (rule_id, component_id) -> first matching LLM recommendation."""
+    lookup: dict[tuple[str, str], dict] = {}
+    for rec in recommendations_doc.get("recommendations", []):
+        key = (rec.get("rule_id", ""), rec.get("component_id", ""))
+        lookup.setdefault(key, rec)
+    return lookup
 
-    def __init__(self, *, use_llm: bool = False) -> None:
+
+def build_audit_report(
+    violations_doc: dict,
+    components_doc: dict | None = None,
+    *,
+    use_llm: bool | None = None,
+) -> dict:
+    """Build report.json: score, summary, and agent fields on each violation.
+
+    Input: violations_doc - Stage 2 output; components_doc - optional Stage 1
+        output; use_llm - True forces LLM, False forces templates, None auto
+        (LLM when llm_configured(), else templates per FR-AG.6).
+    Output: dict matching docs/examples/report.json plus accessibility_score and
+        enrichment_mode ("llm" | "template").
+    """
+    components_by_id = build_components_by_id(components_doc) if components_doc else {}
+    violations = deepcopy(violations_doc.get("violations", []))
+
+    if use_llm is None:
+        use_llm = llm_configured()
+
+    rec_lookup: dict[tuple[str, str], dict] = {}
+    enrichment_mode = "template"
+    if use_llm and violations:
+        recommendations_doc = explain_violations(violations_doc, components_by_id)
+        rec_lookup = _recommendation_lookup(recommendations_doc)
+        if recommendations_doc.get("total_recommendations", 0) > 0:
+            enrichment_mode = "llm"
+
+    enriched_violations: list[dict] = []
+    for violation in violations:
+        component = components_by_id.get(violation.get("component_id"))
+        key = (violation.get("rule_id", ""), violation.get("component_id", ""))
+        rec = rec_lookup.get(key)
+        if rec:
+            agent_fields = {
+                "agent_explanation": rec["explanation"],
+                "agent_why_it_matters": rec["user_impact"],
+                "agent_developer_fix": rec["fix"],
+            }
+        else:
+            agent_fields = _template_enrichment(violation, component)
+        enriched_violations.append({**violation, **agent_fields})
+
+    summary_counts = _severity_counts(enriched_violations)
+    return {
+        "schema_version": violations_doc.get("schema_version", SCHEMA_VERSION),
+        "screen_id": violations_doc.get("screen_id", ""),
+        "image_path": violations_doc.get("image_path", ""),
+        "xml_path": violations_doc.get("xml_path", ""),
+        "accessibility_score": compute_accessibility_score(enriched_violations),
+        "enrichment_mode": enrichment_mode,
+        "summary": {
+            "total_issues": len(enriched_violations),
+            **summary_counts,
+        },
+        "violations": enriched_violations,
+    }
+
+
+class AgenticEnricher:
+    """Enrich violations.json into report.json (SRS FR-AG.1–FR-AG.8)."""
+
+    def __init__(self, *, use_llm: bool | None = None) -> None:
         self.use_llm = use_llm
 
     def enrich(self, violations_doc: dict, components_doc: dict | None = None) -> dict:
-        """Add summary + agent fields to each violation.
-
-        Input: violations_doc - Stage 2 output; components_doc - optional Stage 1
-            output for extra component context.
-        Output: dict matching report.json (see docs/examples/report.json).
-        """
-        violations = deepcopy(violations_doc.get("violations", []))
-        components_by_id = {}
-        if components_doc:
-            components_by_id = {
-                c["component_id"]: c for c in components_doc.get("components", [])
-            }
-
-        enriched_violations: list[dict] = []
-        for violation in violations:
-            component = components_by_id.get(violation.get("component_id"))
-            if self.use_llm:
-                # Week 4: replace with LLM call per SDS §7.2
-                agent_fields = _template_enrichment(violation, component)
-            else:
-                agent_fields = _template_enrichment(violation, component)
-            enriched_violations.append({**violation, **agent_fields})
-
-        summary_counts = _severity_counts(enriched_violations)
-        return {
-            "schema_version": violations_doc.get("schema_version", SCHEMA_VERSION),
-            "screen_id": violations_doc.get("screen_id", ""),
-            "image_path": violations_doc.get("image_path", ""),
-            "xml_path": violations_doc.get("xml_path", ""),
-            "accessibility_score": compute_accessibility_score(enriched_violations),
-            "summary": {
-                "total_issues": len(enriched_violations),
-                **summary_counts,
-            },
-            "violations": enriched_violations,
-        }
+        """Add summary + agent fields to each violation."""
+        return build_audit_report(
+            violations_doc,
+            components_doc,
+            use_llm=self.use_llm,
+        )

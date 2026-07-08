@@ -33,7 +33,8 @@ def test_enrich_adds_agent_fields_and_summary() -> None:
           }
       ],
   }
-  report = AgenticEnricher().enrich(violations_doc)
+  report = AgenticEnricher(use_llm=False).enrich(violations_doc)
+  assert report["enrichment_mode"] == "template"
   assert report["summary"]["total_issues"] == 1
   assert report["accessibility_score"] == 90
   v = report["violations"][0]

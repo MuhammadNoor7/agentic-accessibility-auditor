@@ -10,6 +10,7 @@ AuditStatus = Literal[
     "pending",
     "parsing",
     "checking",
+    "explaining",
     "complete",
     "error",
 ]

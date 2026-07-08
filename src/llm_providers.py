@@ -43,6 +43,20 @@ def _model_name(provider: str) -> str:
     return os.environ.get(env_key) or DEFAULT_MODELS.get(provider, "")
 
 
+def llm_configured() -> bool:
+    """Return True when the active LLM_PROVIDER has a non-empty API key set."""
+    provider = _provider_name()
+    if provider not in DEFAULT_MODELS:
+        return False
+    key_names = {
+        "anthropic": ("ANTHROPIC_API_KEY",),
+        "openai": ("OPENAI_API_KEY",),
+        "gemini": ("GEMINI_API_KEY", "GOOGLE_API_KEY"),
+        "groq": ("GROQ_API_KEY",),
+    }
+    return any(os.environ.get(name, "").strip() for name in key_names.get(provider, ()))
+
+
 def call_llm(system: str, user: str, *, max_tokens: int = 4096) -> str:
     """Call the configured LLM provider and return its raw text response.
 

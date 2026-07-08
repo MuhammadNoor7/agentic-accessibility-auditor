@@ -135,8 +135,26 @@ def _parse_bounds_attr(raw: str | None) -> list[int] | None:
 
 
 def _parse_masc_bounds(node: etree._Element) -> list[int] | None:
-    wrappers = [child for child in node if child.tag == "wrapper"]
-    for wrapper in reversed(wrappers):
+    """Pick a node's bounds from its candidate `<wrapper>` blocks.
+
+    A MASC widget node typically carries exactly two 4-number wrapper
+    candidates: an earlier one in container-relative ("local") coordinates,
+    and a later one in absolute screen coordinates. The later one is what
+    every position-dependent rule needs (R04 touch target, R08 overlap, R17
+    spacing, R24 title region, ...), and it is valid 100% of the time for
+    visible elements (verified against an 80-file MASC sample). It is only
+    unreliable for `visibility="gone"` elements (~30% invalid there,
+    typically a negative-width rect) — almost certainly because whatever
+    walks the parent chain to compute "absolute" position breaks down
+    through a collapsed/never-actually-measured ancestor. Blindly preferring
+    the earlier ("local") candidate instead would fix gone elements only
+    partially (still ~10% invalid there) while breaking visible elements'
+    real screen position — so this prefers the last candidate and only
+    falls back to an earlier one when the last is an inverted rect
+    (right < left or bottom < top).
+    """
+    candidates: list[list[int]] = []
+    for wrapper in node.findall("wrapper"):
         values: list[int] = []
         for value_node in wrapper:
             if value_node.tag != "node":
@@ -151,8 +169,20 @@ def _parse_masc_bounds(node: etree._Element) -> list[int] | None:
                 values = []
                 break
         if len(values) == 4:
-            return values
-    return None
+            candidates.append(values)
+
+    if not candidates:
+        return None
+    for bounds in reversed(candidates):
+        left, top, right, bottom = bounds
+        if right >= left and bottom >= top:
+            return bounds
+    # Every candidate was an inverted rect — return the last one anyway so
+    # callers still get a value; R07 (zero/invalid-size) already exists
+    # downstream to flag it, and (once visibility filtering is applied in
+    # check()) a gone element reaching this fallback won't reach the rules
+    # at all.
+    return candidates[-1]
 
 
 def _get_text(elem: etree._Element) -> str:
@@ -179,6 +209,24 @@ def _get_content_desc(elem: etree._Element) -> str:
     return ""
 
 
+def _is_visible(elem: etree._Element) -> bool:
+    """Whether Android itself would ever actually render this element.
+
+    Input: elem - the source XML element.
+    Output: False when `visibility="gone"` or `visible-to-user="False"` (both
+        MASC attributes — confirmed present on every MASC widget node in a
+        20-file sample, 1,539 occurrences of each, always paired). Neither
+        attribute exists in real UIAutomator dumps (they don't capture a
+        "gone" concept the same way), so this defaults to True when both are
+        absent — an element the parser has no reason to believe is hidden.
+    """
+    if elem.get("visibility") == "gone":
+        return False
+    if elem.get("visible-to-user") == "False":
+        return False
+    return True
+
+
 def _get_hint(elem: etree._Element) -> str:
     """Extract an input field's hint text, if present.
 
@@ -187,6 +235,117 @@ def _get_hint(elem: etree._Element) -> str:
         attribute, or "" if neither is present.
     """
     return _normalize_string(elem.get("hint") or elem.get("android:hint"))
+
+
+def _get_first_attr(elem: etree._Element, *names: str) -> str:
+    """Return the first present XML attribute value from a list of aliases."""
+    for name in names:
+        value = elem.get(name)
+        if value is not None and str(value).strip():
+            return _normalize_string(value)
+    return ""
+
+
+def _get_input_type(elem: etree._Element) -> str:
+    return _get_first_attr(elem, "input-type", "inputType", "android:inputType")
+
+
+def _is_password_input(elem: etree._Element, input_type: str) -> bool:
+    if _parse_bool(elem.get("password")):
+        return True
+    lowered = input_type.lower()
+    return "password" in lowered or "textpassword" in lowered.replace(" ", "")
+
+
+def _get_important_for_accessibility(elem: etree._Element) -> str:
+    return _get_first_attr(
+        elem,
+        "important-for-accessibility",
+        "importantForAccessibility",
+        "android:importantForAccessibility",
+    ).lower()
+
+
+def _get_label_for(elem: etree._Element) -> str:
+    return _get_first_attr(elem, "label-for", "labelFor", "android:labelFor")
+
+
+def _get_text_size_sp(elem: etree._Element) -> float | None:
+    """Extract a declared text size in sp, if the source XML carries one.
+
+    Input: elem - the source XML element.
+    Output: the numeric sp value (unit suffix like "sp"/"px"/"dp" stripped),
+        or None if no such attribute is present. Neither UIAutomator dumps
+        nor MASC dumps carry this today (confirmed by inspecting every
+        wrapper block MASC emits) — this exists so a dataset that *does*
+        expose it (e.g. a custom instrumentation dump) is picked up
+        automatically, used by R09/R28.
+    """
+    raw = _get_first_attr(elem, "text-size", "textSize", "android:textSize", "font-size", "fontSize")
+    if not raw:
+        return None
+    match = re.match(r"^(-?\d+(?:\.\d+)?)", raw.strip())
+    if not match:
+        return None
+    try:
+        return float(match.group(1))
+    except ValueError:
+        return None
+
+
+def _get_color_attr(elem: etree._Element, *names: str) -> str | None:
+    """Extract a declared color attribute as a normalized #RRGGBB/#AARRGGBB hex string.
+
+    Input: elem - the source XML element; names - attribute name aliases to
+        try, in order.
+    Output: the hex string as-is (uppercased, with leading '#'), or None if
+        no such attribute is present or it isn't recognizably hex. Used by
+        R09 to compute a real WCAG contrast ratio when a dataset provides
+        declared colors (neither UIAutomator nor MASC dumps do today).
+    """
+    raw = _get_first_attr(elem, *names)
+    if not raw:
+        return None
+    candidate = raw.strip().upper()
+    if re.fullmatch(r"#[0-9A-F]{6}", candidate) or re.fullmatch(r"#[0-9A-F]{8}", candidate):
+        return candidate
+    return None
+
+
+def _get_text_color(elem: etree._Element) -> str | None:
+    return _get_color_attr(elem, "text-color", "textColor", "android:textColor")
+
+
+def _get_background_color(elem: etree._Element) -> str | None:
+    return _get_color_attr(
+        elem, "background-color", "backgroundColor", "android:background", "background"
+    )
+
+
+def _infer_media_type(class_name: str, resource_id: str) -> str:
+    """Classify media-bearing widgets for R12/R13/R25 rule mapping."""
+    if any(marker in class_name for marker in ("VideoView", "ExoPlayer", "StyledPlayerView")):
+        return "video"
+    if any(
+        marker in class_name
+        for marker in ("AudioView", "SoundRecorder", "VoiceRecorder", "MediaRecorder", "MediaPlayer")
+    ):
+        return "audio"
+    if any(marker in class_name for marker in ("AnimationView", "LottieAnimationView")):
+        return "animation"
+    resource_lower = resource_id.lower()
+    if any(token in resource_lower for token in ("videoview", "video_player", "player_view")):
+        return "video"
+    if any(token in resource_lower for token in ("audio", "podcast", "voice_memo", "sound_recorder")):
+        return "audio"
+    return ""
+
+
+def _is_dialog_class(class_name: str) -> bool:
+    return any(
+        marker in class_name
+        for marker in ("Dialog", "AlertDialog", "BottomSheetDialog", "DialogTitle")
+    )
 
 
 def _tag_to_class(tag: str) -> str:
@@ -228,7 +387,12 @@ def _extract_bounds(elem: etree._Element) -> list[int] | None:
     return _parse_masc_bounds(elem)
 
 
-def _element_to_component(elem: etree._Element, component_index: int) -> dict | None:
+def _element_to_component(
+    elem: etree._Element,
+    component_index: int,
+    *,
+    parent_component_id: str | None = None,
+) -> dict | None:
     if elem.tag in SKIP_TAGS:
         return None
 
@@ -247,30 +411,88 @@ def _element_to_component(elem: etree._Element, component_index: int) -> dict | 
         else:
             return None
 
+    resource_id = _normalize_string(elem.get("resource-id") or elem.get("resource_id"))
+    input_type = _get_input_type(elem)
+
     return {
         "component_id": f"c_{component_index:03d}",
         "class": class_name,
         "text": _get_text(elem),
         "content_desc": _get_content_desc(elem),
         "hint": _get_hint(elem),
-        "resource_id": _normalize_string(elem.get("resource-id") or elem.get("resource_id")),
+        "resource_id": resource_id,
         "clickable": _parse_bool(elem.get("clickable")),
         "enabled": _parse_bool(elem.get("enabled"), default=True),
         "focusable": _parse_bool(elem.get("focusable")),
         "bounds": bounds,
+        "focus_order": component_index,
+        "parent_id": parent_component_id or "",
+        "long_clickable": _parse_bool(elem.get("long-clickable") or elem.get("longClickable")),
+        "scrollable": _parse_bool(elem.get("scrollable")),
+        "selected": _parse_bool(elem.get("selected")),
+        "checked": _parse_bool(elem.get("checked")),
+        "password": _is_password_input(elem, input_type),
+        "text_all_caps": _parse_bool(
+            elem.get("textAllCaps") or elem.get("text-all-caps") or elem.get("android:textAllCaps")
+        ),
+        "input_type": input_type,
+        "important_for_accessibility": _get_important_for_accessibility(elem),
+        "media_type": _infer_media_type(class_name, resource_id),
+        "is_dialog": _is_dialog_class(class_name),
+        "label_for": _get_label_for(elem),
+        "text_size_sp": _get_text_size_sp(elem),
+        "text_color": _get_text_color(elem),
+        "background_color": _get_background_color(elem),
+        "visible": _is_visible(elem),
     }
+
+
+def _walk_xml_tree(
+    elem: etree._Element,
+    components: list[dict],
+    component_index: int,
+    parent_component_id: str | None,
+) -> int:
+    """Depth-first walk that preserves parent links and document order."""
+    component = _element_to_component(
+        elem,
+        component_index,
+        parent_component_id=parent_component_id,
+    )
+    current_parent_id = parent_component_id
+    if component is not None:
+        components.append(component)
+        current_parent_id = component["component_id"]
+        component_index += 1
+
+    for child in elem:
+        if child.tag == "wrapper":
+            # MASC nests real widgets inside <wrapper> blocks; descend without
+            # emitting a component for the wrapper itself.
+            component_index = _walk_xml_tree(
+                child,
+                components,
+                component_index,
+                current_parent_id,
+            )
+            continue
+        if child.tag in SKIP_TAGS:
+            continue
+        component_index = _walk_xml_tree(
+            child,
+            components,
+            component_index,
+            current_parent_id,
+        )
+    return component_index
 
 
 def parse_xml_tree(root: etree._Element) -> list[dict]:
     """Hybrid parser: UIAutomator, MASC, Rico, and generic layout XML in one pass."""
     components: list[dict] = []
-    component_index = 1
-    for elem in root.iter():
-        component = _element_to_component(elem, component_index)
-        if component is None:
-            continue
-        components.append(component)
-        component_index += 1
+    _walk_xml_tree(root, components, 1, None)
+    for index, component in enumerate(components, start=1):
+        component["focus_order"] = index
     return components
 
 
@@ -370,13 +592,24 @@ def _parsed_output_path(xml_path: Path, output_dir: Path, dataset_root: Path | N
     return category_dir / f"{xml_path.stem}_components.json"
 
 
-def _extract_device_info(root: etree._Element) -> dict:
+def _extract_device_info(root: etree._Element, components: list[dict] | None = None) -> dict:
     """Extract screen density and dimensions from the XML root element's attributes.
 
-    Input: root - the top-level parsed XML element (e.g. <hierarchy>).
+    Input: root - the top-level parsed XML element (e.g. <hierarchy>); components -
+        already-parsed component dicts for this screen, used as a fallback for
+        width/height when the root element itself carries no bounds (see below).
     Output: {"dpi": int, "width_px": int, "height_px": int}. Falls back to
-        DEFAULT_DENSITY_DPI and 0x0 dimensions when the XML carries no such
-        metadata, which is true for standard UIAutomator dumps (TBD-03).
+        DEFAULT_DENSITY_DPI when the XML carries no density metadata, which is
+        true for standard UIAutomator dumps (TBD-03).
+
+    Width/height fallback: neither UIAutomator's <hierarchy> root nor MASC's
+    <hierarchy> root ever carries a `bounds` attribute directly (MASC puts the
+    real screen extent on a descendant DecorView's `wrapper` block instead), so
+    root.get("bounds") is always None in practice and width_px/height_px used
+    to silently stay 0. Since R24 (missing screen title) needs a real screen
+    height to define a "toolbar/title region", this falls back to the union of
+    all parsed components' bounds (the furthest right/bottom edge seen), which
+    in practice equals the root container's full-screen bounds.
     """
     dpi_raw = root.get("density") or root.get("android:density")
     try:
@@ -390,6 +623,9 @@ def _extract_device_info(root: etree._Element) -> dict:
         left, top, right, bottom = root_bounds
         width_px = max(0, right - left)
         height_px = max(0, bottom - top)
+    elif components:
+        width_px = max((component["bounds"][2] for component in components), default=0)
+        height_px = max((component["bounds"][3] for component in components), default=0)
 
     return {"dpi": dpi, "width_px": width_px, "height_px": height_px}
 
@@ -403,12 +639,13 @@ def build_screen_document(
     xml_root_dir = xml_root_dir.resolve()
     screen_id = _build_screen_id(xml_path, xml_root_dir)
     tree_root = _read_xml_root(xml_path)
+    components = parse_xml_tree(tree_root)
     return build_components_document(
         screen_id=screen_id,
         image_path=infer_image_path(xml_path) if dataset_root is None else _screenshot_path(xml_path, dataset_root),
         xml_path=_xml_relative_path(xml_path, dataset_root),
-        components=parse_xml_tree(tree_root),
-        device_info=_extract_device_info(tree_root),
+        components=components,
+        device_info=_extract_device_info(tree_root, components),
     )
 
 

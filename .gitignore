@@ -27,36 +27,38 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Generic runtime uploads / outputs (not for Git)
-data/parsed/
-data/xml/
-data/screenshots/
-outputs/*
-# Week 3 validation logs are a tracked deliverable; outputs/violations/ and
-# outputs/reports/ remain regenerable pipeline artifacts and stay ignored.
-!outputs/validation_logs/
-!outputs/validation_logs/**
-
-# Raw Rico source corpus (local only)
-data/final_rico/
-
-# MASC — ignore raw dataset; track parser output & splits only (on azeem branch)
-data/data-masc/*
-!data/data-masc/parsed/
-!data/data-masc/parsed/**
-!data/data-masc/splits/
-!data/data-masc/splits/**
-
-# Rico holdout — ignore raw dataset; track parser output + manifest metadata only
-data/data-rico-holdout/*
-!data/data-rico-holdout/parsed/
-!data/data-rico-holdout/parsed/**
-!data/data-rico-holdout/manifest/
-!data/data-rico-holdout/manifest/*.csv
-!data/data-rico-holdout/manifest/*.json
-data/data-rico-holdout/manifest/_sheet_thumbs/
-data/data-rico-holdout/manifest/category_sheets/
-data/data-rico-holdout/manifest/google_sheets/
-data/data-rico-holdout/manifest/*.xlsx
-
+# Document files
 PROJECT_EXPLAINED.md
+
+# ==========================================
+# Core Folder Ignores
+# ==========================================
+data/
+outputs/
+
+# ==========================================
+# Exceptions (Files you WANT to track)
+# ==========================================
+
+# # 1. Week 3 validation logs are tracked deliverables
+# !outputs/validation_logs/
+# !outputs/validation_logs/**
+
+# # 2. MASC — Track parser output & splits only
+# !data/data-masc/parsed/
+# !data/data-masc/parsed/**
+# !data/data-masc/splits/
+# !data/data-masc/splits/**
+
+# # 3. Rico holdout — Track parser output + manifest metadata
+# !data/data-rico-holdout/parsed/
+# !data/data-rico-holdout/parsed/**
+# !data/data-rico-holdout/manifest/
+# !data/data-rico-holdout/manifest/*.csv
+# !data/data-rico-holdout/manifest/*.json
+
+# # Explicitly re-ignore specific subfolders inside manifest
+# data/data-rico-holdout/manifest/_sheet_thumbs/
+# data/data-rico-holdout/manifest/category_sheets/
+# data/data-rico-holdout/manifest/google_sheets/
+# data/data-rico-holdout/manifest/*.xlsx

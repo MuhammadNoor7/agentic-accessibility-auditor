@@ -172,6 +172,16 @@
         "violations": {
           "type": "array",
           "items": { "$ref": "#/definitions/violation" }
+        },
+        "component_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total parsed components before the visibility filter in check() (diagnostic only)."
+        },
+        "hidden_component_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "How many of component_count were excluded as hidden (visibility=gone / visible-to-user=False) before rules ran."
         }
       },
       "additionalProperties": false

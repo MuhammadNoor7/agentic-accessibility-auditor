@@ -58,8 +58,8 @@ Resolves **TBD-03** (the rule checker previously always assumed 160dpi with no w
 | Field | Required | Type | Description |
 |-------|----------|------|-------------|
 | `dpi` | Optional (defaults to `160`) | integer | Screen density in dots-per-inch. Read from the XML root's `density`/`android:density` attribute when present; most UIAutomator dumps don't carry this, so `160` is the common case. Used by R04 (small touch target) to convert bounds from px to dp. |
-| `width_px` | Optional (defaults to `0`) | integer | Screen width in pixels, read from the XML root's `bounds` attribute when present. |
-| `height_px` | Optional (defaults to `0`) | integer | Screen height in pixels, read from the XML root's `bounds` attribute when present. |
+| `width_px` | Optional (defaults to `0`) | integer | Screen width in pixels. Read from the XML root's `bounds` attribute when present (rare — neither UIAutomator's nor MASC's `<hierarchy>` root carries one in practice); otherwise falls back to the furthest right edge across all parsed components. |
+| `height_px` | Optional (defaults to `0`) | integer | Screen height in pixels, same source/fallback as `width_px` (furthest bottom edge). Used by R24 (missing screen title) to define the toolbar/title region as the screen's top ~12%. |
 
 ### Per component (`components[]`)
 
@@ -75,6 +75,7 @@ Resolves **TBD-03** (the rule checker previously always assumed 160dpi with no w
 | `enabled` | **Yes** | boolean | Whether the element is enabled |
 | `focusable` | **Yes** | boolean | Whether the element is focusable |
 | `bounds` | **Yes** | `[int,int,int,int]` | `[left, top, right, bottom]` in pixels |
+| `visible` | Optional | boolean | `False` when the source XML marks the element `visibility="gone"` or `visible-to-user="False"` (MASC only — real UIAutomator dumps don't carry this signal, so it defaults to `True`). `check()` filters out `visible=False` components before any rule runs — see `component_count`/`hidden_component_count` in `violations.json` below. |
 
 **Bounds note:** Format is `[x1, y1, x2, y2]` to check touch target size (R04), detect overlap (R08), measure spacing (R17), and draw bounding boxes in reports.
 
@@ -92,6 +93,8 @@ Resolves **TBD-03** (the rule checker previously always assumed 160dpi with no w
 | `xml_path` | **Yes** | string | Same XML as components file |
 | `total_violations` | **Yes** | integer | Must equal `violations.length` |
 | `violations` | **Yes** | array | Detected issues (may be empty) |
+| `component_count` | Optional | integer | Total parsed components before the visibility filter in `check()` (diagnostic only). |
+| `hidden_component_count` | Optional | integer | How many of `component_count` were excluded as hidden (`visibility="gone"` / `visible-to-user="False"`) before any rule ran. `component_count - hidden_component_count` == the number of components rules actually saw. |
 
 ### Per violation (`violations[]`)
 

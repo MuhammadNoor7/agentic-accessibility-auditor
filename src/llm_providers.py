@@ -120,17 +120,19 @@ def _call_openai(system: str, user: str, model: str, max_tokens: int) -> str:
 
 
 def _call_gemini(system: str, user: str, model: str, max_tokens: int) -> str:
-    import google.generativeai as genai
+    from google import genai
+    from google.genai import types
 
     api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-    genai.configure(api_key=api_key)
-    client = genai.GenerativeModel(model_name=model, system_instruction=system)
-    response = client.generate_content(
-        user,
-        generation_config={
-            "max_output_tokens": max_tokens,
-            "response_mime_type": "application/json",
-        },
+    client = genai.Client(api_key=api_key)
+    response = client.models.generate_content(
+        model=model,
+        contents=user,
+        config=types.GenerateContentConfig(
+            system_instruction=system,
+            max_output_tokens=max_tokens,
+            response_mime_type="application/json",
+        ),
     )
     return response.text or ""
 

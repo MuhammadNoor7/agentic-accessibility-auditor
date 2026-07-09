@@ -1,0 +1,236 @@
+
+
+##################################################################
+# RE-RUN 2026-07-09
+##################################################################
+
+==================================================================
+NOOR WEEK 4 VALIDATION LOG (R01-R30 + agent report API)
+Branch: noor   Date: 2026-07-09
+Owner: Muhammad Noor - agent wiring + report API + explainer layer
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_parser.py
+------------------------------------------------------------------
+..........                                                               [100%]
+10 passed in 0.06s
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_rules.py (R01-R30)
+------------------------------------------------------------------
+.........................................................                [100%]
+57 passed in 0.19s
+
+------------------------------------------------------------------
+STEP 3: pytest tests/test_agent.py
+------------------------------------------------------------------
+..                                                                       [100%]
+2 passed in 0.03s
+
+------------------------------------------------------------------
+STEP 4: pytest tests/test_audit.py
+------------------------------------------------------------------
+....                                                                     [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+4 passed, 1 warning in 0.67s
+
+------------------------------------------------------------------
+STEP 4b: pytest tests/test_explainer.py
+------------------------------------------------------------------
+.....................                                                    [100%]
+21 passed in 0.06s
+
+------------------------------------------------------------------
+STEP 4c: pytest tests/ (full suite)
+------------------------------------------------------------------
+........................................................................ [ 76%]
+......................                                                   [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+94 passed, 1 warning in 0.74s
+
+------------------------------------------------------------------
+STEP 4d: python test_run.py R01 fixture (parse + rules -> violations.json)
+------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\internship\_noor_push\test_run.py", line 200, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "D:\internship\_noor_push\test_run.py", line 186, in main
+    return run_single(args.xml_file, skip_rules=args.skip_rules)
+  File "D:\internship\_noor_push\test_run.py", line 135, in run_single
+    doc = parse_xml_file(xml_path, output_root, xml_root, dataset_root)
+  File "D:\internship\_noor_push\src\parser.py", line 658, in parse_xml_file
+    payload = build_screen_document(xml_path, xml_root_dir, dataset_root)
+  File "D:\internship\_noor_push\src\parser.py", line 645, in build_screen_document
+    image_path=infer_image_path(xml_path) if dataset_root is None else _screenshot_path(xml_path, dataset_root),
+                                                                       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\internship\_noor_push\src\parser.py", line 563, in _screenshot_path
+    screenshot = _find_screenshot_file(xml_path, dataset_root)
+  File "D:\internship\_noor_push\src\parser.py", line 547, in _find_screenshot_file
+    relative_xml = xml_path.resolve().relative_to((dataset_root / "xml").resolve())
+  File "C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\pathlib\_local.py", line 385, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: 'D:\\internship\\_noor_push\\tests\\fixtures\\rules\\r01_missing_label_fail.xml' is not in the subpath of 'D:\\internship\\agentic-accessibility-auditor\\data\\data-masc\\xml'
+EXIT CODE: 1
+
+------------------------------------------------------------------
+STEP 5: LLM provider SDK import check (lazy imports in llm_providers.py)
+------------------------------------------------------------------
+anthropic: PASS
+openai: PASS
+google-genai: PASS
+groq: PASS
+
+------------------------------------------------------------------
+STEP 6: Live API smoke (parse -> rules -> report, template mode)
+------------------------------------------------------------------
+POST /api/v1/audit?use_llm=false 202 {'audit_id': 'dde9158e-6ca2-40d4-b8a7-1d2418b3e70f', 'status': 'complete'}
+GET /status 200 {'audit_id': 'dde9158e-6ca2-40d4-b8a7-1d2418b3e70f', 'status': 'complete', 'message': 'Pipeline finished'}
+GET /violations total= 1 rule_ids= ['R01']
+GET /report 200 enrichment_mode= template
+accessibility_score= 90
+agent_fields_present= True
+GET /health 200 {'status': 'healthy'}
+
+------------------------------------------------------------------
+STEP 7: CLI vs API cross-check (R01 fixture violations + report)
+------------------------------------------------------------------
+CLI total_violations: 1
+API total_violations: 1
+CLI rule_ids: ['R01']
+API rule_ids: ['R01']
+MATCH count: True
+MATCH rules: True
+Report enrichment_mode: template
+Report score: 90
+Report issues: 1
+
+------------------------------------------------------------------
+STEP 8: python scripts/validate_output.py
+------------------------------------------------------------------
+PASS [components.json] 1054_components.json
+PASS [components.json] 10560_components.json
+PASS [components.json] 11382_components.json
+PASS [components.json] 11389_components.json
+PASS [components.json] 11390_components.json
+PASS [components.json] 10055_components.json
+PASS [components.json] 10103_components.json
+PASS [components.json] 102_components.json
+PASS [components.json] 103_components.json
+PASS [components.json] 1054_components.json
+PASS [components.json] r01_missing_label_fail_components.json
+PASS [violations.json] 1054_violations.json
+PASS [violations.json] chat_10055_violations.json
+PASS [violations.json] chat_10103_violations.json
+PASS [violations.json] chat_102_violations.json
+PASS [violations.json] chat_103_violations.json
+
+Validated 16 file(s); 16 passed schema checks.
+
+------------------------------------------------------------------
+STEP 9: MASC rule scan R01-R30 (random 20 screens + full counts)
+------------------------------------------------------------------
+MASC screens scanned: 7069
+
+Rule | Violations | Screens (>=1 hit)
+R01 |   60112 |  6185
+R02 |   11123 |  2788
+R03 |   12578 |  1901
+R04 |     739 |   408
+R05 |    3797 |  1591
+R06 |    1448 |   865
+R07 |  266393 |  7051
+R08 |   75718 |  3699
+R09 |       0 |     0
+R10 |      24 |    21
+R11 |    3276 |   940
+R12 |      79 |    40
+R13 |    1055 |   118
+R14 |    1873 |   667
+R15 |    3860 |  3860
+R16 |     130 |   115
+R17 |    9327 |  1697
+R18 |   13529 |  3945
+R19 |     758 |   416
+R20 |       0 |     0
+R21 |     313 |   167
+R22 |       0 |     0
+R23 |     582 |   302
+R24 |     526 |   526
+R25 |      34 |    23
+R26 |      16 |    11
+R27 |       8 |     8
+R28 |       0 |     0
+R29 |       0 |     0
+R30 |   11265 |  2818
+
+Rules with ZERO hits on full MASC: R09, R20, R22, R28, R29
+
+Random sample (20 screens) violation totals:
+  - data/data-masc/parsed/chat/26876_components.json
+  - data/data-masc/parsed/chat/3429_components.json
+  - data/data-masc/parsed/chat/48307_components.json
+  - data/data-masc/parsed/home/34337_components.json
+  - data/data-masc/parsed/home/47053_components.json
+  - data/data-masc/parsed/list/18651_components.json
+  - data/data-masc/parsed/list/3956_components.json
+  - data/data-masc/parsed/login/21578_components.json
+  - data/data-masc/parsed/login/37060_components.json
+  - data/data-masc/parsed/maps/41765_components.json
+  - data/data-masc/parsed/maps/52335_components.json
+  - data/data-masc/parsed/menu/20538_components.json
+  - data/data-masc/parsed/profile/14500_components.json
+  - data/data-masc/parsed/search/11359_components.json
+  - data/data-masc/parsed/search/26457_components.json
+  - data/data-masc/parsed/search/40581_components.json
+  - data/data-masc/parsed/settings/35185_components.json
+  - data/data-masc/parsed/settings/62574_components.json
+  - data/data-masc/parsed/settings/69539_components.json
+  - data/data-masc/parsed/welcome/57577_components.json
+
+  R01: 164
+  R02: 22
+  R03: 15
+  R04: 1
+  R05: 10
+  R06: 4
+  R07: 599
+  R08: 95
+  R11: 18
+  R14: 3
+  R15: 10
+  R17: 33
+  R18: 32
+  R19: 1
+  R23: 1
+  R30: 22
+
+------------------------------------------------------------------
+STEP 11: Direct schema validation - R01 violations.json + report.json
+------------------------------------------------------------------
+Violations file: outputs\violations\r01_missing_label_fail_violations.json
+total_violations: 1
+Schema: FAIL (1 error(s))
+Report file: outputs\reports\r01_missing_label_fail_report.json
+enrichment_mode: template
+Schema: FAIL (1 error(s))
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS (94 tests)
+Agent report API: PASS (template mode, GET /report -> 200)
+Explainer unit tests: PASS (mocked LLM, anti-hallucination)
+MASC R01-R30 scan: see STEP 9
+validate_output.py: run in STEP 8

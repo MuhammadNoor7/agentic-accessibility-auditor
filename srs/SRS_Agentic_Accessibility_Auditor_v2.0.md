@@ -826,11 +826,11 @@ Minimum API contract for Axion ↔ FastAPI (normative OpenAPI in SDS):
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/health` | Health check |
-| POST | `/api/v1/audit` | Upload XML; returns `{ audit_id, status }` (**Week 3 implemented**) |
-| GET | `/api/v1/audit/{audit_id}/status` | Pipeline status: `pending`, `parsing`, `checking`, `complete`, `error` |
+| POST | `/api/v1/audit` | Upload XML; returns `{ audit_id, status }` (**Week 3–4 implemented**; optional `use_llm` query) |
+| GET | `/api/v1/audit/{audit_id}/status` | Pipeline status: `pending`, `parsing`, `checking`, `explaining`, `complete`, `error` |
 | GET | `/api/v1/audit/{audit_id}/violations` | Returns violations JSON (**Week 3 implemented**) |
-| GET | `/api/v1/audit/{audit_id}/report` | Returns report JSON (**Week 4+ — not yet implemented**) |
-| GET | `/api/v1/audit/{audit_id}/report/download?format=html\|pdf` | File download (**Week 4+ — not yet implemented**) |
+| GET | `/api/v1/audit/{audit_id}/report` | Returns report JSON with score + agent fields (**Week 4 implemented**; template or live LLM) |
+| GET | `/api/v1/audit/{audit_id}/report/download?format=html\|pdf` | File download (**Week 5+ — not yet implemented**) |
 | POST | `/api/v1/audit/batch` | Batch run over server-side dataset path (**Should**) |
 | POST | `/api/v1/auth/signup` | Register account (**Must**) |
 | POST | `/api/v1/auth/login` | Login → JWT (**Must**) |
@@ -961,12 +961,13 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 | FR-IN.1 | Accept screenshot + XML | Must | §4.1 | Ayesha | Pending |
 | FR-IN.2 | Validate pair screen ID | Must | §4.1 | Salar | Pending |
 | FR-PS.1 | Extract XML attributes | Must | §4.2 | Salar | **Done** |
-| FR-RU.1–10 | Rules R01–R10 | Must | §4.3 | Salar | Planned |
-| FR-AG.1–7 | Agent explanations | Must | §4.5 | Noor | Planned |
+| FR-RU.1–10 | Rules R01–R10 | Must | §4.3 | Salar | **Done** |
+| FR-RU.11–30 | Rules R11–R30 | Should/Stretch | §4.3 | Team | **Done** (R09/R28 limited without colors/text-size) |
+| FR-AG.1–7 | Agent explanations | Must | §4.5 | Noor | **Done** (API-wired; template + LLM) |
 | FR-RP.1–2 | HTML/PDF reports | Must | §4.6 | Noor | Planned |
-| FR-UI.10–17 | Upload + modals | Must | §3.1 | Ayesha | In Progress |
-| FR-UI.20–27 | Dashboard + drawer | Must | §3.1 | Ayesha | In Progress |
-| FR-UI.30–35 | Report screen + modal + PDF | Must | §3.1 | Ayesha | In Progress |
+| FR-UI.10–17 | Upload + modals | Must | §3.1 | Ayesha | In Progress (UI scaffold; not API-wired) |
+| FR-UI.20–27 | Dashboard + drawer | Must | §3.1 | Ayesha | In Progress (mock data) |
+| FR-UI.30–35 | Report screen + modal + PDF | Must | §3.1 | Ayesha | In Progress (mock data) |
 | FR-UI.40–45 | Records page | Must | §3.1 | Ayesha | Planned |
 | FR-AUTH.1–5 | Authentication | Must | §4.9 | Ayesha / Salar | Planned |
 | FR-REC.1–4 | Records storage | Must | §4.9 | Salar / Ayesha | Planned |
@@ -1002,7 +1003,7 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 
 | ID | Description | Expected resolution |
 |----|-------------|---------------------|
-| TBD-01 | Final LLM model (GPT-4o vs GPT-4o-mini) based on cost | Week 1 |
+| TBD-01 | Final LLM model / provider (cost vs quality) | Week 4 — **Open** (Noor + Ayesha; resolve via prompt experiments) |
 | TBD-02 | Accessibility score formula (0–100) | Week 2 / SDS |
 | TBD-03 | dp/density strategy for R04 on static XML without ADB metadata | Week 2 |
 | TBD-04 | Screenshot storage for deployed demo (local vs cloud) | Week 2 |

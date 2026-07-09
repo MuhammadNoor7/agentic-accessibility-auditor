@@ -3,7 +3,7 @@
 Automated accessibility auditing for **Android mobile UIs**.  
 Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `components.json`, rule-based `violations.json`, LLM-enriched explanations, and HTML/PDF reports mapped to **G01–G30** guidelines and **R01–R30** detection rules.
 
-**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — parser + rules through **R20**, MASC re-parse, validation logs, React UI scaffold, partial FastAPI audit API (6 Jul 2026).
+**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — parser + rules **R01–R30**, agent report API, React UI scaffold (mock data), **94 pytest** (9 Jul 2026).
 
 ---
 
@@ -11,9 +11,9 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 | Intern | Branch | Focus |
 |--------|--------|-------|
-| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | Data, hybrid XML parser, rule checker (R01–R10), Docker |
+| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | Data, hybrid XML parser, rule checker, Docker, Stage 3 explainer |
 | **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | JSON schemas, Figma, React dashboard (auth + app pages) |
-| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | R13–R20 rules, LLM agent, reports, API, QA, coordination |
+| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | Agent/API wiring, reports, QA, coordination, R13–R30 ownership |
 
 ---
 
@@ -22,7 +22,7 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 | Document | Path |
 |----------|------|
 | **SRS v2.0** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.0.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.md) |
-| **SDS v2.1** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) |
+| **SDS v2.2** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) |
 | **8-week plan** | [`updated_plan.md`](updated_plan.md) · [`docs/updated_plan_v2.0.docx`](docs/updated_plan_v2.0.docx) |
 | **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) (+ formatted DOCX in same folder) |
 | **Figma screenshots** | `docs/assets/figma/` |
@@ -31,7 +31,7 @@ Formatted Word exports live in `srs/`, `sds/`, and `docs/progress/`.
 
 ---
 
-## Pipeline status (`noor`, 6 Jul 2026)
+## Pipeline status (`noor`, 9 Jul 2026)
 
 ```
 Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
@@ -41,14 +41,16 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 
 | Stage | Owner | Output | Status |
 |-------|-------|--------|--------|
-| 1 — Parser | Salar / Noor | `components.json` | **Done** — 7,068 MASC screens; R13–R20 extended fields |
-| 2 — Rules | Salar / Noor | `violations.json` | **R01–R20** in `check()`; R09 needs screenshot; R11 stub |
-| 3 — Agent | Noor | enriched `report.json` | **Scaffold** — `src/agent.py` (not API-wired) |
-| 4 — Report | Noor | HTML/PDF | Planned |
-| UI — Axion | Ayesha | React dashboard | **Scaffold** — `frontend/` (no API calls yet) |
-| API | Noor | FastAPI | **Partial** — violations-only audit routes |
+| 1 — Parser | Salar / Noor | `components.json` | **Done** — 7,068 MASC screens; R13–R20 fields + visibility |
+| 2 — Rules | Salar / Noor | `violations.json` | **R01–R30** in `check()`; R09/R28 limited without colors/text-size |
+| 3 — Agent | Noor / Salar | enriched `report.json` | **Done** — `GET /api/v1/audit/{id}/report` (template or live LLM) |
+| 4 — Report | Noor | HTML/PDF | Planned (`src/report.py`) |
+| UI — Axion | Ayesha | React dashboard | **Scaffold** — `frontend/` (mock data; not API-wired) |
+| API | Noor | FastAPI | **Partial** — violations + report; no auth/records/download |
 
-**MASC sign-off (Jul 2026):** 640,563 components · 462,542 violations (R01–R20) · 0 parse errors — see `data/data-masc/parsed/masc_parse_signoff_report.json`.
+**MASC sign-off (Jul 2026):** 640,563 components · 462,542 violations (R01–R20 baseline) · 0 parse errors — see `data/data-masc/parsed/masc_parse_signoff_report.json`.
+
+**Demo (no live LLM):** `uvicorn backend.main:app --reload --port 8000` then `POST /api/v1/audit?use_llm=false` with an XML fixture → `GET …/report`.
 
 ---
 
@@ -59,33 +61,43 @@ agentic-accessibility-auditor/
 ├── app.py                  # Streamlit: upload XML + violations preview
 ├── test_run.py             # CLI batch parse + rules
 ├── requirements.txt
+├── .env.example            # LLM_PROVIDER + API keys
 ├── conftest.py
 │
 ├── src/
-│   ├── parser.py           # Hybrid XML → components.json (R13–R20 fields)
-│   ├── rules.py            # R01–R20 rule checker
-│   ├── agent.py            # Agent scaffold / score formula
+│   ├── parser.py           # Hybrid XML → components.json
+│   ├── rules.py            # R01–R30 rule checker
+│   ├── agent.py            # Score + build_audit_report (API-wired)
+│   ├── explainer.py        # Live LLM recommendations
+│   ├── guidelines.py       # G01–G30 + R→G mapping
+│   ├── llm_providers.py    # Anthropic / OpenAI / Gemini / Groq
 │   └── schema_documents.py
 │
 ├── backend/                # FastAPI gateway
 │   ├── main.py
-│   └── routers/audit.py    # POST /api/v1/audit → GET …/violations
+│   └── routers/audit.py    # POST /audit → GET …/violations + …/report
 │
-├── frontend/               # Axion React UI (Vite + React 19 + Tailwind 4)
+├── frontend/               # Axion React UI (Vite + React 19 + Tailwind 4; mock data)
 │
-├── tests/                  # 38 pytest (parser, rules, agent, audit API)
+├── tests/                  # 94 pytest (parser, rules, agent, audit, explainer)
 │   ├── test_parser.py
 │   ├── test_rules.py
 │   ├── test_agent.py
 │   ├── test_audit.py
+│   ├── test_explainer.py
 │   └── fixtures/rules/
 │
 ├── scripts/
-│   ├── validate_output.py          # JSON Schema spot-check
-│   ├── noor_week3_validate.py      # Full QA pipeline (re-parse + pytest + MASC scan)
-│   ├── masc_parse_signoff.py       # Parse sign-off + R13–R20 counts
+│   ├── validate_output.py
+│   ├── noor_week3_validate.py
+│   ├── masc_parse_signoff.py
+│   ├── run_explainer_sample.py
+│   ├── compare_visibility_filter_impact.py
 │   ├── split_masc_dataset.py
 │   └── build_rico_holdout.py
+│
+├── notebooks/
+│   └── masc_dataset_analysis.ipynb
 │
 ├── data/
 │   ├── data-masc/          # 7,068 screens — parsed JSON tracked on noor
@@ -94,12 +106,13 @@ agentic-accessibility-auditor/
 │   └── final_rico/
 │
 ├── outputs/
-│   ├── violations/         # Stage 2 outputs (mostly gitignored)
+│   ├── violations/         # Stage 2 outputs
+│   ├── reports/            # Stage 3 report.json (Week 4)
 │   └── validation_logs/    # week3 + noor_week3 + masc_reparse logs
 │
 ├── docs/                   # Schemas, guidelines, QA plan, progress report
 ├── srs/                    # SRS v2.0
-└── sds/                    # SDS v2.1
+└── sds/                    # SDS v2.2
 ```
 
 ### Where parser output goes

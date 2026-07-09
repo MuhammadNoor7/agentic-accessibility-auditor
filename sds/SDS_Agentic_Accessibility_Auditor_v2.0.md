@@ -5,7 +5,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Document version** | 2.0 |
+| **Document version** | 2.2 |
 | **Status** | Implementation reference |
 | **Prepared by** | Muhammad Noor (Lead), Salar (Parser/Rules/Docker), Ayesha (Frontend/Schemas) |
 | **Institution** | FAST-NUCES |
@@ -21,6 +21,7 @@
 | 1.0 | 2026 | Team | Initial SDS from merged SRS v1.x |
 | **2.0** | 2026 | Team | Aligned to SRS v2.0 with embedded Figma screenshots; auth, Records, Dashboard flows |
 | **2.1** | 2026-07-06 | Noor / Salar | Parser R13–R20 fields; rules R01–R20; MASC re-parse sign-off; audit API violations-only |
+| **2.2** | 2026-07-09 | Noor / Salar | Rules R01–R30; explainer + agent API wiring; `GET …/report`; visibility filter |
 
 ---
 
@@ -89,18 +90,18 @@ This document provides:
 
 | Module | Path | Owner | Status |
 |--------|------|-------|--------|
-| Hybrid XML parser | `src/parser.py` | Salar / Noor | **Done** (R13–R20 fields) |
+| Hybrid XML parser | `src/parser.py` | Salar / Noor | **Done** (R13–R20 fields + visibility) |
 | Schema helpers | `src/schema_documents.py` | Salar | **Done** |
 | JSON Schema | `docs/schemas/auditor_schema.json` | Ayesha / Noor | **Done** |
 | Validation scripts | `scripts/validate_output.py`, `scripts/noor_week3_validate.py`, `scripts/masc_parse_signoff.py` | Noor / Salar | **Done** |
-| FastAPI audit API | `backend/routers/audit.py` | Noor | **Partial** (violations-only; no report/agent) |
-| Rule engine | `src/rules.py` | Salar / Noor | **Done** (R01–R20; R11 stub; R09 needs screenshot) |
-| Agent layer | `src/agent.py` | Noor | **Partial** (score + template scaffold; not wired to API) |
+| FastAPI audit API | `backend/routers/audit.py` | Noor | **Partial** (violations + report; no auth/records/download) |
+| Rule engine | `src/rules.py` | Salar / Noor | **Done** (R01–R30; R09/R28 limited without colors/text-size) |
+| Agent layer | `src/agent.py`, `src/explainer.py`, `src/llm_providers.py` | Noor / Salar | **Done** (API-wired; template + live LLM) |
 | Report generator | `src/report.py` | Noor | Planned |
 | Auth service | `backend/services/auth.py` | Salar | Planned |
 | Records store | `backend/services/records.py` | Salar / Ayesha | Planned |
 | Axion React UI | `frontend/` | Ayesha | **Partial** (UI scaffold; no live API) |
-| Docker Compose | `docker-compose.yml` | Salar | **Partial** |
+| Docker Compose | `docker-compose.yml` | Salar | **Partial** (deferred on `noor`) |
 
 ---
 
@@ -244,7 +245,7 @@ Mirror XML path under `screenshots/` with same stem; try `.jpg`, `.jpeg`, `.png`
 
 ### 3.2 Rule engine module (`src/rules.py`)
 
-**SRS:** FR-RU.1–FR-RU.20 | **Owner:** Salar / Noor | **Status:** Implemented (R01–R20)
+**SRS:** FR-RU.1–FR-RU.30 | **Owner:** Salar / Noor | **Status:** Implemented (R01–R30)
 
 #### 3.2.1 Public API
 
@@ -253,22 +254,23 @@ Mirror XML path under `screenshots/` with same stem; try `.jpg`, `.jpeg`, `.png`
 | `check(components_json)` | `components.json` dict | `violations.json` dict |
 | `check_*` per rule | `list[dict]` components | `list[dict]` violations |
 
-Implementation uses plain functions (not a `RuleEngine` class). Entry point `check()` chains R01–R20 checkers, reads `device_info.dpi` for dp rules (R04, R17), and returns schema-shaped output.
+Implementation uses plain functions (not a `RuleEngine` class). Entry point `check()` filters hidden components (`visibility`), then chains R01–R30 checkers, reads `device_info.dpi` for dp rules (R04, R17, R28), and returns schema-shaped output.
 
 #### 3.2.2 Processing flow
 
 1. Load `components[]` and `device_info.dpi` (default 160)
-2. Run R01–R20 check functions in order
-3. Each violation includes denormalized `class`, `bounds`; pair rules add `related_component` (R03, R08, R17)
-4. Return dict with `total_violations == len(violations)`
+2. Drop components with `visibility=false` (MASC `gone` / `visible-to-user=False`)
+3. Run R01–R30 check functions in order
+4. Each violation includes denormalized `class`, `bounds`; pair rules add `related_component` (R03, R08, R17)
+5. Return dict with `total_violations == len(violations)` plus component/hidden counts
 
-#### 3.2.3 Rule status (Week 3+)
+#### 3.2.3 Rule status (Week 4)
 
 | Rules | Status |
 |-------|--------|
-| R01–R08, R10, R12–R20 | Implemented |
-| R09 | Implemented but inactive without screenshot `contrast_score` |
-| R11 | Documented stub (`check_color_only_info` returns `[]`; needs before/after or pixel diff) |
+| R01–R08, R10–R30 | Implemented |
+| R09 | Implemented when declared colors present; otherwise inactive |
+| R28 | Implemented when declared text size present; otherwise inactive |
 
 #### 3.2.4 dp conversion
 
@@ -290,22 +292,26 @@ Default `dpi = 160` when `device_info` absent (TBD-03).
 
 ---
 
-### 3.3 Agent module (`src/agent.py`)
+### 3.3 Agent module (`src/agent.py` + `src/explainer.py`)
 
-**SRS:** FR-AG.1–FR-AG.8 | **Owner:** Noor | **Status:** Partial (unit-tested scaffold; not in API pipeline)
+**SRS:** FR-AG.1–FR-AG.8 | **Owner:** Noor / Salar | **Status:** Done (API-wired Week 4)
 
 ```python
+def build_audit_report(
+    violations_doc: dict,
+    components_doc: dict | None = None,
+    *,
+    use_llm: bool | None = None,
+) -> dict: ...
+
 class AgenticEnricher:
-    def enrich(
-        self,
-        violations_doc: dict,
-        components_doc: dict,
-    ) -> dict: ...
+    def enrich(self, violations_doc: dict, components_doc: dict | None = None) -> dict: ...
 ```
 
-- One LLM call per violation (MVP)
-- JSON response: `agent_explanation`, `agent_why_it_matters`, `agent_developer_fix`
-- Fallback template on timeout
+- `build_audit_report()` produces `report.json` with `accessibility_score`, `summary`, and per-violation agent fields
+- Live path: `src/explainer.py` → `src/llm_providers.py` (Anthropic / OpenAI / Gemini / Groq), batched, anti-hallucination match
+- Fallback: template enrichment when no API key or `use_llm=false` (FR-AG.6)
+- Wired in `backend/routers/audit.py` → `GET /api/v1/audit/{id}/report`
 
 ---
 
@@ -487,11 +493,11 @@ Auth: `Authorization: Bearer <JWT>` (except auth endpoints)
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/audit` | Upload screenshot + XML; start pipeline |
-| GET | `/audit/{audit_id}/status` | Pipeline status |
-| GET | `/audit/{audit_id}/violations` | Violations JSON |
-| GET | `/audit/{audit_id}/report` | Report JSON |
-| GET | `/audit/{audit_id}/report/download?format=html\|pdf` | File download |
+| POST | `/audit` | Upload XML (multipart field `xml`); optional `use_llm` query; start pipeline |
+| GET | `/audit/{audit_id}/status` | Pipeline status (`pending` → `parsing` → `checking` → `explaining` → `complete`) |
+| GET | `/audit/{audit_id}/violations` | Violations JSON (**implemented**) |
+| GET | `/audit/{audit_id}/report` | Report JSON with score + agent fields (**implemented** Week 4) |
+| GET | `/audit/{audit_id}/report/download?format=html\|pdf` | File download (**planned** Week 5) |
 | POST | `/audit/batch` | Batch over dataset path (Should) |
 
 ### 5.3 Records endpoints
@@ -891,7 +897,7 @@ docker-compose up --build
 |-------|------|-------|
 | Unit | pytest | Parser (incl. MASC wrappers), R01–R20 |
 | Schema | `validate_output.py` | `components.json` / `violations.json` artefacts |
-| API | pytest + TestClient | Audit violations-only (`test_audit.py`) |
+| API | pytest + TestClient | Audit violations + report (`test_audit.py`) |
 | Integration | `noor_week3_validate.py`, `masc_parse_signoff.py` | Full MASC re-parse + R01–R20 scan |
 | E2E | Manual / Playwright | Axion upload → Records (planned) |
 | Evaluation | MASC train/val/test splits | 7,068 screens, sign-off JSON |
@@ -914,11 +920,12 @@ tests/test_agent.py        # score formula scaffold
 ### 13.2 Sign-off tests (from SRS §10)
 
 - TC-01: missing bounds → no crash
-- R01–R10 on controlled fail/pass fixtures
-- R13–R20 on controlled component dicts + MASC full-dataset scan
+- R01–R30 on controlled fail/pass fixtures
+- R13–R20 on controlled component dicts + MASC full-dataset scan (Week 3+)
 - `masc_parse_signoff_report.json` → PASS (7,068 screens, 0 extended-field misses)
 - API `POST /audit` → `GET .../violations` matches CLI on R01 fixture
-- `/report` returns 404 (violations-only API scope)
+- API `GET .../report` returns score + agent fields (`enrichment_mode`: `template` or `llm`)
+- Explainer unit tests mock LLM; anti-hallucination guard covered in `tests/test_explainer.py`
 
 ---
 
@@ -928,12 +935,12 @@ tests/test_agent.py        # score formula scaffold
 |-----------------|-------------|----------------|
 | FR-PS.1–9 | §3.1, §4 | `src/parser.py` |
 | FR-RU.1–20 | §3.2, §6 | `src/rules.py` |
-| FR-AG.1–8 | §7 | `src/agent.py` (scaffold) |
+| FR-AG.1–8 | §7 | `src/agent.py`, `src/explainer.py` (**Done**; API-wired) |
 | FR-RP.1–7 | §8 | `src/report.py` |
 | FR-UI.* | §9, Appendix D | `frontend/` |
 | FR-AUTH.* | §10.1, §5.1 | `backend/routers/auth.py` (planned) |
 | FR-REC.* | §10.2, §5.3 | `backend/services/records.py` (planned) |
-| Audit API (violations) | §5.2 | `backend/routers/audit.py` |
+| Audit API (violations + report) | §5.2 | `backend/routers/audit.py` |
 | FR-DK.* | §11 | `docker-compose.yml` |
 | NFR-1–20 | §2, §7, §11, §12 | Cross-cutting |
 | §8 JSON schemas | §4 | `auditor_schema.json` |
@@ -1032,22 +1039,27 @@ components:
 |------|------|
 | `src/parser.py` | Hybrid XML parser (**Done**) |
 | `src/schema_documents.py` | JSON envelope builders |
-| `src/rules.py` | Rule engine R01–R20 (**Done**; R11 stub) |
-| `src/agent.py` | LLM enricher scaffold (**Partial**) |
+| `src/rules.py` | Rule engine R01–R30 (**Done**; R09/R28 limited without colors/text-size) |
+| `src/agent.py` | Score + `build_audit_report` (**Done**; API-wired) |
+| `src/explainer.py` | Live LLM recommendations (**Done**) |
+| `src/llm_providers.py` | Multi-provider LLM client |
+| `src/guidelines.py` | G01–G30 + R→G mapping |
 | `src/report.py` | HTML/PDF generator (planned) |
 | `backend/main.py` | FastAPI entry |
-| `backend/routers/audit.py` | Violations-only audit API (**Partial**) |
+| `backend/routers/audit.py` | Violations + report audit API (**Partial** — no auth/records/download) |
 | `backend/routers/` | Auth, records (planned) |
 | `scripts/noor_week3_validate.py` | Full validation pipeline |
 | `scripts/masc_parse_signoff.py` | MASC parse sign-off |
+| `scripts/run_explainer_sample.py` | Stage 3 LLM sample runner |
 | `tests/test_parser.py` | Parser unit tests |
-| `tests/test_rules.py` | Rules R01–R20 unit tests |
-| `tests/test_audit.py` | Audit API tests |
-| `frontend/src/` | Axion React app (planned) |
+| `tests/test_rules.py` | Rules R01–R30 unit tests |
+| `tests/test_audit.py` | Audit API tests (violations + report) |
+| `tests/test_explainer.py` | Explainer anti-hallucination tests |
+| `frontend/src/` | Axion React app (**Partial** — mock data) |
 | `docs/schemas/auditor_schema.json` | Normative JSON Schema |
 | `docs/json_schemas.md` | Schema documentation |
-| `outputs/runs/` | Ephemeral audit runs |
-| `outputs/records/` | Per-user saved audits |
+| `outputs/reports/` | Agent-enriched `*_report.json` |
+| `outputs/records/` | Per-user saved audits (planned) |
 | `data/data-masc/` | Primary dataset |
 | `data/data-rico-holdout/` | Unseen evaluation |
 

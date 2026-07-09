@@ -257,12 +257,12 @@ Minimum policy:
 
 | ID | Decision | Owner | Suggested resolution |
 |----|----------|-------|---------------------|
-| TBD-01 | LLM/model choice (+ training strategy) | Noor + Ayesha | pick base model + tuning/prompt strategy by Week 4 |
-| TBD-02 | Score formula | Noor | SDS formula: 100 − weighted penalties |
+| TBD-01 | LLM/model choice (+ training strategy) | Noor + Ayesha | **Open** — pick base model + prompt strategy via Week 4 experiments |
+| TBD-02 | Score formula | Noor | **Resolved** — SDS formula: 100 − weighted penalties |
 | TBD-03 | dp/density for R04 | Salar | Assume 160 dpi; bounds as px for MVP |
 | TBD-05 | Severity UI mapping | All | High→Critical/Serious; Medium→Moderate; Low→Minor |
 | TBD-06 | Auth in MVP | **Resolved** | Must Have (SRS §4.9) |
-| Branch rename | `azeem` → `salar` | Salar | Week 3 |
+| Branch rename | `azeem` → `salar` | Salar | Done |
 
 ---
 

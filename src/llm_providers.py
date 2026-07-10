@@ -43,6 +43,20 @@ def _model_name(provider: str) -> str:
     return os.environ.get(env_key) or DEFAULT_MODELS.get(provider, "")
 
 
+def llm_configured() -> bool:
+    """Return True when the active LLM_PROVIDER has a non-empty API key set."""
+    provider = _provider_name()
+    if provider not in DEFAULT_MODELS:
+        return False
+    key_names = {
+        "anthropic": ("ANTHROPIC_API_KEY",),
+        "openai": ("OPENAI_API_KEY",),
+        "gemini": ("GEMINI_API_KEY", "GOOGLE_API_KEY"),
+        "groq": ("GROQ_API_KEY",),
+    }
+    return any(os.environ.get(name, "").strip() for name in key_names.get(provider, ()))
+
+
 def call_llm(system: str, user: str, *, max_tokens: int = 4096) -> str:
     """Call the configured LLM provider and return its raw text response.
 
@@ -106,17 +120,19 @@ def _call_openai(system: str, user: str, model: str, max_tokens: int) -> str:
 
 
 def _call_gemini(system: str, user: str, model: str, max_tokens: int) -> str:
-    import google.generativeai as genai
+    from google import genai
+    from google.genai import types
 
     api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-    genai.configure(api_key=api_key)
-    client = genai.GenerativeModel(model_name=model, system_instruction=system)
-    response = client.generate_content(
-        user,
-        generation_config={
-            "max_output_tokens": max_tokens,
-            "response_mime_type": "application/json",
-        },
+    client = genai.Client(api_key=api_key)
+    response = client.models.generate_content(
+        model=model,
+        contents=user,
+        config=types.GenerateContentConfig(
+            system_instruction=system,
+            max_output_tokens=max_tokens,
+            response_mime_type="application/json",
+        ),
     )
     return response.text or ""
 

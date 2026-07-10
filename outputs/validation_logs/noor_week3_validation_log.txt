@@ -1,0 +1,1465 @@
+
+
+##################################################################
+# RE-RUN 2026-07-06
+##################################################################
+
+==================================================================
+NOOR WEEK 3+ VALIDATION LOG (R01-R20)
+Branch: noor   Date: 2026-07-06
+Owner: Muhammad Noor - parser extension + rules R13-R20 + API
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_parser.py
+------------------------------------------------------------------
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\internship\_noor_push
+plugins: anyio-4.10.0, langsmith-0.7.22
+collecting ... collected 2 items
+
+tests/test_parser.py::test_parser_emits_extended_fields_on_fixture PASSED [ 50%]
+tests/test_parser.py::test_parser_preserves_parent_id_hierarchy PASSED   [100%]
+
+============================== 2 passed in 0.04s ==============================
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_rules.py (R01-R20)
+------------------------------------------------------------------
+...............................                                          [100%]
+31 passed in 0.08s
+
+------------------------------------------------------------------
+STEP 3: pytest tests/test_agent.py
+------------------------------------------------------------------
+..                                                                       [100%]
+2 passed in 0.02s
+
+------------------------------------------------------------------
+STEP 4: pytest tests/test_audit.py
+------------------------------------------------------------------
+..                                                                       [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2 passed, 1 warning in 0.41s
+
+------------------------------------------------------------------
+STEP 4b: python test_run.py R01 fixture (parse + rules -> violations.json)
+------------------------------------------------------------------
+Parsed 2 component(s) from r01_missing_label_fail.xml
+screen_id:  r01_missing_label_fail
+image_path: tests/fixtures/screenshots/rules/r01_missing_label_fail.jpg
+xml_path:   tests/fixtures/rules/r01_missing_label_fail.xml
+written:    D:\internship\_noor_push\data\parsed\rules\r01_missing_label_fail_components.json
+violations: 1 found
+written:    D:\internship\_noor_push\outputs\violations\r01_missing_label_fail_violations.json
+
+------------------------------------------------------------------
+STEP 5: Parser extended fields (R13-R20 support) on R01 fixture
+------------------------------------------------------------------
+Components parsed: 2
+Sample component_id: c_001
+Extended fields present: 13/13
+All extended parser fields present: PASS
+Components with parent_id: 1
+
+------------------------------------------------------------------
+STEP 6: Live API smoke (TestClient - parse -> rules -> violations)
+------------------------------------------------------------------
+POST /api/v1/audit 202 {'audit_id': '8520ed3d-c344-4ecd-9a57-c5971a48b870', 'status': 'complete'}
+GET /status 200 {'audit_id': '8520ed3d-c344-4ecd-9a57-c5971a48b870', 'status': 'complete', 'message': 'Pipeline finished'}
+GET /violations total= 1 rule_ids= ['R01']
+GET /report (expect 404): 404
+GET /health 200 {'status': 'healthy'}
+
+------------------------------------------------------------------
+STEP 7: CLI vs API output cross-check (R01 fixture)
+------------------------------------------------------------------
+CLI total_violations: 1
+API total_violations: 1
+CLI rule_ids: ['R01']
+API rule_ids: ['R01']
+MATCH count: True
+MATCH rules: True
+
+------------------------------------------------------------------
+STEP 8: python scripts/validate_output.py
+------------------------------------------------------------------
+PASS [components.json] 1054_components.json
+PASS [components.json] 10560_components.json
+PASS [components.json] 11382_components.json
+PASS [components.json] 11389_components.json
+PASS [components.json] 11390_components.json
+PASS [components.json] 10055_components.json
+PASS [components.json] 10103_components.json
+PASS [components.json] 102_components.json
+PASS [components.json] 103_components.json
+PASS [components.json] 1054_components.json
+PASS [components.json] r01_missing_label_fail_components.json
+PASS [violations.json] 1054_violations.json
+PASS [violations.json] chat_10055_violations.json
+PASS [violations.json] chat_10103_violations.json
+PASS [violations.json] chat_102_violations.json
+PASS [violations.json] chat_103_violations.json
+
+Validated 16 file(s); 16 passed schema checks.
+
+------------------------------------------------------------------
+STEP 9: MASC rule scan R01-R20 (first 20 screens + full counts)
+------------------------------------------------------------------
+MASC screens scanned: 7068
+Stale components.json (pre-parser-extension): 7068
+
+Rule | Violations | Screens (>=1 hit)
+R01 |   60111 |  6184
+R02 |   11123 |  2788
+R03 |   12578 |  1901
+R04 |     739 |   408
+R05 |    3797 |  1591
+R06 |    1448 |   865
+R07 |  266393 |  7051
+R08 |   75718 |  3699
+R09 |       0 |     0
+R10 |      24 |    21
+R11 |       0 |     0
+R12 |      55 |    34
+R13 |    1055 |   118
+R14 |    1873 |   667
+R15 |    3860 |  3860
+R16 |     130 |   115
+R17 |    9327 |  1697
+R18 |      10 |     8
+R19 |     758 |   416
+R20 |       0 |     0
+
+Rules with ZERO hits on full MASC: R09, R11, R20
+
+Sample (20 screens) violation totals:
+  R01: 261
+  R02: 28
+  R03: 27
+  R04: 3
+  R05: 9
+  R06: 9
+  R07: 1130
+  R08: 271
+  R12: 2
+  R14: 9
+  R15: 14
+  R17: 37
+
+------------------------------------------------------------------
+STEP 11: Direct schema validation - R01 violations.json
+------------------------------------------------------------------
+File: outputs\violations\r01_missing_label_fail_violations.json
+total_violations: 1
+rule_ids: ['R01']
+Schema: PASS (0 error(s))
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Parser R13-R20 fields: PASS (when fixture XML present)
+Rules R01-R20: wired in check() - see MASC scan above
+API violations-only: PASS (R01 fixture)
+
+
+##################################################################
+# RE-RUN 2026-07-06
+##################################################################
+
+==================================================================
+NOOR WEEK 3+ VALIDATION LOG (R01-R20)
+Branch: noor   Date: 2026-07-06
+Owner: Muhammad Noor - parser extension + rules R13-R20 + API
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_parser.py
+------------------------------------------------------------------
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\internship\_noor_push
+plugins: anyio-4.10.0, langsmith-0.7.22
+collecting ... collected 2 items
+
+tests/test_parser.py::test_parser_emits_extended_fields_on_fixture PASSED [ 50%]
+tests/test_parser.py::test_parser_preserves_parent_id_hierarchy PASSED   [100%]
+
+============================== 2 passed in 0.03s ==============================
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_rules.py (R01-R20)
+------------------------------------------------------------------
+...............................                                          [100%]
+31 passed in 0.08s
+
+------------------------------------------------------------------
+STEP 3: pytest tests/test_agent.py
+------------------------------------------------------------------
+..                                                                       [100%]
+2 passed in 0.02s
+
+------------------------------------------------------------------
+STEP 4: pytest tests/test_audit.py
+------------------------------------------------------------------
+..                                                                       [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2 passed, 1 warning in 0.36s
+
+------------------------------------------------------------------
+STEP 4b: python test_run.py R01 fixture (parse + rules -> violations.json)
+------------------------------------------------------------------
+Parsed 2 component(s) from r01_missing_label_fail.xml
+screen_id:  r01_missing_label_fail
+image_path: tests/fixtures/screenshots/rules/r01_missing_label_fail.jpg
+xml_path:   tests/fixtures/rules/r01_missing_label_fail.xml
+written:    D:\internship\_noor_push\data\parsed\rules\r01_missing_label_fail_components.json
+violations: 1 found
+written:    D:\internship\_noor_push\outputs\violations\r01_missing_label_fail_violations.json
+
+------------------------------------------------------------------
+STEP 5: Parser extended fields (R13-R20 support) on R01 fixture
+------------------------------------------------------------------
+Components parsed: 2
+Sample component_id: c_001
+Extended fields present: 13/13
+All extended parser fields present: PASS
+Components with parent_id: 1
+
+------------------------------------------------------------------
+STEP 6: Live API smoke (TestClient - parse -> rules -> violations)
+------------------------------------------------------------------
+POST /api/v1/audit 202 {'audit_id': '0cac443b-65c2-419a-a426-8bd93f1e7368', 'status': 'complete'}
+GET /status 200 {'audit_id': '0cac443b-65c2-419a-a426-8bd93f1e7368', 'status': 'complete', 'message': 'Pipeline finished'}
+GET /violations total= 1 rule_ids= ['R01']
+GET /report (expect 404): 404
+GET /health 200 {'status': 'healthy'}
+
+------------------------------------------------------------------
+STEP 7: CLI vs API output cross-check (R01 fixture)
+------------------------------------------------------------------
+CLI total_violations: 1
+API total_violations: 1
+CLI rule_ids: ['R01']
+API rule_ids: ['R01']
+MATCH count: True
+MATCH rules: True
+
+------------------------------------------------------------------
+STEP 8: python scripts/validate_output.py
+------------------------------------------------------------------
+PASS [components.json] 1054_components.json
+PASS [components.json] 10560_components.json
+PASS [components.json] 11382_components.json
+PASS [components.json] 11389_components.json
+PASS [components.json] 11390_components.json
+PASS [components.json] 10055_components.json
+PASS [components.json] 10103_components.json
+PASS [components.json] 102_components.json
+PASS [components.json] 103_components.json
+PASS [components.json] 1054_components.json
+PASS [components.json] r01_missing_label_fail_components.json
+PASS [violations.json] 1054_violations.json
+PASS [violations.json] chat_10055_violations.json
+PASS [violations.json] chat_10103_violations.json
+PASS [violations.json] chat_102_violations.json
+PASS [violations.json] chat_103_violations.json
+
+Validated 16 file(s); 16 passed schema checks.
+
+------------------------------------------------------------------
+STEP 9: MASC rule scan R01-R20 (first 20 screens + full counts)
+------------------------------------------------------------------
+MASC screens scanned: 7068
+Stale components.json (pre-parser-extension): 7068
+
+Rule | Violations | Screens (>=1 hit)
+R01 |   60111 |  6184
+R02 |   11123 |  2788
+R03 |   12578 |  1901
+R04 |     739 |   408
+R05 |    3797 |  1591
+R06 |    1448 |   865
+R07 |  266393 |  7051
+R08 |   75718 |  3699
+R09 |       0 |     0
+R10 |      24 |    21
+R11 |       0 |     0
+R12 |      55 |    34
+R13 |    1055 |   118
+R14 |    1873 |   667
+R15 |    3860 |  3860
+R16 |     130 |   115
+R17 |    9327 |  1697
+R18 |      10 |     8
+R19 |     758 |   416
+R20 |       0 |     0
+
+Rules with ZERO hits on full MASC: R09, R11, R20
+
+Sample (20 screens) violation totals:
+  R01: 261
+  R02: 28
+  R03: 27
+  R04: 3
+  R05: 9
+  R06: 9
+  R07: 1130
+  R08: 271
+  R12: 2
+  R14: 9
+  R15: 14
+  R17: 37
+
+------------------------------------------------------------------
+STEP 11: Direct schema validation - R01 violations.json
+------------------------------------------------------------------
+File: outputs\violations\r01_missing_label_fail_violations.json
+total_violations: 1
+rule_ids: ['R01']
+Schema: PASS (0 error(s))
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Parser R13-R20 fields: PASS (when fixture XML present)
+Rules R01-R20: wired in check() - see MASC scan above
+API violations-only: PASS (R01 fixture)
+
+
+##################################################################
+# RE-RUN 2026-07-06
+##################################################################
+
+==================================================================
+NOOR WEEK 3+ VALIDATION LOG (R01-R20)
+Branch: noor   Date: 2026-07-06
+Owner: Muhammad Noor - parser extension + rules R13-R20 + API
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_parser.py
+------------------------------------------------------------------
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\internship\_noor_push
+plugins: anyio-4.10.0, langsmith-0.7.22
+collecting ... collected 2 items
+
+tests/test_parser.py::test_parser_emits_extended_fields_on_fixture PASSED [ 50%]
+tests/test_parser.py::test_parser_preserves_parent_id_hierarchy PASSED   [100%]
+
+============================== 2 passed in 0.04s ==============================
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_rules.py (R01-R20)
+------------------------------------------------------------------
+...............................                                          [100%]
+31 passed in 0.08s
+
+------------------------------------------------------------------
+STEP 3: pytest tests/test_agent.py
+------------------------------------------------------------------
+..                                                                       [100%]
+2 passed in 0.02s
+
+------------------------------------------------------------------
+STEP 4: pytest tests/test_audit.py
+------------------------------------------------------------------
+..                                                                       [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2 passed, 1 warning in 0.32s
+
+------------------------------------------------------------------
+STEP 4b: python test_run.py R01 fixture (parse + rules -> violations.json)
+------------------------------------------------------------------
+Parsed 2 component(s) from r01_missing_label_fail.xml
+screen_id:  r01_missing_label_fail
+image_path: tests/fixtures/screenshots/rules/r01_missing_label_fail.jpg
+xml_path:   tests/fixtures/rules/r01_missing_label_fail.xml
+written:    D:\internship\_noor_push\data\parsed\rules\r01_missing_label_fail_components.json
+violations: 1 found
+written:    D:\internship\_noor_push\outputs\violations\r01_missing_label_fail_violations.json
+
+------------------------------------------------------------------
+STEP 5: Parser extended fields (R13-R20 support) on R01 fixture
+------------------------------------------------------------------
+Components parsed: 2
+Sample component_id: c_001
+Extended fields present: 13/13
+All extended parser fields present: PASS
+Components with parent_id: 1
+
+------------------------------------------------------------------
+STEP 6: Live API smoke (TestClient - parse -> rules -> violations)
+------------------------------------------------------------------
+POST /api/v1/audit 202 {'audit_id': 'c1566301-0f72-42a6-913d-739bb6781488', 'status': 'complete'}
+GET /status 200 {'audit_id': 'c1566301-0f72-42a6-913d-739bb6781488', 'status': 'complete', 'message': 'Pipeline finished'}
+GET /violations total= 1 rule_ids= ['R01']
+GET /report (expect 404): 404
+GET /health 200 {'status': 'healthy'}
+
+------------------------------------------------------------------
+STEP 7: CLI vs API output cross-check (R01 fixture)
+------------------------------------------------------------------
+CLI total_violations: 1
+API total_violations: 1
+CLI rule_ids: ['R01']
+API rule_ids: ['R01']
+MATCH count: True
+MATCH rules: True
+
+------------------------------------------------------------------
+STEP 8: python scripts/validate_output.py
+------------------------------------------------------------------
+PASS [components.json] 1054_components.json
+PASS [components.json] 10560_components.json
+PASS [components.json] 11382_components.json
+PASS [components.json] 11389_components.json
+PASS [components.json] 11390_components.json
+PASS [components.json] 10055_components.json
+PASS [components.json] 10103_components.json
+PASS [components.json] 102_components.json
+PASS [components.json] 103_components.json
+PASS [components.json] 1054_components.json
+PASS [components.json] r01_missing_label_fail_components.json
+PASS [violations.json] 1054_violations.json
+PASS [violations.json] chat_10055_violations.json
+PASS [violations.json] chat_10103_violations.json
+PASS [violations.json] chat_102_violations.json
+PASS [violations.json] chat_103_violations.json
+
+Validated 16 file(s); 16 passed schema checks.
+
+------------------------------------------------------------------
+STEP 9: MASC rule scan R01-R20 (first 20 screens + full counts)
+------------------------------------------------------------------
+MASC screens scanned: 7068
+Stale components.json (pre-parser-extension): 7068
+
+Rule | Violations | Screens (>=1 hit)
+R01 |   60111 |  6184
+R02 |   11123 |  2788
+R03 |   12578 |  1901
+R04 |     739 |   408
+R05 |    3797 |  1591
+R06 |    1448 |   865
+R07 |  266393 |  7051
+R08 |   75718 |  3699
+R09 |       0 |     0
+R10 |      24 |    21
+R11 |       0 |     0
+R12 |      55 |    34
+R13 |    1055 |   118
+R14 |    1873 |   667
+R15 |    3860 |  3860
+R16 |     130 |   115
+R17 |    9327 |  1697
+R18 |      10 |     8
+R19 |     758 |   416
+R20 |       0 |     0
+
+Rules with ZERO hits on full MASC: R09, R11, R20
+
+Sample (20 screens) violation totals:
+  R01: 261
+  R02: 28
+  R03: 27
+  R04: 3
+  R05: 9
+  R06: 9
+  R07: 1130
+  R08: 271
+  R12: 2
+  R14: 9
+  R15: 14
+  R17: 37
+
+------------------------------------------------------------------
+STEP 11: Direct schema validation - R01 violations.json
+------------------------------------------------------------------
+File: outputs\violations\r01_missing_label_fail_violations.json
+total_violations: 1
+rule_ids: ['R01']
+Schema: PASS (0 error(s))
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Parser R13-R20 fields: PASS (when fixture XML present)
+Rules R01-R20: wired in check() - see MASC scan above
+API violations-only: PASS (R01 fixture)
+
+
+##################################################################
+# RE-RUN 2026-07-06
+##################################################################
+
+==================================================================
+NOOR WEEK 3+ VALIDATION LOG (R01-R20)
+Branch: noor   Date: 2026-07-06
+Owner: Muhammad Noor - parser extension + rules R13-R20 + API
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_parser.py
+------------------------------------------------------------------
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\internship\_noor_push
+plugins: anyio-4.10.0, langsmith-0.7.22
+collecting ... collected 2 items
+
+tests/test_parser.py::test_parser_emits_extended_fields_on_fixture PASSED [ 50%]
+tests/test_parser.py::test_parser_preserves_parent_id_hierarchy PASSED   [100%]
+
+============================== 2 passed in 0.03s ==============================
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_rules.py (R01-R20)
+------------------------------------------------------------------
+...............................                                          [100%]
+31 passed in 0.06s
+
+------------------------------------------------------------------
+STEP 3: pytest tests/test_agent.py
+------------------------------------------------------------------
+..                                                                       [100%]
+2 passed in 0.02s
+
+------------------------------------------------------------------
+STEP 4: pytest tests/test_audit.py
+------------------------------------------------------------------
+..                                                                       [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2 passed, 1 warning in 0.31s
+
+------------------------------------------------------------------
+STEP 4b: python test_run.py R01 fixture (parse + rules -> violations.json)
+------------------------------------------------------------------
+Parsed 2 component(s) from r01_missing_label_fail.xml
+screen_id:  r01_missing_label_fail
+image_path: tests/fixtures/screenshots/rules/r01_missing_label_fail.jpg
+xml_path:   tests/fixtures/rules/r01_missing_label_fail.xml
+written:    D:\internship\_noor_push\data\parsed\rules\r01_missing_label_fail_components.json
+violations: 1 found
+written:    D:\internship\_noor_push\outputs\violations\r01_missing_label_fail_violations.json
+
+------------------------------------------------------------------
+STEP 5: Parser extended fields (R13-R20 support) on R01 fixture
+------------------------------------------------------------------
+Components parsed: 2
+Sample component_id: c_001
+Extended fields present: 13/13
+All extended parser fields present: PASS
+Components with parent_id: 1
+
+------------------------------------------------------------------
+STEP 6: Live API smoke (TestClient - parse -> rules -> violations)
+------------------------------------------------------------------
+POST /api/v1/audit 202 {'audit_id': 'a44f6db3-7084-4840-af92-26301ed0c721', 'status': 'complete'}
+GET /status 200 {'audit_id': 'a44f6db3-7084-4840-af92-26301ed0c721', 'status': 'complete', 'message': 'Pipeline finished'}
+GET /violations total= 1 rule_ids= ['R01']
+GET /report (expect 404): 404
+GET /health 200 {'status': 'healthy'}
+
+------------------------------------------------------------------
+STEP 7: CLI vs API output cross-check (R01 fixture)
+------------------------------------------------------------------
+CLI total_violations: 1
+API total_violations: 1
+CLI rule_ids: ['R01']
+API rule_ids: ['R01']
+MATCH count: True
+MATCH rules: True
+
+------------------------------------------------------------------
+STEP 8: python scripts/validate_output.py
+------------------------------------------------------------------
+PASS [components.json] 1054_components.json
+PASS [components.json] 10560_components.json
+PASS [components.json] 11382_components.json
+PASS [components.json] 11389_components.json
+PASS [components.json] 11390_components.json
+PASS [components.json] 10055_components.json
+PASS [components.json] 10103_components.json
+PASS [components.json] 102_components.json
+PASS [components.json] 103_components.json
+PASS [components.json] 1054_components.json
+PASS [components.json] r01_missing_label_fail_components.json
+PASS [violations.json] 1054_violations.json
+PASS [violations.json] chat_10055_violations.json
+PASS [violations.json] chat_10103_violations.json
+PASS [violations.json] chat_102_violations.json
+PASS [violations.json] chat_103_violations.json
+
+Validated 16 file(s); 16 passed schema checks.
+
+------------------------------------------------------------------
+STEP 9: MASC rule scan R01-R20 (first 20 screens + full counts)
+------------------------------------------------------------------
+MASC screens scanned: 7068
+Stale components.json (pre-parser-extension): 7068
+
+Rule | Violations | Screens (>=1 hit)
+R01 |   60111 |  6184
+R02 |   11123 |  2788
+R03 |   12578 |  1901
+R04 |     739 |   408
+R05 |    3797 |  1591
+R06 |    1448 |   865
+R07 |  266393 |  7051
+R08 |   75718 |  3699
+R09 |       0 |     0
+R10 |      24 |    21
+R11 |       0 |     0
+R12 |      55 |    34
+R13 |    1055 |   118
+R14 |    1873 |   667
+R15 |    3860 |  3860
+R16 |     130 |   115
+R17 |    9327 |  1697
+R18 |      10 |     8
+R19 |     758 |   416
+R20 |       0 |     0
+
+Rules with ZERO hits on full MASC: R09, R11, R20
+
+Sample (20 screens) violation totals:
+  R01: 261
+  R02: 28
+  R03: 27
+  R04: 3
+  R05: 9
+  R06: 9
+  R07: 1130
+  R08: 271
+  R12: 2
+  R14: 9
+  R15: 14
+  R17: 37
+
+------------------------------------------------------------------
+STEP 11: Direct schema validation - R01 violations.json
+------------------------------------------------------------------
+File: outputs\violations\r01_missing_label_fail_violations.json
+total_violations: 1
+rule_ids: ['R01']
+Schema: PASS (0 error(s))
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Parser R13-R20 fields: PASS (when fixture XML present)
+Rules R01-R20: wired in check() - see MASC scan above
+API violations-only: PASS (R01 fixture)
+
+
+##################################################################
+# RE-RUN 2026-07-06
+##################################################################
+
+==================================================================
+NOOR WEEK 3+ VALIDATION LOG (R01-R20)
+Branch: noor   Date: 2026-07-06
+Owner: Muhammad Noor - parser extension + rules R13-R20 + API
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_parser.py
+------------------------------------------------------------------
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\internship\_noor_push
+plugins: anyio-4.10.0, langsmith-0.7.22
+collecting ... collected 2 items
+
+tests/test_parser.py::test_parser_emits_extended_fields_on_fixture PASSED [ 50%]
+tests/test_parser.py::test_parser_preserves_parent_id_hierarchy PASSED   [100%]
+
+============================== 2 passed in 0.03s ==============================
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_rules.py (R01-R20)
+------------------------------------------------------------------
+...............................                                          [100%]
+31 passed in 0.07s
+
+------------------------------------------------------------------
+STEP 3: pytest tests/test_agent.py
+------------------------------------------------------------------
+..                                                                       [100%]
+2 passed in 0.02s
+
+------------------------------------------------------------------
+STEP 4: pytest tests/test_audit.py
+------------------------------------------------------------------
+..                                                                       [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2 passed, 1 warning in 0.29s
+
+------------------------------------------------------------------
+STEP 4b: python test_run.py R01 fixture (parse + rules -> violations.json)
+------------------------------------------------------------------
+Parsed 2 component(s) from r01_missing_label_fail.xml
+screen_id:  r01_missing_label_fail
+image_path: tests/fixtures/screenshots/rules/r01_missing_label_fail.jpg
+xml_path:   tests/fixtures/rules/r01_missing_label_fail.xml
+written:    D:\internship\_noor_push\data\parsed\rules\r01_missing_label_fail_components.json
+violations: 1 found
+written:    D:\internship\_noor_push\outputs\violations\r01_missing_label_fail_violations.json
+
+------------------------------------------------------------------
+STEP 5: Parser extended fields (R13-R20 support) on R01 fixture
+------------------------------------------------------------------
+Components parsed: 2
+Sample component_id: c_001
+Extended fields present: 13/13
+All extended parser fields present: PASS
+Components with parent_id: 1
+
+------------------------------------------------------------------
+STEP 6: Live API smoke (TestClient - parse -> rules -> violations)
+------------------------------------------------------------------
+POST /api/v1/audit 202 {'audit_id': '4f0be937-5515-4bef-be9a-bd237ba6e0eb', 'status': 'complete'}
+GET /status 200 {'audit_id': '4f0be937-5515-4bef-be9a-bd237ba6e0eb', 'status': 'complete', 'message': 'Pipeline finished'}
+GET /violations total= 1 rule_ids= ['R01']
+GET /report (expect 404): 404
+GET /health 200 {'status': 'healthy'}
+
+------------------------------------------------------------------
+STEP 7: CLI vs API output cross-check (R01 fixture)
+------------------------------------------------------------------
+CLI total_violations: 1
+API total_violations: 1
+CLI rule_ids: ['R01']
+API rule_ids: ['R01']
+MATCH count: True
+MATCH rules: True
+
+------------------------------------------------------------------
+STEP 8: python scripts/validate_output.py
+------------------------------------------------------------------
+PASS [components.json] 1054_components.json
+PASS [components.json] 10560_components.json
+PASS [components.json] 11382_components.json
+PASS [components.json] 11389_components.json
+PASS [components.json] 11390_components.json
+PASS [components.json] 10055_components.json
+PASS [components.json] 10103_components.json
+PASS [components.json] 102_components.json
+PASS [components.json] 103_components.json
+PASS [components.json] 1054_components.json
+PASS [components.json] r01_missing_label_fail_components.json
+PASS [violations.json] 1054_violations.json
+PASS [violations.json] chat_10055_violations.json
+PASS [violations.json] chat_10103_violations.json
+PASS [violations.json] chat_102_violations.json
+PASS [violations.json] chat_103_violations.json
+
+Validated 16 file(s); 16 passed schema checks.
+
+------------------------------------------------------------------
+STEP 9: MASC rule scan R01-R20 (first 20 screens + full counts)
+------------------------------------------------------------------
+MASC screens scanned: 7068
+Stale components.json (pre-parser-extension): 7068
+
+Rule | Violations | Screens (>=1 hit)
+R01 |   60111 |  6184
+R02 |   11123 |  2788
+R03 |   12578 |  1901
+R04 |     739 |   408
+R05 |    3797 |  1591
+R06 |    1448 |   865
+R07 |  266393 |  7051
+R08 |   75718 |  3699
+R09 |       0 |     0
+R10 |      24 |    21
+R11 |       0 |     0
+R12 |      55 |    34
+R13 |    1055 |   118
+R14 |    1873 |   667
+R15 |    3860 |  3860
+R16 |     130 |   115
+R17 |    9327 |  1697
+R18 |      10 |     8
+R19 |     758 |   416
+R20 |       0 |     0
+
+Rules with ZERO hits on full MASC: R09, R11, R20
+
+Sample (20 screens) violation totals:
+  R01: 261
+  R02: 28
+  R03: 27
+  R04: 3
+  R05: 9
+  R06: 9
+  R07: 1130
+  R08: 271
+  R12: 2
+  R14: 9
+  R15: 14
+  R17: 37
+
+------------------------------------------------------------------
+STEP 11: Direct schema validation - R01 violations.json
+------------------------------------------------------------------
+File: outputs\violations\r01_missing_label_fail_violations.json
+total_violations: 1
+rule_ids: ['R01']
+Schema: PASS (0 error(s))
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Parser R13-R20 fields: PASS (when fixture XML present)
+Rules R01-R20: wired in check() - see MASC scan above
+API violations-only: PASS (R01 fixture)
+
+
+##################################################################
+# RE-RUN 2026-07-06
+##################################################################
+
+==================================================================
+NOOR WEEK 3+ VALIDATION LOG (R01-R20)
+Branch: noor   Date: 2026-07-06
+Owner: Muhammad Noor - parser extension + rules R13-R20 + API
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_parser.py
+------------------------------------------------------------------
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\internship\_noor_push
+plugins: anyio-4.10.0, langsmith-0.7.22
+collecting ... collected 3 items
+
+tests/test_parser.py::test_parser_emits_extended_fields_on_fixture PASSED [ 33%]
+tests/test_parser.py::test_parser_preserves_parent_id_hierarchy PASSED   [ 66%]
+tests/test_parser.py::test_parser_extracts_masc_nodes_from_wrapper_nesting PASSED [100%]
+
+============================== 3 passed in 0.04s ==============================
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_rules.py (R01-R20)
+------------------------------------------------------------------
+...............................                                          [100%]
+31 passed in 0.07s
+
+------------------------------------------------------------------
+STEP 3: pytest tests/test_agent.py
+------------------------------------------------------------------
+..                                                                       [100%]
+2 passed in 0.02s
+
+------------------------------------------------------------------
+STEP 4: pytest tests/test_audit.py
+------------------------------------------------------------------
+..                                                                       [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2 passed, 1 warning in 0.32s
+
+------------------------------------------------------------------
+STEP 4b: python test_run.py R01 fixture (parse + rules -> violations.json)
+------------------------------------------------------------------
+Parsed 2 component(s) from r01_missing_label_fail.xml
+screen_id:  r01_missing_label_fail
+image_path: tests/fixtures/screenshots/rules/r01_missing_label_fail.jpg
+xml_path:   tests/fixtures/rules/r01_missing_label_fail.xml
+written:    D:\internship\_noor_push\data\data-masc\parsed\rules\r01_missing_label_fail_components.json
+violations: 1 found
+written:    D:\internship\_noor_push\outputs\violations\r01_missing_label_fail_violations.json
+
+------------------------------------------------------------------
+STEP 5: Parser extended fields (R13-R20 support) on R01 fixture
+------------------------------------------------------------------
+Components parsed: 2
+Sample component_id: c_001
+Extended fields present: 13/13
+All extended parser fields present: PASS
+Components with parent_id: 1
+
+------------------------------------------------------------------
+STEP 6: Live API smoke (TestClient - parse -> rules -> violations)
+------------------------------------------------------------------
+POST /api/v1/audit 202 {'audit_id': 'f3fe49f5-6163-4922-a3dc-162548e64384', 'status': 'complete'}
+GET /status 200 {'audit_id': 'f3fe49f5-6163-4922-a3dc-162548e64384', 'status': 'complete', 'message': 'Pipeline finished'}
+GET /violations total= 1 rule_ids= ['R01']
+GET /report (expect 404): 404
+GET /health 200 {'status': 'healthy'}
+
+------------------------------------------------------------------
+STEP 7: CLI vs API output cross-check (R01 fixture)
+------------------------------------------------------------------
+CLI total_violations: 1
+API total_violations: 1
+CLI rule_ids: ['R01']
+API rule_ids: ['R01']
+MATCH count: True
+MATCH rules: True
+
+------------------------------------------------------------------
+STEP 8: python scripts/validate_output.py
+------------------------------------------------------------------
+PASS [components.json] 1054_components.json
+PASS [components.json] 10560_components.json
+PASS [components.json] 11382_components.json
+PASS [components.json] 11389_components.json
+PASS [components.json] 11390_components.json
+PASS [components.json] 10055_components.json
+PASS [components.json] 10103_components.json
+PASS [components.json] 102_components.json
+PASS [components.json] 103_components.json
+PASS [components.json] 1054_components.json
+PASS [components.json] r01_missing_label_fail_components.json
+PASS [violations.json] 1054_violations.json
+PASS [violations.json] chat_10055_violations.json
+PASS [violations.json] chat_10103_violations.json
+PASS [violations.json] chat_102_violations.json
+PASS [violations.json] chat_103_violations.json
+
+Validated 16 file(s); 16 passed schema checks.
+
+------------------------------------------------------------------
+STEP 9: MASC rule scan R01-R20 (first 20 screens + full counts)
+------------------------------------------------------------------
+MASC screens scanned: 7069
+Stale components.json (pre-parser-extension): 0
+
+Rule | Violations | Screens (>=1 hit)
+R01 |   60112 |  6185
+R02 |   11123 |  2788
+R03 |   12578 |  1901
+R04 |     739 |   408
+R05 |    3797 |  1591
+R06 |    1448 |   865
+R07 |  266393 |  7051
+R08 |   75718 |  3699
+R09 |       0 |     0
+R10 |      24 |    21
+R11 |       0 |     0
+R12 |      79 |    40
+R13 |    1055 |   118
+R14 |    1873 |   667
+R15 |    3860 |  3860
+R16 |     130 |   115
+R17 |    9327 |  1697
+R18 |   13529 |  3945
+R19 |     758 |   416
+R20 |       0 |     0
+
+Rules with ZERO hits on full MASC: R09, R11, R20
+
+Sample (20 screens) violation totals:
+  R01: 261
+  R02: 28
+  R03: 27
+  R04: 3
+  R05: 9
+  R06: 9
+  R07: 1130
+  R08: 271
+  R12: 2
+  R14: 9
+  R15: 14
+  R17: 37
+  R18: 41
+
+------------------------------------------------------------------
+STEP 11: Direct schema validation - R01 violations.json
+------------------------------------------------------------------
+File: outputs\violations\r01_missing_label_fail_violations.json
+total_violations: 1
+rule_ids: ['R01']
+Schema: PASS (0 error(s))
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Parser R13-R20 fields: PASS (when fixture XML present)
+Rules R01-R20: wired in check() - see MASC scan above
+API violations-only: PASS (R01 fixture)
+
+
+##################################################################
+# RE-RUN 2026-07-06
+##################################################################
+
+==================================================================
+NOOR WEEK 3+ VALIDATION LOG (R01-R20)
+Branch: noor   Date: 2026-07-06
+Owner: Muhammad Noor - parser extension + rules R13-R20 + API
+==================================================================
+
+------------------------------------------------------------------
+STEP 0: MASC full re-parse (all xml folders -> parsed + rules R01-R20)
+------------------------------------------------------------------
+XML files found: 7068
+Output parsed root: D:\internship\_noor_push\data\data-masc\parsed
+Violations root: D:\internship\_noor_push\outputs\violations
+Parsing 7068 XML file(s)...
+Dataset root: D:\internship\_noor_push\data\data-masc
+XML root:     D:\internship\_noor_push\data\data-masc\xml
+Output root:  D:\internship\_noor_push\data\data-masc\parsed
+
+=== Parser Results ===
+{
+  "processed_files": 7068,
+  "failed_files": 0,
+  "total_components": 640563,
+  "total_violations": 462542,
+  "source_root": "D:/internship/_noor_push/data/data-masc/xml",
+  "output_root": "D:/internship/_noor_push/data/data-masc/parsed",
+  "dataset_root": "D:/internship/_noor_push/data/data-masc",
+  "errors": []
+}
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_parser.py
+------------------------------------------------------------------
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\internship\_noor_push
+plugins: anyio-4.10.0, langsmith-0.7.22
+collecting ... collected 3 items
+
+tests/test_parser.py::test_parser_emits_extended_fields_on_fixture PASSED [ 33%]
+tests/test_parser.py::test_parser_preserves_parent_id_hierarchy PASSED   [ 66%]
+tests/test_parser.py::test_parser_extracts_masc_nodes_from_wrapper_nesting PASSED [100%]
+
+============================== 3 passed in 0.04s ==============================
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_rules.py (R01-R20)
+------------------------------------------------------------------
+...............................                                          [100%]
+31 passed in 0.07s
+
+------------------------------------------------------------------
+STEP 3: pytest tests/test_agent.py
+------------------------------------------------------------------
+..                                                                       [100%]
+2 passed in 0.02s
+
+------------------------------------------------------------------
+STEP 4: pytest tests/test_audit.py
+------------------------------------------------------------------
+..                                                                       [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2 passed, 1 warning in 0.42s
+
+------------------------------------------------------------------
+STEP 4b: python test_run.py R01 fixture (parse + rules -> violations.json)
+------------------------------------------------------------------
+Parsed 2 component(s) from r01_missing_label_fail.xml
+screen_id:  r01_missing_label_fail
+image_path: tests/fixtures/screenshots/rules/r01_missing_label_fail.jpg
+xml_path:   tests/fixtures/rules/r01_missing_label_fail.xml
+written:    D:\internship\_noor_push\data\data-masc\parsed\rules\r01_missing_label_fail_components.json
+violations: 1 found
+written:    D:\internship\_noor_push\outputs\violations\r01_missing_label_fail_violations.json
+
+------------------------------------------------------------------
+STEP 5: Parser extended fields (R13-R20 support) on R01 fixture
+------------------------------------------------------------------
+Components parsed: 2
+Sample component_id: c_001
+Extended fields present: 13/13
+All extended parser fields present: PASS
+Components with parent_id: 1
+
+------------------------------------------------------------------
+STEP 6: Live API smoke (TestClient - parse -> rules -> violations)
+------------------------------------------------------------------
+POST /api/v1/audit 202 {'audit_id': '1273af43-ff69-4558-99e2-f660aefc484c', 'status': 'complete'}
+GET /status 200 {'audit_id': '1273af43-ff69-4558-99e2-f660aefc484c', 'status': 'complete', 'message': 'Pipeline finished'}
+GET /violations total= 1 rule_ids= ['R01']
+GET /report (expect 404): 404
+GET /health 200 {'status': 'healthy'}
+
+------------------------------------------------------------------
+STEP 7: CLI vs API output cross-check (R01 fixture)
+------------------------------------------------------------------
+CLI total_violations: 1
+API total_violations: 1
+CLI rule_ids: ['R01']
+API rule_ids: ['R01']
+MATCH count: True
+MATCH rules: True
+
+------------------------------------------------------------------
+STEP 8: python scripts/validate_output.py
+------------------------------------------------------------------
+PASS [components.json] 1054_components.json
+PASS [components.json] 10560_components.json
+PASS [components.json] 11382_components.json
+PASS [components.json] 11389_components.json
+PASS [components.json] 11390_components.json
+PASS [components.json] 10055_components.json
+PASS [components.json] 10103_components.json
+PASS [components.json] 102_components.json
+PASS [components.json] 103_components.json
+PASS [components.json] 1054_components.json
+PASS [components.json] r01_missing_label_fail_components.json
+PASS [violations.json] 1054_violations.json
+PASS [violations.json] chat_10055_violations.json
+PASS [violations.json] chat_10103_violations.json
+PASS [violations.json] chat_102_violations.json
+PASS [violations.json] chat_103_violations.json
+
+Validated 16 file(s); 16 passed schema checks.
+
+------------------------------------------------------------------
+STEP 9: MASC rule scan R01-R20 (random 20 screens + full counts)
+------------------------------------------------------------------
+MASC screens scanned: 7069
+Stale components.json (pre-parser-extension): 0
+
+Rule | Violations | Screens (>=1 hit)
+R01 |   60112 |  6185
+R02 |   11123 |  2788
+R03 |   12578 |  1901
+R04 |     739 |   408
+R05 |    3797 |  1591
+R06 |    1448 |   865
+R07 |  266393 |  7051
+R08 |   75718 |  3699
+R09 |       0 |     0
+R10 |      24 |    21
+R11 |       0 |     0
+R12 |      79 |    40
+R13 |    1055 |   118
+R14 |    1873 |   667
+R15 |    3860 |  3860
+R16 |     130 |   115
+R17 |    9327 |  1697
+R18 |   13529 |  3945
+R19 |     758 |   416
+R20 |       0 |     0
+
+Rules with ZERO hits on full MASC: R09, R11, R20
+
+Random sample (20 screens) violation totals:
+  - data/data-masc/parsed/home/25959_components.json
+  - data/data-masc/parsed/home/28703_components.json
+  - data/data-masc/parsed/home/46274_components.json
+  - data/data-masc/parsed/home/47991_components.json
+  - data/data-masc/parsed/list/20553_components.json
+  - data/data-masc/parsed/login/15873_components.json
+  - data/data-masc/parsed/login/47635_components.json
+  - data/data-masc/parsed/login/5944_components.json
+  - data/data-masc/parsed/maps/19060_components.json
+  - data/data-masc/parsed/menu/18047_components.json
+  - data/data-masc/parsed/menu/58757_components.json
+  - data/data-masc/parsed/menu/8522_components.json
+  - data/data-masc/parsed/profile/56416_components.json
+  - data/data-masc/parsed/settings/11310_components.json
+  - data/data-masc/parsed/settings/68596_components.json
+  - data/data-masc/parsed/settings/70348_components.json
+  - data/data-masc/parsed/welcome/11420_components.json
+  - data/data-masc/parsed/welcome/21508_components.json
+  - data/data-masc/parsed/welcome/34879_components.json
+  - data/data-masc/parsed/welcome/4380_components.json
+
+  R01: 186
+  R02: 64
+  R03: 34
+  R04: 2
+  R05: 11
+  R06: 1
+  R07: 557
+  R08: 151
+  R13: 1
+  R14: 8
+  R15: 9
+  R16: 1
+  R17: 17
+  R18: 35
+
+------------------------------------------------------------------
+STEP 11: Direct schema validation - R01 violations.json
+------------------------------------------------------------------
+File: outputs\violations\r01_missing_label_fail_violations.json
+total_violations: 1
+rule_ids: ['R01']
+Schema: PASS (0 error(s))
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Parser R13-R20 fields: PASS (when fixture XML present)
+MASC re-parse + rules R01-R20: see STEP 0
+validate_output.py: run in STEP 8 (schema spot-check on parsed + violations)
+API violations-only: PASS (R01 fixture)
+
+
+##################################################################
+# RE-RUN 2026-07-06
+##################################################################
+
+==================================================================
+NOOR WEEK 3+ VALIDATION LOG (R01-R20)
+Branch: noor   Date: 2026-07-06
+Owner: Muhammad Noor - parser extension + rules R13-R20 + API
+==================================================================
+
+------------------------------------------------------------------
+STEP 0: MASC full re-parse (all xml folders -> parsed + rules R01-R20)
+------------------------------------------------------------------
+XML files found: 7068
+Output parsed root: D:\internship\_noor_push\data\data-masc\parsed
+Violations root: D:\internship\_noor_push\outputs\violations
+Parsing 7068 XML file(s)...
+Dataset root: D:\internship\_noor_push\data\data-masc
+XML root:     D:\internship\_noor_push\data\data-masc\xml
+Output root:  D:\internship\_noor_push\data\data-masc\parsed
+
+=== Parser Results ===
+{
+  "processed_files": 7068,
+  "failed_files": 0,
+  "total_components": 640563,
+  "total_violations": 462542,
+  "source_root": "D:/internship/_noor_push/data/data-masc/xml",
+  "output_root": "D:/internship/_noor_push/data/data-masc/parsed",
+  "dataset_root": "D:/internship/_noor_push/data/data-masc",
+  "errors": []
+}
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_parser.py
+------------------------------------------------------------------
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\internship\_noor_push
+plugins: anyio-4.10.0, langsmith-0.7.22
+collecting ... collected 3 items
+
+tests/test_parser.py::test_parser_emits_extended_fields_on_fixture PASSED [ 33%]
+tests/test_parser.py::test_parser_preserves_parent_id_hierarchy PASSED   [ 66%]
+tests/test_parser.py::test_parser_extracts_masc_nodes_from_wrapper_nesting PASSED [100%]
+
+============================== 3 passed in 0.05s ==============================
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_rules.py (R01-R20)
+------------------------------------------------------------------
+...............................                                          [100%]
+31 passed in 0.09s
+
+------------------------------------------------------------------
+STEP 3: pytest tests/test_agent.py
+------------------------------------------------------------------
+..                                                                       [100%]
+2 passed in 0.04s
+
+------------------------------------------------------------------
+STEP 4: pytest tests/test_audit.py
+------------------------------------------------------------------
+..                                                                       [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2 passed, 1 warning in 0.32s
+
+------------------------------------------------------------------
+STEP 4b: python test_run.py R01 fixture (parse + rules -> violations.json)
+------------------------------------------------------------------
+Parsed 2 component(s) from r01_missing_label_fail.xml
+screen_id:  r01_missing_label_fail
+image_path: tests/fixtures/screenshots/rules/r01_missing_label_fail.jpg
+xml_path:   tests/fixtures/rules/r01_missing_label_fail.xml
+written:    D:\internship\_noor_push\data\data-masc\parsed\rules\r01_missing_label_fail_components.json
+violations: 1 found
+written:    D:\internship\_noor_push\outputs\violations\r01_missing_label_fail_violations.json
+
+------------------------------------------------------------------
+STEP 5: Parser extended fields (R13-R20 support) on R01 fixture
+------------------------------------------------------------------
+Components parsed: 2
+Sample component_id: c_001
+Extended fields present: 13/13
+All extended parser fields present: PASS
+Components with parent_id: 1
+
+------------------------------------------------------------------
+STEP 6: Live API smoke (TestClient - parse -> rules -> violations)
+------------------------------------------------------------------
+POST /api/v1/audit 202 {'audit_id': '9b5899cf-0911-4276-b636-330d68b045b5', 'status': 'complete'}
+GET /status 200 {'audit_id': '9b5899cf-0911-4276-b636-330d68b045b5', 'status': 'complete', 'message': 'Pipeline finished'}
+GET /violations total= 1 rule_ids= ['R01']
+GET /report (expect 404): 404
+GET /health 200 {'status': 'healthy'}
+
+------------------------------------------------------------------
+STEP 7: CLI vs API output cross-check (R01 fixture)
+------------------------------------------------------------------
+CLI total_violations: 1
+API total_violations: 1
+CLI rule_ids: ['R01']
+API rule_ids: ['R01']
+MATCH count: True
+MATCH rules: True
+
+------------------------------------------------------------------
+STEP 8: python scripts/validate_output.py
+------------------------------------------------------------------
+PASS [components.json] 1054_components.json
+PASS [components.json] 10560_components.json
+PASS [components.json] 11382_components.json
+PASS [components.json] 11389_components.json
+PASS [components.json] 11390_components.json
+PASS [components.json] 10055_components.json
+PASS [components.json] 10103_components.json
+PASS [components.json] 102_components.json
+PASS [components.json] 103_components.json
+PASS [components.json] 1054_components.json
+PASS [components.json] r01_missing_label_fail_components.json
+PASS [violations.json] 1054_violations.json
+PASS [violations.json] chat_10055_violations.json
+PASS [violations.json] chat_10103_violations.json
+PASS [violations.json] chat_102_violations.json
+PASS [violations.json] chat_103_violations.json
+
+Validated 16 file(s); 16 passed schema checks.
+
+------------------------------------------------------------------
+STEP 9: MASC rule scan R01-R20 (random 20 screens + full counts)
+------------------------------------------------------------------
+MASC screens scanned: 7069
+Stale components.json (pre-parser-extension): 0
+
+Rule | Violations | Screens (>=1 hit)
+R01 |   60112 |  6185
+R02 |   11123 |  2788
+R03 |   12578 |  1901
+R04 |     739 |   408
+R05 |    3797 |  1591
+R06 |    1448 |   865
+R07 |  266393 |  7051
+R08 |   75718 |  3699
+R09 |       0 |     0
+R10 |      24 |    21
+R11 |       0 |     0
+R12 |      79 |    40
+R13 |    1055 |   118
+R14 |    1873 |   667
+R15 |    3860 |  3860
+R16 |     130 |   115
+R17 |    9327 |  1697
+R18 |   13529 |  3945
+R19 |     758 |   416
+R20 |       0 |     0
+
+Rules with ZERO hits on full MASC: R09, R11, R20
+
+Random sample (20 screens) violation totals:
+  - data/data-masc/parsed/home/13103_components.json
+  - data/data-masc/parsed/home/19033_components.json
+  - data/data-masc/parsed/home/22958_components.json
+  - data/data-masc/parsed/list/17254_components.json
+  - data/data-masc/parsed/list/3333_components.json
+  - data/data-masc/parsed/list/338_components.json
+  - data/data-masc/parsed/list/7875_components.json
+  - data/data-masc/parsed/login/12179_components.json
+  - data/data-masc/parsed/login/55172_components.json
+  - data/data-masc/parsed/maps/70772_components.json
+  - data/data-masc/parsed/profile/17285_components.json
+  - data/data-masc/parsed/profile/3701_components.json
+  - data/data-masc/parsed/profile/65646_components.json
+  - data/data-masc/parsed/search/36405_components.json
+  - data/data-masc/parsed/search/50391_components.json
+  - data/data-masc/parsed/settings/12252_components.json
+  - data/data-masc/parsed/settings/27399_components.json
+  - data/data-masc/parsed/settings/53043_components.json
+  - data/data-masc/parsed/settings/55035_components.json
+  - data/data-masc/parsed/welcome/29154_components.json
+
+  R01: 191
+  R02: 71
+  R03: 49
+  R04: 1
+  R05: 11
+  R06: 1
+  R07: 1367
+  R08: 322
+  R14: 9
+  R15: 13
+  R17: 39
+  R18: 41
+  R19: 2
+
+------------------------------------------------------------------
+STEP 11: Direct schema validation - R01 violations.json
+------------------------------------------------------------------
+File: outputs\violations\r01_missing_label_fail_violations.json
+total_violations: 1
+rule_ids: ['R01']
+Schema: PASS (0 error(s))
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Parser R13-R20 fields: PASS (when fixture XML present)
+MASC re-parse + rules R01-R20: see STEP 0
+validate_output.py: run in STEP 8 (schema spot-check on parsed + violations)
+API violations-only: PASS (R01 fixture)

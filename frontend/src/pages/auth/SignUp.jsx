@@ -1,0 +1,93 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AuthLayout from '../../components/layout/AuthLayout';
+import TextField from '../../components/ui/TextField';
+import PasswordField from '../../components/ui/PasswordField';
+import Button from '../../components/ui/Button';
+import GoogleButton from '../../components/ui/GoogleButton';
+import FooterLink from '../../components/ui/FooterLink';
+
+export default function SignUp() {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [errors, setErrors] = useState({});
+
+  const handleChange = (field) => (e) =>
+    setForm((f) => ({ ...f, [field]: e.target.value }));
+
+  const validate = () => {
+    // Specific, field-identifying error messages (G21 / R21)
+    const next = {};
+    if (!form.name.trim()) next.name = 'Please enter your full name.';
+    if (!form.email.trim()) {
+      next.email = 'Please enter your email address.';
+    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+      next.email = 'Enter a valid email address, e.g. name@example.com.';
+    }
+    if (!form.password) {
+      next.password = 'Please create a password.';
+    } else if (form.password.length < 8) {
+      next.password = 'Password must be at least 8 characters.';
+    }
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) navigate('/dashboard');
+  };
+
+  return (
+    <AuthLayout
+      title="Create your account"
+      subtitle="Start auditing Android UIs for accessibility in minutes."
+    >
+      <form onSubmit={handleSubmit} noValidate>
+        <TextField
+          id="name"
+          label="Full name"
+          value={form.name}
+          onChange={handleChange('name')}
+          placeholder="Jane Doe"
+          autoComplete="name"
+          required
+          error={errors.name}
+        />
+        <TextField
+          id="email"
+          label="Email address"
+          type="email"
+          value={form.email}
+          onChange={handleChange('email')}
+          placeholder="you@example.com"
+          autoComplete="email"
+          required
+          error={errors.email}
+        />
+        <PasswordField
+          id="password"
+          label="Password"
+          value={form.password}
+          onChange={handleChange('password')}
+          placeholder="Create a password"
+          autoComplete="new-password"
+          required
+          hint="Must be at least 8 characters."
+          error={errors.password}
+        />
+        <Button type="submit">Create account</Button>
+      </form>
+
+      <div className="flex items-center gap-3 my-6" role="presentation">
+        <div className="h-px flex-1 bg-[var(--color-border)]" />
+        <span className="text-sm text-[var(--color-gray-text)]">or</span>
+        <div className="h-px flex-1 bg-[var(--color-border)]" />
+      </div>
+
+      <GoogleButton onClick={() => navigate('/dashboard')} />
+
+      <FooterLink text="Already have an account?" linkText="Log in" to="/login" />
+    </AuthLayout>
+  );
+}

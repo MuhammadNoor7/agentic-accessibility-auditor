@@ -65,7 +65,20 @@
         "clickable": { "type": "boolean" },
         "enabled": { "type": "boolean" },
         "focusable": { "type": "boolean" },
-        "bounds": { "$ref": "#/definitions/bounds" }
+        "bounds": { "$ref": "#/definitions/bounds" },
+        "focus_order": { "type": "integer", "minimum": 1 },
+        "parent_id": { "type": "string" },
+        "long_clickable": { "type": "boolean" },
+        "scrollable": { "type": "boolean" },
+        "selected": { "type": "boolean" },
+        "checked": { "type": "boolean" },
+        "password": { "type": "boolean" },
+        "text_all_caps": { "type": "boolean" },
+        "input_type": { "type": "string" },
+        "important_for_accessibility": { "type": "string" },
+        "media_type": { "type": "string", "enum": ["", "video", "audio", "animation"] },
+        "is_dialog": { "type": "boolean" },
+        "label_for": { "type": "string" }
       },
       "additionalProperties": false
     },
@@ -172,16 +185,6 @@
         "violations": {
           "type": "array",
           "items": { "$ref": "#/definitions/violation" }
-        },
-        "component_count": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "Total parsed components before the visibility filter in check() (diagnostic only)."
-        },
-        "hidden_component_count": {
-          "type": "integer",
-          "minimum": 0,
-          "description": "How many of component_count were excluded as hidden (visibility=gone / visible-to-user=False) before rules ran."
         }
       },
       "additionalProperties": false

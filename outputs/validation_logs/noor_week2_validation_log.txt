@@ -1,0 +1,76 @@
+==================================================================
+NOOR WEEK 2 VALIDATION LOG (Parser sign-off + datasets)
+Branch: noor   Date: 2026-07-01 (baseline retrospective)
+Owner: Muhammad Noor - QA review of Salar parser deliverables
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: Verify MASC parsed output count
+------------------------------------------------------------------
+Directory: data/data-masc/parsed/
+Pattern: *_components.json
+Files found: 7068
+Result: PASS
+
+------------------------------------------------------------------
+STEP 2: Verify parser sign-off report
+------------------------------------------------------------------
+File: data/data-masc/parsed/masc_parse_signoff_report.json
+sign_off: PASS
+total_screens: 7068
+parse_error: 0
+empty: 0
+Result: PASS
+
+------------------------------------------------------------------
+STEP 3: Verify train/val/test split
+------------------------------------------------------------------
+File: data/data-masc/splits/split_summary.json
+train: 4943 screens
+val: 1060 screens
+test: 1065 screens
+Result: PASS (7068 total)
+
+------------------------------------------------------------------
+STEP 4: Verify Rico holdout manifest
+------------------------------------------------------------------
+File: data/data-rico-holdout/manifest/selection_report.json
+holdout screens: 1698
+disjoint from MASC: confirmed
+Result: PASS
+
+------------------------------------------------------------------
+STEP 5: python scripts/validate_output.py (sample)
+------------------------------------------------------------------
+Validated sample components.json and violations.json files
+Schema: auditor_schema.json v1.0
+Result: PASS (sampled files)
+
+------------------------------------------------------------------
+STEP 6: Docker backend health check
+------------------------------------------------------------------
+Command: docker compose up -d (backend service)
+GET /health -> 200 {"status": "healthy"}
+Result: PASS
+
+------------------------------------------------------------------
+STEP 7: Verify guidelines documentation
+------------------------------------------------------------------
+File: docs/accessibility_guidelines_report.md
+Guidelines: G01-G30 mapped to R01-R30
+Result: PASS
+
+------------------------------------------------------------------
+STEP 8: Week 2 gap check
+------------------------------------------------------------------
+src/rules.py R01-R10: NOT IMPLEMENTED (expected Week 3)
+frontend/: NOT STARTED (expected Week 3)
+src/agent.py: NOT STARTED (expected Week 3)
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+Parser + dataset deliverables: PASS (7/7)
+Rule engine: Pending (Week 3)
+UI: Pending (Week 3)
+Week 2 checklist: ~75% team complete

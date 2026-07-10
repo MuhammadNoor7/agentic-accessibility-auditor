@@ -1,0 +1,1003 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "chat_19617",
+  "image_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/screenshots/chat/19617.jpg",
+  "xml_path": "D:/internship/agentic-accessibility-auditor/data/data-masc/xml/chat/19617.xml",
+  "total_violations": 66,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_011",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_047",
+      "class": "com.greatpersonalsmedia.android.layout.TitleBar",
+      "bounds": [
+        0,
+        84,
+        1440,
+        252
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_050",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        101,
+        215,
+        234
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_053",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_059",
+      "class": "android.widget.Button",
+      "bounds": [
+        18,
+        17,
+        183,
+        151
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_065",
+      "class": "android.widget.ListView",
+      "bounds": [
+        0,
+        252,
+        1440,
+        2392
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_068",
+      "class": "android.widget.CheckBox",
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_089",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_053",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_003",
+      "class": "android.view.ViewStub",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_007",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_008",
+      "class": "android.widget.ScrollView",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_009",
+      "class": "android.widget.FrameLayout",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_010",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_011",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_012",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_013",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_014",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_015",
+      "class": "android.widget.TextView",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_016",
+      "class": "android.widget.TextView",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_017",
+      "class": "android.view.View",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_018",
+      "class": "android.view.View",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_019",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_020",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_021",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_022",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_023",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_024",
+      "class": "android.widget.TextView",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_025",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_026",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_027",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_028",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_029",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_030",
+      "class": "android.widget.TextView",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_031",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_032",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_033",
+      "class": "android.widget.TextView",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_034",
+      "class": "android.widget.RelativeLayout",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_035",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_036",
+      "class": "android.widget.TextView",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_037",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_038",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_039",
+      "class": "android.view.View",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_040",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_041",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_042",
+      "class": "android.view.View",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_043",
+      "class": "android.view.View",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_053",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_060",
+      "class": "android.view.View",
+      "bounds": [
+        0,
+        84,
+        0,
+        84
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_068",
+      "class": "android.widget.CheckBox",
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_079",
+      "class": "android.widget.TextView",
+      "bounds": [
+        1295,
+        252,
+        1295,
+        252
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_083",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_084",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_085",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_086",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_087",
+      "class": "android.widget.TextView",
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_088",
+      "class": "android.widget.FrameLayout",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_089",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_090",
+      "class": "android.widget.TextView",
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_091",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_050",
+      "class": "android.widget.LinearLayout",
+      "bounds": [
+        0,
+        101,
+        215,
+        234
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_047"
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_070",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        18,
+        270,
+        368,
+        620
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_065"
+    },
+    {
+      "rule_id": "R08",
+      "issue": "Possible layout overlap",
+      "component_id": "c_073",
+      "class": "android.widget.TextView",
+      "bounds": [
+        400,
+        259,
+        1288,
+        334
+      ],
+      "guideline": "G08 \u2014 Possible layout overlap",
+      "severity": "Medium",
+      "recommendation": "Reposition or resize overlapping controls so neither hides the other and the focus order stays predictable.",
+      "related_component": "c_065"
+    },
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_073",
+      "class": "android.widget.TextView",
+      "bounds": [
+        400,
+        259,
+        1288,
+        334
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_047"
+    },
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_065",
+      "class": "android.widget.ListView",
+      "bounds": [
+        0,
+        252,
+        1440,
+        2392
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    },
+    {
+      "rule_id": "R19",
+      "issue": "No destructive confirmation",
+      "component_id": "c_085",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        252,
+        0,
+        252
+      ],
+      "guideline": "G19 \u2014 No destructive confirmation",
+      "severity": "Medium",
+      "recommendation": "Show a confirmation dialog before irreversible actions such as delete or remove."
+    }
+  ]
+}

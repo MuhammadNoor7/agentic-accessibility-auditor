@@ -255,14 +255,14 @@ Minimum policy:
 
 ## Open decisions (resolve in Week 3)
 
-| ID | Decision | Owner | Suggested resolution |
-|----|----------|-------|---------------------|
-| TBD-01 | LLM/model choice (+ training strategy) | Noor + Ayesha | **Open** — pick base model + prompt strategy via Week 4 experiments |
-| TBD-02 | Score formula | Noor | **Resolved** — SDS formula: 100 − weighted penalties |
-| TBD-03 | dp/density for R04 | Salar | Assume 160 dpi; bounds as px for MVP |
-| TBD-05 | Severity UI mapping | All | High→Critical/Serious; Medium→Moderate; Low→Minor |
-| TBD-06 | Auth in MVP | **Resolved** | Must Have (SRS §4.9) |
-| Branch rename | `azeem` → `salar` | Salar | Done |
+| ID | Decision | Owner | Status | Resolution |
+|----|----------|-------|--------|------------|
+| TBD-01 | LLM/model choice (+ training strategy) | Noor + Ayesha | Resolved | Groq (llama-3.3-70b-versatile) chosen as default — only free, testable provider. Anthropic/OpenAI require paid credits; Gemini blocked by a quota bug. See `docs/TBD-01-decision.md` |
+| TBD-02 | Score formula | Noor | Resolved | SDS formula: 100 − weighted penalties |
+| TBD-03 | dp/density for R04 | Salar | Open | Assume 160 dpi; bounds as px for MVP |
+| TBD-05 | Severity UI mapping | All | Open | High → Critical/Serious; Medium → Moderate; Low → Minor |
+| TBD-06 | Auth in MVP | — | Resolved | Must Have (SRS §4.9) |
+| — | Branch rename: `azeem` → `salar` | Salar | Done | — |
 
 ---
 

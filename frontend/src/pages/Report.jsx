@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getAuditFiles } from '../state/auditFiles'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { getAuditFiles, getAuditId } from '../state/auditFiles'
+import { getAuditReport } from '../api'
 import Sidebar from '../components/Sidebar'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -29,68 +30,6 @@ const RULES = {
 // JSON severity (High/Medium/Low) → UI severity (Critical/Serious/Minor)
 const SEVERITY_MAP = { High: 'Critical', Medium: 'Serious', Low: 'Minor' }
 
-/* ────────────────────────────────────────────────────────────────────────────
-   MOCK report.json — exact shape your teammate defined:
-   { schema_version, screen_id, image_path, xml_path, summary, violations[] }
-   Replace with a real fetch('/api/report/<screen_id>') once backend is live.
-   screen_id below is only used as a fallback when nothing has been uploaded —
-   the actual displayed Screen ID is derived from the uploaded file's name
-   inside the Report() component.
-   ──────────────────────────────────────────────────────────────────────────── */
-const reportData = {
-  schema_version: '1.0',
-  screen_id: 'screen_001',
-  image_path: 'data/screenshots/screen_001.png',
-  xml_path: 'data/xml/window_001.xml',
-  summary: {
-    total_issues: 4,
-    critical: 0,
-    high: 3,
-    medium: 1,
-    low: 0,
-  },
-  violations: [
-    {
-      rule_id: 'R02', issue: 'Image button without description',
-      component_id: 'c_001', class: 'android.widget.ImageButton', bounds: [32, 50, 80, 98],
-      severity: 'High', guideline: 'G02 — Image button without description',
-      recommendation: 'Add android:contentDescription with the action name, such as Back.',
-      agent_explanation: 'This ImageButton acts as a back button but has no text alternative.',
-      agent_why_it_matters: 'Screen reader users will only hear ‘button, unlabelled’ and won’t know what it does.',
-      agent_developer_fix: 'In your XML layout, add android:contentDescription="@string/back_action" to the ImageButton.',
-    },
-    {
-      rule_id: 'R05', issue: 'Unlabeled input field',
-      component_id: 'c_002', class: 'android.widget.EditText', bounds: [32, 120, 400, 168],
-      severity: 'High', guideline: 'G05 — Unlabeled input field',
-      recommendation: 'Add android:hint or a programmatic label linked via labelFor.',
-      agent_explanation: 'The username field has no hint, text, or associated label.',
-      agent_why_it_matters: 'Users relying on assistive technology cannot tell what information to enter.',
-      agent_developer_fix: 'Add android:hint="Username" or a TextView label with android:labelFor pointing to this EditText.',
-    },
-    {
-      rule_id: 'R05', issue: 'Unlabeled input field',
-      component_id: 'c_003', class: 'android.widget.EditText', bounds: [32, 180, 400, 228],
-      severity: 'High', guideline: 'G05 — Unlabeled input field',
-      recommendation: 'Add android:hint or a programmatic label linked via labelFor.',
-      agent_explanation: 'The password field has no hint, text, or associated label.',
-      agent_why_it_matters: 'Users relying on assistive technology cannot tell what information to enter.',
-      agent_developer_fix: 'Add android:hint="Password" and android:importantForAccessibility="yes".',
-    },
-    {
-      rule_id: 'R04', issue: 'Small touch target',
-      component_id: 'c_004', class: 'android.widget.TextView', bounds: [32, 240, 220, 264],
-      severity: 'Medium', guideline: 'G04 — Small touch target',
-      recommendation: 'Increase the tappable area to at least 48×48dp using padding.',
-      agent_explanation: 'The "Forgot password?" link has a touch target smaller than 48dp.',
-      agent_why_it_matters: 'Users with motor impairments or larger fingers struggle to tap small targets accurately.',
-      agent_developer_fix: 'Add android:padding="12dp" or wrap the TextView in a larger clickable container.',
-    },
-  ],
-}
-
-const { summary, violations, screen_id, xml_path } = reportData
-
 /* ── Severity visual tokens (shared language with Dashboard.jsx) ─────────── */
 const SEV = {
   Critical: { color: '#7A1C1C', bg: '#fdf0ef' },
@@ -105,31 +44,42 @@ function uiSeverity(jsonSeverity) {
 function severityColor(s) { return SEV[uiSeverity(s)].color }
 function severityBg(s)    { return SEV[uiSeverity(s)].bg }
 
-// Derive summary pill counts directly from summary{} — High/Medium/Low,
-// labeled with the same Critical/Serious/Minor language used elsewhere.
-const summaryPills = [
-  { label: `${summary.high} Critical`,  color: SEV.Critical.color, bg: SEV.Critical.bg },
-  { label: `${summary.medium} Serious`, color: SEV.Serious.color,  bg: SEV.Serious.bg },
-  { label: `${summary.low} Minor`,      color: SEV.Minor.color,    bg: SEV.Minor.bg },
-]
+// Builds the three summary pills (Critical/Serious/Minor) from a violations[] array.
+function buildSummaryPills(violations) {
+  const counts = { Critical: 0, Serious: 0, Minor: 0 }
+  violations.forEach(v => { counts[uiSeverity(v.severity)]++ })
+  return [
+    { label: `${counts.Critical} Critical`, color: SEV.Critical.color, bg: SEV.Critical.bg, count: counts.Critical },
+    { label: `${counts.Serious} Serious`,   color: SEV.Serious.color,  bg: SEV.Serious.bg,  count: counts.Serious },
+    { label: `${counts.Minor} Minor`,       color: SEV.Minor.color,    bg: SEV.Minor.bg,    count: counts.Minor },
+  ]
+}
 
-// Guideline category breakdown — placeholder until backend aggregates this;
-// computed here from violations[] by grouping on the guideline label.
-const categoryMap = {}
-violations.forEach(v => {
-  const label = v.guideline.split(' — ')[1] || v.guideline
-  categoryMap[label] = (categoryMap[label] || 0) + 1
-})
-const maxCategoryCount = Math.max(...Object.values(categoryMap), 1)
-const guidelineCategories = Object.entries(categoryMap).map(([label, count]) => ({
-  label, count, pct: Math.round((count / maxCategoryCount) * 100),
-}))
+// Guideline category breakdown, computed from violations[] by grouping on the guideline label.
+function buildGuidelineCategories(violations) {
+  const categoryMap = {}
+  violations.forEach(v => {
+    const label = v.guideline?.split(' — ')[1] || v.guideline || 'Uncategorized'
+    categoryMap[label] = (categoryMap[label] || 0) + 1
+  })
+  const maxCount = Math.max(...Object.values(categoryMap), 1)
+  return Object.entries(categoryMap).map(([label, count]) => ({
+    label, count, pct: Math.round((count / maxCount) * 100),
+  }))
+}
 
 /* ── Shared icons / spinner (same visual language as Upload/Dashboard) ───── */
 const Icon = {
   check: (color = '#00c896', size = 26) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M20 6L9 17l-5-5" />
+    </svg>
+  ),
+  alert: (color = '#ef4444', size = 26) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <line x1="12" y1="17" x2="12.01" y2="17" />
     </svg>
   ),
 }
@@ -154,21 +104,25 @@ function GeneratingPopup({ format, onDone }) {
   const [stepIdx, setStepIdx] = useState(0)
   const [progress, setProgress] = useState(0)
 
-  useState(() => {
-    let i = 0
-    const tick = () => {
-      if (i >= REPORT_STEPS.length) {
-        setTimeout(onDone, 350)
-        return
-      }
-      setStepIdx(i)
-      setProgress(REPORT_STEPS[i].pct)
-      i++
-      setTimeout(tick, 550)
+  useEffect(() => {
+  let i = 0
+  let tickTimer
+  const tick = () => {
+    if (i >= REPORT_STEPS.length) {
+      setTimeout(onDone, 350)
+      return
     }
-    const t = setTimeout(tick, 300)
-    return () => clearTimeout(t)
-  }, [])
+    setStepIdx(i)
+    setProgress(REPORT_STEPS[i].pct)
+    i++
+    tickTimer = setTimeout(tick, 550)
+  }
+  const t = setTimeout(tick, 300)
+  return () => {
+    clearTimeout(t)
+    clearTimeout(tickTimer)
+  }
+}, [])
 
   return (
     <div style={{
@@ -203,7 +157,7 @@ function GeneratingPopup({ format, onDone }) {
 }
 
 /* ── Shared document body — used by both PDF and HTML previews ─────────── */
-function PreviewDocument({ imgUrl, xmlText, screenshotName, xmlName, screenId, isHtml }) {
+function PreviewDocument({ imgUrl, xmlText, screenshotName, xmlName, screenId, isHtml, violations, totalIssues, severityCounts, schemaVersion, xmlPath }) {
   return (
     <div style={{ padding: isHtml ? '0' : '36px 40px' }}>
 
@@ -226,7 +180,7 @@ function PreviewDocument({ imgUrl, xmlText, screenshotName, xmlName, screenId, i
 
       {/* Stat tiles */}
       <div className="axion-doc-stats" style={{ display: 'grid', gap: 12, marginBottom: 26 }}>
-        {[['SCREEN ID', screenId], ['TOTAL ISSUES', summary.total_issues], ['SCHEMA', `v${reportData.schema_version}`]].map(([label, value]) => (
+        {[['SCREEN ID', screenId], ['TOTAL ISSUES', totalIssues], ['SCHEMA', `v${schemaVersion}`]].map(([label, value]) => (
           <div key={label} style={{ background: isHtml ? '#f0fdf8' : '#f4f6fb', border: isHtml ? '1px solid #bbf7e0' : 'none', borderRadius: 8, padding: '12px 14px' }}>
             <p style={{ fontSize: 11, color: isHtml ? '#0f6e56' : '#5a6a8a', fontWeight: 700, letterSpacing: '0.5px', margin: '0 0 4px' }}>{label}</p>
             <p style={{ fontSize: 15, fontWeight: 700, color: '#0f1422', margin: 0 }}>{value}</p>
@@ -235,9 +189,9 @@ function PreviewDocument({ imgUrl, xmlText, screenshotName, xmlName, screenId, i
         <div style={{ background: isHtml ? '#fff7ed' : '#f4f6fb', border: isHtml ? '1px solid #fed7aa' : 'none', borderRadius: 8, padding: '12px 14px' }}>
           <p style={{ fontSize: 11, color: isHtml ? '#9a3412' : '#5a6a8a', fontWeight: 700, letterSpacing: '0.5px', margin: '0 0 4px' }}>SEVERITY</p>
           <p style={{ fontSize: 13, fontWeight: 700, margin: 0, display: 'flex', gap: 8 }}>
-            <span style={{ color: '#7A1C1C' }}>{summary.critical} crit</span>
-            <span style={{ color: '#7A4000' }}>{summary.high} high</span>
-            <span style={{ color: '#3D4043' }}>{summary.medium} med</span>
+            <span style={{ color: '#7A1C1C' }}>{severityCounts?.Critical ?? 0} crit</span>
+            <span style={{ color: '#7A4000' }}>{severityCounts?.Serious ?? 0} serious</span>
+            <span style={{ color: '#3D4043' }}>{severityCounts?.Minor ?? 0} minor</span>
           </p>
         </div>
       </div>
@@ -272,7 +226,7 @@ function PreviewDocument({ imgUrl, xmlText, screenshotName, xmlName, screenId, i
                   <div style={{ color: '#7dd3fc', marginTop: 6 }}>&lt;ImageButton id="back"<br />&nbsp;&nbsp;bounds="[32,50][80,98]" /&gt;</div>
                 </>
             }
-            <p style={{ color: '#5a6a8a', margin: '8px 0 0', fontSize: 11 }}>{xmlName || xml_path.split('/').pop()}</p>
+            <p style={{ color: '#5a6a8a', margin: '8px 0 0', fontSize: 11 }}>{xmlName || xmlPath?.split('/').pop() || 'window.xml'}</p>
           </div>
         </div>
       </div>
@@ -318,7 +272,7 @@ function PreviewDocument({ imgUrl, xmlText, screenshotName, xmlName, screenId, i
 }
 
 /* ── Preview modal ─────────────────────────────────────────────────────── */
-function ReportPreview({ format, screenshotFile, xmlFile, screenId, onClose }) {
+function ReportPreview({ format, screenshotFile, xmlFile, screenId, onClose, violations, totalIssues, severityCounts, schemaVersion, xmlPath }) {
   const isHtml = format === 'html'
   const [imgUrl,  setImgUrl]  = useState(null)
   const [xmlText, setXmlText] = useState('')
@@ -412,6 +366,11 @@ function ReportPreview({ format, screenshotFile, xmlFile, screenId, onClose }) {
             xmlName={xmlFile?.name}
             screenId={screenId}
             isHtml={isHtml}
+            violations={violations}
+            totalIssues={totalIssues}
+            severityCounts={severityCounts}
+            schemaVersion={schemaVersion}
+            xmlPath={xmlPath}
           />
         </div>
       </div>
@@ -421,18 +380,54 @@ function ReportPreview({ format, screenshotFile, xmlFile, screenId, onClose }) {
 
 export default function Report() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { screenshot: screenshotFile, xml: xmlFile } = getAuditFiles()
 
-  // Use the actual uploaded screenshot's filename as the Screen ID,
-  // falling back to the mock data's screen_id only if nothing was uploaded.
-  const screenId = screenshotFile?.name
-    ? screenshotFile.name.replace(/\.[^/.]+$/, '')
-    : screen_id
+  // audit_id can arrive via route state (fresh navigation from Dashboard)
+  // or the shared store (getAuditId) if the page was refreshed / reached another way.
+  const auditId = location.state?.auditId || getAuditId()
+
+  const [report, setReport] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(null)
 
   const [showConfirm, setShowConfirm] = useState(false)
   const [flowStep, setFlowStep] = useState('idle') // idle | processing | preview
   const [format, setFormat] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
+
+  useEffect(() => {
+    if (!auditId) {
+      setLoadError('No audit found. Please run a new audit from the Upload page.')
+      setLoading(false)
+      return
+    }
+    let cancelled = false
+    setLoading(true)
+    getAuditReport(auditId)
+      .then(data => {
+        if (!cancelled) { setReport(data); setLoading(false) }
+      })
+      .catch(err => {
+        if (!cancelled) { setLoadError(err.message || 'Could not load report.'); setLoading(false) }
+      })
+    return () => { cancelled = true }
+  }, [auditId])
+
+  const violations = report?.violations || []
+  const totalIssues = violations.length
+
+  // Use the actual backend screen_id first, then the uploaded screenshot's
+  // filename, falling back to a generic label if neither is available.
+  const screenId = report?.screen_id
+    || (screenshotFile?.name ? screenshotFile.name.replace(/\.[^/.]+$/, '') : 'screen')
+
+  const summaryPills = buildSummaryPills(violations)
+  const severityCounts = summaryPills.reduce((acc, p) => {
+    acc[p.label.split(' ')[1]] = p.count
+    return acc
+  }, {})
+  const guidelineCategories = buildGuidelineCategories(violations)
 
   const filteredViolations = violations.filter(v => {
     const q = searchQuery.trim().toLowerCase()
@@ -458,6 +453,45 @@ export default function Report() {
   function handleClosePreview() {
     setFlowStep('idle')
     setFormat(null)
+  }
+
+  // ── Loading state ──────────────────────────────────────────────────────
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f4f6fb' }}>
+        <Sidebar activePage="report" />
+        <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
+            <Spinner size={32} color="#1D9E75" />
+            <p style={{ marginTop: 16, color: '#5a6a8a', fontSize: 15 }}>Loading your audit report…</p>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
+  // ── Error / no audit state ─────────────────────────────────────────────
+  if (loadError) {
+    return (
+      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f4f6fb' }}>
+        <Sidebar activePage="report" />
+        <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32 }}>
+          <div style={{ textAlign: 'center', maxWidth: 420 }}>
+            <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              {Icon.alert('#ef4444', 26)}
+            </div>
+            <p style={{ fontSize: 17, fontWeight: 700, color: '#0f1422', margin: '0 0 8px' }}>Couldn't load report</p>
+            <p style={{ fontSize: 14, color: '#64748b', margin: '0 0 20px' }}>{loadError}</p>
+            <button
+              onClick={() => navigate('/upload')}
+              style={{ background: '#1a2240', color: '#fff', border: 'none', borderRadius: 8, padding: '12px 24px', fontWeight: 700, cursor: 'pointer' }}
+            >
+              Go to Upload
+            </button>
+          </div>
+        </main>
+      </div>
+    )
   }
 
   return (
@@ -577,7 +611,7 @@ export default function Report() {
                   <span aria-hidden="true">📋 </span>Screen ID: {screenId}
                 </span>
                 <span style={{ fontSize: 14, color: '#5a6a8a' }}>
-                  <span aria-hidden="true">🖥 </span>Total issues: {summary.total_issues}
+                  <span aria-hidden="true">🖥 </span>Total issues: {totalIssues}
                 </span>
               </div>
             </div>
@@ -603,28 +637,28 @@ export default function Report() {
           }}>
             <div
               role="img"
-              aria-label={`Total issues detected: ${summary.total_issues}`}
+              aria-label={`Total issues detected: ${totalIssues}`}
               style={{ position: 'relative', width: 90, height: 90, flexShrink: 0 }}
             >
               <svg width="90" height="90" viewBox="0 0 90 90" aria-hidden="true">
                 <circle cx="45" cy="45" r="38" fill="none" stroke="#e2e6f0" strokeWidth="8" />
                 <circle cx="45" cy="45" r="38" fill="none" stroke="#1D9E75" strokeWidth="8"
                   strokeDasharray="238.8"
-                  strokeDashoffset={238.8 - (238.8 * Math.min(summary.total_issues, 10)) / 10}
+                  strokeDashoffset={238.8 - (238.8 * Math.min(totalIssues, 10)) / 10}
                   strokeLinecap="round" transform="rotate(-90 45 45)" />
               </svg>
               <div aria-hidden="true" style={{
                 position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
                 alignItems: 'center', justifyContent: 'center',
               }}>
-                <span style={{ fontSize: 24, fontWeight: 700, color: '#0f1422' }}>{summary.total_issues}</span>
+                <span style={{ fontSize: 24, fontWeight: 700, color: '#0f1422' }}>{totalIssues}</span>
                 <span style={{ fontSize: 10, color: '#5a6a8a', fontWeight: 600 }}>ISSUES</span>
               </div>
             </div>
 
             <div style={{ flex: 1 }}>
               <p style={{ fontSize: 17, fontWeight: 700, color: '#0f1422', margin: '0 0 6px' }}>
-                This audit reviewed {screenId} and surfaced {summary.total_issues} issue{summary.total_issues !== 1 ? 's' : ''}
+                This audit reviewed {screenId} and surfaced {totalIssues} issue{totalIssues !== 1 ? 's' : ''}
               </p>
               <p style={{ fontSize: 15, color: '#5a6a8a', margin: '0 0 14px', lineHeight: 1.6 }}>
                 Most findings relate to missing accessible labels and unlabeled input fields.
@@ -879,6 +913,11 @@ export default function Report() {
           xmlFile={xmlFile}
           screenId={screenId}
           onClose={handleClosePreview}
+          violations={violations}
+          totalIssues={totalIssues}
+          severityCounts={severityCounts}
+          schemaVersion={report?.schema_version || '1.0'}
+          xmlPath={report?.xml_path}
         />
       )}
     </div>

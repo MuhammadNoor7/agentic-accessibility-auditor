@@ -421,6 +421,25 @@ Config: `data/data-masc/splits/split_summary.json`
 
 > **Instructions:** Each intern adds a dated entry after pushing work. Newest week at the top. Keep entries factual — file names, test counts, branch commits.
 
+### Week 4 — Ayesha 
+
+**Pushed by:** Ayesha Naveed
+**Date:** 11 July 2026
+
+**Completed:**
+- **R11–R12 review sign-off:** reviewed `src/rules.py` implementations of `check_color_only_info` (R11) and `check_missing_captions` (R12) against `docs/r11_r12_design.md`. Confirmed both rules moved past their original Week 3 stub design — R11 now flags checkable-state widgets (CheckBox/Switch/ToggleButton/RadioButton) with no text/content_desc; R12 now uses `parent_id` sibling adjacency plus bounds-proximity fallback, not just a blanket VideoView flag. Ran `pytest tests/test_rules.py -k "r11 or r12"` — all 5 relevant tests passed (fixture pass/fail cases, non-checkable-widget exclusion, sibling-vs-bounds-distance priority, non-media stub behavior).
+- **Frontend ↔ API wiring** (Priority 1): Upload, Dashboard, and Report pages now call the live backend (`POST /api/v1/audit`, `GET /report`) instead of mock data. Tested end-to-end with a real XML fixture and Groq — confirmed full pipeline works (upload → audit → dashboard → report).
+- **Agent prompt experiments (TBD-01):** ran `scripts/run_explainer_sample.py` — Groq tested successfully (15/15 violations explained, good quality, no hallucination observed). Anthropic/OpenAI blocked by paid billing requirements; Gemini blocked by a Google-side free-tier quota bug (`429`, limit 0) even after Noor's SDK fix resolved the original key-format issue. Documented in `docs/agent_prompt_experiments.md` and `docs/TBD-01-decision.md`; TBD-01 marked Resolved (Groq as default) in this doc's Open Decisions table.
+
+**Pending:**
+- Full 4-provider comparison once Anthropic/OpenAI credits are available and Gemini's quota issue is resolved
+- Records/Audit History page — blocked on backend (no list endpoint, no persistence yet)
+- Auth pages (login/signup/etc.) — blocked on backend (no auth router implemented yet)
+
+**Blockers:** None on my own tasks; Records + Auth wiring blocked on backend work not yet scoped.
+
+---
+
 ### Week 4 — Noor (`noor` branch, commits `98efd2fe0` → `0144b1af3`)
 
 **Pushed by:** Muhammad Noor  

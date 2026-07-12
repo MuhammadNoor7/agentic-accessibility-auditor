@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r07_zero_size_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r07_zero_size_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r07_zero_size_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R07",
+      "issue": "Invisible or zero-size component",
+      "component_id": "c_002",
+      "class": "android.widget.View",
+      "bounds": [
+        100,
+        100,
+        100,
+        100
+      ],
+      "guideline": "G07 \u2014 Invisible or zero-size component",
+      "severity": "Medium",
+      "recommendation": "Remove this element from the accessibility/focus tree, or give it valid, non-zero bounds if it should be visible."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

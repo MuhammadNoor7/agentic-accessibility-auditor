@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r01_missing_label_fail",
+  "image_path": "C:/Users/Muhammad Noor/AppData/Local/Temp/screenshots/tmp_7qcw92p/r01_missing_label_fail.jpg",
+  "xml_path": "C:/Users/Muhammad Noor/AppData/Local/Temp/tmp_7qcw92p/r01_missing_label_fail.xml",
+  "accessibility_score": 90,
+  "enrichment_mode": "template",
+  "summary": {
+    "total_issues": 1,
+    "critical": 0,
+    "high": 1,
+    "medium": 0,
+    "low": 0
+  },
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_002",
+      "class": "android.widget.Button",
+      "bounds": [
+        100,
+        100,
+        300,
+        220
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control.",
+      "agent_explanation": "The android.widget.Button triggered R01: Missing accessible label.",
+      "agent_why_it_matters": "Users who rely on screen readers, motor assistance, or high contrast may be unable to perceive or operate this control correctly.",
+      "agent_developer_fix": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    }
+  ]
+}

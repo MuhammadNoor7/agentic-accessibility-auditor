@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r13_audio_no_transcript_pass",
+  "image_path": "tests/fixtures/screenshots/rules/r13_audio_no_transcript_pass.jpg",
+  "xml_path": "tests/fixtures/rules/r13_audio_no_transcript_pass.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_002",
+      "class": "android.widget.Button",
+      "bounds": [
+        40,
+        200,
+        400,
+        300
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    }
+  ],
+  "component_count": 3,
+  "hidden_component_count": 0
+}

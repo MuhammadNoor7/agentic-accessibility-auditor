@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r16_decorative_focus_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r16_decorative_focus_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r16_decorative_focus_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R16",
+      "issue": "Decorative element in focus tree",
+      "component_id": "c_002",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        0,
+        300,
+        1080,
+        320
+      ],
+      "guideline": "G16 \u2014 Decorative element in focus tree",
+      "severity": "Low",
+      "recommendation": "Remove decorative elements from the focus order (android:focusable=false and android:importantForAccessibility=no)."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

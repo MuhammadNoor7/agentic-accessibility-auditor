@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r26_no_timeout_warning_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r26_no_timeout_warning_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r26_no_timeout_warning_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R26",
+      "issue": "No timeout warning",
+      "component_id": "c_002",
+      "class": "android.widget.TextView",
+      "bounds": [
+        40,
+        300,
+        900,
+        360
+      ],
+      "guideline": "G26 \u2014 Session timeout without warning",
+      "severity": "Medium",
+      "recommendation": "Warn the user at least 20 seconds before the session expires and offer an enabled Extend/OK control."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

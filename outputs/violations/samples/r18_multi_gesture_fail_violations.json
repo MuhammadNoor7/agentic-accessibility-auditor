@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r18_multi_gesture_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r18_multi_gesture_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r18_multi_gesture_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R18",
+      "issue": "Multi-gesture only",
+      "component_id": "c_002",
+      "class": "android.widget.TextView",
+      "bounds": [
+        40,
+        200,
+        700,
+        260
+      ],
+      "guideline": "G18 \u2014 Multi-finger gesture",
+      "severity": "High",
+      "recommendation": "Provide a single-touch alternative for users who cannot perform multi-finger gestures."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

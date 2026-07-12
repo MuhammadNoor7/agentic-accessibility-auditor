@@ -52,7 +52,7 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 
 **Demo (no live LLM):** `uvicorn backend.main:app --reload --port 8000` → `POST /api/v1/audit?use_llm=false` with XML → `GET …/report` → `GET …/report/download?format=html|pdf`.
 
-**Rule fixtures:** `python test_run.py --fixtures` writes `outputs/violations/*_violations.json` for all 57 XML files under `tests/fixtures/rules/`.
+**Rule fixtures:** `python test_run.py --fixtures` writes `outputs/violations/*_violations.json` for all 57 XML files under `tests/fixtures/rules/`. Curated samples (R01–R30) are committed under `outputs/violations/samples/`.
 
 ---
 
@@ -119,8 +119,8 @@ agentic-accessibility-auditor/
 │   └── parsed/fixtures/    # components.json from test_run --fixtures (gitignored)
 │
 ├── outputs/
-│   ├── violations/         # Stage 2 outputs (*_violations.json)
-│   ├── reports/            # Stage 3–4: *_report.json, .html, .pdf
+│   ├── violations/         # Stage 2 outputs; samples/ has R01–R30 fixture JSON in repo
+│   ├── reports/            # Stage 3–4 outputs; samples/ has example JSON/HTML/PDF
 │   └── validation_logs/    # noor_week1–5 summaries + validation logs
 │
 ├── docs/                   # Schemas, guidelines, QA plan, progress report
@@ -329,7 +329,7 @@ python scripts/build_rico_holdout_sheet.py
 
 **Always commit:** source code, `docs/`, `scripts/`, `tests/`, `frontend/`, `requirements.txt`
 
-**Never commit:** `.venv/`, `__pycache__/`, `.env`, raw `xml/` / `screenshots/` trees, most of `outputs/violations/`
+**Never commit:** `.venv/`, `__pycache__/`, `.env`, raw `xml/` / `screenshots/` trees, bulk MASC `outputs/violations/chat_*` (use `outputs/violations/samples/` for fixture demos)
 
 **Tracked on `noor` (parser artifacts & metadata):**
 

@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r25_uncontrolled_animation_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r25_uncontrolled_animation_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r25_uncontrolled_animation_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R25",
+      "issue": "Uncontrolled animation",
+      "component_id": "c_002",
+      "class": "com.airbnb.lottie.LottieAnimationView",
+      "bounds": [
+        100,
+        400,
+        500,
+        700
+      ],
+      "guideline": "G25 \u2014 Uncontrolled auto-updating content",
+      "severity": "Medium",
+      "recommendation": "Add a pause/stop control near the animation so users can halt continuous motion."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

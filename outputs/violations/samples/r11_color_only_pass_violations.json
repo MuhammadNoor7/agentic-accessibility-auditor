@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r11_color_only_pass",
+  "image_path": "tests/fixtures/screenshots/rules/r11_color_only_pass.jpg",
+  "xml_path": "tests/fixtures/rules/r11_color_only_pass.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_002",
+      "class": "android.widget.Switch",
+      "bounds": [
+        900,
+        300,
+        1000,
+        360
+      ],
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

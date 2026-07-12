@@ -2,8 +2,8 @@
 
 **Project:** Agentic Accessibility Auditor (Axion)  
 **Duration:** 8 weeks (Summer 2026)  
-**Last updated:** 12 July 2026  
-**Status:** End of Week 5 — HTML/PDF report export shipped on `noor` (`4ce430feb`); entering Week 6 (auth + records)
+**Last updated:** 13 July 2026  
+**Status:** Week 6 in progress — auth + records + evaluation batch; Weeks 1–5 complete on `noor` (`1fa03a05e`)
 
 ---
 
@@ -24,12 +24,12 @@
 
 | Document | Path | Purpose |
 |----------|------|---------|
-| **SRS v2.0** | `d:\internship\srs\SRS_Agentic_Accessibility_Auditor_v2.0.md` | What the system must do |
-| **SDS v2.0** | `d:\internship\sds\SDS_Agentic_Accessibility_Auditor_v2.0.md` | How to implement it |
-| **Progress report** | `d:\internship\reports\Supplementary_Progress_Report_v1.0.md` | What is actually done |
-| **This plan** | `d:\internship\updated_plan.md` | Weekly schedule + folder map |
+| **SRS v2.0** | `srs/SRS_Agentic_Accessibility_Auditor_v2.0.md` (+ `.docx`) | What the system must do |
+| **SDS v2.2** | `sds/SDS_Agentic_Accessibility_Auditor_v2.0.md` (+ `.docx`) | How to implement it |
+| **Progress report** | `docs/progress/Supplementary_Progress_Report_v1.0.md` (+ `.docx`) | What is actually done |
+| **This plan** | `updated_plan.md` | Weekly schedule + folder map |
 
-Formatted Word/PDF versions of SRS and SDS are in the `srs\` and `sds\` folders.
+Word exports: `scripts/md_to_docx.py` · Figma assets: `docs/assets/figma/`
 
 ---
 
@@ -38,49 +38,24 @@ Formatted Word/PDF versions of SRS and SDS are in the `srs\` and `sds\` folders.
 Use this layout — the project was reorganized in late June:
 
 ```
-d:\internship\
-│
-├── agentic-accessibility-auditor\     ★ MAIN REPO — all code changes go here
-│   ├── src\
-│   │   ├── parser.py                  ✅ Done
-│   │   ├── schema_documents.py        ✅ Done
-│   │   ├── rules.py                   ✅ Done (R01–R30)
-│   │   ├── agent.py                   ✅ Done (Week 4)
-│   │   ├── report.py                  ✅ Done (Week 5 — Jinja2 + Playwright PDF)
-│   │   ├── templates/audit_report.html.j2  ✅ Week 5
-│   │   ├── explainer.py               ✅ Done (Week 4)
-│   │   └── llm_providers.py           ✅ Done (Week 4)
-│   ├── backend\
-│   │   ├── main.py                    ✅ Audit API v0.4.0 (violations + report + download)
-│   │   └── routers/audit.py           ✅ POST /audit, GET …/report/download
-│   ├── frontend\                      ✅ Partial — Upload/Dashboard/Report wired; Records mock
-│   ├── tests/fixtures/rules/          ✅ 57 XML fixtures (R01–R30 pass/fail)
-│   ├── scripts\                       ✅ 12+ dataset/QA utilities (+ noor_week5_validate.py)
-│   ├── docs\                          ✅ Schemas, guidelines, QA plan, progress report v1.7
-│   ├── data\
-│   │   ├── data-masc\                 ✅ 7,068 screens + parsed outputs
-│   │   ├── data-rico-holdout\        ✅ 1,698 holdout
-│   │   ├── xml\                       Generic uploads
-│   │   └── screenshots\
-│   ├── outputs\
-│   │   ├── violations\                Stage 2 output (generated locally)
-│   │   ├── reports\                   Stage 3–4: JSON + HTML/PDF
-│   │   └── validation_logs\           noor_week1–5 logs
-│   ├── docker-compose.yml             ⚠️ Deferred on `noor` (Salar branch)
-│   ├── test_run.py                    ✅ Batch + single + --fixtures
-│   └── app.py                         ✅ Streamlit dev tool
-│
-├── project-folder-salar\              Salar's local copy + git clone
-├── srs\                               SRS v2.0 markdown + formatted docx/pdf
-├── sds\                               SDS v2.0 markdown + formatted docx/pdf
-├── reports\                           Progress reports (this folder)
-├── basic scripts\                       md_to_docx.py, docx_to_pdf.py
-├── masc-data collection\                Original MASC download
-├── other datasets\                      Rico, OneExample archives
-└── updated_plan.md                      ← You are here
+agentic-accessibility-auditor/          ★ MAIN REPO (branch: noor)
+│   ├── src/                            parser, rules, agent, report, explainer
+│   ├── backend/                        FastAPI audit API (violations + report + download)
+│   ├── frontend/                       Axion React UI (Upload/Dashboard/Report wired)
+│   ├── tests/fixtures/rules/           57 XML fixtures (R01–R30 pass/fail)
+│   ├── scripts/                        validation + md_to_docx + dataset utilities
+│   ├── docs/                           schemas, guidelines, progress report, figma/
+│   ├── srs/ · sds/                     SRS/SDS markdown + DOCX
+│   ├── data/
+│   │   ├── data-masc/                  7,068 screens + parsed outputs
+│   │   └── data-rico-holdout/          1,698 holdout
+│   ├── outputs/
+│   │   ├── violations/samples/         ✅ 56 fixture JSON samples (R01–R30, no R28 fixture)
+│   │   ├── reports/samples/            ✅ Example JSON/HTML/PDF report
+│   │   └── validation_logs/          noor_week1–5 logs
+│   ├── docker-compose.yml              ⚠️ Deferred on noor (Salar branch)
+│   └── test_run.py                     batch + single + --fixtures
 ```
-
-**Do not use** deprecated `intern1` folders — see `intern1_folder_review.md` for why.
 
 ---
 
@@ -115,7 +90,7 @@ Minimum policy:
 
 ---
 
-## Progress snapshot (1 July 2026)
+## Progress snapshot (13 July 2026)
 
 | Milestone | Target week | Actual status |
 |-----------|-------------|---------------|
@@ -123,15 +98,14 @@ Minimum policy:
 | Hybrid XML parser | Week 2 | ✅ 7,068/7,068 PASS sign-off |
 | Rico holdout (unseen eval) | Week 2 | ✅ 1,698 disjoint screens built |
 | JSON schemas + examples | Week 1–2 | ✅ `auditor_schema.json` + docs |
-| SRS + SDS v2.0 | Week 2 | ✅ Written with Figma screenshots |
-| Docker skeleton | Week 1–2 | ⚠️ Partial (no frontend service) |
-| Rule engine R01–R30 | Week 3–8 | 🟡 In progress (R01–R10 implemented; R11–R30 pending) |
-| React Axion UI | Week 3–6 | ❌ Not started |
-| Rule engine R01–R30 | Week 3–4 | ✅ Done + 57 XML fixtures |
+| SRS + SDS v2.0 | Week 2 | ✅ Markdown + DOCX with Figma screenshots |
+| Docker skeleton | Week 1–2 | ⚠️ Partial (Salar branch; not on `noor`) |
+| Rule engine R01–R30 | Week 3–4 | ✅ Done + 57 XML fixtures + 56 sample JSON in repo |
 | Agent + report API | Week 4 | ✅ `GET …/report` |
 | HTML/PDF report export | Week 5 | ✅ `src/report.py` + download API |
 | Axion UI (core pages) | Week 4–5 | ✅ Upload/Dashboard/Report wired |
-| Auth + Records | Week 6–7 | ❌ Spec only (SRS §4.9) |
+| Auth + Records | Week 6–7 | ⬜ **Current focus** — spec only so far |
+| 25–40 screen manual eval | Week 6 | ⬜ Not started |
 | Final evaluation (Rico holdout) | Week 8 | ❌ Not started |
 
 ---
@@ -192,7 +166,7 @@ Minimum policy:
 
 **Week 5 demo goal:** Upload XML → dashboard → downloadable HTML/PDF report. **Met.**
 
-#### Week 6 — Auth, Records, big audit run
+#### Week 6 — Auth, Records, big audit run ← **CURRENT (13 Jul 2026)**
 
 | Person | Tasks | Deliverable |
 |--------|-------|-------------|

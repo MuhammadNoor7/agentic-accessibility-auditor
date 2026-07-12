@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r02_image_button_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r02_image_button_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r02_image_button_fail.xml",
+  "total_violations": 4,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_002",
+      "class": "android.widget.ImageButton",
+      "bounds": [
+        50,
+        50,
+        250,
+        170
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_002",
+      "class": "android.widget.ImageButton",
+      "bounds": [
+        50,
+        50,
+        250,
+        170
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R23",
+      "issue": "Unlabeled navigation control",
+      "component_id": "c_002",
+      "class": "android.widget.ImageButton",
+      "bounds": [
+        50,
+        50,
+        250,
+        170
+      ],
+      "guideline": "G23 \u2014 Navigation control not labeled",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription naming the action, e.g. Back, Close, Home, or Menu."
+    },
+    {
+      "rule_id": "R30",
+      "issue": "Icon-only control with no label",
+      "component_id": "c_002",
+      "class": "android.widget.ImageButton",
+      "bounds": [
+        50,
+        50,
+        250,
+        170
+      ],
+      "guideline": "G30 \u2014 Icon-only button with no text alternative",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription describing the icon's action."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

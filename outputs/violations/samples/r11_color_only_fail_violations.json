@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r11_color_only_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r11_color_only_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r11_color_only_fail.xml",
+  "total_violations": 3,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_002",
+      "class": "android.widget.Switch",
+      "bounds": [
+        900,
+        300,
+        1000,
+        360
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R11",
+      "issue": "Color-only information",
+      "component_id": "c_002",
+      "class": "android.widget.Switch",
+      "bounds": [
+        900,
+        300,
+        1000,
+        360
+      ],
+      "guideline": "G11 \u2014 Information conveyed by color alone",
+      "severity": "High",
+      "recommendation": "Add a content description stating the control's current state (e.g. \"Notifications, on\") so it isn't conveyed by color/fill alone."
+    },
+    {
+      "rule_id": "R14",
+      "issue": "Audio-only notification",
+      "component_id": "c_002",
+      "class": "android.widget.Switch",
+      "bounds": [
+        900,
+        300,
+        1000,
+        360
+      ],
+      "guideline": "G14 \u2014 Audio-only notification",
+      "severity": "Medium",
+      "recommendation": "Pair notification text with a visible icon or banner, not sound alone."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

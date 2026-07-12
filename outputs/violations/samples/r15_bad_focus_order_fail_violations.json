@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r15_bad_focus_order_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r15_bad_focus_order_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r15_bad_focus_order_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R15",
+      "issue": "Bad focus order",
+      "component_id": "c_002",
+      "class": "android.widget.Button",
+      "bounds": [
+        100,
+        400,
+        300,
+        500
+      ],
+      "guideline": "G15 \u2014 Logical focus order",
+      "severity": "Medium",
+      "recommendation": "Reorder focusable elements so traversal follows the visual top-to-bottom layout.",
+      "related_component": "c_003"
+    }
+  ],
+  "component_count": 3,
+  "hidden_component_count": 0
+}

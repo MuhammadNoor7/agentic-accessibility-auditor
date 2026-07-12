@@ -23,6 +23,7 @@
 | **2.1** | 2026-07-06 | Noor / Salar | Parser R13–R20 fields; rules R01–R20; MASC re-parse sign-off; audit API violations-only |
 | **2.2** | 2026-07-09 | Noor / Salar | Rules R01–R30; explainer + agent API wiring; `GET …/report`; visibility filter |
 | **2.3** | 2026-07-12 | Noor | Week 5: `src/report.py` HTML/PDF + download API; R09–R20 fixtures; team ownership alignment |
+| **2.4** | 2026-07-13 | Noor | Rules ownership → Salar + Noor + Ayesha (reviewed by all) |
 
 ---
 
@@ -96,7 +97,7 @@ This document provides:
 | JSON Schema | `docs/schemas/auditor_schema.json`, `docs/json_schemas.md` | Noor | **Done** |
 | Validation scripts | `scripts/validate_output.py`, `scripts/noor_week3_validate.py`, `scripts/noor_week4_validate.py`, `scripts/noor_week5_validate.py`, `scripts/masc_parse_signoff.py` | Noor / Salar | **Done** |
 | FastAPI audit API | `backend/routers/audit.py` | Noor | **Partial** (violations + report + download; no auth/records) |
-| Rule engine | `src/rules.py` | Salar | **Done** (R01–R30; review Ayesha + Noor) |
+| Rule engine | `src/rules.py` | Salar + Noor + Ayesha | **Done** (R01–R30; reviewed by all) |
 | Agent layer | `src/agent.py`, `src/explainer.py`, `src/llm_providers.py` | Noor | **Done** (API-wired; template + live LLM) |
 | Report generator | `src/report.py` | Noor | **Done** (Jinja2 HTML + PIL + Playwright PDF) |
 | Axion React UI | `frontend/` | Ayesha | **Partial** (Upload/Dashboard/Report wired; Records mock) |
@@ -244,7 +245,7 @@ Mirror XML path under `screenshots/` with same stem; try `.jpg`, `.jpeg`, `.png`
 
 ### 3.2 Rule engine module (`src/rules.py`)
 
-**SRS:** FR-RU.1–FR-RU.30 | **Owner:** Salar (review: Ayesha + Noor) | **Status:** Implemented (R01–R30)
+**SRS:** FR-RU.1–FR-RU.30 | **Owner:** Salar + Noor + Ayesha (reviewed by all) | **Status:** Implemented (R01–R30)
 
 #### 3.2.1 Public API
 

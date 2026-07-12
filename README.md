@@ -11,8 +11,8 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 | Intern | Branch | Focus |
 |--------|--------|-------|
-| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | MASC data, parser, **rules implementation**, `components.json`, Docker, tests |
-| **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | Rico holdout, Figma, React frontend, SRS co-author, rules review |
+| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | MASC data, parser, **rules** (with Noor + Ayesha), `components.json`, Docker, tests |
+| **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | Rico holdout, Figma, React frontend, SRS co-author, rules (with Salar + Noor) |
 | **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | Backend API, JSON schemas, SDS, agent, report template, SRS review, tests, QA |
 
 ---
@@ -24,7 +24,7 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 | **SRS v2.0** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.0.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.md) |
 | **SDS v2.2** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) |
 | **8-week plan** | [`updated_plan.md`](updated_plan.md) · [`docs/updated_plan_v2.0.docx`](docs/updated_plan_v2.0.docx) |
-| **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) (+ formatted DOCX in same folder) |
+| **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) · [`Internship_Progress_Report_v1.8.docx`](docs/progress/Internship_Progress_Report_v1.8.docx) |
 | **Figma screenshots** | `docs/assets/figma/` |
 
 Formatted Word exports live in `srs/`, `sds/`, and `docs/progress/`.
@@ -42,7 +42,7 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 | Stage | Owner | Output | Status |
 |-------|-------|--------|--------|
 | 1 — Parser | Salar / Noor | `components.json` | **Done** — 7,068 MASC screens; R13–R20 fields + visibility |
-| 2 — Rules | Salar / Noor | `violations.json` | **R01–R30** in `check()`; R09/R28 limited without colors/text-size |
+| 2 — Rules | Salar + Noor + Ayesha (reviewed by all) | `violations.json` | **R01–R30** in `check()`; R09/R28 limited without colors/text-size |
 | 3 — Agent | Noor / Salar | enriched `report.json` | **Done** — `GET /api/v1/audit/{id}/report` (template or live LLM) |
 | 4 — Report | Noor | HTML/PDF | **Done** — `src/report.py` + `GET …/report/download?format=html\|pdf` |
 | UI — Axion | Ayesha | React dashboard | **Partial** — Upload/Dashboard/Report wired; Records still mock |

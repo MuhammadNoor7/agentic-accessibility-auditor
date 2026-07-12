@@ -259,9 +259,9 @@ All stages are orchestrated behind Docker-managed backend services (Appendix E).
 
 | Intern | Branch | Primary ownership |
 |--------|--------|-------------------|
-| **Salar** | `salar` | MASC data integration (with Noor); hybrid XML parser (with Noor); **rule engine implementation** (`src/rules.py`); `components.json` pipeline; Docker; batch scripts; **tests** (with Noor) |
-| **Ayesha** | `ayesha` | **Rico holdout** dataset; Figma + React/Tailwind Axion frontend; **SRS co-author** (with Salar); rules **review** (with Noor, esp. R11–R12) |
-| **Muhammad Noor (Lead)** | `noor` | **Backend/FastAPI** audit API; **JSON structure** + `docs/json_schemas.md` + `auditor_schema.json`; **SDS author**; **SRS review**; agent layer + **report template** (`report.json`, HTML/PDF); `violations.json` pipeline (with Salar); MASC data (with Salar); parser extensions (with Salar); **tests** (with Salar); coordination |
+| **Salar** | `salar` | MASC data integration (with Noor); hybrid XML parser (with Noor); **rule engine** (`src/rules.py`, with Noor + Ayesha); `components.json` pipeline; Docker; batch scripts; **tests** (with Noor) |
+| **Ayesha** | `ayesha` | **Rico holdout** dataset; Figma + React/Tailwind Axion frontend; **SRS co-author** (with Salar); **rules** (with Salar + Noor, esp. R11–R12) |
+| **Muhammad Noor (Lead)** | `noor` | **Backend/FastAPI** audit API; **JSON structure** + `docs/json_schemas.md` + `auditor_schema.json`; **SDS author**; **SRS review**; agent layer + **report template** (`report.json`, HTML/PDF); **rules** (with Salar + Ayesha); `violations.json` pipeline; MASC data (with Salar); parser extensions (with Salar); **tests** (with Salar); coordination |
 
 #### 2.6.1 Artifact ownership (pipeline JSON + docs)
 
@@ -271,7 +271,7 @@ All stages are orchestrated behind Docker-managed backend services (Appendix E).
 | MASC dataset (7,068 screens) | Salar + Noor | Parsed outputs on `noor` |
 | Rico holdout (1,698 screens) | Ayesha | Manifest + holdout strategy |
 | `components.json` | Salar | Via `src/parser.py` (Noor: R13–R20 fields, visibility) |
-| `violations.json` | Salar + Noor | `src/rules.py`; Noor: fixtures, validation, API wiring |
+| `violations.json` | Salar + Noor + Ayesha | `src/rules.py` R01–R30; reviewed by all |
 | `report.json` + HTML/PDF template | Noor | `src/agent.py`, `src/report.py`, `src/templates/` |
 | JSON schema contracts | Noor | `docs/json_schemas.md`, `docs/schemas/auditor_schema.json` |
 | SRS v2.0 | Ayesha + Salar | Noor: review, merge, traceability |
@@ -868,8 +868,8 @@ Minimum API contract for Axion ↔ FastAPI (normative OpenAPI in SDS):
 | Module | Minimum acceptance | Owner |
 |--------|-------------------|-------|
 | **XML Parser** | Extracts all required fields for MASC/Rico/UIAutomator formats; TC-01 pass; outputs valid `components.json` | Salar |
-| **Rule Checker** | R01–R30 on controlled fixtures; outputs valid `violations.json` | Salar (review: Ayesha + Noor) |
-| **Guideline mapping** | Every violation has WCAG guideline reference, severity, detection note | Salar |
+| **Rule Checker** | R01–R30 on controlled fixtures; outputs valid `violations.json` | Salar + Noor + Ayesha (reviewed by all) |
+| **Guideline mapping** | Every violation has WCAG guideline reference, severity, detection note | Salar + Noor + Ayesha |
 | **Agentic layer** | Generates all three agent fields per violation; zero fabricated violations | Noor |
 | **UI Dashboard (Axion)** | Upload, validation panel, issues table, report view, PDF/HTML download | Ayesha |
 | **Report generator** | Readable HTML/PDF with score, summary, per-violation detail, fixes | Noor |

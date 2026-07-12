@@ -11,9 +11,9 @@
 
 | Role | Name | GitHub branch | Primary focus |
 |------|------|---------------|---------------|
-| **Intern 1** | **Salar** | `azeem` → rename to `salar` | MASC data (with Noor); parser (with Noor); **rules implementation**; `components.json`; Docker; **tests** (with Noor) |
-| **Intern 2** | **Ayesha** | `ayesha` | **Rico holdout**; Figma + React frontend; **SRS co-author** (with Salar); rules **review** (with Noor) |
-| **Intern 3 (Lead)** | **Muhammad Noor** | `noor` | **Backend API**; **JSON schemas**; **SDS**; **SRS review**; agent + **report template**; `violations.json` (with Salar); MASC data; parser extensions; **tests**; QA/coordination |
+| **Intern 1** | **Salar** | `azeem` → rename to `salar` | MASC data (with Noor); parser (with Noor); **rules** (with Noor + Ayesha); `components.json`; Docker; **tests** (with Noor) |
+| **Intern 2** | **Ayesha** | `ayesha` | **Rico holdout**; Figma + React frontend; **SRS co-author** (with Salar); **rules** (with Salar + Noor) |
+| **Intern 3 (Lead)** | **Muhammad Noor** | `noor` | **Backend API**; **JSON schemas**; **SDS**; **SRS review**; agent + **report template**; **rules** (with Salar + Ayesha); MASC data; parser extensions; **tests**; QA/coordination |
 
 **Repository:** [github.com/MuhammadNoor7/agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor)  
 **Default branch on GitHub:** `ayesha`
@@ -252,7 +252,7 @@ Minimum policy:
 | MASC dataset + parse | Salar + Noor | §6 | §4 |
 | Rico holdout | Ayesha | §6 | §4 |
 | Parser → `components.json` | Salar / Noor | §4.2 | §3.1 |
-| Rule engine → `violations.json` | Salar (review: Ayesha + Noor) | §4.3, §7 | §3.2 |
+| Rule engine → `violations.json` | Salar + Noor + Ayesha (reviewed by all) | §4.3, §7 | §3.2 |
 | Agent → `report.json` | Noor | §4.5 | §3.3 |
 | Report HTML/PDF template | Noor | §4.6 | §3.4 |
 | JSON schemas + `json_schemas.md` | Noor | §8 | §4 |

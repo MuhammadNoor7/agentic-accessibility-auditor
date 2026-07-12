@@ -2,7 +2,7 @@
 
 ## Agentic Accessibility Auditor (Axion)
 
-**Practical work completed — Weeks 1–4 (baseline 1 July 2026; updated 9 July 2026)**  
+**Practical work completed — Weeks 1–5 (baseline 1 July 2026; updated 12 July 2026)**  
 **Living document — see §15 for team updates; §12–§13 for literature + rule ownership**
 
 | Field | Value |
@@ -34,16 +34,16 @@ This document gathers what has actually been built, run, and produced so far. It
 | Area | Result (12 Jul on `noor`) |
 |------|---------------------------|
 | Parser (Stage 1) | **Complete** — hybrid XML parser; MASC `<wrapper>` + bounds fixes; visibility field; R13–R20 extended fields |
-| Rule engine (Stage 2) | **R01–R30 implemented** — visibility filter; R11 implemented; R09 needs declared colors/screenshot; **101 pytest** |
+| Rule engine (Stage 2) | **R01–R30 implemented** — 57 XML pass/fail fixtures; **120 pytest** |
 | Agent layer (Stage 3) | **Wired** — `src/explainer.py` + `src/agent.py` (`build_audit_report`); LLM or template fallback; API-wired |
 | Report generator (Stage 4) | **Done** — `src/report.py` (Jinja2 HTML + PIL + Playwright PDF); `GET …/report/download` |
 | Axion React UI | **Partial** — Upload/Dashboard/Report wired to live API; Records still mock (Week 6) |
 | FastAPI audit API | **Partial** — `POST /audit` → violations + report + **download**; no auth/records persistence |
 | Auth + Records | Specified in SRS v2.0; not implemented in code |
 | Docker | Deferred on `noor` (removed); Salar owns Docker on `salar` |
-| Documentation | SRS v2.0, **SDS v2.2**, progress report **v1.6** |
+| Documentation | SRS v2.0, **SDS v2.2**, progress report **v1.7** |
 
-**Bottom line (12 Jul):** Week 5 report export is done — XML → R01–R30 → `report.json` → downloadable HTML/PDF. Upload/Dashboard/Report pages call the live API. Next: Records + auth (Week 6); Rico holdout batch eval.
+**Bottom line (12 Jul, pushed `4ce430feb`):** Week 5 complete — full pipeline XML → R01–R30 → `report.json` → downloadable HTML/PDF. Upload/Dashboard/Report wired to live API. Rule fixtures now cover R09–R20. Next: Records + auth (Week 6).
 
 ---
 
@@ -52,7 +52,7 @@ This document gathers what has actually been built, run, and produced so far. It
 | Stage | Owner | Output artefact | Status (12 Jul) | Evidence |
 |-------|-------|-----------------|-----------------|----------|
 | 1 — Parser | Salar / Noor | `*_components.json` | **Done** (R13–R20 fields + visibility) | `data/data-masc/parsed/` (7,068 files, sign-off PASS) |
-| 2 — Rules | Salar / Noor | `violations.json` | **Done** R01–R30 | `src/rules.py`; fixtures R11 + R21–R30 |
+| 2 — Rules | Salar / Noor | `violations.json` | **Done** R01–R30 | `src/rules.py`; 57 XML fixtures in `tests/fixtures/rules/` |
 | 3 — Agent | Noor / Salar | enriched `report.json` | **Done** (API-wired) | `src/agent.py` + `src/explainer.py`; `GET …/report` |
 | 4 — Report | Noor | HTML/PDF | **Done** | `src/report.py`; `GET …/report/download` |
 | UI — Axion | Ayesha | React dashboard | **Partial** | Upload/Dashboard/Report wired; Records mock |
@@ -63,7 +63,7 @@ This document gathers what has actually been built, run, and produced so far. It
 
 ## 4. Project folder structure (repository root)
 
-> **As of 9 July 2026** on branch `noor` — canonical repo: [agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor)
+> **As of 12 July 2026** on branch `noor` (commit `4ce430feb`) — canonical repo: [agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor)
 
 ```
 agentic-accessibility-auditor/          ← repo root (clone / _noor_push locally)
@@ -73,6 +73,8 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │   ├── rules.py                        ← R01–R30 rule checker (Stage 2)
 │   ├── agent.py                        ← Score + build_audit_report (Stage 3; API-wired)
 │   ├── report.py                       ← Jinja2 HTML + Playwright PDF (Stage 4)
+│   ├── templates/
+│   │   └── audit_report.html.j2        ← Standalone HTML report template
 │   ├── explainer.py                    ← Live LLM recommendations (batched; anti-hallucination)
 │   ├── guidelines.py                   ← G01–G30 + R→G mapping for explainer
 │   ├── llm_providers.py                ← Anthropic / OpenAI / Gemini / Groq
@@ -103,13 +105,14 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │           ├── Upload.jsx, Dashboard.jsx, Report.jsx, Records.jsx
 │           └── main/Placeholder.jsx
 │
-├── tests/                              ← pytest suite (**101** passed on `noor`)
+├── tests/                              ← pytest suite (**120** passed on `noor`)
 │   ├── test_parser.py
-│   ├── test_rules.py                   ← R01–R30 fixtures + visibility filter tests
+│   ├── test_rules.py                   ← R01–R30 pass/fail XML fixtures (78 tests)
 │   ├── test_agent.py                   ← score + template report
-│   ├── test_audit.py                   ← FastAPI violations + report
+│   ├── test_audit.py                   ← FastAPI violations + report + download
+│   ├── test_report.py                  ← HTML/PDF export (Week 5)
 │   ├── test_explainer.py               ← anti-hallucination / batching (mocked LLM)
-│   └── fixtures/rules/                 ← XML fixtures (R01–R12, R21–R30, …)
+│   └── fixtures/rules/                 ← 57 controlled XML screens (R01–R30)
 │
 ├── data/                               ← datasets + local uploads
 │   ├── data-masc/
@@ -123,14 +126,12 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │   └── screenshots/                    ← optional screenshot uploads
 │
 ├── outputs/                            ← pipeline artefacts
-│   ├── violations/                     ← *_violations.json
-│   ├── reports/                        ← *_report.json (agent-enriched; Week 4)
+│   ├── violations/                     ← *_violations.json (Stage 2; generated locally)
+│   ├── reports/                        ← *_report.json, .html, .pdf (Stages 3–4)
 │   └── validation_logs/
-│       ├── week3_summary.md
-│       ├── week3_validation_log.txt
-│       ├── noor_week3_summary.md
-│       ├── noor_week3_validation_log.txt
-│       └── masc_reparse_log.txt
+│       ├── noor_week1–4 summaries + logs
+│       ├── noor_week5_summary.md
+│       └── noor_week5_validation_log.txt
 │
 ├── notebooks/
 │   └── masc_dataset_analysis.ipynb     ← Salar MASC analysis (synced Week 4)
@@ -148,6 +149,8 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 ├── scripts/                            ← batch + validation utilities
 │   ├── validate_output.py
 │   ├── noor_week3_validate.py
+│   ├── noor_week4_validate.py
+│   ├── noor_week5_validate.py
 │   ├── masc_parse_signoff.py
 │   ├── run_explainer_sample.py         ← Stage 3 LLM sample runner
 │   ├── compare_visibility_filter_impact.py
@@ -422,21 +425,21 @@ Config: `data/data-masc/splits/split_summary.json`
 
 > **Instructions:** Each intern adds a dated entry after pushing work. Newest week at the top. Keep entries factual — file names, test counts, branch commits.
 
-### Week 5 — Noor (`noor` branch, local — not yet pushed)
+### Week 5 — Noor (`noor` branch, commit `4ce430feb` — pushed 12 Jul 2026)
 
 **Pushed by:** Muhammad Noor  
 **Date:** 12 July 2026
 
 **Completed:**
-- **`src/report.py`** — Jinja2 HTML template (`src/templates/audit_report.html.j2`), PIL screenshot bounding-box annotation, Playwright PDF export
-- **Download API** — `GET /api/v1/audit/{id}/report/download?format=html|pdf` (sync handler for Playwright compatibility)
-- **Frontend** — `frontend/src/api.js` `downloadAuditReport()`; `Report.jsx` triggers real download after processing animation
-- **Tests** — `tests/test_report.py` + extended `tests/test_audit.py`; **101 pytest** passed
-- **Validation** — `scripts/noor_week5_validate.py` + `outputs/validation_logs/noor_week5_validation_log.txt`
-- **Docs** — SRS/SDS/README updated: WeasyPrint → Jinja2 + Playwright
+- **`src/report.py`** — Jinja2 template (`src/templates/audit_report.html.j2`), PIL screenshot bounding-box annotation, Playwright PDF export
+- **Download API** — `GET /api/v1/audit/{id}/report/download?format=html|pdf` (sync handler for Playwright)
+- **Frontend** — `downloadAuditReport()` in `api.js`; `Report.jsx` real HTML/PDF download after processing animation
+- **Rule fixtures** — 21 new R09–R20 pass/fail XML files; `test_run.py --fixtures` batch mode; fixture path fix (no MASC root collision)
+- **Tests** — `tests/test_report.py`; extended `tests/test_audit.py` + `tests/test_rules.py`; **120 pytest** passed
+- **Validation** — `scripts/noor_week5_validate.py` + validation logs
+- **Docs** — SRS/SDS/README/updated_plan/progress report aligned; WeasyPrint → Jinja2 + Playwright
 
 **Pending:**
-- Push Week 5 commit to `origin/noor`
 - Records + auth (Week 6)
 - Rico holdout batch evaluation
 
@@ -596,6 +599,7 @@ Blockers:None
 | 1.4 | 6 Jul 2026 | Noor | R13–R20 parser/rules, full MASC re-parse, SDS v2.1, validation sign-off |
 | 1.5 | 6 Jul 2026 | Noor | R13–R20 rule lead → Noor; DOCX regenerated |
 | **1.6** | **9 Jul 2026** | **Noor** | Week 4: R01–R30, explainer + report API, 94 tests, frontend/notebook sync; next steps + §15 |
+| **1.7** | **12 Jul 2026** | **Noor** | Week 5 pushed (`4ce430feb`): HTML/PDF export, download API, R09–R20 fixtures, 120 tests, docs aligned (Jinja2+Playwright) |
 
 ---
 

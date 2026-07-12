@@ -830,7 +830,7 @@ Minimum API contract for Axion ↔ FastAPI (normative OpenAPI in SDS):
 | GET | `/api/v1/audit/{audit_id}/status` | Pipeline status: `pending`, `parsing`, `checking`, `explaining`, `complete`, `error` |
 | GET | `/api/v1/audit/{audit_id}/violations` | Returns violations JSON (**Week 3 implemented**) |
 | GET | `/api/v1/audit/{audit_id}/report` | Returns report JSON with score + agent fields (**Week 4 implemented**; template or live LLM) |
-| GET | `/api/v1/audit/{audit_id}/report/download?format=html\|pdf` | File download (**Week 5+ — not yet implemented**) |
+| GET | `/api/v1/audit/{audit_id}/report/download?format=html\|pdf` | File download (**Week 5 implemented** — Jinja2 HTML + Playwright PDF) |
 | POST | `/api/v1/audit/batch` | Batch run over server-side dataset path (**Should**) |
 | POST | `/api/v1/auth/signup` | Register account (**Must**) |
 | POST | `/api/v1/auth/login` | Login → JWT (**Must**) |

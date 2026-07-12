@@ -1,6 +1,7 @@
 # Noor Week 5 Summary — HTML/PDF Report Export
 
 **Branch:** `noor`  
+**Commit:** `4ce430feb` (pushed 12 Jul 2026)  
 **Date:** 12 July 2026  
 **Owner:** Muhammad Noor  
 
@@ -27,7 +28,7 @@
 ```
 pytest tests/test_report.py     → 4 passed
 pytest tests/test_audit.py      → 7 passed (incl. HTML + PDF download)
-pytest tests/                   → 101 passed
+pytest tests/                   → 120 passed, 2 skipped
 API smoke POST /audit           → 202
 API smoke GET /report           → 200 (score present)
 API smoke GET /report/download?format=html → 200
@@ -54,7 +55,7 @@ pip install playwright Jinja2 Pillow
 playwright install chromium
 ```
 
-## Files to push (Week 5)
+## Files in commit `4ce430feb` (pushed)
 
 ```
 src/report.py

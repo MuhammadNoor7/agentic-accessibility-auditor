@@ -3,7 +3,7 @@
 Automated accessibility auditing for **Android mobile UIs**.  
 Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `components.json`, rule-based `violations.json`, LLM-enriched explanations, and HTML/PDF reports mapped to **G01–G30** guidelines and **R01–R30** detection rules.
 
-**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — parser + rules **R01–R30**, agent report API, HTML/PDF report export, React UI wired (Upload/Dashboard/Report), **101 pytest** (12 Jul 2026).
+**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — parser + rules **R01–R30**, agent report API, HTML/PDF report export, React UI wired (Upload/Dashboard/Report), **120 pytest** (12 Jul 2026, commit `4ce430feb`).
 
 ---
 
@@ -31,7 +31,7 @@ Formatted Word exports live in `srs/`, `sds/`, and `docs/progress/`.
 
 ---
 
-## Pipeline status (`noor`, 9 Jul 2026)
+## Pipeline status (`noor`, 12 Jul 2026)
 
 ```
 Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
@@ -50,7 +50,9 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 
 **MASC sign-off (Jul 2026):** 640,563 components · 462,542 violations (R01–R20 baseline) · 0 parse errors — see `data/data-masc/parsed/masc_parse_signoff_report.json`.
 
-**Demo (no live LLM):** `uvicorn backend.main:app --reload --port 8000` then `POST /api/v1/audit?use_llm=false` with an XML fixture → `GET …/report`.
+**Demo (no live LLM):** `uvicorn backend.main:app --reload --port 8000` → `POST /api/v1/audit?use_llm=false` with XML → `GET …/report` → `GET …/report/download?format=html|pdf`.
+
+**Rule fixtures:** `python test_run.py --fixtures` writes `outputs/violations/*_violations.json` for all 57 XML files under `tests/fixtures/rules/`.
 
 ---
 
@@ -59,7 +61,7 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 ```
 agentic-accessibility-auditor/
 ├── app.py                  # Streamlit: upload XML + violations preview
-├── test_run.py             # CLI batch parse + rules
+├── test_run.py             # CLI: single XML, batch dataset, or --fixtures
 ├── requirements.txt
 ├── .env.example            # LLM_PROVIDER + API keys
 ├── conftest.py
@@ -69,29 +71,37 @@ agentic-accessibility-auditor/
 │   ├── rules.py            # R01–R30 rule checker
 │   ├── agent.py            # Score + build_audit_report (API-wired)
 │   ├── report.py           # Jinja2 HTML + PIL annotation + Playwright PDF
+│   ├── templates/
+│   │   └── audit_report.html.j2
 │   ├── explainer.py        # Live LLM recommendations
 │   ├── guidelines.py       # G01–G30 + R→G mapping
 │   ├── llm_providers.py    # Anthropic / OpenAI / Gemini / Groq
 │   └── schema_documents.py
 │
-├── backend/                # FastAPI gateway
+├── backend/                # FastAPI gateway (v0.4.0)
 │   ├── main.py
-│   └── routers/audit.py    # POST /audit → GET …/violations + …/report + …/report/download
+│   └── routers/
+│       └── audit.py        # POST /audit → GET …/violations + …/report + …/report/download
 │
-├── frontend/               # Axion React UI (Upload/Dashboard/Report wired; Records mock)
+├── frontend/               # Axion React UI (Vite + React 19 + Tailwind 4)
+│   └── src/
+│       ├── api.js          # createAudit, getAuditReport, downloadAuditReport
+│       ├── state/auditFiles.js
+│       └── pages/          # Upload, Dashboard, Report (API-wired); Records (mock)
 │
-├── tests/                  # 101 pytest (parser, rules, agent, audit, report, explainer)
+├── tests/                  # 120 pytest
 │   ├── test_parser.py
-│   ├── test_rules.py
+│   ├── test_rules.py       # R01–R30 pass/fail XML fixtures
 │   ├── test_agent.py
 │   ├── test_audit.py
 │   ├── test_report.py
 │   ├── test_explainer.py
-│   └── fixtures/rules/
+│   └── fixtures/rules/     # 57 controlled XML screens (R01–R30 pass/fail)
 │
 ├── scripts/
 │   ├── validate_output.py
 │   ├── noor_week3_validate.py
+│   ├── noor_week4_validate.py
 │   ├── noor_week5_validate.py
 │   ├── masc_parse_signoff.py
 │   ├── run_explainer_sample.py
@@ -106,12 +116,12 @@ agentic-accessibility-auditor/
 │   ├── data-masc/          # 7,068 screens — parsed JSON tracked on noor
 │   ├── data-rico-holdout/  # 1,698-screen unseen eval
 │   ├── xml/ / screenshots/ / parsed/   # Generic uploads
-│   └── final_rico/
+│   └── parsed/fixtures/    # components.json from test_run --fixtures (gitignored)
 │
 ├── outputs/
-│   ├── violations/         # Stage 2 outputs
-│   ├── reports/            # Stage 3 report.json (Week 4)
-│   └── validation_logs/    # week3 + noor_week3 + masc_reparse logs
+│   ├── violations/         # Stage 2 outputs (*_violations.json)
+│   ├── reports/            # Stage 3–4: *_report.json, .html, .pdf
+│   └── validation_logs/    # noor_week1–5 summaries + validation logs
 │
 ├── docs/                   # Schemas, guidelines, QA plan, progress report
 ├── srs/                    # SRS v2.0
@@ -156,17 +166,24 @@ Formal contract: [`docs/json_schemas.md`](docs/json_schemas.md) · [`docs/schema
 
 ## Rule checker (Stage 2)
 
-`src/rules.py` — `check(components_json)` runs **R01–R20** and returns `violations.json`.
+`src/rules.py` — `check(components_json)` runs **R01–R30** and returns `violations.json`.
 
 | Rule | Status | Notes |
 |------|--------|-------|
-| R01–R10 | Done | Core accessibility checks (labels, touch targets, overlap, …) |
-| R11 | Stub | Color-only info — needs before/after or pixel diff |
-| R12 | Done | Missing captions (`media_type` heuristics) |
+| R01–R08, R10 | Done | Core checks; pass/fail XML fixtures in `tests/fixtures/rules/` |
+| R09 | Done | Fires when XML declares `text-color` + `background-color` (fixture-tested) |
+| R11–R12 | Done | Color-only state widgets; missing captions on VideoView |
 | R13–R20 | Done | Audio, focus order, spacing, gestures, hint-only labels |
-| R09 | Partial | Needs screenshot contrast analysis |
+| R21–R30 | Done | Extended rules; pass/fail fixtures for R21–R27, R29–R30 |
+| R28 | Partial | Needs declared `text-size` in XML |
 
-Run rules via CLI: `python test_run.py` (parse + rules) or import `src.rules.check`.
+Run rules via CLI:
+
+```bash
+python test_run.py path/to/screen.xml          # single file
+python test_run.py --fixtures                  # all 57 rule fixtures
+python test_run.py --dataset masc              # MASC batch
+```
 
 ---
 

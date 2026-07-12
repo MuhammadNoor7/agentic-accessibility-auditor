@@ -2,8 +2,8 @@
 
 **Project:** Agentic Accessibility Auditor (Axion)  
 **Duration:** 8 weeks (Summer 2026)  
-**Last updated:** 1 July 2026  
-**Status:** End of Week 2 — parser complete; entering Week 3  
+**Last updated:** 12 July 2026  
+**Status:** End of Week 5 — HTML/PDF report export shipped on `noor` (`4ce430feb`); entering Week 6 (auth + records)
 
 ---
 
@@ -44,25 +44,30 @@ d:\internship\
 │   ├── src\
 │   │   ├── parser.py                  ✅ Done
 │   │   ├── schema_documents.py        ✅ Done
-│   │   ├── rules.py                   ⬜ Week 3–8 (Team: Salar + Ayesha + Noor)
+│   │   ├── rules.py                   ✅ Done (R01–R30)
 │   │   ├── agent.py                   ✅ Done (Week 4)
-│   │   └── report.py                  ✅ Done (Week 5 — Jinja2 + Playwright PDF)
+│   │   ├── report.py                  ✅ Done (Week 5 — Jinja2 + Playwright PDF)
+│   │   ├── templates/audit_report.html.j2  ✅ Week 5
+│   │   ├── explainer.py               ✅ Done (Week 4)
+│   │   └── llm_providers.py           ✅ Done (Week 4)
 │   ├── backend\
-│   │   └── main.py                    ⚠️ Health only — expand Week 3–6
-│   ├── frontend\                      ⬜ Week 3–6 (Ayesha) — create with Vite
-│   ├── scripts\                       ✅ 10 dataset/QA utilities
-│   ├── docs\                          ✅ Schemas, guidelines, QA plan
+│   │   ├── main.py                    ✅ Audit API v0.4.0 (violations + report + download)
+│   │   └── routers/audit.py           ✅ POST /audit, GET …/report/download
+│   ├── frontend\                      ✅ Partial — Upload/Dashboard/Report wired; Records mock
+│   ├── tests/fixtures/rules/          ✅ 57 XML fixtures (R01–R30 pass/fail)
+│   ├── scripts\                       ✅ 12+ dataset/QA utilities (+ noor_week5_validate.py)
+│   ├── docs\                          ✅ Schemas, guidelines, QA plan, progress report v1.7
 │   ├── data\
 │   │   ├── data-masc\                 ✅ 7,068 screens + parsed outputs
-│   │   ├── data-rico-holdout\        ✅ 1,698 holdout (4 parsed so far)
-│   │   ├── final_rico\                Raw Rico corpus
+│   │   ├── data-rico-holdout\        ✅ 1,698 holdout
 │   │   ├── xml\                       Generic uploads
 │   │   └── screenshots\
 │   ├── outputs\
-│   │   ├── violations\                ⬜ Stage 2 output
-│   │   └── reports\                   ⬜ Stage 4 output
-│   ├── docker-compose.yml             ⚠️ backend + auditor (no frontend yet)
-│   ├── test_run.py                    ✅ Batch parser CLI
+│   │   ├── violations\                Stage 2 output (generated locally)
+│   │   ├── reports\                   Stage 3–4: JSON + HTML/PDF
+│   │   └── validation_logs\           noor_week1–5 logs
+│   ├── docker-compose.yml             ⚠️ Deferred on `noor` (Salar branch)
+│   ├── test_run.py                    ✅ Batch + single + --fixtures
 │   └── app.py                         ✅ Streamlit dev tool
 │
 ├── project-folder-salar\              Salar's local copy + git clone
@@ -84,7 +89,7 @@ d:\internship\
 ```
 Screenshot + UIAutomator XML
     → Parser (Salar lead; Noor + Ayesha support)          → components.json     ✅ DONE
-    → Rule engine (Team: Salar + Ayesha + Noor)           → violations.json     ⬜ Week 3–8
+    → Rule engine (Team: Salar + Ayesha + Noor)           → violations.json     ✅ R01–R30
     → Agent/model layer (Noor + Ayesha; Salar support)    → report.json         ✅ Week 4
     → Report generator (Noor lead; team support)          → HTML / PDF          ✅ Week 5 (Noor)
     → Axion UI (Ayesha lead; Noor + Salar support)        → upload / dashboard  ✅ Partial (Records Week 6)
@@ -122,7 +127,10 @@ Minimum policy:
 | Docker skeleton | Week 1–2 | ⚠️ Partial (no frontend service) |
 | Rule engine R01–R30 | Week 3–8 | 🟡 In progress (R01–R10 implemented; R11–R30 pending) |
 | React Axion UI | Week 3–6 | ❌ Not started |
-| LLM agent + reports | Week 4–8 | ⬜ Team setup pending (Ayesha added to model workstream) |
+| Rule engine R01–R30 | Week 3–4 | ✅ Done + 57 XML fixtures |
+| Agent + report API | Week 4 | ✅ `GET …/report` |
+| HTML/PDF report export | Week 5 | ✅ `src/report.py` + download API |
+| Axion UI (core pages) | Week 4–5 | ✅ Upload/Dashboard/Report wired |
 | Auth + Records | Week 6–7 | ❌ Spec only (SRS §4.9) |
 | Final evaluation (Rico holdout) | Week 8 | ❌ Not started |
 
@@ -152,39 +160,37 @@ Minimum policy:
 
 ---
 
-### Phase 2 — Core logic (Weeks 3–4) ← **CURRENT**
+### Phase 2 — Core logic (Weeks 3–4) ✅ Complete
 
-#### Week 3 — Rule engine + UI foundation
+#### Week 3 — Rule engine + UI foundation (completed Jul 2026)
 
-| Person | Tasks | Deliverable |
-|--------|-------|-------------|
-| **Salar** | Lead R01–R05 hardening + pair with Ayesha on R11/R12 design; run `validate_output.py` on violations samples | R01–R05 stable + validation logs |
-| **Ayesha** | Frontend scaffold + start R11–R12 detection stubs + join agent/model prompt experiments with Noor | UI scaffold + first R11/R12 PR + model notes |
-| **Noor** | Lock score formula; scaffold `src/agent.py`; support R01–R05 review; define G01–G10 mapping checks | API/agent skeleton + mapping checklist |
+| Person | Planned | **Actual outcome** |
+|--------|---------|-------------------|
+| **Salar** | R01–R05 + validation | R01–R30 in `check()`; MASC full scan |
+| **Ayesha** | UI scaffold + R11/R12 stubs | Figma + schemas; React deferred to Week 4 |
+| **Noor** | Agent scaffold + R13–R20 | Parser extensions; `noor_week3_validate.py` |
 
-**Week 3 demo goal:** One controlled XML file → `violations.json` with R01–R05 hits.
+#### Week 4 — Full rules + agent prompts (completed 9–11 Jul 2026)
 
-#### Week 4 — Full rules + agent prompts
-
-| Person | Tasks | Deliverable |
-|--------|-------|-------------|
-| **Salar** | Co-implement R13–R15 with team; start Rico holdout batch parse with rules | R13–R15 PRs + holdout run logs |
-| **Ayesha** | Dashboard page + co-implement R11–R15 tests; participate in model fine-tuning/prompt loop | Core dashboard UI + R11–R15 tests + model eval notes |
-| **Noor** | LLM prompts/agent wiring + co-implement R21 starter rules; review R11–R15 | `report.json` draft + R21 starter PR |
-
-**Week 4 demo goal:** Parse → rules → agent explanation for one screen.
+| Person | Planned | **Actual outcome** |
+|--------|---------|-------------------|
+| **Salar** | R13–R15 + explainer layer | `explainer.py`, `llm_providers.py`, visibility filter |
+| **Ayesha** | Dashboard + R11–R15 tests | Frontend ↔ API wiring; TBD-01 Groq default |
+| **Noor** | Agent API + R21–R30 | `GET …/report`; 94→120 pytest after Week 5 |
 
 ---
 
-### Phase 3 — Integration (Weeks 5–6)
+### Phase 3 — Integration (Weeks 5–6) ← **CURRENT**
 
-#### Week 5 — Reports + pipeline wiring
+#### Week 5 — Reports + pipeline wiring (completed 12 Jul 2026, `4ce430feb`)
 
-| Person | Tasks | Deliverable |
-|--------|-------|-------------|
-| **Salar** | FastAPI audit pipeline orchestration; co-work on R16–R20 fixes | End-to-end API + R16–R20 support |
-| **Ayesha** | Audit Report page + Generate Report modal; agent/model experiment branch updates | Report UI + model experiment report |
-| **Noor** | `src/report.py` generation; integrate agent output with shared rule blocks | Downloadable report + integrated agent flow |
+| Person | Planned | **Actual outcome** |
+|--------|---------|-------------------|
+| **Salar** | FastAPI orchestration | Rules R16–R20 covered by new XML fixtures + tests |
+| **Ayesha** | Report page + download modal | `Report.jsx` + `downloadAuditReport()` wired |
+| **Noor** | `src/report.py` HTML/PDF | Jinja2 + Playwright PDF; download API; 21 new R09–R20 fixtures; `noor_week5_validate.py` |
+
+**Week 5 demo goal:** Upload XML → dashboard → downloadable HTML/PDF report. **Met.**
 
 #### Week 6 — Auth, Records, big audit run
 

@@ -93,7 +93,7 @@ This document provides:
 | Hybrid XML parser | `src/parser.py` | Salar / Noor | **Done** (R13–R20 fields + visibility) |
 | Schema helpers | `src/schema_documents.py` | Salar | **Done** |
 | JSON Schema | `docs/schemas/auditor_schema.json` | Ayesha / Noor | **Done** |
-| Validation scripts | `scripts/validate_output.py`, `scripts/noor_week3_validate.py`, `scripts/masc_parse_signoff.py` | Noor / Salar | **Done** |
+| Validation scripts | `scripts/validate_output.py`, `scripts/noor_week3_validate.py`, `scripts/noor_week4_validate.py`, `scripts/noor_week5_validate.py`, `scripts/masc_parse_signoff.py` | Noor / Salar | **Done** |
 | FastAPI audit API | `backend/routers/audit.py` | Noor | **Partial** (violations + report + download; no auth/records) |
 | Rule engine | `src/rules.py` | Salar / Noor | **Done** (R01–R30; R09/R28 limited without colors/text-size) |
 | Agent layer | `src/agent.py`, `src/explainer.py`, `src/llm_providers.py` | Noor / Salar | **Done** (API-wired; template + live LLM) |
@@ -899,23 +899,26 @@ docker-compose up --build
 | Unit | pytest | Parser (incl. MASC wrappers), R01–R20 |
 | Schema | `validate_output.py` | `components.json` / `violations.json` artefacts |
 | API | pytest + TestClient | Audit violations + report (`test_audit.py`) |
-| Integration | `noor_week3_validate.py`, `masc_parse_signoff.py` | Full MASC re-parse + R01–R20 scan |
+| Integration | `noor_week3_validate.py`, `noor_week4_validate.py`, `noor_week5_validate.py`, `masc_parse_signoff.py` | Full pipeline + report download smoke |
 | E2E | Manual / Playwright | Axion upload → Records (planned) |
 | Evaluation | MASC train/val/test splits | 7,068 screens, sign-off JSON |
 
 ### 13.1 Golden files
 
 ```
-tests/fixtures/rules/
+tests/fixtures/rules/          # 57 controlled XML screens
 ├── r01_missing_label_fail.xml / r01_missing_label_pass.xml
-├── r02_image_button_fail.xml / …
-├── … (R03–R10 fail/pass fixtures)
+├── r02_image_button_fail.xml / r02_image_button_pass.xml
+├── … (R03–R20 pass/fail where applicable)
+├── r21–r30 pass/fail fixtures
 └── clean_no_violations.xml
 
-tests/test_parser.py     # extended fields + MASC wrapper nesting
-tests/test_rules.py        # R01–R10 fixtures + R11/R12 stubs + R13–R20 unit cases
-tests/test_audit.py        # API parse→rules parity on R01
-tests/test_agent.py        # score formula scaffold
+tests/test_parser.py       # extended fields + MASC wrapper nesting
+tests/test_rules.py        # R01–R30 pass/fail fixture regression (78 tests)
+tests/test_audit.py        # API violations + report + download
+tests/test_report.py       # HTML/PDF export unit tests
+tests/test_agent.py        # score formula + template report
+tests/test_explainer.py    # anti-hallucination / batching (mocked LLM)
 ```
 
 ### 13.2 Sign-off tests (from SRS §10)
@@ -926,6 +929,7 @@ tests/test_agent.py        # score formula scaffold
 - `masc_parse_signoff_report.json` → PASS (7,068 screens, 0 extended-field misses)
 - API `POST /audit` → `GET .../violations` matches CLI on R01 fixture
 - API `GET .../report` returns score + agent fields (`enrichment_mode`: `template` or `llm`)
+- API `GET .../report/download?format=html|pdf` returns attachment bytes (Playwright PDF requires `playwright install chromium`)
 - Explainer unit tests mock LLM; anti-hallucination guard covered in `tests/test_explainer.py`
 
 ---
@@ -1047,19 +1051,22 @@ components:
 | `src/guidelines.py` | G01–G30 + R→G mapping |
 | `src/report.py` | HTML/PDF generator (Jinja2 + Playwright) |
 | `backend/main.py` | FastAPI entry |
-| `backend/routers/audit.py` | Violations + report audit API (**Partial** — no auth/records/download) |
+| `backend/routers/audit.py` | Violations + report + download API (**Partial** — no auth/records persistence) |
 | `backend/routers/` | Auth, records (planned) |
-| `scripts/noor_week3_validate.py` | Full validation pipeline |
+| `scripts/noor_week3_validate.py` | Week 3 validation pipeline |
+| `scripts/noor_week4_validate.py` | Week 4 agent + report API validation |
+| `scripts/noor_week5_validate.py` | Week 5 HTML/PDF + download validation |
 | `scripts/masc_parse_signoff.py` | MASC parse sign-off |
 | `scripts/run_explainer_sample.py` | Stage 3 LLM sample runner |
 | `tests/test_parser.py` | Parser unit tests |
 | `tests/test_rules.py` | Rules R01–R30 unit tests |
-| `tests/test_audit.py` | Audit API tests (violations + report) |
+| `tests/test_audit.py` | Audit API tests (violations + report + download) |
+| `tests/test_report.py` | Report HTML/PDF export tests |
 | `tests/test_explainer.py` | Explainer anti-hallucination tests |
 | `frontend/src/` | Axion React app (**Partial** — Upload/Dashboard/Report wired) |
 | `docs/schemas/auditor_schema.json` | Normative JSON Schema |
 | `docs/json_schemas.md` | Schema documentation |
-| `outputs/reports/` | Agent-enriched `*_report.json` |
+| `outputs/reports/` | Agent-enriched `*_report.json` + generated `.html` / `.pdf` |
 | `outputs/records/` | Per-user saved audits (planned) |
 | `data/data-masc/` | Primary dataset |
 | `data/data-rico-holdout/` | Unseen evaluation |

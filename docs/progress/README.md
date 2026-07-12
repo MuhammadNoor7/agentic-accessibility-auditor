@@ -6,8 +6,9 @@ This folder holds the **living supplementary progress report** for the Agentic A
 
 | File | Purpose |
 |------|---------|
-| `Supplementary_Progress_Report_v1.0.md` | **Edit this** — markdown source; team adds weekly updates below (current: **v1.6**, 9 Jul 2026) |
-| `Supplementary_Progress_Report_v1.0_formatted.docx` | Formatted Word export (regenerate after major updates) |
+| `Supplementary_Progress_Report_v1.0.md` | **Edit this** — markdown source; team adds weekly updates below (current: **v1.7**, 12 Jul 2026) |
+| `Supplementary_Progress_Report_v1.0_formatted.docx` | Formatted Word export for supervisor submission (regenerate after major updates) |
+| `Supplementary_Progress_Report_v1.0.docx` | Word export (same content; regenerate with `md_to_docx.py`) |
 
 ## How to update (all interns)
 

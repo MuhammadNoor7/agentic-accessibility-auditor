@@ -7,7 +7,7 @@
 |-------|-------|
 | **Document version** | 2.2 |
 | **Status** | Implementation reference |
-| **Prepared by** | Muhammad Noor (Lead), Salar (Parser/Rules/Docker), Ayesha (Frontend/Schemas) |
+| **Prepared by** | Muhammad Noor (Lead — primary author); Salar + Ayesha (SRS inputs, parser/UI design) |
 | **Institution** | FAST-NUCES |
 | **Related SRS** | `SRS_Agentic_Accessibility_Auditor_v2.0.md` (v2.0) |
 | **Repository** | [MuhammadNoor7/agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor) |
@@ -22,6 +22,7 @@
 | **2.0** | 2026 | Team | Aligned to SRS v2.0 with embedded Figma screenshots; auth, Records, Dashboard flows |
 | **2.1** | 2026-07-06 | Noor / Salar | Parser R13–R20 fields; rules R01–R20; MASC re-parse sign-off; audit API violations-only |
 | **2.2** | 2026-07-09 | Noor / Salar | Rules R01–R30; explainer + agent API wiring; `GET …/report`; visibility filter |
+| **2.3** | 2026-07-12 | Noor | Week 5: `src/report.py` HTML/PDF + download API; R09–R20 fixtures; team ownership alignment |
 
 ---
 
@@ -91,17 +92,15 @@ This document provides:
 | Module | Path | Owner | Status |
 |--------|------|-------|--------|
 | Hybrid XML parser | `src/parser.py` | Salar / Noor | **Done** (R13–R20 fields + visibility) |
-| Schema helpers | `src/schema_documents.py` | Salar | **Done** |
-| JSON Schema | `docs/schemas/auditor_schema.json` | Ayesha / Noor | **Done** |
+| Schema helpers | `src/schema_documents.py` | Noor | **Done** (JSON envelope builders) |
+| JSON Schema | `docs/schemas/auditor_schema.json`, `docs/json_schemas.md` | Noor | **Done** |
 | Validation scripts | `scripts/validate_output.py`, `scripts/noor_week3_validate.py`, `scripts/noor_week4_validate.py`, `scripts/noor_week5_validate.py`, `scripts/masc_parse_signoff.py` | Noor / Salar | **Done** |
 | FastAPI audit API | `backend/routers/audit.py` | Noor | **Partial** (violations + report + download; no auth/records) |
-| Rule engine | `src/rules.py` | Salar / Noor | **Done** (R01–R30; R09/R28 limited without colors/text-size) |
-| Agent layer | `src/agent.py`, `src/explainer.py`, `src/llm_providers.py` | Noor / Salar | **Done** (API-wired; template + live LLM) |
+| Rule engine | `src/rules.py` | Salar | **Done** (R01–R30; review Ayesha + Noor) |
+| Agent layer | `src/agent.py`, `src/explainer.py`, `src/llm_providers.py` | Noor | **Done** (API-wired; template + live LLM) |
 | Report generator | `src/report.py` | Noor | **Done** (Jinja2 HTML + PIL + Playwright PDF) |
-| Auth service | `backend/services/auth.py` | Salar | Planned |
-| Records store | `backend/services/records.py` | Salar / Ayesha | Planned |
 | Axion React UI | `frontend/` | Ayesha | **Partial** (Upload/Dashboard/Report wired; Records mock) |
-| Docker Compose | `docker-compose.yml` | Salar | **Partial** (deferred on `noor`) |
+| pytest suite | `tests/` | Salar / Noor | **Done** (120 tests) |
 
 ---
 
@@ -184,7 +183,7 @@ outputs/records/{user_id}/
 
 ### 3.1 Parser module (`src/parser.py`)
 
-**SRS:** FR-PS.1–FR-PS.9 | **Owner:** Salar | **Status:** Implemented
+**SRS:** FR-PS.1–FR-PS.9 | **Owner:** Salar / Noor | **Status:** Implemented
 
 #### 3.1.1 Responsibilities
 
@@ -245,7 +244,7 @@ Mirror XML path under `screenshots/` with same stem; try `.jpg`, `.jpeg`, `.png`
 
 ### 3.2 Rule engine module (`src/rules.py`)
 
-**SRS:** FR-RU.1–FR-RU.30 | **Owner:** Salar / Noor | **Status:** Implemented (R01–R30)
+**SRS:** FR-RU.1–FR-RU.30 | **Owner:** Salar (review: Ayesha + Noor) | **Status:** Implemented (R01–R30)
 
 #### 3.2.1 Public API
 
@@ -294,7 +293,7 @@ Default `dpi = 160` when `device_info` absent (TBD-03).
 
 ### 3.3 Agent module (`src/agent.py` + `src/explainer.py`)
 
-**SRS:** FR-AG.1–FR-AG.8 | **Owner:** Noor / Salar | **Status:** Done (API-wired Week 4)
+**SRS:** FR-AG.1–FR-AG.8 | **Owner:** Noor | **Status:** Done (API-wired Week 4)
 
 ```python
 def build_audit_report(
@@ -329,7 +328,7 @@ class AgenticEnricher:
 
 ### 3.5 API orchestrator (`backend/`)
 
-**Owner:** Salar + Noor
+**Owner:** Noor
 
 ```
 backend/

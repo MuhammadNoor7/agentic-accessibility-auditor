@@ -11,9 +11,9 @@
 
 | Role | Name | GitHub branch | Primary focus |
 |------|------|---------------|---------------|
-| **Intern 1** | **Salar** | `azeem` → rename to `salar` | Data, parser, shared rules/guidelines implementation, Docker, backend APIs |
-| **Intern 2** | **Ayesha** | `ayesha` | UI + schemas + shared rules/guidelines + agentic/model experiments |
-| **Intern 3 (Lead)** | **Muhammad Noor** | `noor` | Agent/report lead, shared rules/guidelines, QA/evaluation, coordination |
+| **Intern 1** | **Salar** | `azeem` → rename to `salar` | MASC data (with Noor); parser (with Noor); **rules implementation**; `components.json`; Docker; **tests** (with Noor) |
+| **Intern 2** | **Ayesha** | `ayesha` | **Rico holdout**; Figma + React frontend; **SRS co-author** (with Salar); rules **review** (with Noor) |
+| **Intern 3 (Lead)** | **Muhammad Noor** | `noor` | **Backend API**; **JSON schemas**; **SDS**; **SRS review**; agent + **report template**; `violations.json` (with Salar); MASC data; parser extensions; **tests**; QA/coordination |
 
 **Repository:** [github.com/MuhammadNoor7/agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor)  
 **Default branch on GitHub:** `ayesha`
@@ -246,13 +246,21 @@ Minimum policy:
 
 ## Module ownership (quick reference)
 
-| Module | Owner | SRS section | SDS section |
-|--------|-------|-------------|-------------|
-| Parser | Salar | §4.2 | §3.1 |
-| Rule engine (R01–R30) | Salar + Ayesha + Noor (split by blocks) | §4.3, §7 | §6 |
-| Agent / model layer | Noor + Ayesha (Salar support) | §4.5 | §7 |
-| Report generator | Noor | §4.6 | §8 |
+| Module / artifact | Owner | SRS section | SDS section |
+|-------------------|-------|-------------|-------------|
+| Data collection | All | §6 | §4 |
+| MASC dataset + parse | Salar + Noor | §6 | §4 |
+| Rico holdout | Ayesha | §6 | §4 |
+| Parser → `components.json` | Salar / Noor | §4.2 | §3.1 |
+| Rule engine → `violations.json` | Salar (review: Ayesha + Noor) | §4.3, §7 | §3.2 |
+| Agent → `report.json` | Noor | §4.5 | §3.3 |
+| Report HTML/PDF template | Noor | §4.6 | §3.4 |
+| JSON schemas + `json_schemas.md` | Noor | §8 | §4 |
+| Backend / FastAPI API | Noor | §9 | §3.5 |
 | Axion UI | Ayesha | §3.1, Appendix F | §9 |
+| SRS v2.0 | Ayesha + Salar (review: Noor) | — | — |
+| SDS v2.2 | Noor | — | — |
+| pytest suite | Salar + Noor | §10 | §13 |
 | Auth + Records | Ayesha + Salar | §4.9 | §10 |
 | Docker | Salar | Appendix E | §11 |
 | Evaluation | Noor | §11 | §13 |

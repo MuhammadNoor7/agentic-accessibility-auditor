@@ -9,7 +9,7 @@
 |-------|-------|
 | Report type | Empirical / progress (not theoretical SRS/SDS) |
 | Prepared by | Muhammad Noor (Lead) |
-| Team | Salar (Parser/Rules/Docker), Ayesha (UI/Schemas/Figma), Noor (Agent/Reports/QA) |
+| Team | Salar (parser, rules, MASC data, tests); Ayesha (Rico holdout, frontend, SRS); Noor (backend, JSON schemas, SDS, agent, reports, SRS review, tests, QA) |
 | Repository | [MuhammadNoor7/agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor) |
 | Canonical specs | In repo: `srs/` · `sds/` · `updated_plan.md` |
 
@@ -41,9 +41,32 @@ This document gathers what has actually been built, run, and produced so far. It
 | FastAPI audit API | **Partial** — `POST /audit` → violations + report + **download**; no auth/records persistence |
 | Auth + Records | Specified in SRS v2.0; not implemented in code |
 | Docker | Deferred on `noor` (removed); Salar owns Docker on `salar` |
-| Documentation | SRS v2.0, **SDS v2.2**, progress report **v1.7** |
+| Documentation | SRS v2.0 (Ayesha+Salar), **SDS v2.2** (Noor), progress report **v1.8** |
 
-**Bottom line (12 Jul, pushed `4ce430feb`):** Week 5 complete — full pipeline XML → R01–R30 → `report.json` → downloadable HTML/PDF. Upload/Dashboard/Report wired to live API. Rule fixtures now cover R09–R20. Next: Records + auth (Week 6).
+**Bottom line (12 Jul, pushed `4ce430feb`):** Week 5 complete — full pipeline XML → R01–R30 → `report.json` → downloadable HTML/PDF. Upload/Dashboard/Report wired to live API. Rule fixtures cover R09–R20. Next: Records + auth (Week 6).
+
+---
+
+## 2.1 Team contributions & artifact ownership (12 Jul 2026)
+
+> **Credit map** for supervisor review — reflects who built each major deliverable on branch `noor`.
+
+| Area | Primary contributor(s) | Evidence |
+|------|------------------------|----------|
+| **Data collection** | All interns | Shared dataset effort |
+| **MASC dataset** (7,068 screens) | Salar + Noor | `data/data-masc/`; full re-parse sign-off |
+| **Rico holdout** (1,698 screens) | Ayesha | `data/data-rico-holdout/`; manifest |
+| **Parser** → `components.json` | Salar + Noor | `src/parser.py` (Noor: R13–R20 fields, visibility, MASC wrapper fix) |
+| **Rules** → `violations.json` | **Salar** (implementation) | `src/rules.py` R01–R30 |
+| **Rules review** | Ayesha + Noor | R11–R12 sign-off; fixture coverage R09–R30 |
+| **Agent** → `report.json` | Noor | `src/agent.py`, `src/explainer.py`, score formula |
+| **Report template** (HTML/PDF) | Noor | `src/report.py`, `src/templates/audit_report.html.j2` |
+| **Backend / FastAPI** | Noor | `backend/routers/audit.py`, `backend/main.py` |
+| **Frontend (Axion)** | Ayesha | `frontend/`; API wiring Upload/Dashboard/Report |
+| **JSON structure + schema docs** | Noor | `docs/json_schemas.md`, `docs/schemas/auditor_schema.json`, `src/schema_documents.py` |
+| **SRS v2.0** | Ayesha + Salar | `srs/` — Noor reviewed and merged |
+| **SDS v2.2** | Noor | `sds/` |
+| **Tests (pytest)** | Salar + Noor | `tests/` — 120 passed |
 
 ---
 
@@ -52,8 +75,8 @@ This document gathers what has actually been built, run, and produced so far. It
 | Stage | Owner | Output artefact | Status (12 Jul) | Evidence |
 |-------|-------|-----------------|-----------------|----------|
 | 1 — Parser | Salar / Noor | `*_components.json` | **Done** (R13–R20 fields + visibility) | `data/data-masc/parsed/` (7,068 files, sign-off PASS) |
-| 2 — Rules | Salar / Noor | `violations.json` | **Done** R01–R30 | `src/rules.py`; 57 XML fixtures in `tests/fixtures/rules/` |
-| 3 — Agent | Noor / Salar | enriched `report.json` | **Done** (API-wired) | `src/agent.py` + `src/explainer.py`; `GET …/report` |
+| 2 — Rules | **Salar** (review: Ayesha + Noor) | `violations.json` | **Done** R01–R30 | `src/rules.py`; 57 XML fixtures |
+| 3 — Agent | Noor | enriched `report.json` | **Done** (API-wired) | `src/agent.py` + `src/explainer.py`; `GET …/report` |
 | 4 — Report | Noor | HTML/PDF | **Done** | `src/report.py`; `GET …/report/download` |
 | UI — Axion | Ayesha | React dashboard | **Partial** | Upload/Dashboard/Report wired; Records mock |
 | API | Noor | FastAPI audit routes | **Partial** | violations + report + download; no auth/records |
@@ -252,50 +275,54 @@ Config: `data/data-masc/splits/split_summary.json`
 
 ---
 
-## 7. Code and infrastructure delivered (baseline 1 Jul)
+## 7. Code and infrastructure delivered (updated 12 Jul)
 
 | Path | Purpose | Owner |
 |------|---------|-------|
-| `src/parser.py` | Hybrid XML → `components.json` | Salar |
-| `src/schema_documents.py` | JSON envelope builders | Salar |
-| `test_run.py` | CLI batch / single-file parser | Salar |
+| `src/parser.py` | Hybrid XML → `components.json` | Salar / Noor |
+| `src/schema_documents.py` | JSON envelope builders | Noor |
+| `src/rules.py` | R01–R30 rule checker → `violations.json` | Salar (review: Ayesha + Noor) |
+| `src/agent.py`, `src/explainer.py` | Agent layer → `report.json` | Noor |
+| `src/report.py`, `src/templates/` | HTML/PDF report export | Noor |
+| `backend/routers/audit.py` | FastAPI audit + download API | Noor |
+| `test_run.py` | CLI batch / single / `--fixtures` | Salar / Noor |
+| `tests/` | pytest suite (120 tests) | Salar / Noor |
 | `app.py` | Streamlit dev UI | Salar |
-| `backend/main.py` | FastAPI health endpoints | Salar |
-| `scripts/validate_output.py` | JSON schema validation | Salar |
+| `scripts/validate_output.py` | JSON schema validation | Noor / Salar |
 | `docker-compose.yml` | Backend + auditor services | Salar |
 
 ---
 
 ## 8. Documentation delivered
 
-| Document | Status |
-|----------|--------|
-| SRS v2.0 | Complete |
-| SDS v2.0 | Complete |
-| JSON schemas + `auditor_schema.json` | Complete |
-| Accessibility guidelines (G01–G30, R01–R30) | Complete |
-| QA test plan (TC-01–TC-06) | Complete |
-| Figma UI specs (SRS Appendix F) | Documented |
-| Updated 8-week plan | Complete |
+| Document | Author(s) | Status |
+|----------|-----------|--------|
+| SRS v2.0 | Ayesha + Salar (Noor review) | Complete |
+| SDS v2.2 | Noor | Complete |
+| JSON schemas + `auditor_schema.json` | Noor | Complete |
+| Accessibility guidelines (G01–G30, R01–R30) | Team (Noor lead doc) | Complete |
+| QA test plan (TC-01–TC-06) | Noor | Complete |
+| Figma UI specs (SRS Appendix F) | Ayesha | Documented |
+| Updated 8-week plan | Noor | Complete |
 
 ---
 
-## 9. Per-person contribution summary (baseline 1 Jul)
+## 9. Per-person contribution summary (updated 12 Jul)
 
-### Salar — Parser, rules, Docker, datasets
+### Salar — Parser, rules, MASC data, Docker, tests
 
-**Done:** Hybrid parser, 7,068 MASC parses, MASC splits, Rico holdout build, Docker Compose, validate script  
-**Pending at baseline:** `src/rules.py`, full audit API, Auth backend, branch rename `azeem` → `salar`
+**Done:** Hybrid parser (with Noor); **R01–R30 rule implementation**; MASC integration + batch scripts; Docker Compose; `components.json` pipeline; pytest (with Noor)  
+**Pending:** Auth backend (Week 6); branch rename `azeem` → `salar`
 
-### Ayesha — Schemas, Figma, React UI
+### Ayesha — Rico holdout, frontend, SRS, rules review
 
-**Done:** `auditor_schema.json`, `json_schemas.md`, Figma designs (8 screen groups in SRS)  
-**Pending:** React + Vite + Tailwind project, all Axion screens, API integration
+**Done:** **Rico holdout** build; Figma designs; React Axion UI; **SRS co-author**; frontend ↔ API wiring; R11–R12 review sign-off; Groq prompt experiments (TBD-01)  
+**Pending:** Records page + auth screens (blocked on backend Week 6)
 
-### Noor (Lead) — Agent, reports, QA, coordination
+### Noor (Lead) — Backend, schemas, SDS, agent, reports, SRS review, tests, QA
 
-**Done:** QA test plan, Rico holdout strategy, SRS/SDS v2.0, supplementary report, updated plan  
-**Pending:** `src/agent.py`, `src/report.py`, evaluation, weekly demos
+**Done:** **FastAPI backend**; **JSON schema contracts**; **SDS v2.2**; **SRS review**; agent + **report template** (JSON/HTML/PDF); parser extensions; violations pipeline + fixtures; `noor_week1–5` validation; supplementary report; coordination  
+**Pending:** Records + auth coordination (Week 6); Rico holdout evaluation
 
 ---
 
@@ -387,8 +414,8 @@ Config: `data/data-masc/splits/split_summary.json`
 | R08 | G08, G15 | Salar | ✅ Done | Zero-area guard added |
 | R09 | G09, G11 | Salar | 🟡 Partial | Needs declared colors / screenshot contrast |
 | R10 | G10, G28, G29 | Salar | ✅ Done | |
-| R11 | G11 | Ayesha | ✅ Done | Implemented on `salar`/`noor` (checkable-state widgets); Ayesha review pending |
-| R12 | G12 | Ayesha | ✅ Done | `media_type` + caption heuristics |
+| R11 | G11 | Ayesha | ✅ Done | Implemented by Salar; **reviewed by Ayesha + Noor** |
+| R12 | G12 | Ayesha | ✅ Done | `media_type` + caption heuristics; Ayesha review sign-off |
 | R13 | G13 | Noor | ✅ Done | 1,055 violations / 118 MASC screens |
 | R14 | G14 | Noor | ✅ Done | 1,873 / 667 screens |
 | R15 | G15, G16 | Noor | ✅ Done | 3,860 / 3,860 screens |
@@ -600,6 +627,7 @@ Blockers:None
 | 1.5 | 6 Jul 2026 | Noor | R13–R20 rule lead → Noor; DOCX regenerated |
 | **1.6** | **9 Jul 2026** | **Noor** | Week 4: R01–R30, explainer + report API, 94 tests, frontend/notebook sync; next steps + §15 |
 | **1.7** | **12 Jul 2026** | **Noor** | Week 5 pushed (`4ce430feb`): HTML/PDF export, download API, R09–R20 fixtures, 120 tests, docs aligned (Jinja2+Playwright) |
+| **1.8** | **12 Jul 2026** | **Noor** | Team artifact ownership table (§2.1); credit map: backend/schemas/SDS (Noor), rules (Salar), frontend/Rico/SRS (Ayesha) |
 
 ---
 

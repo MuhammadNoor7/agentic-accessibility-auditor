@@ -11,9 +11,9 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 | Intern | Branch | Focus |
 |--------|--------|-------|
-| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | Data, hybrid XML parser, rule checker, Docker, Stage 3 explainer |
-| **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | JSON schemas, Figma, React dashboard (auth + app pages) |
-| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | Agent/API wiring, reports, QA, coordination, R13–R30 ownership |
+| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | MASC data, parser, **rules implementation**, `components.json`, Docker, tests |
+| **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | Rico holdout, Figma, React frontend, SRS co-author, rules review |
+| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | Backend API, JSON schemas, SDS, agent, report template, SRS review, tests, QA |
 
 ---
 

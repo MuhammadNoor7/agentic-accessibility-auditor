@@ -295,7 +295,7 @@ The following documentation shall be maintained:
 | MASC Dataset | Primary development and tuning corpus (7,068 paired screens) |
 | Rico holdout | Unseen final evaluation (1,698 screens, MASC-disjoint) |
 | OpenAI GPT-4o API | Agentic explanation and fix suggestion layer |
-| WeasyPrint / pdfkit | HTML-to-PDF report conversion |
+| Jinja2 + Playwright | HTML report templates + HTML-to-PDF conversion |
 | PIL / OpenCV | Screenshot annotation and bounding box rendering |
 | lxml / xml.etree | XML hierarchy parsing |
 | Docker / Docker Compose | Containerized deployment |
@@ -405,7 +405,7 @@ The system does not directly interface with hardware at runtime.
 | lxml / xml.etree | 5+ / stdlib | XML parsing | Internal |
 | PIL / OpenCV | 10+ / 4+ | Screenshot annotation | Internal |
 | OpenAI API (GPT-4o) | v1 | Agentic layer | REST HTTPS |
-| WeasyPrint / pdfkit | Latest | HTML → PDF | Internal |
+| Jinja2 + Playwright | Latest | HTML templates + HTML → PDF | Internal |
 | Docker / Compose | Latest | Deployment | Internal |
 | MASC / Rico datasets | — | Evaluation data | File system |
 | Legacy CNN (Stretch) | TBD | Visual supplementary signal | Internal model file |
@@ -564,7 +564,7 @@ Full rule logic: **Section 7**.
 | ID | Requirement | Priority | Maps to |
 |----|-------------|----------|---------|
 | FR-RP.1 | HTML report: project header, screen ID, accessibility score, issue summary, per-issue detail, annotated screenshots | Must | FR-AAA-36 |
-| FR-RP.2 | PDF version of same report (WeasyPrint or pdfkit) | Must | FR-AAA-37 |
+| FR-RP.2 | PDF version of same report (Jinja2 HTML + Playwright) | Must | FR-AAA-37 |
 | FR-RP.3 | Violations grouped by severity (Critical/High first) | Must | FR-AAA-38 |
 | FR-RP.4 | Each section: rule ID, WCAG reference, severity, component ID, explanation, why it matters, developer fix | Must | FR-AAA-39 |
 | FR-RP.5 | Cover section: audit date, screen filename, total violation count | Should | FR-AAA-40 |
@@ -964,10 +964,10 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 | FR-RU.1–10 | Rules R01–R10 | Must | §4.3 | Salar | **Done** |
 | FR-RU.11–30 | Rules R11–R30 | Should/Stretch | §4.3 | Team | **Done** (R09/R28 limited without colors/text-size) |
 | FR-AG.1–7 | Agent explanations | Must | §4.5 | Noor | **Done** (API-wired; template + LLM) |
-| FR-RP.1–2 | HTML/PDF reports | Must | §4.6 | Noor | Planned |
-| FR-UI.10–17 | Upload + modals | Must | §3.1 | Ayesha | In Progress (UI scaffold; not API-wired) |
-| FR-UI.20–27 | Dashboard + drawer | Must | §3.1 | Ayesha | In Progress (mock data) |
-| FR-UI.30–35 | Report screen + modal + PDF | Must | §3.1 | Ayesha | In Progress (mock data) |
+| FR-RP.1–2 | HTML/PDF reports | Must | §4.6 | Noor | **Done** (`src/report.py` + download API) |
+| FR-UI.10–17 | Upload + modals | Must | §3.1 | Ayesha | **Done** (wired to `POST /audit`) |
+| FR-UI.20–27 | Dashboard + drawer | Must | §3.1 | Ayesha | **Done** (wired to `GET …/report`) |
+| FR-UI.30–35 | Report screen + modal + PDF | Must | §3.1 | Ayesha | **Done** (report view + `GET …/report/download`) |
 | FR-UI.40–45 | Records page | Must | §3.1 | Ayesha | Planned |
 | FR-AUTH.1–5 | Authentication | Must | §4.9 | Ayesha / Salar | Planned |
 | FR-REC.1–4 | Records storage | Must | §4.9 | Salar / Ayesha | Planned |

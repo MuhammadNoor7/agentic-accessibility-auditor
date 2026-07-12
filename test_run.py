@@ -20,6 +20,8 @@ from src.rules import check as check_rules
 
 ROOT = Path(__file__).resolve().parent
 VIOLATIONS_OUTPUT_ROOT = ROOT / "outputs" / "violations"
+FIXTURES_ROOT = ROOT / "tests" / "fixtures" / "rules"
+PARSED_FIXTURES_ROOT = ROOT / "data" / "parsed" / "fixtures"
 
 DATASET_ALIASES = {
     "masc": ROOT / "data" / "data-masc",
@@ -124,13 +126,16 @@ def run_single(xml_arg: str, skip_rules: bool = False) -> int:
         print(f"Error: file not found: {xml_path}", file=sys.stderr)
         return 1
 
-    dataset_root = infer_dataset_root_for_xml(xml_path) or resolve_dataset_root()
+    dataset_root = infer_dataset_root_for_xml(xml_path)
     if dataset_root is not None:
         xml_root = dataset_root / "xml"
         output_root = resolve_parsed_root(dataset_root)
     else:
         xml_root = xml_path.parent
-        output_root = resolve_parsed_root()
+        if FIXTURES_ROOT in xml_path.parents:
+            output_root = PARSED_FIXTURES_ROOT
+        else:
+            output_root = resolve_parsed_root(None)
 
     doc = parse_xml_file(xml_path, output_root, xml_root, dataset_root)
     output_file = _parsed_output_path(xml_path, output_root, dataset_root)
@@ -144,9 +149,39 @@ def run_single(xml_arg: str, skip_rules: bool = False) -> int:
     if not skip_rules:
         violations_doc = write_violations(doc)
         violations_file = VIOLATIONS_OUTPUT_ROOT / f"{doc['screen_id']}_violations.json"
+        rule_ids = sorted({item['rule_id'] for item in violations_doc['violations']})
         print(f"violations: {violations_doc['total_violations']} found")
+        if rule_ids:
+            print(f"rule_ids:   {rule_ids}")
         print(f"written:    {violations_file}")
     return 0
+
+
+def run_fixtures(skip_rules: bool = False) -> int:
+    """Parse every tests/fixtures/rules/*.xml and write violations under outputs/violations/."""
+    xml_files = sorted(FIXTURES_ROOT.glob("*.xml"))
+    if not xml_files:
+        print(f"Error: no fixture XML files under {FIXTURES_ROOT}", file=sys.stderr)
+        return 1
+
+    print(f"Running {len(xml_files)} rule fixture(s)...")
+    failures: list[str] = []
+    for xml_path in xml_files:
+        print(f"\n--- {xml_path.name} ---")
+        try:
+            code = run_single(xml_path, skip_rules=skip_rules)
+            if code != 0:
+                failures.append(xml_path.name)
+        except Exception as exc:
+            failures.append(f"{xml_path.name}: {exc}")
+            print(f"Error: {exc}", file=sys.stderr)
+
+    print(f"\n=== Fixture batch complete ===")
+    print(f"processed: {len(xml_files) - len(failures)}")
+    print(f"failed:    {len(failures)}")
+    if failures:
+        print("failures:", failures[:20])
+    return 1 if failures else 0
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -172,6 +207,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Limit batch size (default: all, or PARSER_MAX_FILES env var)",
     )
     parser.add_argument(
+        "--fixtures",
+        action="store_true",
+        help="Run all tests/fixtures/rules/*.xml and write outputs/violations/*_violations.json",
+    )
+    parser.add_argument(
         "--skip-rules",
         action="store_true",
         help="Skip running the Stage 2 rule checker after parsing.",
@@ -181,6 +221,9 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+
+    if args.fixtures:
+        return run_fixtures(skip_rules=args.skip_rules)
 
     if args.xml_file:
         return run_single(args.xml_file, skip_rules=args.skip_rules)

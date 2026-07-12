@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { getAuditFiles, getAuditId } from '../state/auditFiles'
-import { getAuditReport } from '../api'
+import { getAuditReport, downloadAuditReport } from '../api'
 import Sidebar from '../components/Sidebar'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -394,6 +394,7 @@ export default function Report() {
   const [showConfirm, setShowConfirm] = useState(false)
   const [flowStep, setFlowStep] = useState('idle') // idle | processing | preview
   const [format, setFormat] = useState(null)
+  const [downloadError, setDownloadError] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
@@ -442,12 +443,24 @@ export default function Report() {
 
   function handleChooseFormat(fmt) {
     setFormat(fmt)
+    setDownloadError(null)
     setShowConfirm(false)
     setFlowStep('processing')
   }
 
-  function handleProcessingDone() {
-    setFlowStep('preview')
+  async function handleProcessingDone() {
+    if (!auditId || !format) {
+      setFlowStep('preview')
+      return
+    }
+    try {
+      await downloadAuditReport(auditId, format)
+      setFlowStep('preview')
+    } catch (err) {
+      setDownloadError(err.message || 'Could not download report.')
+      setFlowStep('idle')
+      setFormat(null)
+    }
   }
 
   function handleClosePreview() {
@@ -793,6 +806,9 @@ export default function Report() {
               Download Report →
             </button>
           </div>
+          {downloadError && (
+            <p style={{ color: '#fecaca', fontSize: 13, margin: '12px 0 0' }}>{downloadError}</p>
+          )}
         </div>
       </main>
 

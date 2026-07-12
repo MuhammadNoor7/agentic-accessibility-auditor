@@ -1,4 +1,4 @@
-"""FastAPI gateway — health + audit pipeline stub (Week 3)."""
+"""FastAPI gateway — audit pipeline + HTML/PDF report download (Week 5)."""
 
 from __future__ import annotations
 
@@ -16,8 +16,8 @@ from backend.routers.audit import router as audit_router
 
 app = FastAPI(
     title="Agentic Accessibility Auditor API",
-    version="0.3.0",
-    description="POST /api/v1/audit runs parse → rules → agent report (R01–R30).",
+    version="0.4.0",
+    description="POST /api/v1/audit runs parse → rules → agent report; GET …/report/download exports HTML/PDF.",
 )
 
 app.add_middleware(

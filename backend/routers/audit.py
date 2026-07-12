@@ -9,6 +9,7 @@ import uuid
 from pathlib import Path
 
 from fastapi import APIRouter, File, HTTPException, Query, UploadFile
+from fastapi.responses import Response
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -17,6 +18,7 @@ if str(ROOT) not in sys.path:
 from backend.models.audit import AuditCreateResponse, AuditStatusResponse
 from src.agent import build_audit_report
 from src.parser import build_screen_document
+from src.report import render_report_bytes
 from src.rules import check as check_rules
 
 router = APIRouter(prefix="/api/v1/audit", tags=["audit"])
@@ -136,6 +138,10 @@ async def get_audit_violations(audit_id: str) -> dict:
 @router.get("/{audit_id}/report")
 async def get_audit_report(audit_id: str) -> dict:
     """Return agent-enriched report.json for a completed audit."""
+    return _load_report_doc(audit_id)
+
+
+def _load_report_doc(audit_id: str) -> dict:
     job = _AUDIT_JOBS.get(audit_id)
     if job is None:
         raise HTTPException(status_code=404, detail="Audit not found")
@@ -150,3 +156,29 @@ async def get_audit_report(audit_id: str) -> dict:
         job["report"] = report_doc
         _write_report(report_doc)
     return job["report"]
+
+
+@router.get("/{audit_id}/report/download")
+def download_audit_report(
+    audit_id: str,
+    format: str = Query(..., pattern="^(html|pdf)$", description="Export format"),
+) -> Response:
+    """Download agent-enriched audit report as HTML or PDF."""
+    report_doc = _load_report_doc(audit_id)
+    try:
+        content, media_type, filename = render_report_bytes(
+            report_doc,
+            format,  # type: ignore[arg-type]
+            project_root=ROOT,
+        )
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+
+    artifact_path = REPORTS_OUTPUT_ROOT / filename
+    artifact_path.write_bytes(content)
+
+    return Response(
+        content=content,
+        media_type=media_type,
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )

@@ -3,7 +3,7 @@
 Automated accessibility auditing for **Android mobile UIs**.  
 Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `components.json`, rule-based `violations.json`, LLM-enriched explanations, and HTML/PDF reports mapped to **G01–G30** guidelines and **R01–R30** detection rules.
 
-**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — parser + rules **R01–R30**, agent report API, React UI scaffold (mock data), **94 pytest** (9 Jul 2026).
+**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — parser + rules **R01–R30**, agent report API, HTML/PDF report export, React UI wired (Upload/Dashboard/Report), **101 pytest** (12 Jul 2026).
 
 ---
 
@@ -44,9 +44,9 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 | 1 — Parser | Salar / Noor | `components.json` | **Done** — 7,068 MASC screens; R13–R20 fields + visibility |
 | 2 — Rules | Salar / Noor | `violations.json` | **R01–R30** in `check()`; R09/R28 limited without colors/text-size |
 | 3 — Agent | Noor / Salar | enriched `report.json` | **Done** — `GET /api/v1/audit/{id}/report` (template or live LLM) |
-| 4 — Report | Noor | HTML/PDF | Planned (`src/report.py`) |
-| UI — Axion | Ayesha | React dashboard | **Scaffold** — `frontend/` (mock data; not API-wired) |
-| API | Noor | FastAPI | **Partial** — violations + report; no auth/records/download |
+| 4 — Report | Noor | HTML/PDF | **Done** — `src/report.py` + `GET …/report/download?format=html\|pdf` |
+| UI — Axion | Ayesha | React dashboard | **Partial** — Upload/Dashboard/Report wired; Records still mock |
+| API | Noor | FastAPI | **Partial** — violations + report + download; no auth/records persistence |
 
 **MASC sign-off (Jul 2026):** 640,563 components · 462,542 violations (R01–R20 baseline) · 0 parse errors — see `data/data-masc/parsed/masc_parse_signoff_report.json`.
 
@@ -68,6 +68,7 @@ agentic-accessibility-auditor/
 │   ├── parser.py           # Hybrid XML → components.json
 │   ├── rules.py            # R01–R30 rule checker
 │   ├── agent.py            # Score + build_audit_report (API-wired)
+│   ├── report.py           # Jinja2 HTML + PIL annotation + Playwright PDF
 │   ├── explainer.py        # Live LLM recommendations
 │   ├── guidelines.py       # G01–G30 + R→G mapping
 │   ├── llm_providers.py    # Anthropic / OpenAI / Gemini / Groq
@@ -75,21 +76,23 @@ agentic-accessibility-auditor/
 │
 ├── backend/                # FastAPI gateway
 │   ├── main.py
-│   └── routers/audit.py    # POST /audit → GET …/violations + …/report
+│   └── routers/audit.py    # POST /audit → GET …/violations + …/report + …/report/download
 │
-├── frontend/               # Axion React UI (Vite + React 19 + Tailwind 4; mock data)
+├── frontend/               # Axion React UI (Upload/Dashboard/Report wired; Records mock)
 │
-├── tests/                  # 94 pytest (parser, rules, agent, audit, explainer)
+├── tests/                  # 101 pytest (parser, rules, agent, audit, report, explainer)
 │   ├── test_parser.py
 │   ├── test_rules.py
 │   ├── test_agent.py
 │   ├── test_audit.py
+│   ├── test_report.py
 │   ├── test_explainer.py
 │   └── fixtures/rules/
 │
 ├── scripts/
 │   ├── validate_output.py
 │   ├── noor_week3_validate.py
+│   ├── noor_week5_validate.py
 │   ├── masc_parse_signoff.py
 │   ├── run_explainer_sample.py
 │   ├── compare_visibility_filter_impact.py

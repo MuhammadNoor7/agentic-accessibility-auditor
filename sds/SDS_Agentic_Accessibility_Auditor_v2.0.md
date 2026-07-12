@@ -94,13 +94,13 @@ This document provides:
 | Schema helpers | `src/schema_documents.py` | Salar | **Done** |
 | JSON Schema | `docs/schemas/auditor_schema.json` | Ayesha / Noor | **Done** |
 | Validation scripts | `scripts/validate_output.py`, `scripts/noor_week3_validate.py`, `scripts/masc_parse_signoff.py` | Noor / Salar | **Done** |
-| FastAPI audit API | `backend/routers/audit.py` | Noor | **Partial** (violations + report; no auth/records/download) |
+| FastAPI audit API | `backend/routers/audit.py` | Noor | **Partial** (violations + report + download; no auth/records) |
 | Rule engine | `src/rules.py` | Salar / Noor | **Done** (R01–R30; R09/R28 limited without colors/text-size) |
 | Agent layer | `src/agent.py`, `src/explainer.py`, `src/llm_providers.py` | Noor / Salar | **Done** (API-wired; template + live LLM) |
-| Report generator | `src/report.py` | Noor | Planned |
+| Report generator | `src/report.py` | Noor | **Done** (Jinja2 HTML + PIL + Playwright PDF) |
 | Auth service | `backend/services/auth.py` | Salar | Planned |
 | Records store | `backend/services/records.py` | Salar / Ayesha | Planned |
-| Axion React UI | `frontend/` | Ayesha | **Partial** (UI scaffold; no live API) |
+| Axion React UI | `frontend/` | Ayesha | **Partial** (Upload/Dashboard/Report wired; Records mock) |
 | Docker Compose | `docker-compose.yml` | Salar | **Partial** (deferred on `noor`) |
 
 ---
@@ -315,14 +315,15 @@ class AgenticEnricher:
 
 ---
 
-### 3.4 Report module (`src/report.py` — planned)
+### 3.4 Report module (`src/report.py`)
 
-**SRS:** FR-RP.1–FR-RP.7 | **Owner:** Noor
+**SRS:** FR-RP.1–FR-RP.7 | **Owner:** Noor | **Status:** Implemented (12 Jul 2026)
 
-- Jinja2 HTML template
-- PIL bounding-box annotation
-- WeasyPrint or pdfkit for PDF
-- Accessibility score (see §8.2)
+- Jinja2 HTML template (`src/templates/audit_report.html.j2`)
+- PIL bounding-box annotation on screenshots
+- Playwright Chromium for HTML → PDF (`render_pdf_report`)
+- `GET /api/v1/audit/{id}/report/download?format=html|pdf`
+- Accessibility score from agent layer (see §8.2)
 
 ---
 
@@ -497,7 +498,7 @@ Auth: `Authorization: Bearer <JWT>` (except auth endpoints)
 | GET | `/audit/{audit_id}/status` | Pipeline status (`pending` → `parsing` → `checking` → `explaining` → `complete`) |
 | GET | `/audit/{audit_id}/violations` | Violations JSON (**implemented**) |
 | GET | `/audit/{audit_id}/report` | Report JSON with score + agent fields (**implemented** Week 4) |
-| GET | `/audit/{audit_id}/report/download?format=html\|pdf` | File download (**planned** Week 5) |
+| GET | `/audit/{audit_id}/report/download?format=html\|pdf` | File download (HTML or PDF) |
 | POST | `/audit/batch` | Batch over dataset path (Should) |
 
 ### 5.3 Records endpoints
@@ -724,7 +725,7 @@ Maps to Axion score gauge on Dashboard (SRS FR-UI.21).
 
 ### 8.3 PDF generation
 
-Primary: WeasyPrint from HTML. Fallback: pdfkit + wkhtmltopdf.
+Primary: Jinja2 renders standalone HTML; Playwright Chromium prints HTML to PDF (`page.pdf()`). Requires `playwright install chromium` once per environment.
 
 ---
 
@@ -1044,7 +1045,7 @@ components:
 | `src/explainer.py` | Live LLM recommendations (**Done**) |
 | `src/llm_providers.py` | Multi-provider LLM client |
 | `src/guidelines.py` | G01–G30 + R→G mapping |
-| `src/report.py` | HTML/PDF generator (planned) |
+| `src/report.py` | HTML/PDF generator (Jinja2 + Playwright) |
 | `backend/main.py` | FastAPI entry |
 | `backend/routers/audit.py` | Violations + report audit API (**Partial** — no auth/records/download) |
 | `backend/routers/` | Auth, records (planned) |
@@ -1055,7 +1056,7 @@ components:
 | `tests/test_rules.py` | Rules R01–R30 unit tests |
 | `tests/test_audit.py` | Audit API tests (violations + report) |
 | `tests/test_explainer.py` | Explainer anti-hallucination tests |
-| `frontend/src/` | Axion React app (**Partial** — mock data) |
+| `frontend/src/` | Axion React app (**Partial** — Upload/Dashboard/Report wired) |
 | `docs/schemas/auditor_schema.json` | Normative JSON Schema |
 | `docs/json_schemas.md` | Schema documentation |
 | `outputs/reports/` | Agent-enriched `*_report.json` |

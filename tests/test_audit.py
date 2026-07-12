@@ -100,6 +100,50 @@ def test_audit_report_not_found(client: TestClient) -> None:
     assert response.status_code == 404
 
 
+def test_audit_report_download_html(client: TestClient) -> None:
+    with R01_FIXTURE.open("rb") as handle:
+        created = client.post(
+            "/api/v1/audit?use_llm=false",
+            files={"xml": (R01_FIXTURE.name, handle, "application/xml")},
+        )
+    audit_id = created.json()["audit_id"]
+
+    response = client.get(f"/api/v1/audit/{audit_id}/report/download?format=html")
+    assert response.status_code == 200
+    assert "text/html" in response.headers["content-type"]
+    assert "attachment" in response.headers.get("content-disposition", "")
+    assert "Accessibility audit report" in response.text
+    assert "r01_missing_label_fail" in response.text
+
+
+def test_audit_report_download_pdf(client: TestClient) -> None:
+    with R01_FIXTURE.open("rb") as handle:
+        created = client.post(
+            "/api/v1/audit?use_llm=false",
+            files={"xml": (R01_FIXTURE.name, handle, "application/xml")},
+        )
+    audit_id = created.json()["audit_id"]
+
+    response = client.get(f"/api/v1/audit/{audit_id}/report/download?format=pdf")
+    if response.status_code == 503:
+        pytest.skip(response.json().get("detail", "PDF unavailable"))
+    assert response.status_code == 200
+    assert "application/pdf" in response.headers["content-type"]
+    assert response.content.startswith(b"%PDF")
+
+
+def test_audit_report_download_invalid_format(client: TestClient) -> None:
+    with R01_FIXTURE.open("rb") as handle:
+        created = client.post(
+            "/api/v1/audit?use_llm=false",
+            files={"xml": (R01_FIXTURE.name, handle, "application/xml")},
+        )
+    audit_id = created.json()["audit_id"]
+
+    response = client.get(f"/api/v1/audit/{audit_id}/report/download?format=docx")
+    assert response.status_code == 422
+
+
 def test_build_audit_report_template_mode() -> None:
     violations_doc = _expected_violations_for_fixture(R01_FIXTURE)
     components = parse_xml_tree(load_xml_root(R01_FIXTURE))

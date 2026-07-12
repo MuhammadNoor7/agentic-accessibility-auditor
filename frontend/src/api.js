@@ -34,3 +34,26 @@ export async function getAuditReport(auditId) {
   if (!res.ok) throw new Error(`Report fetch failed (${res.status})`);
   return res.json();
 }
+
+// Step 4: download HTML or PDF export from the Week 5 report generator.
+export async function downloadAuditReport(auditId, format) {
+  const res = await fetch(`${API_BASE}/api/v1/audit/${auditId}/report/download?format=${format}`);
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.detail || `Download failed (${res.status})`);
+  }
+
+  const blob = await res.blob();
+  const disposition = res.headers.get('Content-Disposition') || '';
+  const match = disposition.match(/filename="?([^"]+)"?/);
+  const filename = match?.[1] || `axion-report.${format}`;
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+}

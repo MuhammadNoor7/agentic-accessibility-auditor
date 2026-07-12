@@ -45,8 +45,8 @@ d:\internship\
 │   │   ├── parser.py                  ✅ Done
 │   │   ├── schema_documents.py        ✅ Done
 │   │   ├── rules.py                   ⬜ Week 3–8 (Team: Salar + Ayesha + Noor)
-│   │   ├── agent.py                   ⬜ Week 4–8 (Team: Noor lead, Ayesha + Salar support)
-│   │   └── report.py                  ⬜ Week 5 (Noor)
+│   │   ├── agent.py                   ✅ Done (Week 4)
+│   │   └── report.py                  ✅ Done (Week 5 — Jinja2 + Playwright PDF)
 │   ├── backend\
 │   │   └── main.py                    ⚠️ Health only — expand Week 3–6
 │   ├── frontend\                      ⬜ Week 3–6 (Ayesha) — create with Vite
@@ -85,9 +85,9 @@ d:\internship\
 Screenshot + UIAutomator XML
     → Parser (Salar lead; Noor + Ayesha support)          → components.json     ✅ DONE
     → Rule engine (Team: Salar + Ayesha + Noor)           → violations.json     ⬜ Week 3–8
-    → Agent/model layer (Noor + Ayesha; Salar support)    → report.json         ⬜ Week 4–8
-    → Report generator (Noor lead; team support)          → HTML / PDF          ⬜ Week 5–8
-    → Axion UI (Ayesha lead; Noor + Salar support)        → upload / dashboard  ⬜ Week 3–7
+    → Agent/model layer (Noor + Ayesha; Salar support)    → report.json         ✅ Week 4
+    → Report generator (Noor lead; team support)          → HTML / PDF          ✅ Week 5 (Noor)
+    → Axion UI (Ayesha lead; Noor + Salar support)        → upload / dashboard  ✅ Partial (Records Week 6)
     → Auth + Records (team)    → per-user history    ⬜ Week 6–7
 ```
 

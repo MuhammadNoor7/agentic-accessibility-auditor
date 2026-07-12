@@ -627,7 +627,7 @@ Blockers:None
 | **1.6** | **9 Jul 2026** | **Noor** | Week 4: R01–R30, explainer + report API, 94 tests, frontend/notebook sync; next steps + §15 |
 | **1.7** | **12 Jul 2026** | **Noor** | Week 5 pushed (`4ce430feb`): HTML/PDF export, download API, R09–R20 fixtures, 120 tests, docs aligned (Jinja2+Playwright) |
 | **1.8** | **12 Jul 2026** | **Noor** | Team artifact ownership table (§2.1); credit map: backend/schemas/SDS (Noor), rules (Salar), frontend/Rico/SRS (Ayesha) |
-| **1.9** | **13 Jul 2026** | **Noor** | Rules credit → Salar + Noor + Ayesha (reviewed by all); Word export renamed to `Internship_Progress_Report_v1.8.docx` |
+| **1.9** | **13 Jul 2026** | **Noor** | Rules credit → Salar + Noor + Ayesha (reviewed by all); Word export → `Supplementary_Progress_Report_v1.0.docx`; SRS/SDS DOCX generated from markdown |
 
 ---
 

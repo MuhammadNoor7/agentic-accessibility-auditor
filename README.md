@@ -21,10 +21,10 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 | Document | Path |
 |----------|------|
-| **SRS v2.0** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.0.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.md) |
-| **SDS v2.2** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) |
+| **SRS v2.0** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.0.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.md) · [`SRS_Agentic_Accessibility_Auditor_v2.0.docx`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.docx) |
+| **SDS v2.2** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) · [`SDS_Agentic_Accessibility_Auditor_v2.0.docx`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.docx) |
 | **8-week plan** | [`updated_plan.md`](updated_plan.md) · [`docs/updated_plan_v2.0.docx`](docs/updated_plan_v2.0.docx) |
-| **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) · [`Internship_Progress_Report_v1.8.docx`](docs/progress/Internship_Progress_Report_v1.8.docx) |
+| **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) · [`Supplementary_Progress_Report_v1.0.docx`](docs/progress/Supplementary_Progress_Report_v1.0.docx) |
 | **Figma screenshots** | `docs/assets/figma/` |
 
 Formatted Word exports live in `srs/`, `sds/`, and `docs/progress/`.

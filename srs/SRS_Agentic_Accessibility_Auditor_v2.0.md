@@ -22,6 +22,7 @@
 | 1.0 (Axion) | 2026 | Ayesha Naveed | Initial Axion UI-focused SRS with G01–G30, R01–R30, Figma screen specs |
 | 1.0 (Agentic) | 2026 | Team | Module-based SRS with Docker, R1–R10 core, stretch goals |
 | **2.0** | 2026 | Ayesha + Salar | Unified SRS; Muhammad Noor reviewed and merged for SDS handoff |
+| **2.1** | 2026-07-13 | Noor | Figma screenshots restored from formatted DOCX into `docs/assets/figma/`; team ownership alignment |
 
 > **Note on UI specifications:** Screen layouts, branding, and interaction flows in Section 3.1 and **Appendix F** are derived from **Ayesha Naveed's Figma designs** shared in `#tem-all-dynamo` Slack. Reference screenshots are embedded in Appendix F (`docs/assets/figma/`). Screens covered: Sign Up, Log In, Forgot Password, OTP Verify, Reset Password, Upload (all states), Audit Complete modal, Dashboard, Issue Detail drawer, Audit Report, Generate Report modal, and **Records (Reports)** page.
 
@@ -1056,7 +1057,7 @@ Environment: `DATASET_ROOT=/app/data/data-masc`, `PARSER_MAX_FILES=0` (full batc
 
 ## Appendix F: Axion UI screen specifications (Figma)
 
-> **Source:** Ayesha Naveed's Figma designs (shared in `#tem-all-dynamo` Slack). All screens below are **Must Have** unless marked otherwise. Embedded screenshots are stored in `docs/assets/figma/`.
+> **Source:** Ayesha Naveed's Figma designs (shared in `#tem-all-dynamo` Slack). All screens below are **Must Have** unless marked otherwise. Embedded screenshots are stored in `docs/assets/figma/` (restored from the legacy formatted DOCX export, 13 Jul 2026).
 
 ### F.1 Design system
 

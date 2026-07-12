@@ -13,7 +13,10 @@ from pathlib import Path
 
 from docx import Document
 from docx.enum.text import WD_LINE_SPACING
-from docx.shared import Pt
+from docx.shared import Inches, Pt
+
+
+IMAGE_RE = re.compile(r"^!\[([^\]]*)\]\(([^)]+)\)$")
 
 
 def _add_formatted_run(paragraph, text: str) -> None:
@@ -48,6 +51,7 @@ def _is_table_separator(line: str) -> bool:
 
 def md_to_docx(md_path: Path, docx_path: Path) -> Path:
     lines = md_path.read_text(encoding="utf-8").splitlines()
+    md_dir = md_path.parent
     doc = Document()
     style = doc.styles["Normal"]
     style.font.name = "Calibri"
@@ -107,6 +111,21 @@ def md_to_docx(md_path: Path, docx_path: Path) -> Path:
             run = paragraph.add_run("\n".join(code_lines))
             run.font.name = "Consolas"
             run.font.size = Pt(9)
+            i += 1
+            continue
+        image_match = IMAGE_RE.match(stripped)
+        if image_match:
+            alt, rel_path = image_match.group(1), image_match.group(2)
+            image_path = (md_dir / rel_path).resolve()
+            paragraph = doc.add_paragraph()
+            if alt:
+                caption = paragraph.add_run(alt)
+                caption.italic = True
+            if image_path.is_file():
+                doc.add_picture(str(image_path), width=Inches(6.0))
+            else:
+                missing = doc.add_paragraph()
+                missing.add_run(f"[Missing image: {rel_path}]")
             i += 1
             continue
 

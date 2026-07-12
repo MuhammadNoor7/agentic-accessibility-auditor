@@ -24,6 +24,7 @@
 | **2.2** | 2026-07-09 | Noor / Salar | Rules R01–R30; explainer + agent API wiring; `GET …/report`; visibility filter |
 | **2.3** | 2026-07-12 | Noor | Week 5: `src/report.py` HTML/PDF + download API; R09–R20 fixtures; team ownership alignment |
 | **2.4** | 2026-07-13 | Noor | Rules ownership → Salar + Noor + Ayesha (reviewed by all) |
+| **2.5** | 2026-07-13 | Noor | Figma screenshots restored from formatted DOCX into `docs/assets/figma/`; DOCX export embeds images |
 
 ---
 
@@ -783,7 +784,7 @@ Mirror JSON schema types: `Component`, `Violation`, `ReportSummary`, `AuditRecor
 
 ### 9.6 Figma reference screenshots
 
-Visual source of truth: SRS Appendix F. Screenshots live in `docs/assets/figma/` (same paths as SRS).
+Visual source of truth: SRS Appendix F. Screenshots were restored from the legacy formatted DOCX export into `docs/assets/figma/` and are embedded below for implementation reference.
 
 | Screen group | Asset file | React route(s) |
 |--------------|------------|----------------|
@@ -799,7 +800,19 @@ Visual source of truth: SRS Appendix F. Screenshots live in `docs/assets/figma/`
 
 ![Sign Up and Log In — implementation reference](../docs/assets/figma/figma-01-signup-login.png)
 
-![Upload and Dashboard — implementation reference](../docs/assets/figma/figma-05-audit-complete-dashboard.png)
+![Forgot Password and Verify Code — implementation reference](../docs/assets/figma/figma-02-forgot-verify-otp.png)
+
+![Set Password and Password Reset Success — implementation reference](../docs/assets/figma/figma-03-reset-password-success.png)
+
+![Upload screen — implementation reference](../docs/assets/figma/figma-04-upload-progress-states.png)
+
+![Files Matched modal — implementation reference](../docs/assets/figma/figma-08-upload-files-matched.png)
+
+![Audit Complete modal and Issues Dashboard — implementation reference](../docs/assets/figma/figma-05-audit-complete-dashboard.png)
+
+![Issue Detail drawer and Audit Report — implementation reference](../docs/assets/figma/figma-06-dashboard-detail-report.png)
+
+![Generate Report modal and PDF layout — implementation reference](../docs/assets/figma/figma-07-generate-report-modal-pdf.png)
 
 ---
 

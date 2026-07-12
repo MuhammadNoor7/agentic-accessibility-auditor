@@ -27,7 +27,7 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 | **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) · [`Supplementary_Progress_Report_v1.0.docx`](docs/progress/Supplementary_Progress_Report_v1.0.docx) |
 | **Figma screenshots** | `docs/assets/figma/` |
 
-Formatted Word exports live in `srs/`, `sds/`, and `docs/progress/`.
+Formatted Word exports: `srs/SRS_Agentic_Accessibility_Auditor_v2.0.docx`, `sds/SDS_Agentic_Accessibility_Auditor_v2.0.docx`, `docs/progress/Supplementary_Progress_Report_v1.0.docx` (regenerate via `scripts/md_to_docx.py`; SRS/SDS embed Figma screenshots from `docs/assets/figma/`).
 
 ---
 

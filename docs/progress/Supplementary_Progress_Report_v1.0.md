@@ -2,7 +2,7 @@
 
 ## Agentic Accessibility Auditor (Axion)
 
-**Practical work completed — Weeks 1–5 (baseline 1 July 2026; updated 12 July 2026)**  
+**Practical work completed — Weeks 1–5 (baseline 1 July 2026; updated 14 July 2026)**  
 **Living document — see §15 for team updates; §12–§13 for literature + rule ownership**
 
 | Field | Value |
@@ -31,19 +31,19 @@ This document gathers what has actually been built, run, and produced so far. It
 
 > **Note:** Baseline below is as of **1 July 2026**. For current status after team pushes, see **§15 Team weekly updates**.
 
-| Area | Result (12 Jul on `noor`) |
+| Area | Result (14 Jul on `noor`) |
 |------|---------------------------|
 | Parser (Stage 1) | **Complete** — hybrid XML parser; MASC `<wrapper>` + bounds fixes; visibility field; R13–R20 extended fields |
 | Rule engine (Stage 2) | **R01–R30 implemented** — 57 XML pass/fail fixtures; **120 pytest** |
 | Agent layer (Stage 3) | **Wired** — `src/explainer.py` + `src/agent.py` (`build_audit_report`); LLM or template fallback; API-wired |
 | Report generator (Stage 4) | **Done** — `src/report.py` (Jinja2 HTML + PIL + Playwright PDF); `GET …/report/download` |
-| Axion React UI | **Partial** — Upload/Dashboard/Report wired to live API; Records still mock (Week 6) |
-| FastAPI audit API | **Partial** — `POST /audit` → violations + report + **download**; no auth/records persistence |
+| Axion React UI | **Partial** — Upload/Dashboard/Report wired to live API; **upload pair validation fixed** (Ayesha); Records still mock (Week 6) |
+| FastAPI audit API | **Partial** — `POST /audit` requires screenshot + XML + pair check; violations + report + **download**; no auth/records persistence |
 | Auth + Records | Specified in SRS v2.0; not implemented in code |
 | Docker | Deferred on `noor` (removed); Salar owns Docker on `salar` |
-| Documentation | SRS v2.0 (Ayesha+Salar), **SDS v2.2** (Noor), progress report **v1.8** |
+| Documentation | SRS v2.0 (Ayesha+Salar), **SDS v2.6** (Noor), progress report **v1.10** |
 
-**Bottom line (12 Jul, pushed `4ce430feb`):** Week 5 complete — full pipeline XML → R01–R30 → `report.json` → downloadable HTML/PDF. Upload/Dashboard/Report wired to live API. Rule fixtures cover R09–R20. Next: Records + auth (Week 6).
+**Bottom line (14 Jul):** Upload validation handoff complete — frontend (Ayesha `052a976`) + backend pair enforcement (Noor). Full pipeline: screenshot + XML → R01–R30 → `report.json` → downloadable HTML/PDF. Next: Records + auth (Week 6).
 
 ---
 
@@ -145,7 +145,7 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │   ├── data-rico-holdout/              ← 1,698-screen holdout + manifest
 │   ├── xml/                            ← generic upload XML drops
 │   ├── parsed/                         ← generic parsed output
-│   └── screenshots/                    ← optional screenshot uploads
+│   └── screenshots/                    ← screenshot uploads (paired with XML for POST /audit)
 │
 ├── outputs/                            ← pipeline artefacts
 │   ├── violations/                     ← *_violations.json (Stage 2; generated locally)
@@ -451,6 +451,24 @@ Config: `data/data-masc/splits/split_summary.json`
 
 > **Instructions:** Each intern adds a dated entry after pushing work. Newest week at the top. Keep entries factual — file names, test counts, branch commits.
 
+### Upload validation fix — Ayesha + Noor (`ayesha` `052a976` → merged on `noor`, 14 Jul 2026)
+
+**Pushed by:** Ayesha Naveed (frontend) + Muhammad Noor (backend/docs)  
+**Date:** 14 July 2026
+
+**Completed (handoff doc — 4 issues):**
+- **Issue 1** — XML without screenshot shows error popup (not silent) — `Upload.jsx`
+- **Issue 2** — `createAudit(screenshot, xml)` sends both files — `api.js`
+- **Issue 3** — Backend requires screenshot + XML; 400 on pair mismatch — `backend/routers/audit.py`
+- **Issue 4** — `filesMatch()` stem/prefix logic rejects false-positive digit matches — `Upload.jsx`
+- **Tests** — `tests/test_audit.py` updated; missing-screenshot + mismatched-pair cases; validation scripts aligned
+
+**Pending:** Records + auth (Week 6)
+
+**Blockers:** None
+
+---
+
 ### Week 5 — Noor (`noor` branch, commit `4ce430feb` — pushed 12 Jul 2026)
 
 **Pushed by:** Muhammad Noor  
@@ -628,6 +646,7 @@ Blockers:None
 | **1.7** | **12 Jul 2026** | **Noor** | Week 5 pushed (`4ce430feb`): HTML/PDF export, download API, R09–R20 fixtures, 120 tests, docs aligned (Jinja2+Playwright) |
 | **1.8** | **12 Jul 2026** | **Noor** | Team artifact ownership table (§2.1); credit map: backend/schemas/SDS (Noor), rules (Salar), frontend/Rico/SRS (Ayesha) |
 | **1.9** | **13 Jul 2026** | **Noor** | Rules credit → Salar + Noor + Ayesha (reviewed by all); Word export → `Supplementary_Progress_Report_v1.0.docx`; SRS/SDS DOCX generated from markdown |
+| **1.10** | **14 Jul 2026** | **Noor** | Upload validation handoff merged (Ayesha frontend + Noor backend); SRS/SDS API contract updated |
 
 ---
 

@@ -2,10 +2,11 @@
 // Base URL of your local FastAPI server (started with `uvicorn backend.main:app`).
 const API_BASE = 'http://127.0.0.1:8000';
 
-// Step 1: upload the XML file, kicks off parse -> rules -> agent explain.
+// Step 1: upload screenshot + XML pair, kicks off parse -> rules -> agent explain.
 // Returns { audit_id, status }
-export async function createAudit(xmlFile) {
+export async function createAudit(screenshotFile, xmlFile) {
   const formData = new FormData();
+  formData.append('screenshot', screenshotFile);
   formData.append('xml', xmlFile);
 
   const res = await fetch(`${API_BASE}/api/v1/audit`, {

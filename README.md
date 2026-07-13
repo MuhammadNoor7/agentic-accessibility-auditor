@@ -50,7 +50,7 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 
 **MASC sign-off (Jul 2026):** 640,563 components · 462,542 violations (R01–R20 baseline) · 0 parse errors — see `data/data-masc/parsed/masc_parse_signoff_report.json`.
 
-**Demo (no live LLM):** `uvicorn backend.main:app --reload --port 8000` → `POST /api/v1/audit?use_llm=false` with XML → `GET …/report` → `GET …/report/download?format=html|pdf`.
+**Demo (no live LLM):** `uvicorn backend.main:app --reload --port 8000` → `POST /api/v1/audit?use_llm=false` with **screenshot + XML pair** → `GET …/report` → `GET …/report/download?format=html|pdf`.
 
 **Rule fixtures:** `python test_run.py --fixtures` writes `outputs/violations/*_violations.json` for all 57 XML files under `tests/fixtures/rules/`. Curated samples (R01–R30) are committed under `outputs/violations/samples/`.
 
@@ -266,10 +266,10 @@ npm run dev
 # From repo root
 python -m uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 # Health: http://localhost:8000/health
-# Audit:  POST /api/v1/audit  →  GET /api/v1/audit/{id}/violations
+# Audit:  POST /api/v1/audit (multipart: screenshot + xml)  →  GET /api/v1/audit/{id}/violations
 ```
 
-Upload XML via multipart form to `POST /api/v1/audit`. Report endpoint (`/report`) is not implemented yet.
+Upload a matching screenshot + XML pair via multipart form to `POST /api/v1/audit`. Report and download endpoints are implemented (`/report`, `/report/download`).
 
 ---
 

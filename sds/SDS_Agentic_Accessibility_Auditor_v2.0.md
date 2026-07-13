@@ -25,6 +25,7 @@
 | **2.3** | 2026-07-12 | Noor | Week 5: `src/report.py` HTML/PDF + download API; R09–R20 fixtures; team ownership alignment |
 | **2.4** | 2026-07-13 | Noor | Rules ownership → Salar + Noor + Ayesha (reviewed by all) |
 | **2.5** | 2026-07-13 | Noor | Figma screenshots restored from formatted DOCX into `docs/assets/figma/`; DOCX export embeds images |
+| **2.6** | 2026-07-14 | Noor | `POST /audit` requires `screenshot` + `xml`; server-side pair validation; tests updated |
 
 ---
 
@@ -495,7 +496,7 @@ Auth: `Authorization: Bearer <JWT>` (except auth endpoints)
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/audit` | Upload XML (multipart field `xml`); optional `use_llm` query; start pipeline |
+| POST | `/audit` | Upload **screenshot + XML** (`multipart`: `screenshot`, `xml`); validates PNG/JPG + matching pair; optional `use_llm` query; start pipeline |
 | GET | `/audit/{audit_id}/status` | Pipeline status (`pending` → `parsing` → `checking` → `explaining` → `complete`) |
 | GET | `/audit/{audit_id}/violations` | Violations JSON (**implemented**) |
 | GET | `/audit/{audit_id}/report` | Report JSON with score + agent fields (**implemented** Week 4) |
@@ -513,18 +514,18 @@ Auth: `Authorization: Bearer <JWT>` (except auth endpoints)
 
 ### 5.4 Example: POST /audit
 
-**Request:** `multipart/form-data` — `screenshot`, `xml`
+**Request:** `multipart/form-data` — required fields `screenshot` (PNG/JPG), `xml` (.xml). Filenames must match as a pair (same stem, or shared numeric ID with matching prefix — mirrors `filesMatch()` in `Upload.jsx`).
 
-**Response 201:**
+**Response 202:**
 
 ```json
 {
   "audit_id": "a1b2c3d4",
-  "record_id": "rec_xyz789",
-  "status": "pending",
-  "screen_id": "screen_014"
+  "status": "complete"
 }
 ```
+
+**Errors:** `422` if `screenshot` missing; `400` if invalid image type, non-XML upload, or filename pair mismatch.
 
 ### 5.5 Example: GET /audit/{id}/status
 

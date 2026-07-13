@@ -23,6 +23,7 @@
 | 1.0 (Agentic) | 2026 | Team | Module-based SRS with Docker, R1–R10 core, stretch goals |
 | **2.0** | 2026 | Ayesha + Salar | Unified SRS; Muhammad Noor reviewed and merged for SDS handoff |
 | **2.1** | 2026-07-13 | Noor | Figma screenshots restored from formatted DOCX into `docs/assets/figma/`; team ownership alignment |
+| **2.2** | 2026-07-14 | Noor | `POST /api/v1/audit` requires paired screenshot + XML; pair validation aligned with Axion Upload |
 
 > **Note on UI specifications:** Screen layouts, branding, and interaction flows in Section 3.1 and **Appendix F** are derived from **Ayesha Naveed's Figma designs** shared in `#tem-all-dynamo` Slack. Reference screenshots are embedded in Appendix F (`docs/assets/figma/`). Screens covered: Sign Up, Log In, Forgot Password, OTP Verify, Reset Password, Upload (all states), Audit Complete modal, Dashboard, Issue Detail drawer, Audit Report, Generate Report modal, and **Records (Reports)** page.
 
@@ -846,7 +847,7 @@ Minimum API contract for Axion ↔ FastAPI (normative OpenAPI in SDS):
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/health` | Health check |
-| POST | `/api/v1/audit` | Upload XML; returns `{ audit_id, status }` (**Week 3–4 implemented**; optional `use_llm` query) |
+| POST | `/api/v1/audit` | Upload **screenshot + XML** pair (`multipart`: `screenshot`, `xml`); validates matching filenames; returns `{ audit_id, status }` (**implemented**; optional `use_llm` query) |
 | GET | `/api/v1/audit/{audit_id}/status` | Pipeline status: `pending`, `parsing`, `checking`, `explaining`, `complete`, `error` |
 | GET | `/api/v1/audit/{audit_id}/violations` | Returns violations JSON (**Week 3 implemented**) |
 | GET | `/api/v1/audit/{audit_id}/report` | Returns report JSON with score + agent fields (**Week 4 implemented**; template or live LLM) |
@@ -978,7 +979,7 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 
 | Req ID | Description | Priority | Feature | Owner | Status |
 |--------|-------------|----------|---------|-------|--------|
-| FR-IN.1 | Accept screenshot + XML | Must | §4.1 | Ayesha | Pending |
+| FR-IN.1 | Accept screenshot + XML | Must | §4.1 | Ayesha | **Done** (paired upload + validation; API enforces pair) |
 | FR-IN.2 | Validate pair screen ID | Must | §4.1 | Salar | Pending |
 | FR-PS.1 | Extract XML attributes | Must | §4.2 | Salar | **Done** |
 | FR-RU.1–10 | Rules R01–R10 | Must | §4.3 | Salar | **Done** |

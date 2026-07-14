@@ -2,8 +2,8 @@
 
 **Project:** Agentic Accessibility Auditor (Axion)  
 **Duration:** 8 weeks (Summer 2026)  
-**Last updated:** 13 July 2026  
-**Status:** Week 6 in progress — auth + records + evaluation batch; Weeks 1–5 complete on `noor` (`1fa03a05e`)
+**Last updated:** 15 July 2026  
+**Status:** Week 6 largely complete on `noor` (`92702a71`) — JWT auth + records synced; 40-screen stratified-random eval sheet; Weeks 1–5 done; manual eval fill + Friday demo remaining
 
 ---
 
@@ -24,10 +24,10 @@
 
 | Document | Path | Purpose |
 |----------|------|---------|
-| **SRS v2.0** | `srs/SRS_Agentic_Accessibility_Auditor_v2.0.md` (+ `.docx`) | What the system must do |
-| **SDS v2.2** | `sds/SDS_Agentic_Accessibility_Auditor_v2.0.md` (+ `.docx`) | How to implement it |
-| **Progress report** | `docs/progress/Supplementary_Progress_Report_v1.0.md` (+ `.docx`) | What is actually done |
-| **This plan** | `updated_plan.md` | Weekly schedule + folder map |
+| **SRS v2.3** | `srs/SRS_Agentic_Accessibility_Auditor_v2.0.md` (+ `.docx`) | What the system must do |
+| **SDS v2.7** | `sds/SDS_Agentic_Accessibility_Auditor_v2.0.md` (+ `.docx`) | How to implement it |
+| **Progress report** | `docs/progress/Supplementary_Progress_Report_v1.0.md` (+ `.docx`) v1.11 | What is actually done |
+| **This plan** | `updated_plan.md` (+ `docs/updated_plan_v2.0.docx`) | Weekly schedule + folder map |
 
 Word exports: `scripts/md_to_docx.py` · Figma assets: `docs/assets/figma/`
 
@@ -40,20 +40,21 @@ Use this layout — the project was reorganized in late June:
 ```
 agentic-accessibility-auditor/          ★ MAIN REPO (branch: noor)
 │   ├── src/                            parser, rules, agent, report, explainer
-│   ├── backend/                        FastAPI audit API (violations + report + download)
-│   ├── frontend/                       Axion React UI (Upload/Dashboard/Report wired)
+│   ├── backend/                        audit + JWT auth + records routers
+│   ├── frontend/                       Upload/Dashboard/Report/Records/Login wired
+│   ├── tests/ + backend/tests/         rules/audit/report + auth suite
 │   ├── tests/fixtures/rules/           57 XML fixtures (R01–R30 pass/fail)
-│   ├── scripts/                        validation + md_to_docx + dataset utilities
-│   ├── docs/                           schemas, guidelines, progress report, figma/
-│   ├── srs/ · sds/                     SRS/SDS markdown + DOCX
+│   ├── scripts/                        week1–6 validate + md_to_docx + utilities
+│   ├── docs/                           schemas, progress, week6/, figma/, plan DOCX
+│   ├── srs/ · sds/                     SRS v2.3 / SDS v2.7 markdown + DOCX
 │   ├── data/
-│   │   ├── data-masc/                  7,068 screens + parsed outputs
+│   │   ├── data-masc/                  7,068 screens + parsed outputs + splits
 │   │   └── data-rico-holdout/          1,698 holdout
 │   ├── outputs/
-│   │   ├── violations/samples/         ✅ 56 fixture JSON samples (R01–R30, no R28 fixture)
+│   │   ├── violations/samples/         ✅ 56 fixture JSON samples (R01–R30, no R28)
 │   │   ├── reports/samples/            ✅ Example JSON/HTML/PDF report
-│   │   └── validation_logs/          noor_week1–5 logs
-│   ├── docker-compose.yml              ⚠️ Deferred on noor (Salar branch)
+│   │   └── validation_logs/            noor_week1–6 logs + summaries
+│   ├── docker-compose.yml              ✅ Synced from Salar (Week 6)
 │   └── test_run.py                     batch + single + --fixtures
 ```
 
@@ -67,8 +68,8 @@ Screenshot + UIAutomator XML
     → Rule engine (Team: Salar + Ayesha + Noor)           → violations.json     ✅ R01–R30
     → Agent/model layer (Noor + Ayesha; Salar support)    → report.json         ✅ Week 4
     → Report generator (Noor lead; team support)          → HTML / PDF          ✅ Week 5 (Noor)
-    → Axion UI (Ayesha lead; Noor + Salar support)        → upload / dashboard  ✅ Partial (Records Week 6)
-    → Auth + Records (team)    → per-user history    ⬜ Week 6–7
+    → Axion UI (Ayesha lead; Noor + Salar support)        → upload / dashboard / records  ✅ Week 6
+    → Auth + Records (Salar + Ayesha; Noor sync)          → JWT + per-user history        ✅ Week 6 on `noor`
 ```
 
 ---
@@ -90,7 +91,7 @@ Minimum policy:
 
 ---
 
-## Progress snapshot (13 July 2026)
+## Progress snapshot (15 July 2026)
 
 | Milestone | Target week | Actual status |
 |-----------|-------------|---------------|
@@ -98,14 +99,14 @@ Minimum policy:
 | Hybrid XML parser | Week 2 | ✅ 7,068/7,068 PASS sign-off |
 | Rico holdout (unseen eval) | Week 2 | ✅ 1,698 disjoint screens built |
 | JSON schemas + examples | Week 1–2 | ✅ `auditor_schema.json` + docs |
-| SRS + SDS v2.0 | Week 2 | ✅ Markdown + DOCX with Figma screenshots |
-| Docker skeleton | Week 1–2 | ⚠️ Partial (Salar branch; not on `noor`) |
+| SRS + SDS | Week 2+ | ✅ SRS v2.3 / SDS v2.7 + DOCX (Figma embedded) |
+| Docker skeleton | Week 1–2 | ✅ Synced to `noor` (Salar Week 6) |
 | Rule engine R01–R30 | Week 3–4 | ✅ Done + 57 XML fixtures + 56 sample JSON in repo |
 | Agent + report API | Week 4 | ✅ `GET …/report` |
 | HTML/PDF report export | Week 5 | ✅ `src/report.py` + download API |
-| Axion UI (core pages) | Week 4–5 | ✅ Upload/Dashboard/Report wired |
-| Auth + Records | Week 6–7 | ⬜ **Current focus** — spec only so far |
-| 25–40 screen manual eval | Week 6 | ⬜ Not started |
+| Axion UI (core pages) | Week 4–5 | ✅ Upload/Dashboard/Report wired (+ pair validation) |
+| Auth + Records | Week 6 | ✅ JWT + `/records` on `noor` (Salar); Login/Records UI live |
+| 25–40 screen manual eval | Week 6 | 🟡 Sheet ready (40 stratified-random); **manual fill ≥25 pending** |
 | Final evaluation (Rico holdout) | Week 8 | ❌ Not started |
 
 ---
@@ -154,7 +155,7 @@ Minimum policy:
 
 ---
 
-### Phase 3 — Integration (Weeks 5–6) ← **CURRENT**
+### Phase 3 — Integration (Weeks 5–6) ✅ Mostly complete
 
 #### Week 5 — Reports + pipeline wiring (completed 12 Jul 2026, `4ce430feb`)
 
@@ -166,17 +167,24 @@ Minimum policy:
 
 **Week 5 demo goal:** Upload XML → dashboard → downloadable HTML/PDF report. **Met.**
 
-#### Week 6 — Auth, Records, big audit run ← **CURRENT (13 Jul 2026)**
+#### Week 6 — Auth, Records, evaluation batch (updated 15 Jul 2026, `92702a71`)
 
-| Person | Tasks | Deliverable |
-|--------|-------|-------------|
-| **Salar** | Auth backend (JWT); records persistence; contribute to R21–R25 implementation | Auth + Records API + R21–R25 code support |
-| **Ayesha** | Auth screens + records page; contribute to R21–R25 tests; continue model experiments | Full Axion auth flow + R21–R25 tests |
-| **Noor** | Run pipeline on 25–40 screens; manual validation; lead R26–R30 design and review | Evaluation sheet + R26–R30 design doc |
+| Person | Planned | **Actual outcome** |
+|--------|---------|-------------------|
+| **Salar** | Auth backend (JWT); records persistence | ✅ Done — `backend/auth.py`, `auth_router.py`, `records_router.py`, `test_auth.py`; synced into `noor` |
+| **Ayesha** | Auth screens + Records page; prompt experiments | ✅ Login/SignUp wired to JWT; Records on live API; prompt experiments expanded (`3d4fa82`); Dashboard re-run popup |
+| **Noor** | 25–40 screen eval; R26–R30 design; sync + docs | ✅ Sync Salar+Ayesha; score/filename on Records; stratified-random 40-screen CSV (`docs/week6/`); R26–R30 design DOCX; `noor_week6_validate.py` + logs; SRS/SDS/progress updated |
+
+**Week 6 remaining (this week):**
+- Fill ≥25 **manual** rows on `docs/week6/evaluation_sheet_40_screens.csv` (auto scores already filled; FP/miss notes blank)
+- Friday demo: signup/login → upload screenshot+XML pair → dashboard → report HTML/PDF → Records list with score
+- OTP / forgot-password backend still **stretch** (UI screens exist)
+
+**Week 6 demo goal:** Auth + upload pair + report download + Records. **Ready to demo** (manual eval fill ongoing).
 
 ---
 
-### Phase 4 — Polish & delivery (Weeks 7–8)
+### Phase 4 — Polish & delivery (Weeks 7–8) ← **NEXT**
 
 #### Week 7 — QA, benchmark, bug fixes
 
@@ -200,9 +208,9 @@ Minimum policy:
 
 | Tier | Scope |
 |------|-------|
-| **Must Have** | Parser ✅ · R01–R10 rules · LLM explanations · HTML/PDF report · Axion Upload/Dashboard/Report · Auth + Records · Docker · 25–40 screen eval |
-| **Should Have** | R11–R20 · batch API · annotated screenshot regions in UI · Ayesha model/prompt experiments integrated |
-| **Stretch** | R21–R30 · R09 contrast (CV) · CNN classifier / lightweight model training · click-to-highlight in HTML report · benchmark dataset export |
+| **Must Have** | Parser ✅ · R01–R30 rules ✅ · LLM explanations ✅ · HTML/PDF ✅ · Upload/Dashboard/Report ✅ · Auth + Records ✅ · Docker ✅ · 25–40 screen eval 🟡 (sheet done; manual fill pending) |
+| **Should Have** | Batch API · annotated screenshot regions in UI · deeper prompt comparison notes |
+| **Stretch** | OTP auth · R09 contrast (CV) · CNN / lightweight training on MASC train→val→test · click-to-highlight in HTML · Rico holdout batch (Week 8) |
 
 ---
 
@@ -230,14 +238,14 @@ Minimum policy:
 | Agent → `report.json` | Noor | §4.5 | §3.3 |
 | Report HTML/PDF template | Noor | §4.6 | §3.4 |
 | JSON schemas + `json_schemas.md` | Noor | §8 | §4 |
-| Backend / FastAPI API | Noor | §9 | §3.5 |
-| Axion UI | Ayesha | §3.1, Appendix F | §9 |
-| SRS v2.0 | Ayesha + Salar (review: Noor) | — | — |
-| SDS v2.2 | Noor | — | — |
+| Backend / FastAPI audit API | Noor | §9 | §3.5 |
+| Auth (JWT) + Records API | Salar (synced by Noor) | §4.9 | §10 |
+| Axion UI | Ayesha (+ Salar auth wiring) | §3.1, Appendix F | §9 |
+| SRS v2.3 | Ayesha + Salar (updates: Noor) | — | — |
+| SDS v2.7 | Noor | — | — |
 | pytest suite | Salar + Noor | §10 | §13 |
-| Auth + Records | Ayesha + Salar | §4.9 | §10 |
 | Docker | Salar | Appendix E | §11 |
-| Evaluation | Noor | §11 | §13 |
+| Evaluation (40-screen sheet) | Noor | §11 | §13 |
 
 ---
 
@@ -246,7 +254,7 @@ Minimum policy:
 | ID | Decision | Owner | Status | Resolution |
 |----|----------|-------|--------|------------|
 | TBD-01 | LLM/model choice (+ training strategy) | Noor + Ayesha | Resolved | Groq (llama-3.3-70b-versatile) chosen as default — only free, testable provider. Anthropic/OpenAI require paid credits; Gemini blocked by a quota bug. See `docs/TBD-01-decision.md` |
-| TBD-02 | Score formula | Noor | Resolved | SDS formula: 100 − weighted penalties |
+| TBD-02 | Score formula | Noor | Resolved | `compute_accessibility_score`: start 100; Critical−20, High−10, Medium−5, Low−2; clamp [0,100] |
 | TBD-03 | dp/density for R04 | Salar | Open | Assume 160 dpi; bounds as px for MVP |
 | TBD-05 | Severity UI mapping | All | Open | High → Critical/Serious; Medium → Moderate; Low → Minor |
 | TBD-06 | Auth in MVP | — | Resolved | Must Have (SRS §4.9) |

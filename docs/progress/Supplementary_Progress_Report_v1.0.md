@@ -2,14 +2,14 @@
 
 ## Agentic Accessibility Auditor (Axion)
 
-**Practical work completed — Weeks 1–4 (baseline 1 July 2026; updated 9 July 2026)**  
+**Practical work completed — Weeks 1–5 (baseline 1 July 2026; updated 14 July 2026)**  
 **Living document — see §15 for team updates; §12–§13 for literature + rule ownership**
 
 | Field | Value |
 |-------|-------|
 | Report type | Empirical / progress (not theoretical SRS/SDS) |
 | Prepared by | Muhammad Noor (Lead) |
-| Team | Salar (Parser/Rules/Docker), Ayesha (UI/Schemas/Figma), Noor (Agent/Reports/QA) |
+| Team | Salar (parser, MASC data, rules, tests); Ayesha (Rico holdout, frontend, SRS, rules); Noor (backend, JSON schemas, SDS, agent, reports, rules, SRS review, tests, QA) |
 | Repository | [MuhammadNoor7/agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor) |
 | Canonical specs | In repo: `srs/` · `sds/` · `updated_plan.md` |
 
@@ -31,39 +31,61 @@ This document gathers what has actually been built, run, and produced so far. It
 
 > **Note:** Baseline below is as of **1 July 2026**. For current status after team pushes, see **§15 Team weekly updates**.
 
-| Area | Result (9 Jul on `noor`) |
-|------|--------------------------|
+| Area | Result (14 Jul on `noor`) |
+|------|---------------------------|
 | Parser (Stage 1) | **Complete** — hybrid XML parser; MASC `<wrapper>` + bounds fixes; visibility field; R13–R20 extended fields |
-| Rule engine (Stage 2) | **R01–R30 implemented** — visibility filter; R11 implemented; R09 needs declared colors/screenshot; **94 pytest** |
+| Rule engine (Stage 2) | **R01–R30 implemented** — 57 XML pass/fail fixtures; **120 pytest** |
 | Agent layer (Stage 3) | **Wired** — `src/explainer.py` + `src/agent.py` (`build_audit_report`); LLM or template fallback; API-wired |
-| Report generator (Stage 4) | Not started — no `src/report.py` HTML/PDF yet |
-| Axion React UI | **On `noor` branch** — Ayesha `frontend/` synced (latest 8 Jul); **not calling live API** (mock data) |
-| FastAPI audit API | **Partial** — `POST /audit` → violations + **`GET …/report`** (score + agent fields); no auth/records/download |
+| Report generator (Stage 4) | **Done** — `src/report.py` (Jinja2 HTML + PIL + Playwright PDF); `GET …/report/download` |
+| Axion React UI | **Partial** — Upload/Dashboard/Report wired to live API; **upload pair validation fixed** (Ayesha); Records still mock (Week 6) |
+| FastAPI audit API | **Partial** — `POST /audit` requires screenshot + XML + pair check; violations + report + **download**; no auth/records persistence |
 | Auth + Records | Specified in SRS v2.0; not implemented in code |
 | Docker | Deferred on `noor` (removed); Salar owns Docker on `salar` |
-| Documentation | SRS v2.0, **SDS v2.2**, progress report **v1.6** |
+| Documentation | SRS v2.0 (Ayesha+Salar), **SDS v2.6** (Noor), progress report **v1.10** |
 
-**Bottom line (9 Jul):** Week 4 agent wiring is done — real API demo: XML → R01–R30 → `report.json` (template mode without live LLM). Next: Ayesha frontend↔API + prompt experiments (TBD-01); Noor `src/report.py` HTML/PDF.
+**Bottom line (14 Jul):** Upload validation handoff complete — frontend (Ayesha `052a976`) + backend pair enforcement (Noor). Full pipeline: screenshot + XML → R01–R30 → `report.json` → downloadable HTML/PDF. Next: Records + auth (Week 6).
+
+---
+
+## 2.1 Team contributions & artifact ownership (12 Jul 2026)
+
+> **Credit map** for supervisor review — reflects who built each major deliverable on branch `noor`.
+
+| Area | Primary contributor(s) | Evidence |
+|------|------------------------|----------|
+| **Data collection** | All interns | Shared dataset effort |
+| **MASC dataset** (7,068 screens) | Salar + Noor | `data/data-masc/`; full re-parse sign-off |
+| **Rico holdout** (1,698 screens) | Ayesha | `data/data-rico-holdout/`; manifest |
+| **Parser** → `components.json` | Salar + Noor | `src/parser.py` (Noor: R13–R20 fields, visibility, MASC wrapper fix) |
+| **Rules** → `violations.json` | **Salar + Noor + Ayesha** (reviewed by all) | `src/rules.py` R01–R30; 57 XML fixtures; R11–R12 sign-off |
+| **Agent** → `report.json` | Noor | `src/agent.py`, `src/explainer.py`, score formula |
+| **Report template** (HTML/PDF) | Noor | `src/report.py`, `src/templates/audit_report.html.j2` |
+| **Backend / FastAPI** | Noor | `backend/routers/audit.py`, `backend/main.py` |
+| **Frontend (Axion)** | Ayesha | `frontend/`; API wiring Upload/Dashboard/Report |
+| **JSON structure + schema docs** | Noor | `docs/json_schemas.md`, `docs/schemas/auditor_schema.json`, `src/schema_documents.py` |
+| **SRS v2.0** | Ayesha + Salar | `srs/` — Noor reviewed and merged |
+| **SDS v2.2** | Noor | `sds/` |
+| **Tests (pytest)** | Salar + Noor | `tests/` — 120 passed |
 
 ---
 
 ## 3. Pipeline status (actual vs planned)
 
-| Stage | Owner | Output artefact | Status (9 Jul) | Evidence |
-|-------|-------|-----------------|----------------|----------|
+| Stage | Owner | Output artefact | Status (12 Jul) | Evidence |
+|-------|-------|-----------------|-----------------|----------|
 | 1 — Parser | Salar / Noor | `*_components.json` | **Done** (R13–R20 fields + visibility) | `data/data-masc/parsed/` (7,068 files, sign-off PASS) |
-| 2 — Rules | Salar / Noor | `violations.json` | **Done** R01–R30 | `src/rules.py`; fixtures R11 + R21–R30 |
-| 3 — Agent | Noor / Salar | enriched `report.json` | **Done** (API-wired) | `src/agent.py` + `src/explainer.py`; `GET …/report` |
-| 4 — Report | Noor | HTML/PDF | Planned | No `src/report.py` |
-| UI — Axion | Ayesha | React dashboard | **Scaffold** | `frontend/` on `noor`; mock data only |
-| API | Noor | FastAPI audit routes | **Partial** | violations + report; no auth/records/download |
+| 2 — Rules | **Salar + Noor + Ayesha** (reviewed by all) | `violations.json` | **Done** R01–R30 | `src/rules.py`; 57 XML fixtures |
+| 3 — Agent | Noor | enriched `report.json` | **Done** (API-wired) | `src/agent.py` + `src/explainer.py`; `GET …/report` |
+| 4 — Report | Noor | HTML/PDF | **Done** | `src/report.py`; `GET …/report/download` |
+| UI — Axion | Ayesha | React dashboard | **Partial** | Upload/Dashboard/Report wired; Records mock |
+| API | Noor | FastAPI audit routes | **Partial** | violations + report + download; no auth/records |
 | Auth/Records | Ayesha / Salar | JWT + per-user history | Planned | SRS §4.9 only |
 
 ---
 
 ## 4. Project folder structure (repository root)
 
-> **As of 9 July 2026** on branch `noor` — canonical repo: [agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor)
+> **As of 12 July 2026** on branch `noor` (commit `4ce430feb`) — canonical repo: [agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor)
 
 ```
 agentic-accessibility-auditor/          ← repo root (clone / _noor_push locally)
@@ -72,6 +94,9 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │   ├── parser.py                       ← XML → components.json (Stage 1; R13–R20 fields + visibility)
 │   ├── rules.py                        ← R01–R30 rule checker (Stage 2)
 │   ├── agent.py                        ← Score + build_audit_report (Stage 3; API-wired)
+│   ├── report.py                       ← Jinja2 HTML + Playwright PDF (Stage 4)
+│   ├── templates/
+│   │   └── audit_report.html.j2        ← Standalone HTML report template
 │   ├── explainer.py                    ← Live LLM recommendations (batched; anti-hallucination)
 │   ├── guidelines.py                   ← G01–G30 + R→G mapping for explainer
 │   ├── llm_providers.py                ← Anthropic / OpenAI / Gemini / Groq
@@ -83,7 +108,7 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │   ├── models/
 │   │   └── audit.py                    ← Pydantic audit response models
 │   └── routers/
-│       └── audit.py                    ← POST /audit, GET …/violations, GET …/report
+│       └── audit.py                    ← POST /audit, GET …/violations, GET …/report, GET …/report/download
 │
 ├── frontend/                           ← Axion React UI (Ayesha, synced to noor)
 │   ├── package.json                    ← Vite 8 + React 19 + Tailwind 4
@@ -92,7 +117,7 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │   └── src/
 │       ├── App.jsx                     ← Routes (auth + Upload/Dashboard/Report/Records)
 │       ├── main.jsx, index.css
-│       ├── state/auditFiles.js         ← Local upload state (not API-wired yet)
+│       ├── state/auditFiles.js         ← Upload file state (wired to POST /audit)
 │       ├── components/
 │       │   ├── Sidebar.jsx
 │       │   ├── layout/                 ← AuthLayout, MainLayout
@@ -102,13 +127,14 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │           ├── Upload.jsx, Dashboard.jsx, Report.jsx, Records.jsx
 │           └── main/Placeholder.jsx
 │
-├── tests/                              ← pytest suite (**94** passed on `noor`)
+├── tests/                              ← pytest suite (**120** passed on `noor`)
 │   ├── test_parser.py
-│   ├── test_rules.py                   ← R01–R30 fixtures + visibility filter tests
+│   ├── test_rules.py                   ← R01–R30 pass/fail XML fixtures (78 tests)
 │   ├── test_agent.py                   ← score + template report
-│   ├── test_audit.py                   ← FastAPI violations + report
+│   ├── test_audit.py                   ← FastAPI violations + report + download
+│   ├── test_report.py                  ← HTML/PDF export (Week 5)
 │   ├── test_explainer.py               ← anti-hallucination / batching (mocked LLM)
-│   └── fixtures/rules/                 ← XML fixtures (R01–R12, R21–R30, …)
+│   └── fixtures/rules/                 ← 57 controlled XML screens (R01–R30)
 │
 ├── data/                               ← datasets + local uploads
 │   ├── data-masc/
@@ -119,17 +145,15 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │   ├── data-rico-holdout/              ← 1,698-screen holdout + manifest
 │   ├── xml/                            ← generic upload XML drops
 │   ├── parsed/                         ← generic parsed output
-│   └── screenshots/                    ← optional screenshot uploads
+│   └── screenshots/                    ← screenshot uploads (paired with XML for POST /audit)
 │
 ├── outputs/                            ← pipeline artefacts
-│   ├── violations/                     ← *_violations.json
-│   ├── reports/                        ← *_report.json (agent-enriched; Week 4)
+│   ├── violations/                     ← *_violations.json (Stage 2; generated locally)
+│   ├── reports/                        ← *_report.json, .html, .pdf (Stages 3–4)
 │   └── validation_logs/
-│       ├── week3_summary.md
-│       ├── week3_validation_log.txt
-│       ├── noor_week3_summary.md
-│       ├── noor_week3_validation_log.txt
-│       └── masc_reparse_log.txt
+│       ├── noor_week1–4 summaries + logs
+│       ├── noor_week5_summary.md
+│       └── noor_week5_validation_log.txt
 │
 ├── notebooks/
 │   └── masc_dataset_analysis.ipynb     ← Salar MASC analysis (synced Week 4)
@@ -147,6 +171,8 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 ├── scripts/                            ← batch + validation utilities
 │   ├── validate_output.py
 │   ├── noor_week3_validate.py
+│   ├── noor_week4_validate.py
+│   ├── noor_week5_validate.py
 │   ├── masc_parse_signoff.py
 │   ├── run_explainer_sample.py         ← Stage 3 LLM sample runner
 │   ├── compare_visibility_filter_impact.py
@@ -172,9 +198,9 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 | 1 — Parser | `src/parser.py`, `test_run.py`, `app.py` | `data/**/parsed/*_components.json` |
 | 2 — Rules | `src/rules.py` | `outputs/violations/*_violations.json` |
 | 3 — Agent | `src/agent.py`, `src/explainer.py` | `outputs/reports/*_report.json` |
-| 4 — Report | `src/report.py` (planned) | HTML/PDF — not started |
-| API | `backend/routers/audit.py` | in-memory job → violations + report JSON |
-| UI | `frontend/` | browser at `:5173` (mock data; not wired to API yet) |
+| 4 — Report | `src/report.py` | `outputs/reports/*_report.html` / `.pdf` + download API |
+| API | `backend/routers/audit.py` | in-memory job → violations + report JSON + file download |
+| UI | `frontend/` | browser at `:5173` (Upload/Dashboard/Report wired; Records mock) |
 
 ### Local workspace (optional clones)
 
@@ -248,50 +274,54 @@ Config: `data/data-masc/splits/split_summary.json`
 
 ---
 
-## 7. Code and infrastructure delivered (baseline 1 Jul)
+## 7. Code and infrastructure delivered (updated 12 Jul)
 
 | Path | Purpose | Owner |
 |------|---------|-------|
-| `src/parser.py` | Hybrid XML → `components.json` | Salar |
-| `src/schema_documents.py` | JSON envelope builders | Salar |
-| `test_run.py` | CLI batch / single-file parser | Salar |
+| `src/parser.py` | Hybrid XML → `components.json` | Salar / Noor |
+| `src/schema_documents.py` | JSON envelope builders | Noor |
+| `src/rules.py` | R01–R30 rule checker → `violations.json` | Salar + Noor + Ayesha (reviewed by all) |
+| `src/agent.py`, `src/explainer.py` | Agent layer → `report.json` | Noor |
+| `src/report.py`, `src/templates/` | HTML/PDF report export | Noor |
+| `backend/routers/audit.py` | FastAPI audit + download API | Noor |
+| `test_run.py` | CLI batch / single / `--fixtures` | Salar / Noor |
+| `tests/` | pytest suite (120 tests) | Salar / Noor |
 | `app.py` | Streamlit dev UI | Salar |
-| `backend/main.py` | FastAPI health endpoints | Salar |
-| `scripts/validate_output.py` | JSON schema validation | Salar |
+| `scripts/validate_output.py` | JSON schema validation | Noor / Salar |
 | `docker-compose.yml` | Backend + auditor services | Salar |
 
 ---
 
 ## 8. Documentation delivered
 
-| Document | Status |
-|----------|--------|
-| SRS v2.0 | Complete |
-| SDS v2.0 | Complete |
-| JSON schemas + `auditor_schema.json` | Complete |
-| Accessibility guidelines (G01–G30, R01–R30) | Complete |
-| QA test plan (TC-01–TC-06) | Complete |
-| Figma UI specs (SRS Appendix F) | Documented |
-| Updated 8-week plan | Complete |
+| Document | Author(s) | Status |
+|----------|-----------|--------|
+| SRS v2.0 | Ayesha + Salar (Noor review) | Complete |
+| SDS v2.2 | Noor | Complete |
+| JSON schemas + `auditor_schema.json` | Noor | Complete |
+| Accessibility guidelines (G01–G30, R01–R30) | Team (Noor lead doc) | Complete |
+| QA test plan (TC-01–TC-06) | Noor | Complete |
+| Figma UI specs (SRS Appendix F) | Ayesha | Documented |
+| Updated 8-week plan | Noor | Complete |
 
 ---
 
-## 9. Per-person contribution summary (baseline 1 Jul)
+## 9. Per-person contribution summary (updated 12 Jul)
 
-### Salar — Parser, rules, Docker, datasets
+### Salar — Parser, rules, MASC data, Docker, tests
 
-**Done:** Hybrid parser, 7,068 MASC parses, MASC splits, Rico holdout build, Docker Compose, validate script  
-**Pending at baseline:** `src/rules.py`, full audit API, Auth backend, branch rename `azeem` → `salar`
+**Done:** Hybrid parser (with Noor); **R01–R30 rules** (with Noor + Ayesha; reviewed by all); MASC integration + batch scripts; Docker Compose; `components.json` pipeline; pytest (with Noor)  
+**Pending:** Auth backend (Week 6); branch rename `azeem` → `salar`
 
-### Ayesha — Schemas, Figma, React UI
+### Ayesha — Rico holdout, frontend, SRS, rules
 
-**Done:** `auditor_schema.json`, `json_schemas.md`, Figma designs (8 screen groups in SRS)  
-**Pending:** React + Vite + Tailwind project, all Axion screens, API integration
+**Done:** **Rico holdout** build; Figma designs; React Axion UI; **SRS co-author**; frontend ↔ API wiring; **rules** (with Salar + Noor; R11–R12 sign-off); Groq prompt experiments (TBD-01)  
+**Pending:** Records page + auth screens (blocked on backend Week 6)
 
-### Noor (Lead) — Agent, reports, QA, coordination
+### Noor (Lead) — Backend, schemas, SDS, agent, reports, rules, SRS review, tests, QA
 
-**Done:** QA test plan, Rico holdout strategy, SRS/SDS v2.0, supplementary report, updated plan  
-**Pending:** `src/agent.py`, `src/report.py`, evaluation, weekly demos
+**Done:** **FastAPI backend**; **JSON schema contracts**; **SDS v2.2**; **SRS review**; agent + **report template** (JSON/HTML/PDF); parser extensions; **rules** (with Salar + Ayesha); violations fixtures + validation; `noor_week1–5` validation; supplementary report; coordination  
+**Pending:** Records + auth coordination (Week 6); Rico holdout evaluation
 
 ---
 
@@ -383,8 +413,8 @@ Config: `data/data-masc/splits/split_summary.json`
 | R08 | G08, G15 | Salar | ✅ Done | Zero-area guard added |
 | R09 | G09, G11 | Salar | 🟡 Partial | Needs declared colors / screenshot contrast |
 | R10 | G10, G28, G29 | Salar | ✅ Done | |
-| R11 | G11 | Ayesha | ✅ Done | Implemented on `salar`/`noor` (checkable-state widgets); Ayesha review pending |
-| R12 | G12 | Ayesha | ✅ Done | `media_type` + caption heuristics |
+| R11 | G11 | Ayesha | ✅ Done | Implemented by Salar; **reviewed by Ayesha + Noor** |
+| R12 | G12 | Ayesha | ✅ Done | `media_type` + caption heuristics; Ayesha review sign-off |
 | R13 | G13 | Noor | ✅ Done | 1,055 violations / 118 MASC screens |
 | R14 | G14 | Noor | ✅ Done | 1,873 / 667 screens |
 | R15 | G15, G16 | Noor | ✅ Done | 3,860 / 3,860 screens |
@@ -408,18 +438,77 @@ Config: `data/data-masc/splits/split_summary.json`
 
 ---
 
-## 14. Recommended next steps (updated 9 July 2026)
+## 14. Recommended next steps (updated 12 July 2026)
 
-1. **Ayesha:** Wire `frontend/` to live audit API (`POST /audit`, `GET …/violations`, `GET …/report`); run prompt experiments (`run_explainer_sample.py`) and resolve **TBD-01** with Noor; review R11–R12
-2. **Noor:** Start `src/report.py` HTML/PDF; update validation logs for R01–R30; Rico holdout batch parse
-3. **Salar:** Tune R07 false positives; improve R09 when colors/screenshots available
-4. **All:** Demo — XML upload → API → violations → agent-enriched report (template or live LLM)
+1. **Salar:** Auth backend (JWT) + records persistence API (Week 6)
+2. **Ayesha:** Wire Records page to list endpoint once backend exists; auth screens when auth router lands
+3. **Noor:** Rico holdout batch parse + evaluation sheet; Docker polish
+4. **All:** Demo — XML upload → API → dashboard → downloadable HTML/PDF report
 
 ---
 
 ## 15. Team weekly updates
 
 > **Instructions:** Each intern adds a dated entry after pushing work. Newest week at the top. Keep entries factual — file names, test counts, branch commits.
+
+### Upload validation fix — Ayesha + Noor (`ayesha` `052a976` → merged on `noor`, 14 Jul 2026)
+
+**Pushed by:** Ayesha Naveed (frontend) + Muhammad Noor (backend/docs)  
+**Date:** 14 July 2026
+
+**Completed (handoff doc — 4 issues):**
+- **Issue 1** — XML without screenshot shows error popup (not silent) — `Upload.jsx`
+- **Issue 2** — `createAudit(screenshot, xml)` sends both files — `api.js`
+- **Issue 3** — Backend requires screenshot + XML; 400 on pair mismatch — `backend/routers/audit.py`
+- **Issue 4** — `filesMatch()` stem/prefix logic rejects false-positive digit matches — `Upload.jsx`
+- **Tests** — `tests/test_audit.py` updated; missing-screenshot + mismatched-pair cases; validation scripts aligned
+
+**Pending:** Records + auth (Week 6)
+
+**Blockers:** None
+
+---
+
+### Week 5 — Noor (`noor` branch, commit `4ce430feb` — pushed 12 Jul 2026)
+
+**Pushed by:** Muhammad Noor  
+**Date:** 12 July 2026
+
+**Completed:**
+- **`src/report.py`** — Jinja2 template (`src/templates/audit_report.html.j2`), PIL screenshot bounding-box annotation, Playwright PDF export
+- **Download API** — `GET /api/v1/audit/{id}/report/download?format=html|pdf` (sync handler for Playwright)
+- **Frontend** — `downloadAuditReport()` in `api.js`; `Report.jsx` real HTML/PDF download after processing animation
+- **Rule fixtures** — 21 new R09–R20 pass/fail XML files; `test_run.py --fixtures` batch mode; fixture path fix (no MASC root collision)
+- **Tests** — `tests/test_report.py`; extended `tests/test_audit.py` + `tests/test_rules.py`; **120 pytest** passed
+- **Validation** — `scripts/noor_week5_validate.py` + validation logs
+- **Docs** — SRS/SDS/README/updated_plan/progress report aligned; WeasyPrint → Jinja2 + Playwright
+
+**Pending:**
+- Records + auth (Week 6)
+- Rico holdout batch evaluation
+
+**Blockers:** None
+
+---
+
+### Week 4 — Ayesha 
+
+**Pushed by:** Ayesha Naveed
+**Date:** 11 July 2026
+
+**Completed:**
+- **R11–R12 review sign-off:** reviewed `src/rules.py` implementations of `check_color_only_info` (R11) and `check_missing_captions` (R12) against `docs/r11_r12_design.md`. Confirmed both rules moved past their original Week 3 stub design — R11 now flags checkable-state widgets (CheckBox/Switch/ToggleButton/RadioButton) with no text/content_desc; R12 now uses `parent_id` sibling adjacency plus bounds-proximity fallback, not just a blanket VideoView flag. Ran `pytest tests/test_rules.py -k "r11 or r12"` — all 5 relevant tests passed (fixture pass/fail cases, non-checkable-widget exclusion, sibling-vs-bounds-distance priority, non-media stub behavior).
+- **Frontend ↔ API wiring** (Priority 1): Upload, Dashboard, and Report pages now call the live backend (`POST /api/v1/audit`, `GET /report`) instead of mock data. Tested end-to-end with a real XML fixture and Groq — confirmed full pipeline works (upload → audit → dashboard → report).
+- **Agent prompt experiments (TBD-01):** ran `scripts/run_explainer_sample.py` — Groq tested successfully (15/15 violations explained, good quality, no hallucination observed). Anthropic/OpenAI blocked by paid billing requirements; Gemini blocked by a Google-side free-tier quota bug (`429`, limit 0) even after Noor's SDK fix resolved the original key-format issue. Documented in `docs/agent_prompt_experiments.md` and `docs/TBD-01-decision.md`; TBD-01 marked Resolved (Groq as default) in this doc's Open Decisions table.
+
+**Pending:**
+- Full 4-provider comparison once Anthropic/OpenAI credits are available and Gemini's quota issue is resolved
+- Records/Audit History page — blocked on backend (no list endpoint, no persistence yet)
+- Auth pages (login/signup/etc.) — blocked on backend (no auth router implemented yet)
+
+**Blockers:** None on my own tasks; Records + Auth wiring blocked on backend work not yet scoped.
+
+---
 
 ### Week 4 — Noor (`noor` branch, commits `98efd2fe0` → `0144b1af3`)
 
@@ -554,6 +643,10 @@ Blockers:None
 | 1.4 | 6 Jul 2026 | Noor | R13–R20 parser/rules, full MASC re-parse, SDS v2.1, validation sign-off |
 | 1.5 | 6 Jul 2026 | Noor | R13–R20 rule lead → Noor; DOCX regenerated |
 | **1.6** | **9 Jul 2026** | **Noor** | Week 4: R01–R30, explainer + report API, 94 tests, frontend/notebook sync; next steps + §15 |
+| **1.7** | **12 Jul 2026** | **Noor** | Week 5 pushed (`4ce430feb`): HTML/PDF export, download API, R09–R20 fixtures, 120 tests, docs aligned (Jinja2+Playwright) |
+| **1.8** | **12 Jul 2026** | **Noor** | Team artifact ownership table (§2.1); credit map: backend/schemas/SDS (Noor), rules (Salar), frontend/Rico/SRS (Ayesha) |
+| **1.9** | **13 Jul 2026** | **Noor** | Rules credit → Salar + Noor + Ayesha (reviewed by all); Word export → `Supplementary_Progress_Report_v1.0.docx`; SRS/SDS DOCX generated from markdown |
+| **1.10** | **14 Jul 2026** | **Noor** | Upload validation handoff merged (Ayesha frontend + Noor backend); SRS/SDS API contract updated |
 
 ---
 

@@ -1,8 +1,8 @@
 """Tests for src/rules.py: run each controlled fixture through the parser and rule checker.
 
 Fixtures live in tests/fixtures/rules/ and map to TC-02 (R01), TC-03 (R04), and
-TC-04 (R05) in docs/qa_test_plan.md, plus additional coverage for R02, R03,
-R06, R07, R08, R10, a negative/regression case, and R21-R30 (Week 4/5).
+TC-04 (R05) in docs/qa_test_plan.md, plus coverage for R02, R03, R06–R10,
+R11–R20, a negative/regression case, and R21–R30 (Week 4/5).
 """
 
 from __future__ import annotations
@@ -53,7 +53,17 @@ def _violations_for(filename: str) -> dict:
         ("r06_disabled_control_fail.xml", "R06"),
         ("r07_zero_size_fail.xml", "R07"),
         ("r08_layout_overlap_fail.xml", "R08"),
+        ("r09_low_contrast_fail.xml", "R09"),
         ("r10_text_overflow_fail.xml", "R10"),
+        ("r12_missing_captions_fail.xml", "R12"),
+        ("r13_audio_no_transcript_fail.xml", "R13"),
+        ("r14_audio_only_notification_fail.xml", "R14"),
+        ("r15_bad_focus_order_fail.xml", "R15"),
+        ("r16_decorative_focus_fail.xml", "R16"),
+        ("r17_insufficient_spacing_fail.xml", "R17"),
+        ("r18_multi_gesture_fail.xml", "R18"),
+        ("r19_destructive_no_confirm_fail.xml", "R19"),
+        ("r20_hint_only_label_fail.xml", "R20"),
         ("r21_vague_error_fail.xml", "R21"),
         ("r22_no_password_toggle_fail.xml", "R22"),
         ("r23_unlabeled_nav_fail.xml", "R23"),
@@ -81,6 +91,17 @@ def test_rule_triggers_on_fail_fixture(filename: str, expected_rule: str) -> Non
         ("r04_small_target_pass.xml", "R04"),
         ("r05_unlabeled_input_pass.xml", "R05"),
         ("r05_unlabeled_input_hint_pass.xml", "R05"),
+        ("r09_low_contrast_pass.xml", "R09"),
+        ("r10_text_overflow_pass.xml", "R10"),
+        ("r12_missing_captions_pass.xml", "R12"),
+        ("r13_audio_no_transcript_pass.xml", "R13"),
+        ("r14_audio_only_notification_pass.xml", "R14"),
+        ("r15_bad_focus_order_pass.xml", "R15"),
+        ("r16_decorative_focus_pass.xml", "R16"),
+        ("r17_insufficient_spacing_pass.xml", "R17"),
+        ("r18_multi_gesture_pass.xml", "R18"),
+        ("r19_destructive_no_confirm_pass.xml", "R19"),
+        ("r20_hint_only_label_pass.xml", "R20"),
         ("r21_vague_error_pass.xml", "R21"),
         ("r22_no_password_toggle_pass.xml", "R22"),
         ("r23_unlabeled_nav_pass.xml", "R23"),

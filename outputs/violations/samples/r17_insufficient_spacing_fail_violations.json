@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r17_insufficient_spacing_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r17_insufficient_spacing_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r17_insufficient_spacing_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R17",
+      "issue": "Insufficient spacing",
+      "component_id": "c_002",
+      "class": "android.widget.Button",
+      "bounds": [
+        0,
+        0,
+        100,
+        100
+      ],
+      "guideline": "G17 \u2014 Insufficient spacing",
+      "severity": "Medium",
+      "recommendation": "Increase spacing between adjacent controls to at least 8dp.",
+      "related_component": "c_003"
+    }
+  ],
+  "component_count": 3,
+  "hidden_component_count": 0
+}

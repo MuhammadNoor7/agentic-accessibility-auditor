@@ -1,0 +1,404 @@
+
+
+##################################################################
+# RE-RUN 2026-07-12
+##################################################################
+
+==================================================================
+NOOR WEEK 5 VALIDATION LOG (HTML/PDF report export)
+Branch: noor   Date: 2026-07-12
+Owner: Muhammad Noor - src/report.py + download API
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_report.py
+------------------------------------------------------------------
+...s                                                                     [100%]
+3 passed, 1 skipped in 4.50s
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_audit.py (download endpoints)
+------------------------------------------------------------------
+......                                                                   [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+6 passed, 1 warning in 2.66s
+
+------------------------------------------------------------------
+STEP 2b: pytest tests/ (full suite)
+------------------------------------------------------------------
+..........................................s............................. [ 72%]
+............................                                             [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+99 passed, 1 skipped, 1 warning in 6.97s
+
+------------------------------------------------------------------
+STEP 3: API smoke — report JSON + HTML/PDF download
+------------------------------------------------------------------
+POST /api/v1/audit?use_llm=false 202 {'audit_id': 'c1c8d0a1-e672-49a4-8b97-bc1558830476', 'status': 'complete'}
+GET /report 200 score= 90
+GET /report/download?format=html 200 bytes= 7465
+HTML contains report title: True
+GET /report/download?format=pdf 503 bytes= 82
+PDF detail: PDF export failed. Install browsers with: playwright install chromium
+
+------------------------------------------------------------------
+STEP 4: src/report.py direct render
+------------------------------------------------------------------
+HTML length: 8175 chars
+Contains screen_id: True
+Wrote: outputs\reports\r01_missing_label_fail_report.html
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Report HTML download API: PASS
+Report PDF download API: see STEP 3 (503 OK if playwright chromium missing)
+src/report.py direct render: PASS
+
+
+##################################################################
+# RE-RUN 2026-07-12
+##################################################################
+
+==================================================================
+NOOR WEEK 5 VALIDATION LOG (HTML/PDF report export)
+Branch: noor   Date: 2026-07-12
+Owner: Muhammad Noor - src/report.py + download API
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_report.py
+------------------------------------------------------------------
+....                                                                     [100%]
+4 passed in 26.62s
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_audit.py (download endpoints)
+------------------------------------------------------------------
+......                                                                   [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+6 passed, 1 warning in 1.01s
+
+------------------------------------------------------------------
+STEP 2b: pytest tests/ (full suite)
+------------------------------------------------------------------
+........................................................................ [ 72%]
+............................                                             [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+100 passed, 1 warning in 3.87s
+
+------------------------------------------------------------------
+STEP 3: API smoke — report JSON + HTML/PDF download
+------------------------------------------------------------------
+POST /api/v1/audit?use_llm=false 202 {'audit_id': 'b3866a57-d439-4702-b808-63d7aaaa78a8', 'status': 'complete'}
+GET /report 200 score= 90
+GET /report/download?format=html 200 bytes= 7465
+HTML contains report title: True
+GET /report/download?format=pdf 503 bytes= 82
+PDF detail: PDF export failed. Install browsers with: playwright install chromium
+
+------------------------------------------------------------------
+STEP 4: src/report.py direct render
+------------------------------------------------------------------
+HTML length: 8175 chars
+Contains screen_id: True
+Wrote: outputs\reports\r01_missing_label_fail_report.html
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Report HTML download API: PASS
+Report PDF download API: see STEP 3 (503 OK if playwright chromium missing)
+src/report.py direct render: PASS
+
+
+##################################################################
+# RE-RUN 2026-07-12
+##################################################################
+
+==================================================================
+NOOR WEEK 5 VALIDATION LOG (HTML/PDF report export)
+Branch: noor   Date: 2026-07-12
+Owner: Muhammad Noor - src/report.py + download API
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_report.py
+------------------------------------------------------------------
+....                                                                     [100%]
+4 passed in 2.94s
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_audit.py (download endpoints)
+------------------------------------------------------------------
+.......                                                                  [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+7 passed, 1 warning in 5.29s
+
+------------------------------------------------------------------
+STEP 2b: pytest tests/ (full suite)
+------------------------------------------------------------------
+........................................................................ [ 71%]
+.............................                                            [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+101 passed, 1 warning in 5.76s
+
+------------------------------------------------------------------
+STEP 3: API smoke — report JSON + HTML/PDF download
+------------------------------------------------------------------
+POST /api/v1/audit?use_llm=false 202 {'audit_id': 'b23efb34-3ad0-477d-95dc-000fd2217179', 'status': 'complete'}
+GET /report 200 score= 90
+GET /report/download?format=html 200 bytes= 7465
+HTML contains report title: True
+GET /report/download?format=pdf 200 bytes= 62797
+PDF magic header: b'%PDF'
+
+------------------------------------------------------------------
+STEP 4: src/report.py direct render
+------------------------------------------------------------------
+HTML length: 8175 chars
+Contains screen_id: True
+Wrote: outputs\reports\r01_missing_label_fail_report.html
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Report HTML download API: PASS
+Report PDF download API: PASS (requires playwright install chromium)
+src/report.py direct render: PASS
+
+
+##################################################################
+# RE-RUN 2026-07-12
+##################################################################
+
+==================================================================
+NOOR WEEK 5 VALIDATION LOG (HTML/PDF report export)
+Branch: noor   Date: 2026-07-12
+Owner: Muhammad Noor - src/report.py + download API
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_report.py
+------------------------------------------------------------------
+...s                                                                     [100%]
+3 passed, 1 skipped in 7.61s
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_audit.py (download endpoints)
+------------------------------------------------------------------
+....s..                                                                  [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+6 passed, 1 skipped, 1 warning in 1.65s
+
+------------------------------------------------------------------
+STEP 2b: pytest tests/ (full suite)
+------------------------------------------------------------------
+......s....................................s............................ [ 71%]
+.............................                                            [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+99 passed, 2 skipped, 1 warning in 5.67s
+
+------------------------------------------------------------------
+STEP 3: API smoke — report JSON + HTML/PDF download
+------------------------------------------------------------------
+POST /api/v1/audit?use_llm=false 202 {'audit_id': 'db7136b1-225d-4161-ac5e-530d3c976ef4', 'status': 'complete'}
+GET /report 200 score= 90
+GET /report/download?format=html 200 bytes= 7465
+HTML contains report title: True
+GET /report/download?format=pdf 503 bytes= 82
+PDF detail: PDF export failed. Install browsers with: playwright install chromium
+NOTE: run once: playwright install chromium
+
+------------------------------------------------------------------
+STEP 4: src/report.py direct render
+------------------------------------------------------------------
+HTML length: 8175 chars
+Contains screen_id: True
+Wrote: outputs\reports\r01_missing_label_fail_report.html
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Report HTML download API: PASS
+Report PDF download API: PASS (requires playwright install chromium)
+src/report.py direct render: PASS
+
+
+##################################################################
+# RE-RUN 2026-07-12
+##################################################################
+
+==================================================================
+NOOR WEEK 5 VALIDATION LOG (HTML/PDF report export)
+Branch: noor   Date: 2026-07-12
+Owner: Muhammad Noor - src/report.py + download API
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_report.py
+------------------------------------------------------------------
+....                                                                     [100%]
+4 passed in 11.64s
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_audit.py (download endpoints)
+------------------------------------------------------------------
+.......                                                                  [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+7 passed, 1 warning in 2.40s
+
+------------------------------------------------------------------
+STEP 2b: pytest tests/ (full suite)
+------------------------------------------------------------------
+........................................................................ [ 71%]
+.............................                                            [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+101 passed, 1 warning in 4.42s
+
+------------------------------------------------------------------
+STEP 3: API smoke — report JSON + HTML/PDF download
+------------------------------------------------------------------
+POST /api/v1/audit?use_llm=false 202 {'audit_id': '7315b3ff-ee9c-4101-a5c1-51585071a912', 'status': 'complete'}
+GET /report 200 score= 90
+GET /report/download?format=html 200 bytes= 7465
+HTML contains report title: True
+GET /report/download?format=pdf 200 bytes= 62656
+PDF magic header: b'%PDF'
+
+------------------------------------------------------------------
+STEP 4: src/report.py direct render
+------------------------------------------------------------------
+HTML length: 8175 chars
+Contains screen_id: True
+Wrote: outputs\reports\r01_missing_label_fail_report.html
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Report HTML download API: PASS
+Report PDF download API: PASS (requires playwright install chromium)
+src/report.py direct render: PASS
+
+
+##################################################################
+# RE-RUN 2026-07-12
+##################################################################
+
+==================================================================
+NOOR WEEK 5 VALIDATION LOG (HTML/PDF report export)
+Branch: noor   Date: 2026-07-12
+Owner: Muhammad Noor - src/report.py + download API
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: pytest tests/test_report.py
+------------------------------------------------------------------
+...s                                                                     [100%]
+3 passed, 1 skipped in 3.61s
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_audit.py (download endpoints)
+------------------------------------------------------------------
+....s..                                                                  [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+6 passed, 1 skipped, 1 warning in 4.87s
+
+------------------------------------------------------------------
+STEP 2b: pytest tests/ (full suite)
+------------------------------------------------------------------
+......s....................................s............................ [ 59%]
+..................................................                       [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+120 passed, 2 skipped, 1 warning in 5.56s
+
+------------------------------------------------------------------
+STEP 3: API smoke — report JSON + HTML/PDF download
+------------------------------------------------------------------
+POST /api/v1/audit?use_llm=false 202 {'audit_id': '022801d9-7453-4e91-9fd1-d37d3c226aed', 'status': 'complete'}
+GET /report 200 score= 90
+GET /report/download?format=html 200 bytes= 7465
+HTML contains report title: True
+GET /report/download?format=pdf 503 bytes= 82
+PDF detail: PDF export failed. Install browsers with: playwright install chromium
+NOTE: run once: playwright install chromium
+
+------------------------------------------------------------------
+STEP 4: src/report.py direct render
+------------------------------------------------------------------
+HTML length: 8175 chars
+Contains screen_id: True
+Wrote: outputs\reports\r01_missing_label_fail_report.html
+
+------------------------------------------------------------------
+SUMMARY
+------------------------------------------------------------------
+All pytest steps: PASS
+Report HTML download API: PASS
+Report PDF download API: PASS (requires playwright install chromium)
+src/report.py direct render: PASS

@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r19_destructive_no_confirm_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r19_destructive_no_confirm_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r19_destructive_no_confirm_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R19",
+      "issue": "No destructive confirmation",
+      "component_id": "c_002",
+      "class": "android.widget.Button",
+      "bounds": [
+        40,
+        400,
+        360,
+        500
+      ],
+      "guideline": "G19 \u2014 No destructive confirmation",
+      "severity": "Medium",
+      "recommendation": "Show a confirmation dialog before irreversible actions such as delete or remove."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

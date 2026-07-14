@@ -15,6 +15,25 @@ from src.schema_documents import build_components_document
 
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "rules"
 R01_FIXTURE = FIXTURES_DIR / "r01_missing_label_fail.xml"
+R01_SCREENSHOT_NAME = "r01_missing_label_fail.png"
+
+MINIMAL_PNG = (
+    b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01"
+    b"\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\x0cIDATx\x9cc\xf8\xcf"
+    b"\xc0\x00\x00\x00\x03\x00\x01\x00\x05\xfe\xd4\xef\x00\x00\x00\x00IEND\xaeB`\x82"
+)
+
+
+def _post_audit(client: TestClient, *, use_llm: bool | None = None) -> object:
+    query = f"?use_llm={'false' if use_llm is False else 'true'}" if use_llm is not None else ""
+    with R01_FIXTURE.open("rb") as handle:
+        return client.post(
+            f"/api/v1/audit{query}",
+            files={
+                "screenshot": (R01_SCREENSHOT_NAME, MINIMAL_PNG, "image/png"),
+                "xml": (R01_FIXTURE.name, handle, "application/xml"),
+            },
+        )
 
 
 def _expected_violations_for_fixture(xml_path: Path) -> dict:
@@ -38,11 +57,7 @@ def test_audit_pipeline_r01_fixture(client: TestClient) -> None:
     """POST fixture XML → GET violations matches test_rules R01 expectations."""
     expected = _expected_violations_for_fixture(R01_FIXTURE)
 
-    with R01_FIXTURE.open("rb") as handle:
-        response = client.post(
-            "/api/v1/audit",
-            files={"xml": (R01_FIXTURE.name, handle, "application/xml")},
-        )
+    response = _post_audit(client)
 
     assert response.status_code == 202
     body = response.json()
@@ -69,11 +84,7 @@ def test_audit_pipeline_r01_fixture(client: TestClient) -> None:
 
 def test_audit_report_endpoint_returns_enriched_report(client: TestClient) -> None:
     """POST fixture XML → GET report returns report.json with agent fields."""
-    with R01_FIXTURE.open("rb") as handle:
-        response = client.post(
-            "/api/v1/audit?use_llm=false",
-            files={"xml": (R01_FIXTURE.name, handle, "application/xml")},
-        )
+    response = _post_audit(client, use_llm=False)
 
     assert response.status_code == 202
     audit_id = response.json()["audit_id"]
@@ -98,6 +109,62 @@ def test_audit_report_endpoint_returns_enriched_report(client: TestClient) -> No
 def test_audit_report_not_found(client: TestClient) -> None:
     response = client.get("/api/v1/audit/00000000-0000-0000-0000-000000000000/report")
     assert response.status_code == 404
+
+
+def test_audit_report_download_html(client: TestClient) -> None:
+    created = _post_audit(client, use_llm=False)
+    audit_id = created.json()["audit_id"]
+
+    response = client.get(f"/api/v1/audit/{audit_id}/report/download?format=html")
+    assert response.status_code == 200
+    assert "text/html" in response.headers["content-type"]
+    assert "attachment" in response.headers.get("content-disposition", "")
+    assert "Accessibility audit report" in response.text
+    assert "r01_missing_label_fail" in response.text
+
+
+def test_audit_report_download_pdf(client: TestClient) -> None:
+    created = _post_audit(client, use_llm=False)
+    audit_id = created.json()["audit_id"]
+
+    response = client.get(f"/api/v1/audit/{audit_id}/report/download?format=pdf")
+    if response.status_code == 503:
+        pytest.skip(response.json().get("detail", "PDF unavailable"))
+    assert response.status_code == 200
+    assert "application/pdf" in response.headers["content-type"]
+    assert response.content.startswith(b"%PDF")
+
+
+def test_audit_report_download_invalid_format(client: TestClient) -> None:
+    created = _post_audit(client, use_llm=False)
+    audit_id = created.json()["audit_id"]
+
+    response = client.get(f"/api/v1/audit/{audit_id}/report/download?format=docx")
+    assert response.status_code == 422
+
+
+def test_audit_missing_screenshot_returns_422(client: TestClient) -> None:
+    with R01_FIXTURE.open("rb") as handle:
+        response = client.post(
+            "/api/v1/audit",
+            files={"xml": (R01_FIXTURE.name, handle, "application/xml")},
+        )
+
+    assert response.status_code == 422
+
+
+def test_audit_mismatched_pair_returns_400(client: TestClient) -> None:
+    with R01_FIXTURE.open("rb") as handle:
+        response = client.post(
+            "/api/v1/audit",
+            files={
+                "screenshot": ("photo1.png", MINIMAL_PNG, "image/png"),
+                "xml": (R01_FIXTURE.name, handle, "application/xml"),
+            },
+        )
+
+    assert response.status_code == 400
+    assert "match" in response.json()["detail"].lower()
 
 
 def test_build_audit_report_template_mode() -> None:

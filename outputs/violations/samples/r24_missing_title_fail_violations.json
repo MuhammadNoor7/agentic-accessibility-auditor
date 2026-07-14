@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r24_missing_title_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r24_missing_title_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r24_missing_title_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R24",
+      "issue": "Missing screen title",
+      "component_id": "c_002",
+      "class": "android.widget.TextView",
+      "bounds": [
+        40,
+        20,
+        600,
+        90
+      ],
+      "guideline": "G24 \u2014 Screen has no descriptive title",
+      "severity": "Medium",
+      "recommendation": "Give the screen a visible, descriptive title or heading."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

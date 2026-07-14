@@ -7,7 +7,7 @@
 |-------|-------|
 | **Document version** | 2.2 |
 | **Status** | Implementation reference |
-| **Prepared by** | Muhammad Noor (Lead), Salar (Parser/Rules/Docker), Ayesha (Frontend/Schemas) |
+| **Prepared by** | Muhammad Noor (Lead — primary author); Salar + Ayesha (SRS inputs, parser/UI design) |
 | **Institution** | FAST-NUCES |
 | **Related SRS** | `SRS_Agentic_Accessibility_Auditor_v2.0.md` (v2.0) |
 | **Repository** | [MuhammadNoor7/agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor) |
@@ -22,6 +22,10 @@
 | **2.0** | 2026 | Team | Aligned to SRS v2.0 with embedded Figma screenshots; auth, Records, Dashboard flows |
 | **2.1** | 2026-07-06 | Noor / Salar | Parser R13–R20 fields; rules R01–R20; MASC re-parse sign-off; audit API violations-only |
 | **2.2** | 2026-07-09 | Noor / Salar | Rules R01–R30; explainer + agent API wiring; `GET …/report`; visibility filter |
+| **2.3** | 2026-07-12 | Noor | Week 5: `src/report.py` HTML/PDF + download API; R09–R20 fixtures; team ownership alignment |
+| **2.4** | 2026-07-13 | Noor | Rules ownership → Salar + Noor + Ayesha (reviewed by all) |
+| **2.5** | 2026-07-13 | Noor | Figma screenshots restored from formatted DOCX into `docs/assets/figma/`; DOCX export embeds images |
+| **2.6** | 2026-07-14 | Noor | `POST /audit` requires `screenshot` + `xml`; server-side pair validation; tests updated |
 
 ---
 
@@ -91,17 +95,15 @@ This document provides:
 | Module | Path | Owner | Status |
 |--------|------|-------|--------|
 | Hybrid XML parser | `src/parser.py` | Salar / Noor | **Done** (R13–R20 fields + visibility) |
-| Schema helpers | `src/schema_documents.py` | Salar | **Done** |
-| JSON Schema | `docs/schemas/auditor_schema.json` | Ayesha / Noor | **Done** |
-| Validation scripts | `scripts/validate_output.py`, `scripts/noor_week3_validate.py`, `scripts/masc_parse_signoff.py` | Noor / Salar | **Done** |
-| FastAPI audit API | `backend/routers/audit.py` | Noor | **Partial** (violations + report; no auth/records/download) |
-| Rule engine | `src/rules.py` | Salar / Noor | **Done** (R01–R30; R09/R28 limited without colors/text-size) |
-| Agent layer | `src/agent.py`, `src/explainer.py`, `src/llm_providers.py` | Noor / Salar | **Done** (API-wired; template + live LLM) |
-| Report generator | `src/report.py` | Noor | Planned |
-| Auth service | `backend/services/auth.py` | Salar | Planned |
-| Records store | `backend/services/records.py` | Salar / Ayesha | Planned |
-| Axion React UI | `frontend/` | Ayesha | **Partial** (UI scaffold; no live API) |
-| Docker Compose | `docker-compose.yml` | Salar | **Partial** (deferred on `noor`) |
+| Schema helpers | `src/schema_documents.py` | Noor | **Done** (JSON envelope builders) |
+| JSON Schema | `docs/schemas/auditor_schema.json`, `docs/json_schemas.md` | Noor | **Done** |
+| Validation scripts | `scripts/validate_output.py`, `scripts/noor_week3_validate.py`, `scripts/noor_week4_validate.py`, `scripts/noor_week5_validate.py`, `scripts/masc_parse_signoff.py` | Noor / Salar | **Done** |
+| FastAPI audit API | `backend/routers/audit.py` | Noor | **Partial** (violations + report + download; no auth/records) |
+| Rule engine | `src/rules.py` | Salar + Noor + Ayesha | **Done** (R01–R30; reviewed by all) |
+| Agent layer | `src/agent.py`, `src/explainer.py`, `src/llm_providers.py` | Noor | **Done** (API-wired; template + live LLM) |
+| Report generator | `src/report.py` | Noor | **Done** (Jinja2 HTML + PIL + Playwright PDF) |
+| Axion React UI | `frontend/` | Ayesha | **Partial** (Upload/Dashboard/Report wired; Records mock) |
+| pytest suite | `tests/` | Salar / Noor | **Done** (120 tests) |
 
 ---
 
@@ -184,7 +186,7 @@ outputs/records/{user_id}/
 
 ### 3.1 Parser module (`src/parser.py`)
 
-**SRS:** FR-PS.1–FR-PS.9 | **Owner:** Salar | **Status:** Implemented
+**SRS:** FR-PS.1–FR-PS.9 | **Owner:** Salar / Noor | **Status:** Implemented
 
 #### 3.1.1 Responsibilities
 
@@ -245,7 +247,7 @@ Mirror XML path under `screenshots/` with same stem; try `.jpg`, `.jpeg`, `.png`
 
 ### 3.2 Rule engine module (`src/rules.py`)
 
-**SRS:** FR-RU.1–FR-RU.30 | **Owner:** Salar / Noor | **Status:** Implemented (R01–R30)
+**SRS:** FR-RU.1–FR-RU.30 | **Owner:** Salar + Noor + Ayesha (reviewed by all) | **Status:** Implemented (R01–R30)
 
 #### 3.2.1 Public API
 
@@ -294,7 +296,7 @@ Default `dpi = 160` when `device_info` absent (TBD-03).
 
 ### 3.3 Agent module (`src/agent.py` + `src/explainer.py`)
 
-**SRS:** FR-AG.1–FR-AG.8 | **Owner:** Noor / Salar | **Status:** Done (API-wired Week 4)
+**SRS:** FR-AG.1–FR-AG.8 | **Owner:** Noor | **Status:** Done (API-wired Week 4)
 
 ```python
 def build_audit_report(
@@ -315,20 +317,21 @@ class AgenticEnricher:
 
 ---
 
-### 3.4 Report module (`src/report.py` — planned)
+### 3.4 Report module (`src/report.py`)
 
-**SRS:** FR-RP.1–FR-RP.7 | **Owner:** Noor
+**SRS:** FR-RP.1–FR-RP.7 | **Owner:** Noor | **Status:** Implemented (12 Jul 2026)
 
-- Jinja2 HTML template
-- PIL bounding-box annotation
-- WeasyPrint or pdfkit for PDF
-- Accessibility score (see §8.2)
+- Jinja2 HTML template (`src/templates/audit_report.html.j2`)
+- PIL bounding-box annotation on screenshots
+- Playwright Chromium for HTML → PDF (`render_pdf_report`)
+- `GET /api/v1/audit/{id}/report/download?format=html|pdf`
+- Accessibility score from agent layer (see §8.2)
 
 ---
 
 ### 3.5 API orchestrator (`backend/`)
 
-**Owner:** Salar + Noor
+**Owner:** Noor
 
 ```
 backend/
@@ -493,11 +496,11 @@ Auth: `Authorization: Bearer <JWT>` (except auth endpoints)
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/audit` | Upload XML (multipart field `xml`); optional `use_llm` query; start pipeline |
+| POST | `/audit` | Upload **screenshot + XML** (`multipart`: `screenshot`, `xml`); validates PNG/JPG + matching pair; optional `use_llm` query; start pipeline |
 | GET | `/audit/{audit_id}/status` | Pipeline status (`pending` → `parsing` → `checking` → `explaining` → `complete`) |
 | GET | `/audit/{audit_id}/violations` | Violations JSON (**implemented**) |
 | GET | `/audit/{audit_id}/report` | Report JSON with score + agent fields (**implemented** Week 4) |
-| GET | `/audit/{audit_id}/report/download?format=html\|pdf` | File download (**planned** Week 5) |
+| GET | `/audit/{audit_id}/report/download?format=html\|pdf` | File download (HTML or PDF) |
 | POST | `/audit/batch` | Batch over dataset path (Should) |
 
 ### 5.3 Records endpoints
@@ -511,18 +514,18 @@ Auth: `Authorization: Bearer <JWT>` (except auth endpoints)
 
 ### 5.4 Example: POST /audit
 
-**Request:** `multipart/form-data` — `screenshot`, `xml`
+**Request:** `multipart/form-data` — required fields `screenshot` (PNG/JPG), `xml` (.xml). Filenames must match as a pair (same stem, or shared numeric ID with matching prefix — mirrors `filesMatch()` in `Upload.jsx`).
 
-**Response 201:**
+**Response 202:**
 
 ```json
 {
   "audit_id": "a1b2c3d4",
-  "record_id": "rec_xyz789",
-  "status": "pending",
-  "screen_id": "screen_014"
+  "status": "complete"
 }
 ```
+
+**Errors:** `422` if `screenshot` missing; `400` if invalid image type, non-XML upload, or filename pair mismatch.
 
 ### 5.5 Example: GET /audit/{id}/status
 
@@ -724,7 +727,7 @@ Maps to Axion score gauge on Dashboard (SRS FR-UI.21).
 
 ### 8.3 PDF generation
 
-Primary: WeasyPrint from HTML. Fallback: pdfkit + wkhtmltopdf.
+Primary: Jinja2 renders standalone HTML; Playwright Chromium prints HTML to PDF (`page.pdf()`). Requires `playwright install chromium` once per environment.
 
 ---
 
@@ -782,7 +785,7 @@ Mirror JSON schema types: `Component`, `Violation`, `ReportSummary`, `AuditRecor
 
 ### 9.6 Figma reference screenshots
 
-Visual source of truth: SRS Appendix F. Screenshots live in `docs/assets/figma/` (same paths as SRS).
+Visual source of truth: SRS Appendix F. Screenshots were restored from the legacy formatted DOCX export into `docs/assets/figma/` and are embedded below for implementation reference.
 
 | Screen group | Asset file | React route(s) |
 |--------------|------------|----------------|
@@ -798,7 +801,19 @@ Visual source of truth: SRS Appendix F. Screenshots live in `docs/assets/figma/`
 
 ![Sign Up and Log In — implementation reference](../docs/assets/figma/figma-01-signup-login.png)
 
-![Upload and Dashboard — implementation reference](../docs/assets/figma/figma-05-audit-complete-dashboard.png)
+![Forgot Password and Verify Code — implementation reference](../docs/assets/figma/figma-02-forgot-verify-otp.png)
+
+![Set Password and Password Reset Success — implementation reference](../docs/assets/figma/figma-03-reset-password-success.png)
+
+![Upload screen — implementation reference](../docs/assets/figma/figma-04-upload-progress-states.png)
+
+![Files Matched modal — implementation reference](../docs/assets/figma/figma-08-upload-files-matched.png)
+
+![Audit Complete modal and Issues Dashboard — implementation reference](../docs/assets/figma/figma-05-audit-complete-dashboard.png)
+
+![Issue Detail drawer and Audit Report — implementation reference](../docs/assets/figma/figma-06-dashboard-detail-report.png)
+
+![Generate Report modal and PDF layout — implementation reference](../docs/assets/figma/figma-07-generate-report-modal-pdf.png)
 
 ---
 
@@ -898,23 +913,26 @@ docker-compose up --build
 | Unit | pytest | Parser (incl. MASC wrappers), R01–R20 |
 | Schema | `validate_output.py` | `components.json` / `violations.json` artefacts |
 | API | pytest + TestClient | Audit violations + report (`test_audit.py`) |
-| Integration | `noor_week3_validate.py`, `masc_parse_signoff.py` | Full MASC re-parse + R01–R20 scan |
+| Integration | `noor_week3_validate.py`, `noor_week4_validate.py`, `noor_week5_validate.py`, `masc_parse_signoff.py` | Full pipeline + report download smoke |
 | E2E | Manual / Playwright | Axion upload → Records (planned) |
 | Evaluation | MASC train/val/test splits | 7,068 screens, sign-off JSON |
 
 ### 13.1 Golden files
 
 ```
-tests/fixtures/rules/
+tests/fixtures/rules/          # 57 controlled XML screens
 ├── r01_missing_label_fail.xml / r01_missing_label_pass.xml
-├── r02_image_button_fail.xml / …
-├── … (R03–R10 fail/pass fixtures)
+├── r02_image_button_fail.xml / r02_image_button_pass.xml
+├── … (R03–R20 pass/fail where applicable)
+├── r21–r30 pass/fail fixtures
 └── clean_no_violations.xml
 
-tests/test_parser.py     # extended fields + MASC wrapper nesting
-tests/test_rules.py        # R01–R10 fixtures + R11/R12 stubs + R13–R20 unit cases
-tests/test_audit.py        # API parse→rules parity on R01
-tests/test_agent.py        # score formula scaffold
+tests/test_parser.py       # extended fields + MASC wrapper nesting
+tests/test_rules.py        # R01–R30 pass/fail fixture regression (78 tests)
+tests/test_audit.py        # API violations + report + download
+tests/test_report.py       # HTML/PDF export unit tests
+tests/test_agent.py        # score formula + template report
+tests/test_explainer.py    # anti-hallucination / batching (mocked LLM)
 ```
 
 ### 13.2 Sign-off tests (from SRS §10)
@@ -925,6 +943,7 @@ tests/test_agent.py        # score formula scaffold
 - `masc_parse_signoff_report.json` → PASS (7,068 screens, 0 extended-field misses)
 - API `POST /audit` → `GET .../violations` matches CLI on R01 fixture
 - API `GET .../report` returns score + agent fields (`enrichment_mode`: `template` or `llm`)
+- API `GET .../report/download?format=html|pdf` returns attachment bytes (Playwright PDF requires `playwright install chromium`)
 - Explainer unit tests mock LLM; anti-hallucination guard covered in `tests/test_explainer.py`
 
 ---
@@ -1044,21 +1063,24 @@ components:
 | `src/explainer.py` | Live LLM recommendations (**Done**) |
 | `src/llm_providers.py` | Multi-provider LLM client |
 | `src/guidelines.py` | G01–G30 + R→G mapping |
-| `src/report.py` | HTML/PDF generator (planned) |
+| `src/report.py` | HTML/PDF generator (Jinja2 + Playwright) |
 | `backend/main.py` | FastAPI entry |
-| `backend/routers/audit.py` | Violations + report audit API (**Partial** — no auth/records/download) |
+| `backend/routers/audit.py` | Violations + report + download API (**Partial** — no auth/records persistence) |
 | `backend/routers/` | Auth, records (planned) |
-| `scripts/noor_week3_validate.py` | Full validation pipeline |
+| `scripts/noor_week3_validate.py` | Week 3 validation pipeline |
+| `scripts/noor_week4_validate.py` | Week 4 agent + report API validation |
+| `scripts/noor_week5_validate.py` | Week 5 HTML/PDF + download validation |
 | `scripts/masc_parse_signoff.py` | MASC parse sign-off |
 | `scripts/run_explainer_sample.py` | Stage 3 LLM sample runner |
 | `tests/test_parser.py` | Parser unit tests |
 | `tests/test_rules.py` | Rules R01–R30 unit tests |
-| `tests/test_audit.py` | Audit API tests (violations + report) |
+| `tests/test_audit.py` | Audit API tests (violations + report + download) |
+| `tests/test_report.py` | Report HTML/PDF export tests |
 | `tests/test_explainer.py` | Explainer anti-hallucination tests |
-| `frontend/src/` | Axion React app (**Partial** — mock data) |
+| `frontend/src/` | Axion React app (**Partial** — Upload/Dashboard/Report wired) |
 | `docs/schemas/auditor_schema.json` | Normative JSON Schema |
 | `docs/json_schemas.md` | Schema documentation |
-| `outputs/reports/` | Agent-enriched `*_report.json` |
+| `outputs/reports/` | Agent-enriched `*_report.json` + generated `.html` / `.pdf` |
 | `outputs/records/` | Per-user saved audits (planned) |
 | `data/data-masc/` | Primary dataset |
 | `data/data-rico-holdout/` | Unseen evaluation |

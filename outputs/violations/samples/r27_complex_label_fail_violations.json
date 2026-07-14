@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r27_complex_label_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r27_complex_label_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r27_complex_label_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R27",
+      "issue": "Complex label language",
+      "component_id": "c_002",
+      "class": "android.widget.ImageButton",
+      "bounds": [
+        40,
+        300,
+        300,
+        360
+      ],
+      "guideline": "G27 \u2014 Complex or jargon-heavy labels",
+      "severity": "Low",
+      "recommendation": "Rewrite using short, plain-language wording that a low-literacy user can understand."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

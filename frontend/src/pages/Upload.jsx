@@ -1,7 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-import { setAuditFiles } from '../state/auditFiles';
+import { setAuditFiles, setAuditId } from '../state/auditFiles';
+import { createAudit } from '../api';
 
 // ── Responsive rules (inline styles can't do @media, so inject CSS) ───────────
 const injectResponsiveStyles = (() => {
@@ -139,9 +140,34 @@ const Icon = {
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+// Filename without its extension, e.g. "chat_1054.png" -> "chat_1054"
+function getStem(filename) {
+  return filename.replace(/\.[^/.]+$/, '');
+}
+
+// Last run of digits in a filename, e.g. "chat_1054.png" -> "1054"
 function extractNumber(filename) {
   const matches = filename.match(/\d+/g);
   return matches ? matches[matches.length - 1] : null;
+}
+
+// Strong pair match: exact stem match first (safe for any naming), falling
+// back to shared trailing numeric ID ONLY when both files share the same
+// prefix before that number (e.g. chat_1054.png + chat_1054.xml).
+// This fixes the false-positive bug: photo1.jpg no longer matches data1.xml,
+// since "photo" !== "data" even though both contain "1".
+function filesMatch(screenshotName, xmlName) {
+  const stem1 = getStem(screenshotName);
+  const stem2 = getStem(xmlName);
+  if (stem1 === stem2) return true;
+
+  const n1 = extractNumber(screenshotName);
+  const n2 = extractNumber(xmlName);
+  if (n1 === null || n2 === null || n1 !== n2) return false;
+
+  const prefix1 = stem1.replace(/\d+$/, '');
+  const prefix2 = stem2.replace(/\d+$/, '');
+  return prefix1 === prefix2;
 }
 
 function Spinner({ size = 14, color = '#94a3b8' }) {
@@ -381,6 +407,14 @@ function FilePreviewPopup({ screenshot, xml, onClose }) {
 // ── Validation Popup ──────────────────────────────────────────────────────────
 function ValidationPopup({ result, screenshotName, xmlName, onClose }) {
   const ok = result === 'matched';
+  const missingScreenshot = result === 'missing_screenshot';
+  const title = ok ? 'Files Matched!' : missingScreenshot ? 'Screenshot Required' : 'File Mismatch';
+  const message = ok
+    ? 'Your screenshot and XML are a validated pair. You can now start the audit.'
+    : missingScreenshot
+    ? 'Please upload a screenshot (PNG or JPG) before selecting the XML file.'
+    : "The files don't share the same identifier. Upload a matching pair.";
+
   return (
     <div
       onClick={onClose}
@@ -432,14 +466,13 @@ function ValidationPopup({ result, screenshotName, xmlName, onClose }) {
         </div>
 
         <h3 style={{ fontSize: 18, fontWeight: 700, color: '#0f1b2d', margin: '0 0 10px' }}>
-          {ok ? 'Files Matched!' : 'File Mismatch'}
+          {title}
         </h3>
         <p style={{ fontSize: 13.5, color: '#64748b', lineHeight: 1.6, margin: '0 0 24px' }}>
-          {ok
-            ? 'Your screenshot and XML are a validated pair. You can now start the audit.'
-            : "The files don't share the same identifier. Upload a matching pair."}
+          {message}
         </p>
 
+        {!missingScreenshot && (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
           {[screenshotName, xmlName].map(name => (
             <div key={name} style={{
@@ -459,12 +492,13 @@ function ValidationPopup({ result, screenshotName, xmlName, onClose }) {
             </div>
           ))}
         </div>
+        )}
       </div>
     </div>
   );
 }
 
-// ── Audit Steps Config ────────────────────────────────────────────────────────
+// ── Audit Steps Config (cosmetic progress shown while real API call runs) ────
 const AUDIT_STEPS = [
   { label: 'Parsing screenshot and XML',      detail: 'Extracting UI component tree from UIAutomator dump',           pct: 15 },
   { label: 'Mapping components to bounds',    detail: 'Resolving components with spatial coordinates from XML',        pct: 32 },
@@ -475,12 +509,37 @@ const AUDIT_STEPS = [
 ];
 
 // ── Audit Processing Popup ────────────────────────────────────────────────────
-function AuditPopup({ onViewDashboard }) {
+// Now actually calls the backend (createAudit) instead of just faking progress.
+// The step animation below still runs so the UI doesn't feel instant/jumpy,
+// but "done" only becomes true once BOTH the animation AND the real API call finish.
+function AuditPopup({ screenshotFile, xmlFile, onViewDashboard }) {
   const [completedSteps, setCompletedSteps] = useState([]);
   const [activeStep,     setActiveStep]     = useState(0);
   const [progress,       setProgress]       = useState(0);
   const [done,           setDone]           = useState(false);
+  const [error,          setError]          = useState(null);
+  const [auditId,        setAuditIdState]   = useState(null);
 
+  // Real backend call — fires once, independent of the cosmetic animation below.
+  useEffect(() => {
+    let cancelled = false;
+    createAudit(screenshotFile, xmlFile)
+      .then(result => {
+        if (cancelled) return;
+        if (result.status === 'error') {
+          setError(result.message || 'Audit pipeline failed.');
+          return;
+        }
+        setAuditIdState(result.audit_id);
+        setAuditId(result.audit_id); // persist so Dashboard/Report can read it later
+      })
+      .catch(err => {
+        if (!cancelled) setError(err.message || 'Could not reach the audit server.');
+      });
+    return () => { cancelled = true; };
+  }, [screenshotFile, xmlFile]);
+
+  // Cosmetic step animation — purely visual, runs regardless of API timing.
   useEffect(() => {
     let stepIdx = 0;
     function runStep() {
@@ -500,7 +559,7 @@ function AuditPopup({ onViewDashboard }) {
           stepIdx++;
           setCompletedSteps(prev => [...prev, finished]);
           if (stepIdx >= AUDIT_STEPS.length) {
-            setTimeout(() => setDone(true), 350);
+            setTimeout(() => setAnimationDone(true), 350);
           } else {
             setTimeout(runStep, 350);
           }
@@ -511,6 +570,47 @@ function AuditPopup({ onViewDashboard }) {
     const t = setTimeout(runStep, 400);
     return () => clearTimeout(t);
   }, []);
+
+  // Tracks whether the cosmetic animation has finished its steps.
+  const [animationDone, setAnimationDone] = useState(false);
+
+  // Only show the "done" success card once animation AND real API call both finish.
+  useEffect(() => {
+    if (animationDone && auditId && !error) {
+      setDone(true);
+    }
+  }, [animationDone, auditId, error]);
+
+  if (error) {
+    return (
+      <div style={{
+        position: 'fixed', inset: 0, background: 'rgba(15,27,45,0.65)',
+        backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', zIndex: 1000, animation: 'fadeIn 0.2s ease', padding: '20px',
+      }}>
+        <div style={{
+          background: '#fff', borderRadius: 18, width: '100%', maxWidth: 480,
+          padding: '32px', textAlign: 'center', boxShadow: '0 24px 64px rgba(0,0,0,0.22)',
+        }}>
+          <div style={{
+            width: 56, height: 56, borderRadius: '50%', background: '#fee2e2',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px',
+          }}>
+            {Icon.alert('#ef4444', 26)}
+          </div>
+          <h3 style={{ fontSize: 18, fontWeight: 700, color: '#0f1422', margin: '0 0 10px' }}>
+            Audit failed
+          </h3>
+          <p style={{ fontSize: 14, color: '#64748b', margin: '0 0 24px', lineHeight: 1.6 }}>
+            {error}
+          </p>
+          <p style={{ fontSize: 12, color: '#94a3b8', margin: '0 0 20px' }}>
+            Check that the backend server is running at http://127.0.0.1:8000
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{
@@ -602,7 +702,7 @@ function AuditPopup({ onViewDashboard }) {
       </div>
     </div>
     <button
-      onClick={onViewDashboard}
+      onClick={() => onViewDashboard(auditId)}
       style={{
         width: '100%', background: '#1D9E75', color: '#fff', border: 'none',
         borderRadius: 10, padding: '15px', fontSize: 16, fontWeight: 700, cursor: 'pointer',
@@ -689,10 +789,14 @@ export default function Upload() {
 
   const handleXmlChange = useCallback(e => {
     const file = e.target.files[0];
-    if (!file || !screenshot) return;
-    const n1 = extractNumber(screenshot.name);
-    const n2 = extractNumber(file.name);
-    const matched = n1 !== null && n1 === n2;
+    if (!file) return;
+    if (!screenshot) {
+      setValidationResult('missing_screenshot');
+      setShowPopup(true);
+      e.target.value = '';
+      return;
+    }
+    const matched = filesMatch(screenshot.name, file.name);
     setXml(file);
     setValidationResult(matched ? 'matched' : 'mismatched');
     setShowPopup(true);
@@ -909,9 +1013,11 @@ export default function Upload() {
 
       {showAuditPopup && (
         <AuditPopup
-          onViewDashboard={() => {
+          screenshotFile={screenshot}
+          xmlFile={xml}
+          onViewDashboard={(auditId) => {
             setShowAuditPopup(false);
-            navigate('/dashboard', { state: { screenshot, xml } });
+            navigate('/dashboard', { state: { auditId, screenshot, xml } });
           }}
         />
       )}

@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r30_icon_only_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r30_icon_only_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r30_icon_only_fail.xml",
+  "total_violations": 2,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_002",
+      "class": "com.example.widgets.IconButton",
+      "bounds": [
+        40,
+        300,
+        100,
+        360
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R30",
+      "issue": "Icon-only control with no label",
+      "component_id": "c_002",
+      "class": "com.example.widgets.IconButton",
+      "bounds": [
+        40,
+        300,
+        100,
+        360
+      ],
+      "guideline": "G30 \u2014 Icon-only button with no text alternative",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription describing the icon's action."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

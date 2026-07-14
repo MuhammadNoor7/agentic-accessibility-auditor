@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r09_low_contrast_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r09_low_contrast_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r09_low_contrast_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R09",
+      "issue": "Low contrast",
+      "component_id": "c_002",
+      "class": "android.widget.TextView",
+      "bounds": [
+        40,
+        100,
+        400,
+        160
+      ],
+      "guideline": "G09 \u2014 Low contrast",
+      "severity": "Medium",
+      "recommendation": "Increase contrast to at least 4.5:1 between text/icon and background."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

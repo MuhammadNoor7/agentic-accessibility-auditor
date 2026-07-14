@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r21_vague_error_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r21_vague_error_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r21_vague_error_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R21",
+      "issue": "Vague error message",
+      "component_id": "c_002",
+      "class": "android.widget.TextView",
+      "bounds": [
+        40,
+        300,
+        600,
+        340
+      ],
+      "guideline": "G21 \u2014 Vague or missing error messages",
+      "severity": "High",
+      "recommendation": "Set error text that names the specific field and how to fix it (e.g. \"Email is required\"), rather than leaving it empty."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

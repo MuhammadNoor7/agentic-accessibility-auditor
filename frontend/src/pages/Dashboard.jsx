@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { getAuditFiles } from '../state/auditFiles'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { getAuditFiles, getAuditId } from '../state/auditFiles'
+import { getAuditReport } from '../api'
 import Sidebar from '../components/Sidebar'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -44,78 +45,6 @@ const RULES = {
   R30: { guideline: 'G30', label: 'Icon-only button, no label',      wcag: 'WCAG 1.1.1', docSeverity: 'High' },
 }
 
-/* ────────────────────────────────────────────────────────────────────────────
-   MOCK violations.json — shape matches the schema your teammate defined:
-   { rule_id, issue, component_id, class, bounds, severity, guideline,
-     recommendation, agent_explanation, agent_why_it_matters, agent_developer_fix }
-   Replace this array with the real fetched report.json when backend is ready.
-   ──────────────────────────────────────────────────────────────────────────── */
-const violations = [
-  {
-    rule_id: 'R01', issue: RULES.R01.label,
-    component_id: 'c_001', class: 'ImageButton', resource_id: 'back',
-    severity: SEVERITY_MAP[RULES.R01.docSeverity], guideline: RULES.R01.wcag,
-    recommendation: 'Add android:contentDescription with the action name, such as "Back".',
-    agent_explanation: 'This ImageButton acts as a back button but has no text alternative.',
-    agent_why_it_matters: 'Screen reader users will only hear "button, unlabelled" and won’t know what it does.',
-    agent_developer_fix: 'In your XML layout, add android:contentDescription="@string/back_action" to the ImageButton.',
-  },
-  {
-    rule_id: 'R05', issue: RULES.R05.label,
-    component_id: 'c_002', class: 'EditText', resource_id: 'username',
-    severity: SEVERITY_MAP[RULES.R05.docSeverity], guideline: RULES.R05.wcag,
-    recommendation: 'Add android:hint or a programmatic label linked via labelFor.',
-    agent_explanation: 'The username field has no hint, text, or associated label.',
-    agent_why_it_matters: 'Users relying on assistive technology cannot tell what information to enter.',
-    agent_developer_fix: 'Add android:hint="Username" or a TextView label with android:labelFor pointing to this EditText.',
-  },
-  {
-    rule_id: 'R05', issue: RULES.R05.label,
-    component_id: 'c_003', class: 'EditText', resource_id: 'password',
-    severity: SEVERITY_MAP[RULES.R05.docSeverity], guideline: RULES.R05.wcag,
-    recommendation: 'Add android:hint or a programmatic label linked via labelFor.',
-    agent_explanation: 'The password field has no hint, text, or associated label.',
-    agent_why_it_matters: 'Users relying on assistive technology cannot tell what information to enter.',
-    agent_developer_fix: 'Add android:hint="Password" or a TextView label with android:labelFor pointing to this EditText.',
-  },
-  {
-    rule_id: 'R04', issue: RULES.R04.label,
-    component_id: 'c_004', class: 'TextView', resource_id: 'forgot_password',
-    severity: SEVERITY_MAP[RULES.R04.docSeverity], guideline: RULES.R04.wcag,
-    recommendation: 'Increase tappable area to at least 48×48dp using padding.',
-    agent_explanation: 'The "Forgot password?" link has a touch target smaller than 48dp.',
-    agent_why_it_matters: 'Users with motor impairments or larger fingers struggle to tap small targets accurately.',
-    agent_developer_fix: 'Add android:padding="12dp" or wrap the TextView in a larger clickable container.',
-  },
-  {
-    rule_id: 'R03', issue: RULES.R03.label,
-    component_id: 'c_005', class: 'Button', resource_id: 'submit',
-    severity: SEVERITY_MAP[RULES.R03.docSeverity], guideline: RULES.R03.wcag,
-    recommendation: 'Ensure each interactive element has a unique accessible name.',
-    agent_explanation: 'Two buttons on this screen share the same text "Submit" with different IDs.',
-    agent_why_it_matters: 'Screen readers announce identical names for different controls, confusing navigation.',
-    agent_developer_fix: 'Give each button a distinct android:contentDescription or android:text value.',
-  },
-  {
-    rule_id: 'R09', issue: RULES.R09.label,
-    component_id: 'c_006', class: 'TextView', resource_id: 'helper_text',
-    severity: SEVERITY_MAP[RULES.R09.docSeverity], guideline: RULES.R09.wcag,
-    recommendation: 'Increase contrast ratio to at least 4.5:1 for normal-sized text.',
-    agent_explanation: 'The helper text color produces a contrast ratio below 4.5:1 against its background.',
-    agent_why_it_matters: 'Low contrast text is unreadable for users with low vision or color blindness, or in bright lighting.',
-    agent_developer_fix: 'Change the text color to #767676 or darker on a white background to meet 4.5:1.',
-  },
-  {
-    rule_id: 'R07', issue: RULES.R07.label,
-    component_id: 'c_007', class: 'ProgressBar', resource_id: 'loading_spinner',
-    severity: SEVERITY_MAP[RULES.R07.docSeverity], guideline: RULES.R07.wcag,
-    recommendation: 'Zero-size components should be hidden from the accessibility tree.',
-    agent_explanation: 'This ProgressBar has zero width and height but remains in the layout tree.',
-    agent_why_it_matters: 'Invisible elements still appear in the accessibility tree, creating confusing ghost focus stops.',
-    agent_developer_fix: 'Set android:importantForAccessibility="no" on the zero-size ProgressBar.',
-  },
-]
-
 /* ── Severity visual tokens ─────────────────────────────────────────────── */
 const SEV = {
   Critical: { bg: '#fdf0ef', color: '#7A1C1C', dot: '#ef4444', cardBg: '#fff5f5', cardBorder: '#fecaca', desc: 'Must fix — blocks assistive tech' },
@@ -124,12 +53,6 @@ const SEV = {
 }
 
 const severityOrder = ['Critical', 'Serious', 'Minor']
-const counts = severityOrder.reduce((acc, s) => {
-  acc[s] = violations.filter(v => v.severity === s).length
-  return acc
-}, {})
-const total = violations.length
-const pct = s => total ? Math.round((counts[s] / total) * 100) : 0
 
 /* ── Shared icons / spinner (same visual language as Upload's audit popup) ─ */
 const Icon = {
@@ -142,6 +65,13 @@ const Icon = {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <line x1="5" y1="12" x2="19" y2="12" />
       <polyline points="12 5 19 12 12 19" />
+    </svg>
+  ),
+  alert: (color = '#ef4444', size = 26) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <line x1="12" y1="17" x2="12.01" y2="17" />
     </svg>
   ),
 }
@@ -169,14 +99,32 @@ const AUDIT_STEPS = [
   { label: 'Generating report', detail: 'Compiling all findings into a structured accessibility report', pct: 100 },
 ]
 
-/* ── Re-run Audit Processing Popup — identical behavior to Upload's AuditPopup ── */
-function AuditPopup({ onClose }) {
+/* ── Re-run Audit Processing Popup — now re-fetches the real report ──────── */
+function AuditPopup({ auditId, onClose, onRefreshed }) {
   const [completedSteps, setCompletedSteps] = useState([])
   const [activeStep, setActiveStep] = useState(0)
   const [progress, setProgress] = useState(0)
   const [done, setDone] = useState(false)
+  const [error, setError] = useState(null)
 
-  useState(() => {
+  // Real re-fetch of the report for this same audit_id
+  useEffect(() => {
+    let cancelled = false
+    if (!auditId) {
+      setError('No audit ID available to refresh.')
+      return
+    }
+    getAuditReport(auditId)
+      .then(report => {
+        if (!cancelled) onRefreshed(report)
+      })
+      .catch(err => {
+        if (!cancelled) setError(err.message || 'Could not refresh the report.')
+      })
+    return () => { cancelled = true }
+  }, [auditId])
+
+  useEffect(() => {
     let stepIdx = 0
     function runStep() {
       if (stepIdx >= AUDIT_STEPS.length) return
@@ -206,6 +154,27 @@ function AuditPopup({ onClose }) {
     const t = setTimeout(runStep, 350)
     return () => clearTimeout(t)
   }, [])
+
+  if (error) {
+    return (
+      <div style={{
+        position: 'fixed', inset: 0, background: 'rgba(15,27,45,0.65)',
+        backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', zIndex: 1000, padding: '20px',
+      }}>
+        <div style={{ background: '#fff', borderRadius: 18, width: '100%', maxWidth: 440, padding: '28px', textAlign: 'center' }}>
+          <div style={{ width: 52, height: 52, borderRadius: '50%', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
+            {Icon.alert('#ef4444', 24)}
+          </div>
+          <p style={{ fontSize: 16, fontWeight: 700, color: '#0f1422', margin: '0 0 8px' }}>Refresh failed</p>
+          <p style={{ fontSize: 13.5, color: '#64748b', margin: '0 0 20px' }}>{error}</p>
+          <button onClick={onClose} style={{ background: '#1a2240', color: '#fff', border: 'none', borderRadius: 8, padding: '10px 20px', fontWeight: 700, cursor: 'pointer' }}>
+            Close
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div style={{
@@ -371,7 +340,7 @@ function IssueDrawer({ issue, onClose }) {
               {issue.issue}
             </p>
             <p style={{ color: '#a8bbd4', fontSize: 13, margin: '6px 0 0' }}>
-              {issue.class} · {issue.resource_id}
+              {issue.class} · {issue.component_id}
             </p>
           </div>
           <button
@@ -445,20 +414,100 @@ function IssueDrawer({ issue, onClose }) {
 /* ── Main Dashboard ────────────────────────────────────────────────────── */
 export default function Dashboard() {
   const navigate = useNavigate()
-  const { screenshot, xml } = getAuditFiles()
+  const location = useLocation()
+  const { screenshot } = getAuditFiles()
+
+  // audit_id can arrive via route state (fresh navigation from Upload)
+  // or the shared store (getAuditId) if the page was refreshed / reached another way.
+  const auditId = location.state?.auditId || getAuditId()
+
+  const [report, setReport]   = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(null)
+
   const [severityFilter, setSeverityFilter] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
-  const [selectedIssue,  setSelectedIssue]  = useState(null)
+  const [selectedIssue, setSelectedIssue] = useState(null)
   const [showAuditPopup, setShowAuditPopup] = useState(false)
+
+  useEffect(() => {
+    if (!auditId) {
+      setLoadError('No audit found. Please run a new audit from the Upload page.')
+      setLoading(false)
+      return
+    }
+    let cancelled = false
+    setLoading(true)
+    getAuditReport(auditId)
+      .then(data => {
+        if (!cancelled) { setReport(data); setLoading(false) }
+      })
+      .catch(err => {
+        if (!cancelled) { setLoadError(err.message || 'Could not load report.'); setLoading(false) }
+      })
+    return () => { cancelled = true }
+  }, [auditId])
+
+  // Map real backend violations -> UI shape (severity label + drawer fields)
+  const violations = (report?.violations || []).map(v => ({
+    ...v,
+    severity: SEVERITY_MAP[v.severity] || v.severity,
+  }))
+
+  const total = violations.length
+  const counts = severityOrder.reduce((acc, s) => {
+    acc[s] = violations.filter(v => v.severity === s).length
+    return acc
+  }, {})
+  const pct = s => total ? Math.round((counts[s] / total) * 100) : 0
 
   const filtered = violations
     .filter(v => severityFilter === 'All' || v.severity === severityFilter)
     .filter(v => {
       const q = searchQuery.trim().toLowerCase()
       if (!q) return true
-      return [v.rule_id, v.issue, v.class, v.resource_id, v.guideline]
+      return [v.rule_id, v.issue, v.class, v.component_id, v.guideline]
         .some(field => field?.toLowerCase().includes(q))
     })
+
+  // ── Loading state ──────────────────────────────────────────────────────
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f4f6fb' }}>
+        <Sidebar activePage="dashboard" />
+        <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
+            <Spinner size={32} color="#1D9E75" />
+            <p style={{ marginTop: 16, color: '#5a6a8a', fontSize: 15 }}>Loading your audit report…</p>
+          </div>
+        </main>
+      </div>
+    )
+  }
+
+  // ── Error / no audit state ─────────────────────────────────────────────
+  if (loadError) {
+    return (
+      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f4f6fb' }}>
+        <Sidebar activePage="dashboard" />
+        <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32 }}>
+          <div style={{ textAlign: 'center', maxWidth: 420 }}>
+            <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#fee2e2', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              {Icon.alert('#ef4444', 26)}
+            </div>
+            <p style={{ fontSize: 17, fontWeight: 700, color: '#0f1422', margin: '0 0 8px' }}>Couldn't load dashboard</p>
+            <p style={{ fontSize: 14, color: '#64748b', margin: '0 0 20px' }}>{loadError}</p>
+            <button
+              onClick={() => navigate('/upload')}
+              style={{ background: '#1a2240', color: '#fff', border: 'none', borderRadius: 8, padding: '12px 24px', fontWeight: 700, cursor: 'pointer' }}
+            >
+              Go to Upload
+            </button>
+          </div>
+        </main>
+      </div>
+    )
+  }
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f4f6fb' }}>
@@ -575,7 +624,7 @@ export default function Dashboard() {
                 Issues Dashboard
               </h1>
               <p style={{ fontSize: 15, color: '#5a6a8a', margin: 0 }}>
-                screen_014.png &nbsp;·&nbsp; 47 components scanned &nbsp;·&nbsp; Audited 3 minutes ago
+                {report?.screen_id || screenshot?.name || 'screen'} &nbsp;·&nbsp; {total} issue{total === 1 ? '' : 's'} found &nbsp;·&nbsp; {report?.enrichment_mode === 'llm' ? 'AI-explained' : 'Rule-based'}
               </p>
             </div>
            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4 }}>
@@ -612,7 +661,7 @@ export default function Dashboard() {
 
             <div
               role="img"
-              aria-label={`Accessibility score: 78 out of 100. Based on ${total} detected issues.`}
+              aria-label={`Accessibility score: ${report?.accessibility_score ?? '—'} out of 100. Based on ${total} detected issues.`}
               style={{
                 background: '#0f1422', borderRadius: 14,
                 padding: '20px 20px', display: 'flex', alignItems: 'center', gap: 16,
@@ -622,7 +671,8 @@ export default function Dashboard() {
                 <svg width="72" height="72" viewBox="0 0 72 72">
                   <circle cx="36" cy="36" r="30" fill="none" stroke="#1e2d42" strokeWidth="6" />
                   <circle cx="36" cy="36" r="30" fill="none" stroke="#1D9E75" strokeWidth="6"
-                    strokeDasharray="188.5" strokeDashoffset="47.1"
+                    strokeDasharray="188.5"
+                    strokeDashoffset={188.5 - (188.5 * (report?.accessibility_score ?? 0)) / 100}
                     strokeLinecap="round" transform="rotate(-90 36 36)" />
                 </svg>
                 <div style={{
@@ -630,7 +680,7 @@ export default function Dashboard() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 20, fontWeight: 700, color: '#fff',
                 }}>
-                  78
+                  {report?.accessibility_score ?? '—'}
                 </div>
               </div>
               <div aria-hidden="true">
@@ -764,7 +814,7 @@ export default function Dashboard() {
                       </td>
                       <td style={{ padding: '13px 16px' }}>
                         <p style={{ fontSize: 15, fontWeight: 600, color: '#0f1422', margin: 0 }}>{v.issue}</p>
-                        <p style={{ fontSize: 12, color: '#94a3b8', margin: '3px 0 0' }}>{v.class} · {v.resource_id}</p>
+                        <p style={{ fontSize: 12, color: '#94a3b8', margin: '3px 0 0' }}>{v.class} · {v.component_id}</p>
                       </td>
                       <td style={{ padding: '13px 16px', width: 120 }}>
                         <span style={{
@@ -775,7 +825,7 @@ export default function Dashboard() {
                           {v.severity}
                         </span>
                       </td>
-                      <td style={{ padding: '13px 16px', fontSize: 13, color: '#475569', fontWeight: 500, width: 120 }}>
+                      <td style={{ padding: '13px 16px', fontSize: 13, color: '#475569', fontWeight: 500, width: 160 }}>
                         {v.guideline}
                       </td>
                       <td style={{ padding: '13px 16px', width: 80, textAlign: 'right' }}>
@@ -827,7 +877,7 @@ export default function Dashboard() {
             </div>
             <button
               aria-label="Generate accessibility report"
-              onClick={() => navigate('/report', { state: { screenshot, xml } })}
+              onClick={() => navigate('/report', { state: { auditId } })}
               style={{
                 background: '#1D9E75', color: '#fff', border: 'none',
                 borderRadius: 10, padding: '14px 30px',
@@ -848,7 +898,11 @@ export default function Dashboard() {
       )}
 
       {showAuditPopup && (
-        <AuditPopup onClose={() => setShowAuditPopup(false)} />
+        <AuditPopup
+          auditId={auditId}
+          onRefreshed={(freshReport) => setReport(freshReport)}
+          onClose={() => setShowAuditPopup(false)}
+        />
       )}
     </div>
   )

@@ -7,7 +7,7 @@
 |-------|-------|
 | **Document version** | 2.0 |
 | **Status** | Draft for SDS handoff |
-| **Prepared by** | Muhammad Noor (Lead, i233068), Ayesha Naveed (UI/Schemas), Salar (Parser/Rules/Docker) |
+| **Prepared by** | Ayesha Naveed + Salar (primary authors); Muhammad Noor (Lead — review, integration, API/report sections) |
 | **Institution** | National University of Computer and Emerging Sciences (FAST-NUCES) |
 | **Internship duration** | 8 weeks (Summer 2026) |
 | **Standards basis** | IEEE 830-style SRS structure |
@@ -21,7 +21,9 @@
 |---------|------|--------|---------|
 | 1.0 (Axion) | 2026 | Ayesha Naveed | Initial Axion UI-focused SRS with G01–G30, R01–R30, Figma screen specs |
 | 1.0 (Agentic) | 2026 | Team | Module-based SRS with Docker, R1–R10 core, stretch goals |
-| **2.0** | 2026 | Team | Unified SRS combining both documents, repo reality (MASC/Rico), JSON schemas, API contract, evaluation plan |
+| **2.0** | 2026 | Ayesha + Salar | Unified SRS; Muhammad Noor reviewed and merged for SDS handoff |
+| **2.1** | 2026-07-13 | Noor | Figma screenshots restored from formatted DOCX into `docs/assets/figma/`; team ownership alignment |
+| **2.2** | 2026-07-14 | Noor | `POST /api/v1/audit` requires paired screenshot + XML; pair validation aligned with Axion Upload |
 
 > **Note on UI specifications:** Screen layouts, branding, and interaction flows in Section 3.1 and **Appendix F** are derived from **Ayesha Naveed's Figma designs** shared in `#tem-all-dynamo` Slack. Reference screenshots are embedded in Appendix F (`docs/assets/figma/`). Screens covered: Sign Up, Log In, Forgot Password, OTP Verify, Reset Password, Upload (all states), Audit Complete modal, Dashboard, Issue Detail drawer, Audit Report, Generate Report modal, and **Records (Reports)** page.
 
@@ -95,8 +97,8 @@ Higher-level requirement priority propagates to sub-requirements unless stated o
 | Audience | Focus sections |
 |----------|----------------|
 | **Salar (Intern 1)** — Parser, rules, Docker, datasets | §4.2, §4.3, §6, §7, §8, Appendix E |
-| **Ayesha (Intern 2)** — Figma, React dashboard, JSON schemas | §3.1, §4.1, §4.5, §8, Appendix F |
-| **Muhammad Noor (Lead, Intern 3)** — LLM agent, reports, evaluation | §4.4, §4.6, §11, §12 |
+| **Ayesha (Intern 2)** — Figma, React dashboard, SRS co-author | §3.1, §4.1, Appendix F |
+| **Muhammad Noor (Lead, Intern 3)** — SDS, backend API, agent, reports, JSON contracts, QA, evaluation | §4.4–§4.6, §8–§9, §11–§12 |
 | **Supervisor / Evaluator** | All sections; §10–§12 for acceptance |
 | **Future maintainers** | §2, §7, §8, §9, Appendix C |
 
@@ -259,9 +261,26 @@ All stages are orchestrated behind Docker-managed backend services (Appendix E).
 
 | Intern | Branch | Primary ownership |
 |--------|--------|-------------------|
-| **Salar** | `salar` | Data collection, hybrid XML parser, rule checker (R01–R30), Docker, batch scripts |
-| **Ayesha** | `ayesha` | JSON schemas, Figma design, React/Tailwind Axion dashboard |
-| **Muhammad Noor (Lead)** | `noor` | LLM agent layer, report generation (HTML/PDF), evaluation plan, project coordination |
+| **Salar** | `salar` | MASC data integration (with Noor); hybrid XML parser (with Noor); **rule engine** (`src/rules.py`, with Noor + Ayesha); `components.json` pipeline; Docker; batch scripts; **tests** (with Noor) |
+| **Ayesha** | `ayesha` | **Rico holdout** dataset; Figma + React/Tailwind Axion frontend; **SRS co-author** (with Salar); **rules** (with Salar + Noor, esp. R11–R12) |
+| **Muhammad Noor (Lead)** | `noor` | **Backend/FastAPI** audit API; **JSON structure** + `docs/json_schemas.md` + `auditor_schema.json`; **SDS author**; **SRS review**; agent layer + **report template** (`report.json`, HTML/PDF); **rules** (with Salar + Ayesha); `violations.json` pipeline; MASC data (with Salar); parser extensions (with Salar); **tests** (with Salar); coordination |
+
+#### 2.6.1 Artifact ownership (pipeline JSON + docs)
+
+| Artifact / deliverable | Primary author(s) | Notes |
+|------------------------|-------------------|--------|
+| Data collection (team) | All | Shared internship dataset effort |
+| MASC dataset (7,068 screens) | Salar + Noor | Parsed outputs on `noor` |
+| Rico holdout (1,698 screens) | Ayesha | Manifest + holdout strategy |
+| `components.json` | Salar | Via `src/parser.py` (Noor: R13–R20 fields, visibility) |
+| `violations.json` | Salar + Noor + Ayesha | `src/rules.py` R01–R30; reviewed by all |
+| `report.json` + HTML/PDF template | Noor | `src/agent.py`, `src/report.py`, `src/templates/` |
+| JSON schema contracts | Noor | `docs/json_schemas.md`, `docs/schemas/auditor_schema.json` |
+| SRS v2.0 | Ayesha + Salar | Noor: review, merge, traceability |
+| SDS v2.2 | Noor | Implementation reference from SRS |
+| Backend API | Noor | `backend/routers/audit.py`, `backend/main.py` |
+| Frontend (Axion) | Ayesha | `frontend/`; API wiring on Upload/Dashboard/Report |
+| pytest suite | Salar + Noor | Parser, rules, agent, audit, report tests |
 
 ### 2.7 User documentation
 
@@ -270,11 +289,13 @@ The following documentation shall be maintained:
 | Document | Location | Owner |
 |----------|----------|-------|
 | README with setup, folder structure, module descriptions | Repository root | All |
-| FastAPI Swagger UI | `/docs` on backend | Salar |
+| FastAPI Swagger UI / audit API | `/docs`, `backend/` | Noor |
 | Windows setup guide | `docs/windows_setup.md` | All |
-| JSON schemas | `docs/json_schemas.md` | Ayesha / Noor |
-| Accessibility guidelines report | `docs/accessibility_guidelines_report.md` | Ayesha / Noor |
+| JSON schemas | `docs/json_schemas.md`, `docs/schemas/auditor_schema.json` | Noor |
+| Accessibility guidelines report | `docs/accessibility_guidelines_report.md` | Noor (team review) |
 | QA test plan | `docs/qa_test_plan.md` | Noor |
+| SRS v2.0 | `srs/` | Ayesha + Salar (Noor review) |
+| SDS v2.2 | `sds/` | Noor |
 | Weekly progress notes | `docs/progress/` | Each intern |
 | Final internship report | `docs/` | All |
 
@@ -295,7 +316,7 @@ The following documentation shall be maintained:
 | MASC Dataset | Primary development and tuning corpus (7,068 paired screens) |
 | Rico holdout | Unseen final evaluation (1,698 screens, MASC-disjoint) |
 | OpenAI GPT-4o API | Agentic explanation and fix suggestion layer |
-| WeasyPrint / pdfkit | HTML-to-PDF report conversion |
+| Jinja2 + Playwright | HTML report templates + HTML-to-PDF conversion |
 | PIL / OpenCV | Screenshot annotation and bounding box rendering |
 | lxml / xml.etree | XML hierarchy parsing |
 | Docker / Docker Compose | Containerized deployment |
@@ -405,7 +426,7 @@ The system does not directly interface with hardware at runtime.
 | lxml / xml.etree | 5+ / stdlib | XML parsing | Internal |
 | PIL / OpenCV | 10+ / 4+ | Screenshot annotation | Internal |
 | OpenAI API (GPT-4o) | v1 | Agentic layer | REST HTTPS |
-| WeasyPrint / pdfkit | Latest | HTML → PDF | Internal |
+| Jinja2 + Playwright | Latest | HTML templates + HTML → PDF | Internal |
 | Docker / Compose | Latest | Deployment | Internal |
 | MASC / Rico datasets | — | Evaluation data | File system |
 | Legacy CNN (Stretch) | TBD | Visual supplementary signal | Internal model file |
@@ -564,7 +585,7 @@ Full rule logic: **Section 7**.
 | ID | Requirement | Priority | Maps to |
 |----|-------------|----------|---------|
 | FR-RP.1 | HTML report: project header, screen ID, accessibility score, issue summary, per-issue detail, annotated screenshots | Must | FR-AAA-36 |
-| FR-RP.2 | PDF version of same report (WeasyPrint or pdfkit) | Must | FR-AAA-37 |
+| FR-RP.2 | PDF version of same report (Jinja2 HTML + Playwright) | Must | FR-AAA-37 |
 | FR-RP.3 | Violations grouped by severity (Critical/High first) | Must | FR-AAA-38 |
 | FR-RP.4 | Each section: rule ID, WCAG reference, severity, component ID, explanation, why it matters, developer fix | Must | FR-AAA-39 |
 | FR-RP.5 | Cover section: audit date, screen filename, total violation count | Should | FR-AAA-40 |
@@ -826,11 +847,11 @@ Minimum API contract for Axion ↔ FastAPI (normative OpenAPI in SDS):
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/health` | Health check |
-| POST | `/api/v1/audit` | Upload XML; returns `{ audit_id, status }` (**Week 3–4 implemented**; optional `use_llm` query) |
+| POST | `/api/v1/audit` | Upload **screenshot + XML** pair (`multipart`: `screenshot`, `xml`); validates matching filenames; returns `{ audit_id, status }` (**implemented**; optional `use_llm` query) |
 | GET | `/api/v1/audit/{audit_id}/status` | Pipeline status: `pending`, `parsing`, `checking`, `explaining`, `complete`, `error` |
 | GET | `/api/v1/audit/{audit_id}/violations` | Returns violations JSON (**Week 3 implemented**) |
 | GET | `/api/v1/audit/{audit_id}/report` | Returns report JSON with score + agent fields (**Week 4 implemented**; template or live LLM) |
-| GET | `/api/v1/audit/{audit_id}/report/download?format=html\|pdf` | File download (**Week 5+ — not yet implemented**) |
+| GET | `/api/v1/audit/{audit_id}/report/download?format=html\|pdf` | File download (**Week 5 implemented** — Jinja2 HTML + Playwright PDF) |
 | POST | `/api/v1/audit/batch` | Batch run over server-side dataset path (**Should**) |
 | POST | `/api/v1/auth/signup` | Register account (**Must**) |
 | POST | `/api/v1/auth/login` | Login → JWT (**Must**) |
@@ -849,8 +870,8 @@ Minimum API contract for Axion ↔ FastAPI (normative OpenAPI in SDS):
 | Module | Minimum acceptance | Owner |
 |--------|-------------------|-------|
 | **XML Parser** | Extracts all required fields for MASC/Rico/UIAutomator formats; TC-01 pass; outputs valid `components.json` | Salar |
-| **Rule Checker** | R01–R05 detect on 10–15 controlled cases with zero false negatives; outputs valid `violations.json` | Salar |
-| **Guideline mapping** | Every violation has WCAG guideline reference, severity, detection note | Salar |
+| **Rule Checker** | R01–R30 on controlled fixtures; outputs valid `violations.json` | Salar + Noor + Ayesha (reviewed by all) |
+| **Guideline mapping** | Every violation has WCAG guideline reference, severity, detection note | Salar + Noor + Ayesha |
 | **Agentic layer** | Generates all three agent fields per violation; zero fabricated violations | Noor |
 | **UI Dashboard (Axion)** | Upload, validation panel, issues table, report view, PDF/HTML download | Ayesha |
 | **Report generator** | Readable HTML/PDF with score, summary, per-violation detail, fixes | Noor |
@@ -886,7 +907,7 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 | Rule documentation | R01–R10 (min) implemented rules, logic, limitations | Salar |
 | Agent & report docs | Prompt templates, sample reports, limitations | Noor |
 | Axion UI | Figma + implemented React dashboard | Ayesha |
-| JSON schemas | Documented + validated examples | Ayesha / Noor |
+| JSON schemas | Documented + validated examples | Noor |
 | Evaluation summary | Manual validation + Rico holdout results | Noor |
 | Final internship report | Problem, method, implementation, results, future work | All |
 | Final demo | 5–7 min live demo: problem → architecture → audit → report | All |
@@ -958,16 +979,16 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 
 | Req ID | Description | Priority | Feature | Owner | Status |
 |--------|-------------|----------|---------|-------|--------|
-| FR-IN.1 | Accept screenshot + XML | Must | §4.1 | Ayesha | Pending |
+| FR-IN.1 | Accept screenshot + XML | Must | §4.1 | Ayesha | **Done** (paired upload + validation; API enforces pair) |
 | FR-IN.2 | Validate pair screen ID | Must | §4.1 | Salar | Pending |
 | FR-PS.1 | Extract XML attributes | Must | §4.2 | Salar | **Done** |
 | FR-RU.1–10 | Rules R01–R10 | Must | §4.3 | Salar | **Done** |
 | FR-RU.11–30 | Rules R11–R30 | Should/Stretch | §4.3 | Team | **Done** (R09/R28 limited without colors/text-size) |
 | FR-AG.1–7 | Agent explanations | Must | §4.5 | Noor | **Done** (API-wired; template + LLM) |
-| FR-RP.1–2 | HTML/PDF reports | Must | §4.6 | Noor | Planned |
-| FR-UI.10–17 | Upload + modals | Must | §3.1 | Ayesha | In Progress (UI scaffold; not API-wired) |
-| FR-UI.20–27 | Dashboard + drawer | Must | §3.1 | Ayesha | In Progress (mock data) |
-| FR-UI.30–35 | Report screen + modal + PDF | Must | §3.1 | Ayesha | In Progress (mock data) |
+| FR-RP.1–2 | HTML/PDF reports | Must | §4.6 | Noor | **Done** (`src/report.py` + download API) |
+| FR-UI.10–17 | Upload + modals | Must | §3.1 | Ayesha | **Done** (wired to `POST /audit`) |
+| FR-UI.20–27 | Dashboard + drawer | Must | §3.1 | Ayesha | **Done** (wired to `GET …/report`) |
+| FR-UI.30–35 | Report screen + modal + PDF | Must | §3.1 | Ayesha | **Done** (report view + `GET …/report/download`) |
 | FR-UI.40–45 | Records page | Must | §3.1 | Ayesha | Planned |
 | FR-AUTH.1–5 | Authentication | Must | §4.9 | Ayesha / Salar | Planned |
 | FR-REC.1–4 | Records storage | Must | §4.9 | Salar / Ayesha | Planned |
@@ -1037,7 +1058,7 @@ Environment: `DATASET_ROOT=/app/data/data-masc`, `PARSER_MAX_FILES=0` (full batc
 
 ## Appendix F: Axion UI screen specifications (Figma)
 
-> **Source:** Ayesha Naveed's Figma designs (shared in `#tem-all-dynamo` Slack). All screens below are **Must Have** unless marked otherwise. Embedded screenshots are stored in `docs/assets/figma/`.
+> **Source:** Ayesha Naveed's Figma designs (shared in `#tem-all-dynamo` Slack). All screens below are **Must Have** unless marked otherwise. Embedded screenshots are stored in `docs/assets/figma/` (restored from the legacy formatted DOCX export, 13 Jul 2026).
 
 ### F.1 Design system
 

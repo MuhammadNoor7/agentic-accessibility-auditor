@@ -16,6 +16,12 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 R01_FIXTURE = ROOT / "tests" / "fixtures" / "rules" / "r01_missing_label_fail.xml"
+R01_SCREENSHOT_NAME = "r01_missing_label_fail.png"
+MINIMAL_PNG = (
+    b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01"
+    b"\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\x0cIDATx\x9cc\xf8\xcf"
+    b"\xc0\x00\x00\x00\x03\x00\x01\x00\x05\xfe\xd4\xef\x00\x00\x00\x00IEND\xaeB`\x82"
+)
 R01_VIOLATIONS = ROOT / "outputs" / "violations" / "r01_missing_label_fail_violations.json"
 R01_REPORT = ROOT / "outputs" / "reports" / "r01_missing_label_fail_report.json"
 MASC_DATASET = ROOT / "data" / "data-masc"
@@ -80,7 +86,10 @@ def api_smoke_with_report() -> None:
     with R01_FIXTURE.open("rb") as handle:
         created = client.post(
             "/api/v1/audit?use_llm=false",
-            files={"xml": (R01_FIXTURE.name, handle, "application/xml")},
+            files={
+                "screenshot": (R01_SCREENSHOT_NAME, MINIMAL_PNG, "image/png"),
+                "xml": (R01_FIXTURE.name, handle, "application/xml"),
+            },
         )
     print("POST /api/v1/audit?use_llm=false", created.status_code, created.json())
     audit_id = created.json()["audit_id"]
@@ -122,7 +131,10 @@ def cross_check_cli_api() -> None:
     with R01_FIXTURE.open("rb") as handle:
         created = client.post(
             "/api/v1/audit?use_llm=false",
-            files={"xml": (R01_FIXTURE.name, handle, "application/xml")},
+            files={
+                "screenshot": (R01_SCREENSHOT_NAME, MINIMAL_PNG, "image/png"),
+                "xml": (R01_FIXTURE.name, handle, "application/xml"),
+            },
         )
     audit_id = created.json()["audit_id"]
     api = client.get(f"/api/v1/audit/{audit_id}/violations").json()

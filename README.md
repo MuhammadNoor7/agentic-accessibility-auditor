@@ -3,7 +3,7 @@
 Automated accessibility auditing for **Android mobile UIs**.  
 Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `components.json`, rule-based `violations.json`, LLM-enriched explanations, and HTML/PDF reports mapped to **G01–G30** guidelines and **R01–R30** detection rules.
 
-**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — parser + rules **R01–R30**, agent report API, React UI scaffold (mock data), **94 pytest** (9 Jul 2026).
+**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — parser + rules **R01–R30**, agent report API, HTML/PDF report export, React UI wired (Upload/Dashboard/Report), **120 pytest** (12 Jul 2026, commit `4ce430feb`).
 
 ---
 
@@ -11,9 +11,9 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 | Intern | Branch | Focus |
 |--------|--------|-------|
-| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | Data, hybrid XML parser, rule checker, Docker, Stage 3 explainer |
-| **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | JSON schemas, Figma, React dashboard (auth + app pages) |
-| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | Agent/API wiring, reports, QA, coordination, R13–R30 ownership |
+| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | MASC data, parser, **rules** (with Noor + Ayesha), `components.json`, Docker, tests |
+| **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | Rico holdout, Figma, React frontend, SRS co-author, rules (with Salar + Noor) |
+| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | Backend API, JSON schemas, SDS, agent, report template, SRS review, tests, QA |
 
 ---
 
@@ -21,17 +21,17 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 | Document | Path |
 |----------|------|
-| **SRS v2.0** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.0.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.md) |
-| **SDS v2.2** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) |
+| **SRS v2.0** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.0.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.md) · [`SRS_Agentic_Accessibility_Auditor_v2.0.docx`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.docx) |
+| **SDS v2.2** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) · [`SDS_Agentic_Accessibility_Auditor_v2.0.docx`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.docx) |
 | **8-week plan** | [`updated_plan.md`](updated_plan.md) · [`docs/updated_plan_v2.0.docx`](docs/updated_plan_v2.0.docx) |
-| **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) (+ formatted DOCX in same folder) |
+| **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) · [`Supplementary_Progress_Report_v1.0.docx`](docs/progress/Supplementary_Progress_Report_v1.0.docx) |
 | **Figma screenshots** | `docs/assets/figma/` |
 
-Formatted Word exports live in `srs/`, `sds/`, and `docs/progress/`.
+Formatted Word exports: `srs/SRS_Agentic_Accessibility_Auditor_v2.0.docx`, `sds/SDS_Agentic_Accessibility_Auditor_v2.0.docx`, `docs/progress/Supplementary_Progress_Report_v1.0.docx` (regenerate via `scripts/md_to_docx.py`; SRS/SDS embed Figma screenshots from `docs/assets/figma/`).
 
 ---
 
-## Pipeline status (`noor`, 9 Jul 2026)
+## Pipeline status (`noor`, 12 Jul 2026)
 
 ```
 Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
@@ -42,15 +42,17 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 | Stage | Owner | Output | Status |
 |-------|-------|--------|--------|
 | 1 — Parser | Salar / Noor | `components.json` | **Done** — 7,068 MASC screens; R13–R20 fields + visibility |
-| 2 — Rules | Salar / Noor | `violations.json` | **R01–R30** in `check()`; R09/R28 limited without colors/text-size |
+| 2 — Rules | Salar + Noor + Ayesha (reviewed by all) | `violations.json` | **R01–R30** in `check()`; R09/R28 limited without colors/text-size |
 | 3 — Agent | Noor / Salar | enriched `report.json` | **Done** — `GET /api/v1/audit/{id}/report` (template or live LLM) |
-| 4 — Report | Noor | HTML/PDF | Planned (`src/report.py`) |
-| UI — Axion | Ayesha | React dashboard | **Scaffold** — `frontend/` (mock data; not API-wired) |
-| API | Noor | FastAPI | **Partial** — violations + report; no auth/records/download |
+| 4 — Report | Noor | HTML/PDF | **Done** — `src/report.py` + `GET …/report/download?format=html\|pdf` |
+| UI — Axion | Ayesha | React dashboard | **Partial** — Upload/Dashboard/Report wired; Records still mock |
+| API | Noor | FastAPI | **Partial** — violations + report + download; no auth/records persistence |
 
 **MASC sign-off (Jul 2026):** 640,563 components · 462,542 violations (R01–R20 baseline) · 0 parse errors — see `data/data-masc/parsed/masc_parse_signoff_report.json`.
 
-**Demo (no live LLM):** `uvicorn backend.main:app --reload --port 8000` then `POST /api/v1/audit?use_llm=false` with an XML fixture → `GET …/report`.
+**Demo (no live LLM):** `uvicorn backend.main:app --reload --port 8000` → `POST /api/v1/audit?use_llm=false` with **screenshot + XML pair** → `GET …/report` → `GET …/report/download?format=html|pdf`.
+
+**Rule fixtures:** `python test_run.py --fixtures` writes `outputs/violations/*_violations.json` for all 57 XML files under `tests/fixtures/rules/`. Curated samples (R01–R30) are committed under `outputs/violations/samples/`.
 
 ---
 
@@ -59,7 +61,7 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 ```
 agentic-accessibility-auditor/
 ├── app.py                  # Streamlit: upload XML + violations preview
-├── test_run.py             # CLI batch parse + rules
+├── test_run.py             # CLI: single XML, batch dataset, or --fixtures
 ├── requirements.txt
 ├── .env.example            # LLM_PROVIDER + API keys
 ├── conftest.py
@@ -68,28 +70,39 @@ agentic-accessibility-auditor/
 │   ├── parser.py           # Hybrid XML → components.json
 │   ├── rules.py            # R01–R30 rule checker
 │   ├── agent.py            # Score + build_audit_report (API-wired)
+│   ├── report.py           # Jinja2 HTML + PIL annotation + Playwright PDF
+│   ├── templates/
+│   │   └── audit_report.html.j2
 │   ├── explainer.py        # Live LLM recommendations
 │   ├── guidelines.py       # G01–G30 + R→G mapping
 │   ├── llm_providers.py    # Anthropic / OpenAI / Gemini / Groq
 │   └── schema_documents.py
 │
-├── backend/                # FastAPI gateway
+├── backend/                # FastAPI gateway (v0.4.0)
 │   ├── main.py
-│   └── routers/audit.py    # POST /audit → GET …/violations + …/report
+│   └── routers/
+│       └── audit.py        # POST /audit → GET …/violations + …/report + …/report/download
 │
-├── frontend/               # Axion React UI (Vite + React 19 + Tailwind 4; mock data)
+├── frontend/               # Axion React UI (Vite + React 19 + Tailwind 4)
+│   └── src/
+│       ├── api.js          # createAudit, getAuditReport, downloadAuditReport
+│       ├── state/auditFiles.js
+│       └── pages/          # Upload, Dashboard, Report (API-wired); Records (mock)
 │
-├── tests/                  # 94 pytest (parser, rules, agent, audit, explainer)
+├── tests/                  # 120 pytest
 │   ├── test_parser.py
-│   ├── test_rules.py
+│   ├── test_rules.py       # R01–R30 pass/fail XML fixtures
 │   ├── test_agent.py
 │   ├── test_audit.py
+│   ├── test_report.py
 │   ├── test_explainer.py
-│   └── fixtures/rules/
+│   └── fixtures/rules/     # 57 controlled XML screens (R01–R30 pass/fail)
 │
 ├── scripts/
 │   ├── validate_output.py
 │   ├── noor_week3_validate.py
+│   ├── noor_week4_validate.py
+│   ├── noor_week5_validate.py
 │   ├── masc_parse_signoff.py
 │   ├── run_explainer_sample.py
 │   ├── compare_visibility_filter_impact.py
@@ -103,12 +116,12 @@ agentic-accessibility-auditor/
 │   ├── data-masc/          # 7,068 screens — parsed JSON tracked on noor
 │   ├── data-rico-holdout/  # 1,698-screen unseen eval
 │   ├── xml/ / screenshots/ / parsed/   # Generic uploads
-│   └── final_rico/
+│   └── parsed/fixtures/    # components.json from test_run --fixtures (gitignored)
 │
 ├── outputs/
-│   ├── violations/         # Stage 2 outputs
-│   ├── reports/            # Stage 3 report.json (Week 4)
-│   └── validation_logs/    # week3 + noor_week3 + masc_reparse logs
+│   ├── violations/         # Stage 2 outputs; samples/ has R01–R30 fixture JSON in repo
+│   ├── reports/            # Stage 3–4 outputs; samples/ has example JSON/HTML/PDF
+│   └── validation_logs/    # noor_week1–5 summaries + validation logs
 │
 ├── docs/                   # Schemas, guidelines, QA plan, progress report
 ├── srs/                    # SRS v2.0
@@ -153,17 +166,24 @@ Formal contract: [`docs/json_schemas.md`](docs/json_schemas.md) · [`docs/schema
 
 ## Rule checker (Stage 2)
 
-`src/rules.py` — `check(components_json)` runs **R01–R20** and returns `violations.json`.
+`src/rules.py` — `check(components_json)` runs **R01–R30** and returns `violations.json`.
 
 | Rule | Status | Notes |
 |------|--------|-------|
-| R01–R10 | Done | Core accessibility checks (labels, touch targets, overlap, …) |
-| R11 | Stub | Color-only info — needs before/after or pixel diff |
-| R12 | Done | Missing captions (`media_type` heuristics) |
+| R01–R08, R10 | Done | Core checks; pass/fail XML fixtures in `tests/fixtures/rules/` |
+| R09 | Done | Fires when XML declares `text-color` + `background-color` (fixture-tested) |
+| R11–R12 | Done | Color-only state widgets; missing captions on VideoView |
 | R13–R20 | Done | Audio, focus order, spacing, gestures, hint-only labels |
-| R09 | Partial | Needs screenshot contrast analysis |
+| R21–R30 | Done | Extended rules; pass/fail fixtures for R21–R27, R29–R30 |
+| R28 | Partial | Needs declared `text-size` in XML |
 
-Run rules via CLI: `python test_run.py` (parse + rules) or import `src.rules.check`.
+Run rules via CLI:
+
+```bash
+python test_run.py path/to/screen.xml          # single file
+python test_run.py --fixtures                  # all 57 rule fixtures
+python test_run.py --dataset masc              # MASC batch
+```
 
 ---
 
@@ -246,10 +266,10 @@ npm run dev
 # From repo root
 python -m uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
 # Health: http://localhost:8000/health
-# Audit:  POST /api/v1/audit  →  GET /api/v1/audit/{id}/violations
+# Audit:  POST /api/v1/audit (multipart: screenshot + xml)  →  GET /api/v1/audit/{id}/violations
 ```
 
-Upload XML via multipart form to `POST /api/v1/audit`. Report endpoint (`/report`) is not implemented yet.
+Upload a matching screenshot + XML pair via multipart form to `POST /api/v1/audit`. Report and download endpoints are implemented (`/report`, `/report/download`).
 
 ---
 
@@ -309,7 +329,7 @@ python scripts/build_rico_holdout_sheet.py
 
 **Always commit:** source code, `docs/`, `scripts/`, `tests/`, `frontend/`, `requirements.txt`
 
-**Never commit:** `.venv/`, `__pycache__/`, `.env`, raw `xml/` / `screenshots/` trees, most of `outputs/violations/`
+**Never commit:** `.venv/`, `__pycache__/`, `.env`, raw `xml/` / `screenshots/` trees, bulk MASC `outputs/violations/chat_*` (use `outputs/violations/samples/` for fixture demos)
 
 **Tracked on `noor` (parser artifacts & metadata):**
 

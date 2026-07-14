@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r12_missing_captions_fail",
+  "image_path": "tests/fixtures/screenshots/rules/r12_missing_captions_fail.jpg",
+  "xml_path": "tests/fixtures/rules/r12_missing_captions_fail.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R12",
+      "issue": "Missing captions",
+      "component_id": "c_002",
+      "class": "android.widget.VideoView",
+      "bounds": [
+        0,
+        200,
+        400,
+        500
+      ],
+      "guideline": "G12 \u2014 Missing captions",
+      "severity": "High",
+      "recommendation": "Add a caption/CC toggle control near the video player."
+    }
+  ],
+  "component_count": 2,
+  "hidden_component_count": 0
+}

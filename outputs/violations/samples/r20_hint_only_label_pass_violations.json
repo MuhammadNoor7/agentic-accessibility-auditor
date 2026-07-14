@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r20_hint_only_label_pass",
+  "image_path": "tests/fixtures/screenshots/rules/r20_hint_only_label_pass.jpg",
+  "xml_path": "tests/fixtures/rules/r20_hint_only_label_pass.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_003",
+      "class": "android.widget.EditText",
+      "bounds": [
+        40,
+        200,
+        500,
+        280
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    }
+  ],
+  "component_count": 3,
+  "hidden_component_count": 0
+}

@@ -1,5 +1,7 @@
 // Central place for all backend API calls.
 // Base URL of your local FastAPI server (started with `uvicorn backend.main:app`).
+import { getAuthHeaders } from './utils/auth';
+
 const API_BASE = 'http://127.0.0.1:8000';
 
 // Step 1: upload screenshot + XML pair, kicks off parse -> rules -> agent explain.
@@ -33,6 +35,25 @@ export async function getAuditStatus(auditId) {
 export async function getAuditReport(auditId) {
   const res = await fetch(`${API_BASE}/api/v1/audit/${auditId}/report`);
   if (!res.ok) throw new Error(`Report fetch failed (${res.status})`);
+  return res.json();
+}
+
+// Raw violations doc — used to persist severity counts via POST /records.
+export async function getAuditViolations(auditId) {
+  const res = await fetch(`${API_BASE}/api/v1/audit/${auditId}/violations`);
+  if (!res.ok) throw new Error(`Violations fetch failed (${res.status})`);
+  return res.json();
+}
+
+// Re-open a past record's report from disk (survives backend restart).
+export async function getRecordReport(recordId) {
+  const res = await fetch(`${API_BASE}/records/${recordId}/report`, {
+    headers: { ...getAuthHeaders() },
+  });
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.detail || `Report fetch failed (${res.status})`);
+  }
   return res.json();
 }
 

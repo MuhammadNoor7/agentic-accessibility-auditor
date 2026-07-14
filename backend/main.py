@@ -13,6 +13,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from backend.routers.audit import router as audit_router
+from backend.routers.auth_router import router as auth_router
+from backend.routers.records_router import router as records_router
 
 app = FastAPI(
     title="Agentic Accessibility Auditor API",
@@ -29,6 +31,8 @@ app.add_middleware(
 )
 
 app.include_router(audit_router)
+app.include_router(auth_router)
+app.include_router(records_router, prefix="")
 
 
 @app.get("/")

@@ -1,41 +1,77 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
-
-/* ────────────────────────────────────────────────────────────────────────────
-   MOCK audit history — replace with a real fetch('/api/audits') once the
-   backend persists past runs. Shape mirrors what the Upload/Dashboard flow
-   would produce per screen.
-   ──────────────────────────────────────────────────────────────────────────── */
-const AUDITS = [
-  { id: 'screen_008', high: 2, med: 0, low: 0, date: 'Today' },
-  { id: 'screen_007', high: 3, med: 2, low: 1, date: 'Jun 30' },
-  { id: 'screen_006', high: 4, med: 0, low: 0, date: 'Jun 29' },
-  { id: 'screen_005', high: 2, med: 4, low: 2, date: 'Jun 28' },
-  { id: 'screen_004', high: 1, med: 1, low: 1, date: 'Jun 27' },
-  { id: 'screen_003', high: 3, med: 2, low: 0, date: 'Jun 26' },
-  { id: 'screen_002', high: 2, med: 1, low: 1, date: 'Jun 25' },
-  { id: 'screen_001', high: 2, med: 0, low: 0, date: 'Jun 14' },
-].map(a => ({ ...a, total: a.high + a.med + a.low }))
-
-const totalIssuesFound = AUDITS.reduce((sum, a) => sum + a.total, 0)
-const mostRecent = AUDITS[0]
+import { apiGet } from '../utils/api'
+import { isLoggedIn } from '../utils/auth'
 
 const SEV_DOT = { high: '#f97316', med: '#94a3b8', low: '#cbd5e1' }
-const SEV_LABEL = { high: 'high', med: 'med', low: 'low' }
+
+function formatDate(iso) {
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ''
+  if (d.toDateString() === new Date().toDateString()) return 'Today'
+  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+}
+
+function mapRecord(r) {
+  const bySeverity = r.violations_by_severity || {}
+  return {
+    id: r.screen_id,
+    recordId: r.record_id,
+    high: bySeverity.High || 0,
+    med: bySeverity.Medium || 0,
+    low: bySeverity.Low || 0,
+    total: r.total_violations,
+    score: r.accessibility_score ?? null,
+    screenshotName: r.screenshot_name || null,
+    xmlName: r.xml_name || null,
+    date: formatDate(r.created_at),
+    violationsPath: r.violations_path,
+    componentsPath: r.components_path,
+  }
+}
 
 export default function AuditHistory() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [severityFilter, setSeverityFilter] = useState('All')
   const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '')
+  const [records, setRecords] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [loadError, setLoadError] = useState(null)
 
   useEffect(() => {
     const q = searchParams.get('q')
     if (q) setSearchQuery(q)
   }, [searchParams])
 
-  const filtered = AUDITS
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      setLoading(false)
+      setLoadError('not_logged_in')
+      return
+    }
+    let cancelled = false
+    setLoading(true)
+    apiGet('/records', true)
+      .then(data => {
+        if (cancelled) return
+        setRecords((data.records || []).map(mapRecord))
+        setLoadError(null)
+      })
+      .catch(err => {
+        if (!cancelled) setLoadError(err.message || 'Could not load audit history.')
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
+    return () => { cancelled = true }
+  }, [])
+
+  const totalIssuesFound = records.reduce((sum, a) => sum + a.total, 0)
+  const mostRecent = records[0]
+
+  const filtered = records
     .filter(a => severityFilter === 'All' || a[severityFilter.toLowerCase()] > 0)
     .filter(a => a.id.toLowerCase().includes(searchQuery.trim().toLowerCase()))
 
@@ -169,122 +205,165 @@ export default function AuditHistory() {
             </button>
           </div>
 
-          {/* STAT CARDS */}
-          <div className="axion-stat-grid" style={{ display: 'grid', gap: 14 }}>
-            <div style={{ background: '#fff', border: '0.5px solid #e2e6f0', borderRadius: 14, padding: '18px 20px' }}>
-              <p style={{ fontSize: 11, color: '#5a6a8a', fontWeight: 700, letterSpacing: '0.6px', textTransform: 'uppercase', margin: '0 0 8px' }}>Total audits</p>
-              <p style={{ fontSize: 30, fontWeight: 700, color: '#0f1422', margin: 0 }}>{AUDITS.length}</p>
+          {loadError === 'not_logged_in' && (
+            <div style={{ background: '#fff', border: '0.5px solid #e2e6f0', borderRadius: 14, padding: '40px', textAlign: 'center' }}>
+              <p style={{ fontSize: 16, fontWeight: 700, color: '#0f1422', margin: '0 0 6px' }}>Log in to see your audit history</p>
+              <p style={{ fontSize: 14, color: '#5a6a8a', margin: '0 0 20px' }}>Records are saved per account once you're logged in.</p>
+              <button
+                onClick={() => navigate('/login')}
+                style={{ background: '#1a2240', color: '#fff', border: 'none', borderRadius: 8, padding: '12px 24px', fontWeight: 700, cursor: 'pointer' }}
+              >
+                Go to Log in
+              </button>
             </div>
-            <div style={{ background: '#fff', border: '0.5px solid #e2e6f0', borderRadius: 14, padding: '18px 20px' }}>
-              <p style={{ fontSize: 11, color: '#5a6a8a', fontWeight: 700, letterSpacing: '0.6px', textTransform: 'uppercase', margin: '0 0 8px' }}>Screens audited</p>
-              <p style={{ fontSize: 30, fontWeight: 700, color: '#0f1422', margin: 0 }}>{AUDITS.length}</p>
-            </div>
-            <div style={{ background: '#fff', border: '0.5px solid #e2e6f0', borderRadius: 14, padding: '18px 20px' }}>
-              <p style={{ fontSize: 11, color: '#5a6a8a', fontWeight: 700, letterSpacing: '0.6px', textTransform: 'uppercase', margin: '0 0 8px' }}>Issues found</p>
-              <p style={{ fontSize: 30, fontWeight: 700, color: '#0f1422', margin: 0 }}>{totalIssuesFound}</p>
-            </div>
-            <div style={{ background: '#f0fdf8', border: '1px solid #6ee7b7', borderRadius: 14, padding: '18px 20px' }}>
-              <p style={{ fontSize: 11, color: '#0f6e56', fontWeight: 700, letterSpacing: '0.6px', textTransform: 'uppercase', margin: '0 0 8px' }}>Most recent</p>
-              <p style={{ fontSize: 18, fontWeight: 700, color: '#0f1422', margin: '0 0 2px' }}>{mostRecent.id}</p>
-              <p style={{ fontSize: 12.5, color: '#0f6e56', margin: 0 }}>Audited {mostRecent.date === 'Today' ? 'today' : mostRecent.date}</p>
-            </div>
-          </div>
+          )}
 
-          {/* Filter row */}
-          <div className="axion-filter-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <select
-              value={severityFilter}
-              onChange={e => setSeverityFilter(e.target.value)}
-              aria-label="Filter by severity"
-              style={{
-                fontSize: 13, padding: '9px 16px', border: '1.5px solid #94a3b8',
-                borderRadius: 8, color: '#1a2240', background: '#fff', cursor: 'pointer', fontWeight: 600,
-              }}
-            >
-              <option value="All">All severities</option>
-              <option value="High">Has high severity</option>
-              <option value="Med">Has medium severity</option>
-              <option value="Low">Has low severity</option>
-            </select>
-            <span style={{ fontSize: 13, color: '#94a3b8' }}>{filtered.length} records</span>
-          </div>
-
-          {/* TABLE */}
-          <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #e2e6f0', overflow: 'hidden' }}>
-            <div className="axion-table-scroll">
-            <table style={{ width: '100%', borderCollapse: 'collapse' }} aria-label="Audit history records">
-              <thead>
-                <tr style={{ background: '#f8fafc' }}>
-                  {['#', 'Screen ID', 'File paths', 'Severity', 'Issues', 'Date', ''].map(h => (
-                    <th key={h} scope="col" style={{
-                      padding: '10px 16px', textAlign: 'left', fontSize: 11, fontWeight: 700,
-                      color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.6px',
-                    }}>
-                      {h}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((a, i) => (
-                  <tr key={a.id} style={{ borderTop: '0.5px solid #f0f2f8' }}>
-                    <td style={{ padding: '13px 16px', fontSize: 13, color: '#94a3b8' }}>{i + 1}</td>
-                    <td style={{ padding: '13px 16px', fontSize: 15, fontWeight: 700, color: '#0f1422' }}>{a.id}</td>
-                    <td style={{ padding: '13px 16px', fontSize: 12.5, color: '#94a3b8', lineHeight: 1.6 }}>
-                      data/screenshots/{a.id}.png<br />
-                      data/xml/window_{a.id.split('_')[1]}.xml
-                    </td>
-                    <td style={{ padding: '13px 16px' }}>
-                      <div style={{ display: 'flex', gap: 10, fontSize: 12.5, fontWeight: 600 }}>
-                        {a.high > 0 && (
-                          <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#7A4000' }}>
-                            <span style={{ width: 7, height: 7, borderRadius: '50%', background: SEV_DOT.high }} aria-hidden="true" />
-                            {a.high} high
-                          </span>
-                        )}
-                        {a.med > 0 && (
-                          <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#475569' }}>
-                            <span style={{ width: 7, height: 7, borderRadius: '50%', background: SEV_DOT.med }} aria-hidden="true" />
-                            {a.med} med
-                          </span>
-                        )}
-                        {a.low > 0 && (
-                          <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#94a3b8' }}>
-                            <span style={{ width: 7, height: 7, borderRadius: '50%', background: SEV_DOT.low }} aria-hidden="true" />
-                            {a.low} low
-                          </span>
-                        )}
-                      </div>
-                    </td>
-                    <td style={{ padding: '13px 16px', fontSize: 14, fontWeight: 600, color: '#0f1422' }}>{a.total} issues</td>
-                    <td style={{ padding: '13px 16px', fontSize: 13, color: '#5a6a8a' }}>{a.date}</td>
-                    <td style={{ padding: '13px 16px', textAlign: 'right' }}>
-                      <button
-                        onClick={() => navigate('/report')}
-                        aria-label={`View report for ${a.id}`}
-                        style={{
-                          background: '#1a2240', border: 'none', borderRadius: 6, padding: '6px 16px',
-                          fontSize: 12, color: '#fff', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
-                        }}
-                      >
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-                {filtered.length === 0 && (
-                  <tr>
-                    <td colSpan={7} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8', fontSize: 14 }}>
-                      {searchQuery.trim()
-                        ? `No audits match "${searchQuery}".`
-                        : 'No audits match this filter.'}
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+          {loadError && loadError !== 'not_logged_in' && (
+            <div style={{ background: '#fff', border: '0.5px solid #e2e6f0', borderRadius: 14, padding: '40px', textAlign: 'center' }}>
+              <p style={{ fontSize: 16, fontWeight: 700, color: '#0f1422', margin: '0 0 6px' }}>Couldn't load audit history</p>
+              <p style={{ fontSize: 14, color: '#5a6a8a', margin: 0 }}>{loadError}</p>
             </div>
-          </div>
+          )}
+
+          {loading && !loadError && (
+            <div style={{ background: '#fff', border: '0.5px solid #e2e6f0', borderRadius: 14, padding: '60px', textAlign: 'center', color: '#94a3b8', fontSize: 14 }}>
+              Loading audit history…
+            </div>
+          )}
+
+          {!loading && !loadError && (
+            <>
+              {/* STAT CARDS */}
+              <div className="axion-stat-grid" style={{ display: 'grid', gap: 14 }}>
+                <div style={{ background: '#fff', border: '0.5px solid #e2e6f0', borderRadius: 14, padding: '18px 20px' }}>
+                  <p style={{ fontSize: 11, color: '#5a6a8a', fontWeight: 700, letterSpacing: '0.6px', textTransform: 'uppercase', margin: '0 0 8px' }}>Total audits</p>
+                  <p style={{ fontSize: 30, fontWeight: 700, color: '#0f1422', margin: 0 }}>{records.length}</p>
+                </div>
+                <div style={{ background: '#fff', border: '0.5px solid #e2e6f0', borderRadius: 14, padding: '18px 20px' }}>
+                  <p style={{ fontSize: 11, color: '#5a6a8a', fontWeight: 700, letterSpacing: '0.6px', textTransform: 'uppercase', margin: '0 0 8px' }}>Screens audited</p>
+                  <p style={{ fontSize: 30, fontWeight: 700, color: '#0f1422', margin: 0 }}>{records.length}</p>
+                </div>
+                <div style={{ background: '#fff', border: '0.5px solid #e2e6f0', borderRadius: 14, padding: '18px 20px' }}>
+                  <p style={{ fontSize: 11, color: '#5a6a8a', fontWeight: 700, letterSpacing: '0.6px', textTransform: 'uppercase', margin: '0 0 8px' }}>Issues found</p>
+                  <p style={{ fontSize: 30, fontWeight: 700, color: '#0f1422', margin: 0 }}>{totalIssuesFound}</p>
+                </div>
+                <div style={{ background: '#f0fdf8', border: '1px solid #6ee7b7', borderRadius: 14, padding: '18px 20px' }}>
+                  <p style={{ fontSize: 11, color: '#0f6e56', fontWeight: 700, letterSpacing: '0.6px', textTransform: 'uppercase', margin: '0 0 8px' }}>Most recent</p>
+                  {mostRecent ? (
+                    <>
+                      <p style={{ fontSize: 18, fontWeight: 700, color: '#0f1422', margin: '0 0 2px' }}>{mostRecent.id}</p>
+                      <p style={{ fontSize: 12.5, color: '#0f6e56', margin: 0 }}>Audited {mostRecent.date === 'Today' ? 'today' : mostRecent.date}</p>
+                    </>
+                  ) : (
+                    <p style={{ fontSize: 14, color: '#0f6e56', margin: 0 }}>No audits yet</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Filter row */}
+              <div className="axion-filter-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <select
+                  value={severityFilter}
+                  onChange={e => setSeverityFilter(e.target.value)}
+                  aria-label="Filter by severity"
+                  style={{
+                    fontSize: 13, padding: '9px 16px', border: '1.5px solid #94a3b8',
+                    borderRadius: 8, color: '#1a2240', background: '#fff', cursor: 'pointer', fontWeight: 600,
+                  }}
+                >
+                  <option value="All">All severities</option>
+                  <option value="High">Has high severity</option>
+                  <option value="Med">Has medium severity</option>
+                  <option value="Low">Has low severity</option>
+                </select>
+                <span style={{ fontSize: 13, color: '#94a3b8' }}>{filtered.length} records</span>
+              </div>
+
+              {/* TABLE */}
+              <div style={{ background: '#fff', borderRadius: 14, border: '0.5px solid #e2e6f0', overflow: 'hidden' }}>
+                <div className="axion-table-scroll">
+                <table style={{ width: '100%', borderCollapse: 'collapse' }} aria-label="Audit history records">
+                  <thead>
+                    <tr style={{ background: '#f8fafc' }}>
+                      {['#', 'Screen ID', 'Screenshot / XML', 'Score', 'Severity', 'Issues', 'Date', ''].map(h => (
+                        <th key={h || 'actions'} scope="col" style={{
+                          padding: '10px 16px', textAlign: 'left', fontSize: 11, fontWeight: 700,
+                          color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.6px',
+                        }}>
+                          {h}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((a, i) => (
+                      <tr key={a.recordId} style={{ borderTop: '0.5px solid #f0f2f8' }}>
+                        <td style={{ padding: '13px 16px', fontSize: 13, color: '#94a3b8' }}>{i + 1}</td>
+                        <td style={{ padding: '13px 16px', fontSize: 15, fontWeight: 700, color: '#0f1422' }}>{a.id}</td>
+                        <td style={{ padding: '13px 16px', fontSize: 12.5, color: '#475569', lineHeight: 1.6 }}>
+                          <span style={{ fontWeight: 600, color: '#0f1422' }}>{a.screenshotName || '—'}</span>
+                          <br />
+                          <span style={{ color: '#94a3b8' }}>{a.xmlName || a.violationsPath || '—'}</span>
+                        </td>
+                        <td style={{ padding: '13px 16px', fontSize: 16, fontWeight: 700, color: '#0f6e56' }}>
+                          {a.score ?? '—'}
+                        </td>
+                        <td style={{ padding: '13px 16px' }}>
+                          <div style={{ display: 'flex', gap: 10, fontSize: 12.5, fontWeight: 600, flexWrap: 'wrap' }}>
+                            {a.high > 0 && (
+                              <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#7A4000' }}>
+                                <span style={{ width: 7, height: 7, borderRadius: '50%', background: SEV_DOT.high }} aria-hidden="true" />
+                                {a.high} high
+                              </span>
+                            )}
+                            {a.med > 0 && (
+                              <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#475569' }}>
+                                <span style={{ width: 7, height: 7, borderRadius: '50%', background: SEV_DOT.med }} aria-hidden="true" />
+                                {a.med} med
+                              </span>
+                            )}
+                            {a.low > 0 && (
+                              <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#94a3b8' }}>
+                                <span style={{ width: 7, height: 7, borderRadius: '50%', background: SEV_DOT.low }} aria-hidden="true" />
+                                {a.low} low
+                              </span>
+                            )}
+                            {a.total === 0 && <span style={{ color: '#94a3b8' }}>none</span>}
+                          </div>
+                        </td>
+                        <td style={{ padding: '13px 16px', fontSize: 14, fontWeight: 600, color: '#0f1422' }}>{a.total} issues</td>
+                        <td style={{ padding: '13px 16px', fontSize: 13, color: '#5a6a8a' }}>{a.date}</td>
+                        <td style={{ padding: '13px 16px', textAlign: 'right' }}>
+                          <button
+                            onClick={() => navigate('/report', { state: { recordId: a.recordId } })}
+                            aria-label={`View report for ${a.id}`}
+                            style={{
+                              background: '#1a2240', border: 'none', borderRadius: 6, padding: '6px 16px',
+                              fontSize: 12, color: '#fff', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
+                            }}
+                          >
+                            View
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {filtered.length === 0 && (
+                      <tr>
+                        <td colSpan={8} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8', fontSize: 14 }}>
+                          {records.length === 0
+                            ? 'No audits yet — log in, run an upload, and records appear here with screenshot/XML names and scores.'
+                            : searchQuery.trim()
+                              ? `No audits match "${searchQuery}".`
+                              : 'No audits match this filter.'}
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         {/* BOTTOM BAR */}

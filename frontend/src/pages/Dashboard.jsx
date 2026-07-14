@@ -183,7 +183,7 @@ function AuditPopup({ auditId, onClose, onRefreshed }) {
       justifyContent: 'center', zIndex: 1000, animation: 'fadeIn 0.2s ease', padding: '20px',
     }}>
       <div style={{
-        background: '#fff', borderRadius: 18, width: '100%', maxWidth: 460,
+        background: '#fff', borderRadius: 18, width: '100%', maxWidth: 760,
         overflow: 'hidden', boxShadow: '0 24px 64px rgba(0,0,0,0.22)',
         animation: 'pulseIn 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards',
       }}>
@@ -219,7 +219,7 @@ function AuditPopup({ auditId, onClose, onRefreshed }) {
           <p style={{ fontSize: 13, color: '#0f1422', fontWeight: 700, letterSpacing: '0.8px', margin: '0 0 14px', textTransform: 'uppercase' }}>
             Audit steps
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div className="axion-audit-steps" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             {AUDIT_STEPS.map((s, i) => {
               const isComplete = completedSteps.includes(i)
               const isActive = activeStep === i && !isComplete && !done
@@ -545,6 +545,9 @@ export default function Dashboard() {
           }
         }
         @media (max-width: 640px) {
+          .axion-audit-steps {
+            grid-template-columns: 1fr;
+          }
           .axion-topbar {
             flex-direction: column;
             align-items: flex-start;

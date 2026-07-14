@@ -6,11 +6,14 @@ import PasswordField from '../../components/ui/PasswordField';
 import Button from '../../components/ui/Button';
 import GoogleButton from '../../components/ui/GoogleButton';
 import FooterLink from '../../components/ui/FooterLink';
+import { apiPost } from '../../utils/api';
+import { setToken } from '../../utils/auth';
 
 export default function SignUp() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (field) => (e) =>
     setForm((f) => ({ ...f, [field]: e.target.value }));
@@ -33,9 +36,23 @@ export default function SignUp() {
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) navigate('/dashboard');
+    if (!validate()) return;
+    setSubmitting(true);
+    try {
+      const data = await apiPost('/auth/register', { email: form.email, password: form.password });
+      setToken(data.access_token, data.user_id, data.email);
+      navigate('/upload');
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, email: err.message }));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleGoogleClick = () => {
+    setErrors((prev) => ({ ...prev, password: 'Google auth not yet implemented.' }));
   };
 
   return (
@@ -76,7 +93,7 @@ export default function SignUp() {
           hint="Must be at least 8 characters."
           error={errors.password}
         />
-        <Button type="submit">Create account</Button>
+        <Button type="submit" disabled={submitting}>Create account</Button>
       </form>
 
       <div className="flex items-center gap-3 my-6" role="presentation">
@@ -85,7 +102,7 @@ export default function SignUp() {
         <div className="h-px flex-1 bg-[var(--color-border)]" />
       </div>
 
-      <GoogleButton onClick={() => navigate('/dashboard')} />
+      <GoogleButton onClick={handleGoogleClick} />
 
       <FooterLink text="Already have an account?" linkText="Log in" to="/login" />
     </AuthLayout>

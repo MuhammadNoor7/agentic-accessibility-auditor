@@ -24,6 +24,7 @@
 | **2.0** | 2026 | Ayesha + Salar | Unified SRS; Muhammad Noor reviewed and merged for SDS handoff |
 | **2.1** | 2026-07-13 | Noor | Figma screenshots restored from formatted DOCX into `docs/assets/figma/`; team ownership alignment |
 | **2.2** | 2026-07-14 | Noor | `POST /api/v1/audit` requires paired screenshot + XML; pair validation aligned with Axion Upload |
+| **2.3** | 2026-07-15 | Noor | Week 6 status: JWT auth + Records API implemented on `noor`; FR-AUTH/FR-REC/FR-UI.40–45 marked Done; eval sheet started |
 
 > **Note on UI specifications:** Screen layouts, branding, and interaction flows in Section 3.1 and **Appendix F** are derived from **Ayesha Naveed's Figma designs** shared in `#tem-all-dynamo` Slack. Reference screenshots are embedded in Appendix F (`docs/assets/figma/`). Screens covered: Sign Up, Log In, Forgot Password, OTP Verify, Reset Password, Upload (all states), Audit Complete modal, Dashboard, Issue Detail drawer, Audit Report, Generate Report modal, and **Records (Reports)** page.
 
@@ -989,11 +990,11 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 | FR-UI.10–17 | Upload + modals | Must | §3.1 | Ayesha | **Done** (wired to `POST /audit`) |
 | FR-UI.20–27 | Dashboard + drawer | Must | §3.1 | Ayesha | **Done** (wired to `GET …/report`) |
 | FR-UI.30–35 | Report screen + modal + PDF | Must | §3.1 | Ayesha | **Done** (report view + `GET …/report/download`) |
-| FR-UI.40–45 | Records page | Must | §3.1 | Ayesha | Planned |
-| FR-AUTH.1–5 | Authentication | Must | §4.9 | Ayesha / Salar | Planned |
-| FR-REC.1–4 | Records storage | Must | §4.9 | Salar / Ayesha | Planned |
-| FR-DK.1–3 | Docker Compose | Must | §4.7 | Salar | Partial |
-| FR-EV.1–6 | Evaluation | Must | §4.8 | Noor | Planned |
+| FR-UI.40–45 | Records page | Must | §3.1 | Ayesha / Salar | **Done** (live `GET /records`) |
+| FR-AUTH.1–5 | Authentication | Must | §4.9 | Ayesha / Salar | **Done** (JWT register/login on `noor`; OTP stretch) |
+| FR-REC.1–4 | Records storage | Must | §4.9 | Salar / Ayesha | **Done** (flat JSON store + report reopen) |
+| FR-DK.1–3 | Docker Compose | Must | §4.7 | Salar | **Done** (synced to `noor`) |
+| FR-EV.1–6 | Evaluation | Must | §4.8 | Noor | **Partial** (40-screen stratified-random sheet; manual fill ongoing) |
 | FR-CV.1–3 | CV/CNN/R09 | Stretch | §4.4 | Noor | Stretch |
 | FR-AAA-01 … 40 | Legacy IDs | — | Mapped above | — | — |
 

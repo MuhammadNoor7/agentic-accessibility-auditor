@@ -31,19 +31,19 @@ This document gathers what has actually been built, run, and produced so far. It
 
 > **Note:** Baseline below is as of **1 July 2026**. For current status after team pushes, see **§15 Team weekly updates**.
 
-| Area | Result (14 Jul on `noor`) |
+| Area | Result (15 Jul on `noor`) |
 |------|---------------------------|
 | Parser (Stage 1) | **Complete** — hybrid XML parser; MASC `<wrapper>` + bounds fixes; visibility field; R13–R20 extended fields |
-| Rule engine (Stage 2) | **R01–R30 implemented** — 57 XML pass/fail fixtures; **120 pytest** |
+| Rule engine (Stage 2) | **R01–R30 implemented** — 57 XML pass/fail fixtures; **120+ pytest** |
 | Agent layer (Stage 3) | **Wired** — `src/explainer.py` + `src/agent.py` (`build_audit_report`); LLM or template fallback; API-wired |
 | Report generator (Stage 4) | **Done** — `src/report.py` (Jinja2 HTML + PIL + Playwright PDF); `GET …/report/download` |
-| Axion React UI | **Partial** — Upload/Dashboard/Report wired to live API; **upload pair validation fixed** (Ayesha); Records still mock (Week 6) |
-| FastAPI audit API | **Partial** — `POST /audit` requires screenshot + XML + pair check; violations + report + **download**; no auth/records persistence |
-| Auth + Records | Specified in SRS v2.0; not implemented in code |
-| Docker | Deferred on `noor` (removed); Salar owns Docker on `salar` |
-| Documentation | SRS v2.0 (Ayesha+Salar), **SDS v2.6** (Noor), progress report **v1.10** |
+| Axion React UI | **Partial → near-complete** — Upload/Dashboard/Report wired; Records + Login/SignUp on live auth/records API (Salar + Ayesha synced) |
+| FastAPI audit API | **Done** for Week 5 scope — paired `POST /audit`, violations, report, download |
+| Auth + Records | **Done on `noor`** — JWT (`/auth/*`) + per-user `/records` (Salar `198936146`); score/filename fields (Noor) |
+| Docker | **Synced** — `backend/Dockerfile` + root `docker-compose.yml` from Salar |
+| Documentation | SRS **v2.3**, SDS **v2.7**, progress report **v1.11** |
 
-**Bottom line (14 Jul):** Upload validation handoff complete — frontend (Ayesha `052a976`) + backend pair enforcement (Noor). Full pipeline: screenshot + XML → R01–R30 → `report.json` → downloadable HTML/PDF. Next: Records + auth (Week 6).
+**Bottom line (15 Jul):** Week 6 sync on `noor` (`03ffa505a`+): Salar JWT/records + Ayesha prompt/Dashboard + Noor eval sheet (40 stratified-random screens) + Week 6 validation logs. Next: ≥25 manual eval rows; Friday demo; training stretch on MASC splits.
 
 ---
 
@@ -60,8 +60,8 @@ This document gathers what has actually been built, run, and produced so far. It
 | **Rules** → `violations.json` | **Salar + Noor + Ayesha** (reviewed by all) | `src/rules.py` R01–R30; 57 XML fixtures; R11–R12 sign-off |
 | **Agent** → `report.json` | Noor | `src/agent.py`, `src/explainer.py`, score formula |
 | **Report template** (HTML/PDF) | Noor | `src/report.py`, `src/templates/audit_report.html.j2` |
-| **Backend / FastAPI** | Noor | `backend/routers/audit.py`, `backend/main.py` |
-| **Frontend (Axion)** | Ayesha | `frontend/`; API wiring Upload/Dashboard/Report |
+| **Backend / FastAPI** | Noor (audit) + **Salar (auth/records)** | `backend/routers/audit.py`; `auth.py`, `auth_router.py`, `records_router.py` |
+| **Frontend (Axion)** | Ayesha (+ Salar auth wiring) | `frontend/`; API wiring Upload/Dashboard/Report/Records/Login |
 | **JSON structure + schema docs** | Noor | `docs/json_schemas.md`, `docs/schemas/auditor_schema.json`, `src/schema_documents.py` |
 | **SRS v2.0** | Ayesha + Salar | `srs/` — Noor reviewed and merged |
 | **SDS v2.2** | Noor | `sds/` |
@@ -438,18 +438,45 @@ Config: `data/data-masc/splits/split_summary.json`
 
 ---
 
-## 14. Recommended next steps (updated 12 July 2026)
+## 14. Recommended next steps (updated 15 July 2026)
 
-1. **Salar:** Auth backend (JWT) + records persistence API (Week 6)
-2. **Ayesha:** Wire Records page to list endpoint once backend exists; auth screens when auth router lands
-3. **Noor:** Rico holdout batch parse + evaluation sheet; Docker polish
-4. **All:** Demo — XML upload → API → dashboard → downloadable HTML/PDF report
+1. **Noor:** Fill ≥25 manual rows on `docs/week6/evaluation_sheet_40_screens.csv` (FP / missed notes)
+2. **All:** Friday demo — login → upload screenshot+XML → dashboard → report HTML/PDF → Records list
+3. **Noor (stretch):** Map guidelines for CV training on MASC **train** → tune on **val** → test on **test**; never train on Rico holdout
+4. **Ayesha:** Continue prompt experiments; polish auth/records UX if needed
+5. **Salar:** Optional OTP/forgot-password backend stretch; keep JWT secret configured for demos
 
 ---
 
 ## 15. Team weekly updates
 
 > **Instructions:** Each intern adds a dated entry after pushing work. Newest week at the top. Keep entries factual — file names, test counts, branch commits.
+
+### Week 6 — Noor (`noor` branch — Salar + Ayesha sync + eval, 15 Jul 2026)
+
+**Pushed by:** Muhammad Noor (integration) — sources: Salar `198936146`, Ayesha `3d4fa82eb`  
+**Date:** 15 July 2026
+
+**Completed:**
+- **Synced Salar JWT + records** into `_noor_push` / `noor` — `backend/auth.py`, `auth_router.py`, `records_router.py`, `test_auth.py`, Docker/compose, Login/SignUp, `frontend/src/utils/auth.js`
+- **Synced Ayesha** — `docs/agent_prompt_experiments.md` (larger Groq sample); `Dashboard.jsx` re-run popup layout
+- **Noor UI polish** — Report score ring (`accessibility_score`); Records Screenshot/XML + Score columns; Upload saves record when logged in
+- **Eval sheet** — `docs/week6/evaluation_sheet_40_screens.csv` — **stratified random** 4×10 MASC categories (seed `20260715`); R26–R30 design DOCX
+- **`.gitignore`** — synced from Salar (`data/` + `outputs/` + validation/samples exceptions)
+- **Validation** — `scripts/noor_week6_validate.py` → `outputs/validation_logs/noor_week6_summary.md` + `noor_week6_validation_log.txt`
+  - auth tests: **12 passed**
+  - audit tests: **8 passed, 1 skipped** (PDF skip if Chromium missing)
+  - R26–R30: **8 passed**
+  - Auth/Records API smoke: **PASS**
+
+**Pending:**
+- ≥25 manual eval verdicts on the CSV
+- Rico holdout batch evaluation (Week 8)
+- Progress manual fill + Friday demo rehearsal
+
+**Blockers:** None on sync scope
+
+---
 
 ### Upload validation fix — Ayesha + Noor (`ayesha` `052a976` → merged on `noor`, 14 Jul 2026)
 
@@ -647,6 +674,7 @@ Blockers:None
 | **1.8** | **12 Jul 2026** | **Noor** | Team artifact ownership table (§2.1); credit map: backend/schemas/SDS (Noor), rules (Salar), frontend/Rico/SRS (Ayesha) |
 | **1.9** | **13 Jul 2026** | **Noor** | Rules credit → Salar + Noor + Ayesha (reviewed by all); Word export → `Supplementary_Progress_Report_v1.0.docx`; SRS/SDS DOCX generated from markdown |
 | **1.10** | **14 Jul 2026** | **Noor** | Upload validation handoff merged (Ayesha frontend + Noor backend); SRS/SDS API contract updated |
+| **1.11** | **15 Jul 2026** | **Noor** | Week 6: Salar auth/records + Ayesha prompt/Dashboard synced; random 40-screen eval sheet; Week 6 validation logs; `.gitignore` from Salar |
 
 ---
 

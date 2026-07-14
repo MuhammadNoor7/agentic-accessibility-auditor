@@ -28,12 +28,16 @@ Thumbs.db
 .idea/
 
 # Generic runtime uploads / outputs (not for Git)
+# Note: do not use a bare `data/` or `outputs/` rule — it blocks the
+# !exceptions below (validation_logs + samples must remain trackable).
 data/parsed/
 data/xml/
 data/screenshots/
 outputs/*
 !outputs/validation_logs/
 !outputs/validation_logs/**
+outputs/validation_logs/_week6_tmp/
+outputs/validation_logs/_week6_tmp/**
 !outputs/violations/
 outputs/violations/*
 !outputs/violations/samples/

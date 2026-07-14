@@ -5,7 +5,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Document version** | 2.2 |
+| **Document version** | 2.7 |
 | **Status** | Implementation reference |
 | **Prepared by** | Muhammad Noor (Lead — primary author); Salar + Ayesha (SRS inputs, parser/UI design) |
 | **Institution** | FAST-NUCES |
@@ -26,6 +26,7 @@
 | **2.4** | 2026-07-13 | Noor | Rules ownership → Salar + Noor + Ayesha (reviewed by all) |
 | **2.5** | 2026-07-13 | Noor | Figma screenshots restored from formatted DOCX into `docs/assets/figma/`; DOCX export embeds images |
 | **2.6** | 2026-07-14 | Noor | `POST /audit` requires `screenshot` + `xml`; server-side pair validation; tests updated |
+| **2.7** | 2026-07-15 | Noor | Week 6: JWT auth + records routers synced from Salar; Records UI live; eval sheet (40 stratified-random); validation logs; `.gitignore` from Salar |
 
 ---
 
@@ -97,13 +98,15 @@ This document provides:
 | Hybrid XML parser | `src/parser.py` | Salar / Noor | **Done** (R13–R20 fields + visibility) |
 | Schema helpers | `src/schema_documents.py` | Noor | **Done** (JSON envelope builders) |
 | JSON Schema | `docs/schemas/auditor_schema.json`, `docs/json_schemas.md` | Noor | **Done** |
-| Validation scripts | `scripts/validate_output.py`, `scripts/noor_week3_validate.py`, `scripts/noor_week4_validate.py`, `scripts/noor_week5_validate.py`, `scripts/masc_parse_signoff.py` | Noor / Salar | **Done** |
-| FastAPI audit API | `backend/routers/audit.py` | Noor | **Partial** (violations + report + download; no auth/records) |
+| Validation scripts | `scripts/validate_output.py`, `scripts/noor_week3_validate.py`, `scripts/noor_week4_validate.py`, `scripts/noor_week5_validate.py`, `scripts/noor_week6_validate.py`, `scripts/masc_parse_signoff.py` | Noor / Salar | **Done** |
+| FastAPI audit API | `backend/routers/audit.py` | Noor | **Done** (paired upload + violations + report + download) |
+| Auth (JWT) | `backend/auth.py`, `backend/routers/auth_router.py` | Salar | **Done** (synced to `noor` Week 6) |
+| Records API | `backend/routers/records_router.py` | Salar / Noor | **Done** (list/create/get/delete + score/filename fields) |
 | Rule engine | `src/rules.py` | Salar + Noor + Ayesha | **Done** (R01–R30; reviewed by all) |
 | Agent layer | `src/agent.py`, `src/explainer.py`, `src/llm_providers.py` | Noor | **Done** (API-wired; template + live LLM) |
 | Report generator | `src/report.py` | Noor | **Done** (Jinja2 HTML + PIL + Playwright PDF) |
-| Axion React UI | `frontend/` | Ayesha | **Partial** (Upload/Dashboard/Report wired; Records mock) |
-| pytest suite | `tests/` | Salar / Noor | **Done** (120 tests) |
+| Axion React UI | `frontend/` | Ayesha / Salar | **Done** for MVP screens (Upload/Dashboard/Report/Records/Login; OTP stretch) |
+| pytest suite | `tests/`, `backend/tests/` | Salar / Noor | **Done** (120+ tests; auth suite added) |
 
 ---
 
@@ -507,10 +510,13 @@ Auth: `Authorization: Bearer <JWT>` (except auth endpoints)
 
 | Method | Path | Description |
 |--------|------|-------------|
+| POST | `/records` | Create record for current user (JWT) — optional `accessibility_score`, `screenshot_name`, `xml_name` |
 | GET | `/records` | List current user's audits |
 | GET | `/records/{record_id}` | Record detail + artefact paths |
-| GET | `/records/{record_id}/download?format=html\|pdf` | Re-download report |
-| DELETE | `/records/{record_id}` | Delete record (Stretch) |
+| GET | `/records/{record_id}/report` | Re-open persisted `outputs/reports/{screen_id}_report.json` |
+| DELETE | `/records/{record_id}` | Delete record |
+
+Auth endpoints (implemented Week 6 on `noor`): `POST /auth/register`, `POST /auth/login`, `GET /auth/me` (OTP/forgot-password remain stretch).
 
 ### 5.4 Example: POST /audit
 
@@ -547,17 +553,22 @@ Auth: `Authorization: Bearer <JWT>` (except auth endpoints)
 
 ```json
 {
-  "user_id": "u_001",
   "records": [
     {
-      "record_id": "rec_xyz789",
-      "screen_id": "screen_014",
-      "score": 78,
-      "total_issues": 7,
-      "severity_summary": {"critical": 4, "high": 3, "medium": 0, "low": 0},
-      "created_at": "2026-07-01T12:00:00Z"
+      "record_id": "8d3b7853-2aab-4f1a-8fc3-8a7cc9e20baa",
+      "user_id": "…",
+      "screen_id": "week6_smoke",
+      "created_at": "2026-07-15T00:00:00+00:00",
+      "total_violations": 2,
+      "violations_by_severity": {"High": 1, "Medium": 1, "Low": 0},
+      "components_path": "",
+      "violations_path": "outputs/violations/week6_smoke_violations.json",
+      "accessibility_score": 85,
+      "screenshot_name": "week6_smoke.png",
+      "xml_name": "week6_smoke.xml"
     }
-  ]
+  ],
+  "total": 1
 }
 ```
 
@@ -1065,7 +1076,9 @@ components:
 | `src/guidelines.py` | G01–G30 + R→G mapping |
 | `src/report.py` | HTML/PDF generator (Jinja2 + Playwright) |
 | `backend/main.py` | FastAPI entry |
-| `backend/routers/audit.py` | Violations + report + download API (**Partial** — no auth/records persistence) |
+| `backend/routers/audit.py` | Violations + report + download API (**Done**) |
+| `backend/auth.py` / `routers/auth_router.py` | JWT register/login/me (**Done** — Salar, synced Week 6) |
+| `backend/routers/records_router.py` | Per-user records CRUD + report reopen (**Done**) |
 | `backend/routers/` | Auth, records (planned) |
 | `scripts/noor_week3_validate.py` | Week 3 validation pipeline |
 | `scripts/noor_week4_validate.py` | Week 4 agent + report API validation |
@@ -1077,7 +1090,7 @@ components:
 | `tests/test_audit.py` | Audit API tests (violations + report + download) |
 | `tests/test_report.py` | Report HTML/PDF export tests |
 | `tests/test_explainer.py` | Explainer anti-hallucination tests |
-| `frontend/src/` | Axion React app (**Partial** — Upload/Dashboard/Report wired) |
+| `frontend/src/` | Axion React app (**Done** for Upload/Dashboard/Report/Records/Login; OTP flows stretch) |
 | `docs/schemas/auditor_schema.json` | Normative JSON Schema |
 | `docs/json_schemas.md` | Schema documentation |
 | `outputs/reports/` | Agent-enriched `*_report.json` + generated `.html` / `.pdf` |

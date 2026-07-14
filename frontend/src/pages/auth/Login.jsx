@@ -6,11 +6,14 @@ import PasswordField from '../../components/ui/PasswordField';
 import Button from '../../components/ui/Button';
 import GoogleButton from '../../components/ui/GoogleButton';
 import FooterLink from '../../components/ui/FooterLink';
+import { apiPost } from '../../utils/api';
+import { setToken } from '../../utils/auth';
 
 export default function Login() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (field) => (e) =>
     setForm((f) => ({ ...f, [field]: e.target.value }));
@@ -32,9 +35,23 @@ export default function Login() {
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) navigate('/upload');
+    if (!validate()) return;
+    setSubmitting(true);
+    try {
+      const data = await apiPost('/auth/login', { email: form.email, password: form.password });
+      setToken(data.access_token, data.user_id, data.email);
+      navigate('/upload');
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, password: err.message }));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleGoogleClick = () => {
+    setErrors((prev) => ({ ...prev, password: 'Google auth not yet implemented.' }));
   };
 
   return (
@@ -69,7 +86,7 @@ export default function Login() {
             Forgot password?
           </Link>
         </div>
-        <Button type="submit">Log in</Button>
+        <Button type="submit" disabled={submitting}>Log in</Button>
       </form>
 
       <div className="flex items-center gap-3 my-6" role="presentation">
@@ -78,7 +95,7 @@ export default function Login() {
         <div className="h-px flex-1 bg-[var(--color-border)]" />
       </div>
 
-      <GoogleButton onClick={() => navigate('/upload')} />
+      <GoogleButton onClick={handleGoogleClick} />
 
       <FooterLink text="Don't have an account?" linkText="Sign up" to="/signup" />
     </AuthLayout>

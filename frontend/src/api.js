@@ -1,5 +1,7 @@
 // Central place for all backend API calls.
 // Base URL of your local FastAPI server (started with `uvicorn backend.main:app`).
+import { getAuthHeaders } from './utils/auth';
+
 const API_BASE = 'http://127.0.0.1:8000';
 
 // Step 1: upload screenshot + XML pair, kicks off parse -> rules -> agent explain.
@@ -33,6 +35,28 @@ export async function getAuditStatus(auditId) {
 export async function getAuditReport(auditId) {
   const res = await fetch(`${API_BASE}/api/v1/audit/${auditId}/report`);
   if (!res.ok) throw new Error(`Report fetch failed (${res.status})`);
+  return res.json();
+}
+
+// Raw violations doc for a just-completed audit — used to build the summary
+// (screen_id, total_violations, per-severity counts) persisted via POST /records.
+export async function getAuditViolations(auditId) {
+  const res = await fetch(`${API_BASE}/api/v1/audit/${auditId}/violations`);
+  if (!res.ok) throw new Error(`Violations fetch failed (${res.status})`);
+  return res.json();
+}
+
+// Re-open the full report for a past record from Audit History (Records page).
+// Unlike getAuditReport, this reads the persisted report off disk by record_id,
+// so it works even after the backend has restarted since the audit ran.
+export async function getRecordReport(recordId) {
+  const res = await fetch(`${API_BASE}/records/${recordId}/report`, {
+    headers: { ...getAuthHeaders() },
+  });
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.detail || `Report fetch failed (${res.status})`);
+  }
   return res.json();
 }
 

@@ -8,6 +8,8 @@ services:
     volumes:
       - .:/app
     working_dir: /app/backend
+    environment:
+      - JWT_SECRET=dev-secret-change-in-prod
     networks:
       - auditor-network
 

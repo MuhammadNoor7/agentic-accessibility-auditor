@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { getAuditFiles, getAuditId } from '../state/auditFiles'
-import { getAuditReport, downloadAuditReport } from '../api'
+import { getAuditReport, getRecordReport, downloadAuditReport } from '../api'
 import Sidebar from '../components/Sidebar'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -387,6 +387,11 @@ export default function Report() {
   // or the shared store (getAuditId) if the page was refreshed / reached another way.
   const auditId = location.state?.auditId || getAuditId()
 
+  // recordId arrives when opened from Audit History (Records page) — it loads
+  // straight from the persisted report on disk instead of the in-memory audit job,
+  // so it works for past records even after the backend has restarted.
+  const recordId = location.state?.recordId || null
+
   const [report, setReport] = useState(null)
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(null)
@@ -398,14 +403,15 @@ export default function Report() {
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
-    if (!auditId) {
+    if (!recordId && !auditId) {
       setLoadError('No audit found. Please run a new audit from the Upload page.')
       setLoading(false)
       return
     }
     let cancelled = false
     setLoading(true)
-    getAuditReport(auditId)
+    const fetchReport = recordId ? getRecordReport(recordId) : getAuditReport(auditId)
+    fetchReport
       .then(data => {
         if (!cancelled) { setReport(data); setLoading(false) }
       })
@@ -413,7 +419,7 @@ export default function Report() {
         if (!cancelled) { setLoadError(err.message || 'Could not load report.'); setLoading(false) }
       })
     return () => { cancelled = true }
-  }, [auditId])
+  }, [auditId, recordId])
 
   const violations = report?.violations || []
   const totalIssues = violations.length
@@ -438,6 +444,10 @@ export default function Report() {
   })
 
   function handleDownloadClick() {
+    if (!auditId) {
+      setDownloadError('Download isn\'t available for past records opened from Audit History — run a new audit to download its report.')
+      return
+    }
     setShowConfirm(true)
   }
 

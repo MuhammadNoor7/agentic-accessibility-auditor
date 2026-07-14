@@ -2,7 +2,9 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import { setAuditFiles, setAuditId } from '../state/auditFiles';
-import { createAudit } from '../api';
+import { createAudit, getAuditViolations } from '../api';
+import { apiPost } from '../utils/api';
+import { isLoggedIn } from '../utils/auth';
 
 // ── Responsive rules (inline styles can't do @media, so inject CSS) ───────────
 const injectResponsiveStyles = (() => {
@@ -532,6 +534,26 @@ function AuditPopup({ screenshotFile, xmlFile, onViewDashboard }) {
         }
         setAuditIdState(result.audit_id);
         setAuditId(result.audit_id); // persist so Dashboard/Report can read it later
+
+        // Best-effort: save this audit to the user's Records history. Skipped
+        // entirely for guests (no JWT) and never blocks the audit flow itself.
+        if (isLoggedIn()) {
+          getAuditViolations(result.audit_id)
+            .then(violationsDoc => {
+              const bySeverity = { High: 0, Medium: 0, Low: 0 };
+              (violationsDoc.violations || []).forEach(v => {
+                bySeverity[v.severity] = (bySeverity[v.severity] || 0) + 1;
+              });
+              return apiPost('/records', {
+                screen_id: violationsDoc.screen_id,
+                total_violations: violationsDoc.total_violations,
+                violations_by_severity: bySeverity,
+                components_path: '',
+                violations_path: `outputs/violations/${violationsDoc.screen_id}_violations.json`,
+              }, true);
+            })
+            .catch(() => {});
+        }
       })
       .catch(err => {
         if (!cancelled) setError(err.message || 'Could not reach the audit server.');

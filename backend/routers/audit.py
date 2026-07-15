@@ -5,7 +5,6 @@ from __future__ import annotations
 import json
 import re
 import sys
-import tempfile
 import uuid
 from pathlib import Path
 
@@ -26,10 +25,35 @@ router = APIRouter(prefix="/api/v1/audit", tags=["audit"])
 
 VIOLATIONS_OUTPUT_ROOT = ROOT / "outputs" / "violations"
 REPORTS_OUTPUT_ROOT = ROOT / "outputs" / "reports"
+RUNS_OUTPUT_ROOT = ROOT / "outputs" / "runs"
 ALLOWED_SCREENSHOT_SUFFIXES = {".png", ".jpg", ".jpeg"}
 
 # In-memory job store for MVP stub (Week 5+: persist to outputs/records/)
 _AUDIT_JOBS: dict[str, dict] = {}
+
+
+def _path_for_report(path: Path) -> str:
+    """Store repo-relative paths so HTML/PDF export can resolve files later."""
+    resolved = path.resolve()
+    try:
+        return resolved.relative_to(ROOT).as_posix()
+    except ValueError:
+        return resolved.as_posix()
+
+
+async def _persist_upload_pair(
+    audit_id: str,
+    screenshot: UploadFile,
+    xml: UploadFile,
+) -> tuple[Path, Path]:
+    """Save screenshot + XML under outputs/runs/{audit_id}/input/ (survives download)."""
+    run_dir = RUNS_OUTPUT_ROOT / audit_id / "input"
+    run_dir.mkdir(parents=True, exist_ok=True)
+    xml_path = run_dir / Path(xml.filename).name
+    screenshot_path = run_dir / Path(screenshot.filename).name
+    xml_path.write_bytes(await xml.read())
+    screenshot_path.write_bytes(await screenshot.read())
+    return screenshot_path, xml_path
 
 
 def _file_stem(filename: str) -> str:
@@ -79,7 +103,13 @@ def _write_report(report_doc: dict) -> None:
     output_file.write_text(json.dumps(report_doc, indent=2), encoding="utf-8")
 
 
-def _run_pipeline(audit_id: str, xml_path: Path, *, use_llm: bool | None) -> None:
+def _run_pipeline(
+    audit_id: str,
+    xml_path: Path,
+    screenshot_path: Path,
+    *,
+    use_llm: bool | None,
+) -> None:
     """Synchronous pipeline: parsing → checking → explaining → complete."""
     try:
         _set_status(audit_id, "parsing")
@@ -88,8 +118,13 @@ def _run_pipeline(audit_id: str, xml_path: Path, *, use_llm: bool | None) -> Non
             xml_root_dir=xml_path.parent,
             dataset_root=None,
         )
+        # Point at durable upload copies so report HTML/PDF can embed them.
+        components_doc["image_path"] = _path_for_report(screenshot_path)
+        components_doc["xml_path"] = _path_for_report(xml_path)
         job = _AUDIT_JOBS[audit_id]
         job["components"] = components_doc
+        job["screenshot_path"] = components_doc["image_path"]
+        job["xml_path"] = components_doc["xml_path"]
 
         _set_status(audit_id, "checking")
         violations_doc = check_rules(components_doc)
@@ -98,6 +133,8 @@ def _run_pipeline(audit_id: str, xml_path: Path, *, use_llm: bool | None) -> Non
 
         _set_status(audit_id, "explaining")
         report_doc = build_audit_report(violations_doc, components_doc, use_llm=use_llm)
+        report_doc["image_path"] = components_doc["image_path"]
+        report_doc["xml_path"] = components_doc["xml_path"]
         job["report"] = report_doc
         _write_report(report_doc)
 
@@ -144,15 +181,11 @@ async def create_audit(
         "report": None,
         "use_llm": use_llm,
         "screenshot_filename": screenshot.filename,
+        "xml_filename": xml.filename,
     }
 
-    with tempfile.TemporaryDirectory() as tmp:
-        tmp_dir = Path(tmp)
-        xml_path = tmp_dir / Path(xml.filename).name
-        screenshot_path = tmp_dir / Path(screenshot.filename).name
-        xml_path.write_bytes(await xml.read())
-        screenshot_path.write_bytes(await screenshot.read())
-        _run_pipeline(audit_id, xml_path, use_llm=use_llm)
+    screenshot_path, xml_path = await _persist_upload_pair(audit_id, screenshot, xml)
+    _run_pipeline(audit_id, xml_path, screenshot_path, use_llm=use_llm)
 
     job = _AUDIT_JOBS[audit_id]
     if job["status"] == "error":

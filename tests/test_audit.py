@@ -115,12 +115,27 @@ def test_audit_report_download_html(client: TestClient) -> None:
     created = _post_audit(client, use_llm=False)
     audit_id = created.json()["audit_id"]
 
+    report = client.get(f"/api/v1/audit/{audit_id}/report")
+    assert report.status_code == 200
+    report_doc = report.json()
+    assert report_doc.get("image_path")
+    assert "outputs/runs/" in report_doc["image_path"].replace("\\", "/")
+    assert report_doc.get("xml_path")
+    assert Path(report_doc["image_path"]).is_file() or (
+        Path(__file__).resolve().parents[1] / report_doc["image_path"]
+    ).is_file()
+
     response = client.get(f"/api/v1/audit/{audit_id}/report/download?format=html")
     assert response.status_code == 200
     assert "text/html" in response.headers["content-type"]
     assert "attachment" in response.headers.get("content-disposition", "")
     assert "Accessibility audit report" in response.text
     assert "r01_missing_label_fail" in response.text
+    # Screenshot + XML must be embedded (not the empty placeholders).
+    assert "No screenshot available" not in response.text
+    assert "data:image" in response.text
+    assert "XML source not available" not in response.text
+    assert "<hierarchy" in response.text or "node" in response.text.lower()
 
 
 def test_audit_report_download_pdf(client: TestClient) -> None:

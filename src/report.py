@@ -107,9 +107,13 @@ def screenshot_data_uri(report_doc: dict, *, project_root: Path | None = None) -
     image_path = _resolve_existing_path(report_doc.get("image_path", ""), root)
     if image_path is None:
         return None
-    try:
-        if report_doc.get("violations"):
+    if report_doc.get("violations"):
+        try:
             return _annotate_screenshot(image_path, report_doc["violations"])
+        except Exception:
+            # Tiny / corrupt crops or missing PIL features — still embed the raw image.
+            pass
+    try:
         return _image_to_data_uri(image_path)
     except OSError:
         return None

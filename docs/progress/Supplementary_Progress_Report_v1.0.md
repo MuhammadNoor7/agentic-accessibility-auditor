@@ -2,7 +2,7 @@
 
 ## Agentic Accessibility Auditor (Axion)
 
-**Practical work completed — Weeks 1–5 (baseline 1 July 2026; updated 14 July 2026)**  
+**Practical work completed — Weeks 1–6 (baseline 1 July 2026; updated 16 July 2026)**  
 **Living document — see §15 for team updates; §12–§13 for literature + rule ownership**
 
 | Field | Value |
@@ -31,19 +31,19 @@ This document gathers what has actually been built, run, and produced so far. It
 
 > **Note:** Baseline below is as of **1 July 2026**. For current status after team pushes, see **§15 Team weekly updates**.
 
-| Area | Result (15 Jul on `noor`) |
+| Area | Result (16 Jul on `noor`) |
 |------|---------------------------|
 | Parser (Stage 1) | **Complete** — hybrid XML parser; MASC `<wrapper>` + bounds fixes; visibility field; R13–R20 extended fields |
-| Rule engine (Stage 2) | **R01–R30 implemented** — 57 XML pass/fail fixtures; **120+ pytest** |
+| Rule engine (Stage 2) | **R01–R30 implemented** — 57 XML pass/fail fixtures; **146 pytest collected** |
 | Agent layer (Stage 3) | **Wired** — `src/explainer.py` + `src/agent.py` (`build_audit_report`); LLM or template fallback; API-wired |
-| Report generator (Stage 4) | **Done** — `src/report.py` (Jinja2 HTML + PIL + Playwright PDF); `GET …/report/download` |
-| Axion React UI | **Partial → near-complete** — Upload/Dashboard/Report wired; Records + Login/SignUp on live auth/records API (Salar + Ayesha synced) |
-| FastAPI audit API | **Done** for Week 5 scope — paired `POST /audit`, violations, report, download |
-| Auth + Records | **Done on `noor`** — JWT (`/auth/*`) + per-user `/records` (Salar `198936146`); score/filename fields (Noor) |
-| Docker | **Synced** — `backend/Dockerfile` + root `docker-compose.yml` from Salar |
-| Documentation | SRS **v2.3**, SDS **v2.7**, progress report **v1.11** |
+| Report generator (Stage 4) | **Done** — `src/report.py` (Jinja2 HTML + PIL + Playwright PDF); screenshot/XML persisted for export; `GET …/report/download` |
+| Axion React UI | **Complete for Week 6 MVP** — Upload/Dashboard/Report/Records + Sign Up/Log In/Forgot/OTP/Reset + Google Sign-In + profile initials |
+| FastAPI audit API | **Done** — paired `POST /api/v1/audit`, violations, report, download |
+| Auth + Records | **Done on `noor`** — JWT + OTP/SMTP + Google OAuth + per-user `/records` (score/filename fields) |
+| Docker | **Synced** — compose services **backend + auditor** (frontend via local Vite) |
+| Documentation | SRS **v2.5**, SDS **v2.9**, progress report **v1.13**, plan updated 16 Jul |
 
-**Bottom line (15 Jul):** Week 6 sync on `noor` (`03ffa505a`+): Salar JWT/records + Ayesha prompt/Dashboard + Noor eval sheet (40 stratified-random screens) + Week 6 validation logs. Next: ≥25 manual eval rows; Friday demo; training stretch on MASC splits.
+**Bottom line (16 Jul):** Week 6 **complete** on `noor` (`995f6d31`): Salar JWT/records + Ayesha auth UI + Noor OTP/SMTP/Google OAuth, 40/40 eval sheet, HTML/PDF export fix, validation logs refreshed. Optional: Friday demo walkthrough; training stretch / Rico holdout in Weeks 7–8.
 
 ---
 
@@ -60,26 +60,26 @@ This document gathers what has actually been built, run, and produced so far. It
 | **Rules** → `violations.json` | **Salar + Noor + Ayesha** (reviewed by all) | `src/rules.py` R01–R30; 57 XML fixtures; R11–R12 sign-off |
 | **Agent** → `report.json` | Noor | `src/agent.py`, `src/explainer.py`, score formula |
 | **Report template** (HTML/PDF) | Noor | `src/report.py`, `src/templates/audit_report.html.j2` |
-| **Backend / FastAPI** | Noor (audit) + **Salar (auth/records)** | `backend/routers/audit.py`; `auth.py`, `auth_router.py`, `records_router.py` |
-| **Frontend (Axion)** | Ayesha (+ Salar auth wiring) | `frontend/`; API wiring Upload/Dashboard/Report/Records/Login |
+| **Backend / FastAPI** | Noor (audit) + Salar (auth/records base) + Noor (OTP/SMTP/OAuth) | `backend/routers/audit.py`; `auth.py`, `otp_store.py`, `email_service.py`, `auth_router.py`, `records_router.py` |
+| **Frontend (Axion)** | Ayesha (+ Salar/Noor auth wiring) | `frontend/`; Upload/Dashboard/Report/Records + full auth |
 | **JSON structure + schema docs** | Noor | `docs/json_schemas.md`, `docs/schemas/auditor_schema.json`, `src/schema_documents.py` |
-| **SRS v2.0** | Ayesha + Salar | `srs/` — Noor reviewed and merged |
-| **SDS v2.2** | Noor | `sds/` |
-| **Tests (pytest)** | Salar + Noor | `tests/` — 120 passed |
+| **SRS / SDS** | Ayesha+Salar (SRS) / Noor (SDS + Week 6 sync) | `srs/` · `sds/` |
+| **Tests (pytest)** | Salar + Noor | `tests/` + `backend/tests/` — **146 collected** (16 Jul) |
 
 ---
 
 ## 3. Pipeline status (actual vs planned)
 
-| Stage | Owner | Output artefact | Status (12 Jul) | Evidence |
+| Stage | Owner | Output artefact | Status (16 Jul) | Evidence |
 |-------|-------|-----------------|-----------------|----------|
-| 1 — Parser | Salar / Noor | `*_components.json` | **Done** (R13–R20 fields + visibility) | `data/data-masc/parsed/` (7,068 files, sign-off PASS) |
-| 2 — Rules | **Salar + Noor + Ayesha** (reviewed by all) | `violations.json` | **Done** R01–R30 | `src/rules.py`; 57 XML fixtures |
-| 3 — Agent | Noor | enriched `report.json` | **Done** (API-wired) | `src/agent.py` + `src/explainer.py`; `GET …/report` |
-| 4 — Report | Noor | HTML/PDF | **Done** | `src/report.py`; `GET …/report/download` |
-| UI — Axion | Ayesha | React dashboard | **Partial** | Upload/Dashboard/Report wired; Records mock |
-| API | Noor | FastAPI audit routes | **Partial** | violations + report + download; no auth/records |
-| Auth/Records | Ayesha / Salar | JWT + per-user history | Planned | SRS §4.9 only |
+| 1 — Parser | Salar / Noor | `*_components.json` | **Done** | `data/data-masc/parsed/` (7,068; sign-off PASS) |
+| 2 — Rules | Salar + Noor + Ayesha | `violations.json` | **Done** R01–R30 | `src/rules.py`; 57 XML fixtures |
+| 3 — Agent | Noor | enriched `report.json` | **Done** | `GET /api/v1/audit/{id}/report` |
+| 4 — Report | Noor | HTML/PDF | **Done** | download API; screenshot/XML persist + autoescape |
+| UI — Axion | Ayesha / Noor | React app | **Done (Week 6 MVP)** | Upload/Dashboard/Report/Records + full auth flows |
+| API — Audit | Noor | FastAPI | **Done** | `/api/v1/audit/*` |
+| Auth / Records | Salar + Noor | JWT + OTP/SMTP/OAuth + history | **Done** | `/auth/*`, `/records/*`; **146** pytest collected |
+| Week 6 eval | Noor | 40-screen sheet | **Done** | `docs/week6/` + validation logs |
 
 ---
 
@@ -285,7 +285,7 @@ Config: `data/data-masc/splits/split_summary.json`
 | `src/report.py`, `src/templates/` | HTML/PDF report export | Noor |
 | `backend/routers/audit.py` | FastAPI audit + download API | Noor |
 | `test_run.py` | CLI batch / single / `--fixtures` | Salar / Noor |
-| `tests/` | pytest suite (120 tests) | Salar / Noor |
+| `tests/` | pytest suite (**146** collected, 16 Jul) | Salar / Noor |
 | `app.py` | Streamlit dev UI | Salar |
 | `scripts/validate_output.py` | JSON schema validation | Noor / Salar |
 | `docker-compose.yml` | Backend + auditor services | Salar |
@@ -308,20 +308,20 @@ Config: `data/data-masc/splits/split_summary.json`
 
 ## 9. Per-person contribution summary (updated 12 Jul)
 
-### Salar — Parser, rules, MASC data, Docker, tests
+### Salar — Parser, rules, MASC data, Agent, Docker, tests, JWT/records
 
-**Done:** Hybrid parser (with Noor); **R01–R30 rules** (with Noor + Ayesha; reviewed by all); MASC integration + batch scripts; Docker Compose; `components.json` pipeline; pytest (with Noor)  
-**Pending:** Auth backend (Week 6); branch rename `azeem` → `salar`
+**Done:** Hybrid parser (with Noor); **R01–R30 rules** (with Noor + Ayesha; reviewed by all); MASC integration + batch scripts; Docker Compose; `components.json` pipeline; pytest (with Noor); **JWT auth + records API** (synced to `noor` Week 6)  
+**Pending:** Branch rename `azeem` → `salar` (if still open); rule FP tuning (Week 7)
 
-### Ayesha — Rico holdout, frontend, SRS, rules
+### Ayesha — Rico holdout, frontend, SRS, rules, 
 
-**Done:** **Rico holdout** build; Figma designs; React Axion UI; **SRS co-author**; frontend ↔ API wiring; **rules** (with Salar + Noor; R11–R12 sign-off); Groq prompt experiments (TBD-01)  
-**Pending:** Records page + auth screens (blocked on backend Week 6)
+**Done:** **Rico holdout** build; Figma designs; React Axion UI (incl. auth screens); **SRS co-author**; frontend ↔ API wiring; Records on live API; **rules** (with Salar + Noor; R11–R12 sign-off); Groq prompt experiments (TBD-01)  
+**Pending:** UI polish / prompt comparison notes (Week 7)
 
-### Noor (Lead) — Backend, schemas, SDS, agent, reports, rules, SRS review, tests, QA
+### Noor (Lead) — Parser, MASC data, Backend, Frontend Review, schemas, SDS, agent, reports, rules, SRS review, tests, QA, Week 6 auth stretch
 
-**Done:** **FastAPI backend**; **JSON schema contracts**; **SDS v2.2**; **SRS review**; agent + **report template** (JSON/HTML/PDF); parser extensions; **rules** (with Salar + Ayesha); violations fixtures + validation; `noor_week1–5` validation; supplementary report; coordination  
-**Pending:** Records + auth coordination (Week 6); Rico holdout evaluation
+**Done:** **FastAPI** audit API; **JSON schemas**; **SDS**; **SRS review**; agent + **report template** (JSON/HTML/PDF + export fix); parser extensions; **rules** (with Salar + Ayesha); Week 1–6 validation; **OTP + Gmail SMTP + Google OAuth**; any-domain signup emails; profile initials; **40/40** eval sheet + R26–R30 design; docs/plan alignment  
+**Pending:** Rico holdout evaluation (Week 8); Friday demo rehearsal
 
 ---
 
@@ -444,13 +444,42 @@ Config: `data/data-masc/splits/split_summary.json`
 2. **All:** Friday demo — login → upload screenshot+XML → dashboard → report HTML/PDF → Records list
 3. **Noor (stretch):** Map guidelines for CV training on MASC **train** → tune on **val** → test on **test**; never train on Rico holdout
 4. **Ayesha:** Continue prompt experiments; polish auth/records UX if needed
-5. **Salar:** Optional OTP/forgot-password backend stretch; keep JWT secret configured for demos
+5. **Salar:** Keep JWT secret configured for demos; continue rule FP tuning
+6. **Team:** Friday demo path — signup/login → upload pair → report → Records
 
 ---
 
 ## 15. Team weekly updates
 
 > **Instructions:** Each intern adds a dated entry after pushing work. Newest week at the top. Keep entries factual — file names, test counts, branch commits.
+
+### Week 6 close-out — Noor (`noor` / `995f6d31`, 16 Jul 2026)
+
+**Pushed by:** Muhammad Noor  
+**Date:** 16 July 2026
+
+**Completed (auth / mail / OAuth / eval / export):**
+- **Sign Up / Log In** — JWT register/login; password policy (letter+digit); optional `name`; **UserAvatar** initials
+- **Forgot → OTP → Reset** — `forgot-password`, `resend-otp`, `verify-otp`, `reset-password` wired end-to-end
+- **SMTP** — Gmail App Password via `.env` (`SMTP_HOST`, `SMTP_USER`, `SMTP_FROM`, `SMTP_PASSWORD`); real OTP emails verified; `AUTH_DEV_SHOW_OTP=0` when mail works
+- **Recipient domains** — any valid email (Yahoo, Outlook, university/education, …); sender remains Gmail
+- **Google OAuth** — GIS + `POST /auth/google`; `GOOGLE_CLIENT_ID` in `.env` / `.env.example`
+- **Other settings** — `JWT_SECRET`; `load_dotenv(override=True)`; frontend `VITE_API_BASE`
+- **Report export fix** — persist screenshot/XML for HTML/PDF; Jinja autoescape (`123fbde4`)
+- **Eval** — **40/40** assisted FP/miss notes on stratified sheet; `evaluation_sheet.md` / `.docx` + method note
+- **Docs** — SRS v2.4 · SDS v2.8 · `updated_plan.md` · this progress report
+- **Validation (16 Jul live):** auth **22 passed** · audit **9 passed** · R26–R30 **8 passed** · eval integrity **40/40**  
+  → `outputs/validation_logs/noor_week6_validation_log.txt` + `noor_week6_summary.md`
+
+**Pending:**
+- Friday demo rehearsal
+- Rico holdout batch (Week 8)
+
+**Blockers:** None
+
+**Secrets:** App Passwords / `JWT_SECRET` stay local (gitignored). Document env **names** only in `.env.example`.
+
+---
 
 ### Week 6 — Noor (`noor` branch — Salar + Ayesha sync + eval, 15 Jul 2026)
 
@@ -464,15 +493,15 @@ Config: `data/data-masc/splits/split_summary.json`
 - **Eval sheet** — `docs/week6/evaluation_sheet_40_screens.csv` — **stratified random** 4×10 MASC categories (seed `20260715`); R26–R30 design DOCX
 - **`.gitignore`** — synced from Salar (`data/` + `outputs/` + validation/samples exceptions)
 - **Validation** — `scripts/noor_week6_validate.py` → `outputs/validation_logs/noor_week6_summary.md` + `noor_week6_validation_log.txt`
-  - auth tests: **12 passed**
-  - audit tests: **8 passed, 1 skipped** (PDF skip if Chromium missing)
+  - auth tests: **12 passed** (expanded to **22** on 16 Jul — see close-out entry above)
+  - audit tests: **8 passed, 1 skipped** (PDF included on 16 Jul re-run)
   - R26–R30: **8 passed**
   - Auth/Records API smoke: **PASS**
 
-**Pending:**
-- ≥25 manual eval verdicts on the CSV
+**Pending (resolved 16 Jul):**
+- ~~≥25 manual eval verdicts on the CSV~~ → **40/40 done**
 - Rico holdout batch evaluation (Week 8)
-- Progress manual fill + Friday demo rehearsal
+- ~~OTP / SMTP stretch~~ → **Done**
 
 **Blockers:** None on sync scope
 
@@ -658,6 +687,110 @@ Blockers:None
 
 ---
 
+## 15A. Week 6 evidence pack (logs, tables, UI references)
+
+> Embedded for supervisor review. Machine log copy: `docs/progress/assets/logs/noor_week6_validation_log.txt`  
+> Canonical path: `outputs/validation_logs/noor_week6_validation_log.txt`
+
+### 15A.1 Validation result tables (16 Jul 2026)
+
+| Check | 15 Jul baseline | 16 Jul live | Status |
+|-------|----------------|------------|--------|
+| `pytest backend/tests/test_auth.py` | 12 passed | **22 passed** | PASS (+ OTP / reset / Google) |
+| `pytest tests/test_audit.py` | 8 passed, 1 skipped | **9 passed** | PASS (PDF included) |
+| R26–R30 rules | 8 passed | **8 passed** | PASS |
+| Eval sheet manual columns | blank | **40/40** | PASS |
+| Auth + Records smoke | PASS | (covered by auth suite) | PASS |
+| Pytest collection (repo) | — | **146 tests** | — |
+
+#### Eval sheet verdict mix (40/40)
+
+| Verdict | Count |
+|---------|------:|
+| mostly_agree | 32 |
+| agree_clean | 3 |
+| mixed_r30_noise | 3 |
+| over_flagging | 2 |
+
+#### Stratified sample (seed `20260715`)
+
+| Category | Screens sampled |
+|----------|----------------:|
+| chat, home, list, login, maps, menu, profile, search, settings, welcome | 4 each (40 total) |
+
+#### Working auth / mail / OAuth configuration (names only)
+
+| Setting | Role |
+|---------|------|
+| `JWT_SECRET` | JWT signing |
+| `GOOGLE_CLIENT_ID` | Google Sign-In Web client ID |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_TLS` | Gmail SMTP (`smtp.gmail.com:587`) |
+| `SMTP_USER` / `SMTP_FROM` | Sender Gmail |
+| `SMTP_PASSWORD` | Gmail App Password (**local `.env` only**) |
+| `AUTH_DEV_SHOW_OTP` | `0` when real mail works |
+| Email domains accepted | **Any valid** (Yahoo, Outlook, university/education, …) |
+
+### 15A.2 Excerpt — `noor_week6_validation_log.txt` (15 Jul + 16 Jul)
+
+```
+##################################################################
+# RE-RUN 2026-07-15
+##################################################################
+STEP 0: Regenerate eval sheet — stratified RANDOM (4/category, seed=20260715)
+  Wrote 40 rows -> docs\week6\evaluation_sheet_40_screens.csv
+STEP 1: pytest backend/tests/test_auth.py → 12 passed, 2 warnings in 7.96s
+STEP 2: pytest tests/test_audit.py → 8 passed, 1 skipped, 2 warnings in 2.13s
+STEP 3: pytest R26–R30 rules → 8 passed, 70 deselected in 0.14s
+STEP 4: API smoke — POST /auth/register 200; POST /records 200; GET /records 200
+Auth + Records smoke: PASS
+
+##################################################################
+# RE-RUN 2026-07-16 — recent session work (report/auth/eval)
+# Branch: noor   HEAD: 995f6d31
+##################################################################
+CHANGESET:
+  123fbde4  fix(report): persist upload screenshot/XML for HTML/PDF export
+  995f6d31  feat(auth): implement OTP email verify, password reset, and Google Sign-In
+
+STEP A: pytest backend/tests/test_auth.py → 22 passed, 2 warnings in 9.50s
+STEP B: pytest tests/test_audit.py → 9 passed, 1 warning in 2.65s
+STEP C: pytest R26-R30 rules → 8 passed, 116 deselected in 0.81s
+STEP D: eval sheet integrity → rows=40 manual_complete=40
+SUMMARY (2026-07-16 live): Overall PASS
+```
+
+Full log file (also copied under progress assets):
+
+- `outputs/validation_logs/noor_week6_validation_log.txt`
+- `docs/progress/assets/logs/noor_week6_validation_log.txt`
+- Summary: `docs/progress/assets/logs/noor_week6_summary.md`
+
+### 15A.3 UI reference images (Figma → Axion)
+
+![Sign Up and Log In](assets/figma/figma-01-signup-login.png)
+
+![Forgot Password and OTP Verify](assets/figma/figma-02-forgot-verify-otp.png)
+
+![Reset Password success](assets/figma/figma-03-reset-password-success.png)
+
+![Upload files matched](assets/figma/figma-08-upload-files-matched.png)
+
+![Audit complete and Dashboard](assets/figma/figma-05-audit-complete-dashboard.png)
+
+![Issue detail and Report](assets/figma/figma-06-dashboard-detail-report.png)
+
+![Generate report modal / PDF layout](assets/figma/figma-07-generate-report-modal-pdf.png)
+
+### 15A.4 End-to-end demo path (working)
+
+1. **Sign Up** or **Log In** (email any domain) — or **Continue with Google**
+2. Optional: **Forgot password** → OTP email (SMTP) → **Reset**
+3. **Upload** matching screenshot + XML pair → validate → `POST /api/v1/audit`
+4. **Dashboard** / **Report** — accessibility score ring; HTML/PDF download includes screenshot + XML + violations
+5. **Records** — list shows screenshot/XML names + score (`GET /records`)
+
+---
+
 ## 16. Document history
 
 | Version | Date | Author | Changes |
@@ -675,6 +808,8 @@ Blockers:None
 | **1.9** | **13 Jul 2026** | **Noor** | Rules credit → Salar + Noor + Ayesha (reviewed by all); Word export → `Supplementary_Progress_Report_v1.0.docx`; SRS/SDS DOCX generated from markdown |
 | **1.10** | **14 Jul 2026** | **Noor** | Upload validation handoff merged (Ayesha frontend + Noor backend); SRS/SDS API contract updated |
 | **1.11** | **15 Jul 2026** | **Noor** | Week 6: Salar auth/records + Ayesha prompt/Dashboard synced; random 40-screen eval sheet; Week 6 validation logs; `.gitignore` from Salar |
+| **1.12** | **16 Jul 2026** | **Noor** | Week 6 close-out: OTP/SMTP/Google OAuth; any-domain emails; 40/40 eval notes; report export fix; SRS/SDS/plan DOCX regen; auth 22 / audit 9 tests |
+| **1.13** | **16 Jul 2026** | **Noor** | Progress evidence pack §15A (validation log excerpt + tables + Figma images); pipeline status Done; SRS/SDS path accuracy sync |
 
 ---
 

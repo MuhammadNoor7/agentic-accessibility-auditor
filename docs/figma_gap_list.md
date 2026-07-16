@@ -7,31 +7,36 @@
 
 | Feature | Notes |
 |---|---|
-| Sign up / Log in | Real JWT auth (`backend/auth.py`), bcrypt-hashed passwords; optional `name` stored and returned |
-| Profile initials (top-right) | Real — avatar shows the logged-in user's initials from name (signup) or email local-part (login-only / legacy accounts) |
-| **Email verification (OTP)** | Real — signup → `POST /auth/register` + OTP email → `/verify-code` (`purpose=email_verify`) → JWT session |
-| **Forgot / Reset Password** | Real — `/forgot-password` → OTP → `/set-password` via `reset_token` (`POST /auth/forgot-password`, `/auth/verify-otp`, `/auth/reset-password`) |
-| **Google Sign-In** | Real OAuth ID-token flow — GIS on frontend + `POST /auth/google` (requires `GOOGLE_CLIENT_ID`) |
-| Upload → Audit | Sends real screenshot + XML, runs full parse → rules → agent explain pipeline |
-| Dashboard | Real violations, real accessibility score |
-| Report view | Real score, real per-violation explanations (via Groq) |
-| Report download (HTML) | Real file download — embeds annotated screenshot, XML snippet, and detected violations |
-| Report download (PDF) | Real file download (needs local Playwright browser install) — same content as HTML |
-| Records / Audit History | Real per-user history via `GET /records` |
-| Reopening a past record | Real — refetches the actual saved report |
+| Sign up / Log in | Real JWT auth; email + password rules enforced (valid domain, ≥8 chars with letter+number) |
+| Profile initials (top-right) | Real — initials from name or email local-part |
+| Email verification (OTP) | Real — signup → OTP → `/verify-code` → JWT |
+| Forgot / Reset Password | Real — forgot → OTP → set password via `reset_token` |
+| Google Sign-In | Real OAuth ID-token flow (`GOOGLE_CLIENT_ID` required) |
+| **SMTP email delivery** | Real — Gmail SMTP via App Password (`SMTP_USER` / `SMTP_PASSWORD` / `SMTP_FROM`). Sends **to any recipient domain** (Yahoo, Outlook, `.edu`, …) |
+| Upload → Audit | Real screenshot + XML pipeline |
+| Dashboard | Real violations + accessibility score |
+| Report view | Real score + explanations |
+| Report download (HTML/PDF) | Real — embeds screenshot, XML, violations |
+| Records / Audit History | Real `GET /records` |
+| Reopening a past record | Real saved report refetch |
 
 ## ⚠️ Still mock / not implemented
 
-None for the previous Figma auth shell. Remaining items are **config dependencies**, not missing UI/API:
+None remaining from the Figma auth / report shell.
 
-| Feature | Status | Notes |
-|---|---|---|
-| SMTP delivery | Optional config | Set `SMTP_HOST`, `SMTP_FROM`, and usually `SMTP_USER` / `SMTP_PASSWORD` / `SMTP_PORT` for real email. Without SMTP, codes are logged and returned as `debug_code` when `AUTH_DEV_SHOW_OTP=1` (default when SMTP is unset) for local demos/tests |
-| Google Console project | Optional config | Set `GOOGLE_CLIENT_ID` (OAuth Web client) on the backend; frontend reads it via `GET /auth/config`. Until set, the Google button shows a clear configuration error |
+**Config you must set locally (not code gaps):**
 
-## Known limitations (not gaps, just current scope)
+| Setting | Why |
+|---|---|
+| `SMTP_USER` + `SMTP_PASSWORD` (Gmail App Password) + `SMTP_FROM` | Real OTP emails |
+| `GOOGLE_CLIENT_ID` | Google button works end-to-end |
+| `JWT_SECRET` | Production-safe tokens |
 
-- Only Groq is free-to-test for the agent explanation layer; Anthropic/OpenAI need paid credits, Gemini blocked by a Google-side quota bug (see `docs/agent_prompt_experiments.md`)
-- Report timestamps are hardcoded to UTC, not localized
-- Users registered before the `name` field was added get initials from their email until they re-register with a name
-- Google-only accounts must use Continue with Google (or complete password reset) before email/password login works
+Until SMTP is configured, `AUTH_DEV_SHOW_OTP` exposes `debug_code` so the verify screen still works offline.
+
+## Known limitations
+
+- Agent LLM: Groq is free-to-test; Anthropic/OpenAI need credits
+- Report timestamps are UTC
+- Google-only accounts must use Continue with Google (or password-reset) before email/password login
+- **Email accounts:** signup/login accept **any valid email domain** (not Gmail-only). Gmail is only used as the *SMTP sender* when delivering OTP codes

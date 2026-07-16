@@ -8,6 +8,7 @@ import GoogleButton from '../../components/ui/GoogleButton';
 import FooterLink from '../../components/ui/FooterLink';
 import { apiPost } from '../../utils/api';
 import { signInWithGoogle } from '../../utils/googleAuth';
+import { emailError, passwordError } from '../../utils/validation';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -21,16 +22,10 @@ export default function SignUp() {
   const validate = () => {
     const next = {};
     if (!form.name.trim()) next.name = 'Please enter your full name.';
-    if (!form.email.trim()) {
-      next.email = 'Please enter your email address.';
-    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-      next.email = 'Enter a valid email address, e.g. name@example.com.';
-    }
-    if (!form.password) {
-      next.password = 'Please create a password.';
-    } else if (form.password.length < 8) {
-      next.password = 'Password must be at least 8 characters.';
-    }
+    const e = emailError(form.email);
+    if (e) next.email = e;
+    const p = passwordError(form.password, { requiredMessage: 'Please create a password.' });
+    if (p) next.password = p;
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -55,6 +50,8 @@ export default function SignUp() {
           email: form.email.trim(),
           purpose: 'email_verify',
           debugCode: resent.debug_code || null,
+          emailSent: Boolean(resent.email_sent),
+          mailHint: resent.message || '',
         },
       });
     } catch (err) {
@@ -112,7 +109,7 @@ export default function SignUp() {
           placeholder="Create a password"
           autoComplete="new-password"
           required
-          hint="Must be at least 8 characters."
+          hint="Must be at least 8 characters and include a letter and a number."
           error={errors.password}
         />
         <Button type="submit" disabled={submitting}>

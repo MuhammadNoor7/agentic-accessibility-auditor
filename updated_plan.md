@@ -2,8 +2,8 @@
 
 **Project:** Agentic Accessibility Auditor (Axion)  
 **Duration:** 8 weeks (Summer 2026)  
-**Last updated:** 15 July 2026  
-**Status:** Week 6 largely complete on `noor` (`92702a71`) — JWT auth + records synced; 40-screen stratified-random eval sheet; Weeks 1–5 done; manual eval fill + Friday demo remaining
+**Last updated:** 16 July 2026  
+**Status:** Week 6 assigned deliverables complete on `noor` (`995f6d31`) — JWT/OTP/SMTP/Google auth, records, 40/40 eval sheet, Weeks 1–5 done; Friday demo walkthrough optional
 
 ---
 
@@ -105,8 +105,8 @@ Minimum policy:
 | Agent + report API | Week 4 | ✅ `GET …/report` |
 | HTML/PDF report export | Week 5 | ✅ `src/report.py` + download API |
 | Axion UI (core pages) | Week 4–5 | ✅ Upload/Dashboard/Report wired (+ pair validation) |
-| Auth + Records | Week 6 | ✅ JWT + `/records` on `noor` (Salar); Login/Records UI live |
-| 25–40 screen manual eval | Week 6 | 🟡 Sheet ready (40 stratified-random); **manual fill ≥25 pending** |
+| Auth + Records | Week 6 | ✅ JWT + `/records` on `noor`; Login/Records UI; **OTP/SMTP/Google OAuth** (Noor `995f6d31`) |
+| 25–40 screen manual eval | Week 6 | ✅ 40 stratified-random + 40/40 assisted FP/miss notes (`docs/week6/`) |
 | Final evaluation (Rico holdout) | Week 8 | ❌ Not started |
 
 ---
@@ -167,20 +167,35 @@ Minimum policy:
 
 **Week 5 demo goal:** Upload XML → dashboard → downloadable HTML/PDF report. **Met.**
 
-#### Week 6 — Auth, Records, evaluation batch (updated 15 Jul 2026, `92702a71`)
+#### Week 6 — Auth, Records, evaluation batch (updated **16 Jul 2026**, `995f6d31`)
 
 | Person | Planned | **Actual outcome** |
 |--------|---------|-------------------|
 | **Salar** | Auth backend (JWT); records persistence | ✅ Done — `backend/auth.py`, `auth_router.py`, `records_router.py`, `test_auth.py`; synced into `noor` |
-| **Ayesha** | Auth screens + Records page; prompt experiments | ✅ Login/SignUp wired to JWT; Records on live API; prompt experiments expanded (`3d4fa82`); Dashboard re-run popup |
-| **Noor** | 25–40 screen eval; R26–R30 design; sync + docs | ✅ Sync Salar+Ayesha; score/filename on Records; stratified-random 40-screen CSV (`docs/week6/`); R26–R30 design DOCX; `noor_week6_validate.py` + logs; SRS/SDS/progress updated |
+| **Ayesha** | Auth screens + Records page; prompt experiments | ✅ Login/SignUp wired to JWT; Records on live API; prompt experiments expanded; Dashboard re-run popup |
+| **Noor** | 25–40 screen eval; R26–R30 design; sync + docs; auth stretch | ✅ Sync Salar+Ayesha; score/filename on Records; **40/40** stratified eval (`docs/week6/`); R26–R30 design DOCX; validation logs; **OTP + SMTP + Google OAuth**; Forgot /OTP /RESET UI ; HTML/PDF export fix; profile initials; SRS/SDS/progress/plan updated |
 
-**Week 6 remaining (this week):**
-- Fill ≥25 **manual** rows on `docs/week6/evaluation_sheet_40_screens.csv` (auto scores already filled; FP/miss notes blank)
-- Friday demo: signup/login → upload screenshot+XML pair → dashboard → report HTML/PDF → Records list with score
-- OTP / forgot-password backend still **stretch** (UI screens exist)
+### Noor Week 6 detail — signup / login / reset / forgot / SMTP / OTP / OAuth
 
-**Week 6 demo goal:** Auth + upload pair + report download + Records. **Ready to demo** (manual eval fill ongoing).
+| Deliverable | Detail |
+|-------------|--------|
+| **Sign Up / Log In** | Register + login JWT; password ≥8 with letter+number; **any valid email domain** (Yahoo, Outlook, education/university, etc.) |
+| **Forgot → OTP → Reset** | Forgot password sends 6-digit OTP; verify; set new password; success path matches Figma |
+| **SMTP mail** | Gmail SMTP (`smtp.gmail.com:587` TLS) with App Password; `SMTP_USER` / `SMTP_FROM` = project Gmail; recipients can be non-Gmail |
+| **OTP store** | `backend/otp_store.py` + `email_service.py`; purposes: email verify + password reset; resend supported |
+| **Google OAuth** | GIS button + `POST /auth/google`; env `GOOGLE_CLIENT_ID` (Web client ID from Google Cloud Console) |
+| **Credentials / env** | `.env` / `.env.example`: `JWT_SECRET`, `GOOGLE_CLIENT_ID`, `SMTP_*`, `AUTH_DEV_SHOW_OTP` (0 when real mail works), `VITE_API_BASE` |
+| **Profile UI** | `UserAvatar` initials from logged-in name/email (not hardcoded “AN”) |
+| **Report export** | Persist screenshot+XML under run folder; HTML/PDF include media + violations (`123fbde4`) |
+| **Eval research** | 40-screen stratified sheet (seed `20260715`) + assisted FP/miss notes on **all 40** rows |
+| **Tests (16 Jul)** | Auth **22** passed · Audit **9** passed · R26–R30 **8** passed |
+
+**Week 6 remaining (optional):**
+- Friday demo walkthrough: signup/login → upload screenshot+XML pair → dashboard → report HTML/PDF → Records list with score
+
+**Week 6 demo goal:** Auth + upload pair + report download + Records. **Ready to demo.**
+
+**Secrets policy:** App Passwords and `JWT_SECRET` stay in local `.env` only (gitignored). Document env **names** in `.env.example`; never commit live SMTP passwords.
 
 ---
 
@@ -208,9 +223,9 @@ Minimum policy:
 
 | Tier | Scope |
 |------|-------|
-| **Must Have** | Parser ✅ · R01–R30 rules ✅ · LLM explanations ✅ · HTML/PDF ✅ · Upload/Dashboard/Report ✅ · Auth + Records ✅ · Docker ✅ · 25–40 screen eval 🟡 (sheet done; manual fill pending) |
+| **Must Have** | Parser ✅ · R01–R30 rules ✅ · LLM explanations ✅ · HTML/PDF ✅ · Upload/Dashboard/Report ✅ · Auth + Records ✅ · Docker ✅ · 25–40 screen eval ✅ (40/40 assisted notes) · OTP/forgot/reset + SMTP ✅ · Google OAuth ✅ |
 | **Should Have** | Batch API · annotated screenshot regions in UI · deeper prompt comparison notes |
-| **Stretch** | OTP auth · R09 contrast (CV) · CNN / lightweight training on MASC train→val→test · click-to-highlight in HTML · Rico holdout batch (Week 8) |
+| **Stretch** | R09 contrast (CV) · CNN / lightweight training on MASC train→val→test · click-to-highlight in HTML · Rico holdout batch (Week 8) |
 
 ---
 

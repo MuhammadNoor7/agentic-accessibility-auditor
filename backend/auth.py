@@ -35,7 +35,31 @@ if not JWT_SECRET:
 
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "").strip()
 
-EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+def get_google_client_id() -> str:
+    """Re-read env so .env / process env updates apply after reload."""
+    return os.environ.get("GOOGLE_CLIENT_ID", "").strip() or GOOGLE_CLIENT_ID
+
+EMAIL_RE = re.compile(
+    r"^(?!\.)(?!.*\.\.)[A-Za-z0-9._%+\-]+@[A-Za-z0-9](?:[A-Za-z0-9\-]*[A-Za-z0-9])?"
+    r"(?:\.[A-Za-z0-9](?:[A-Za-z0-9\-]*[A-Za-z0-9])?)+$"
+)
+# Any domain is allowed (gmail.com, yahoo.com, university.edu, …).
+MIN_PASSWORD_LENGTH = 8
+PASSWORD_COMPLEXITY_RE = re.compile(r"(?=.*[A-Za-z])(?=.*\d)")
+
+
+def is_valid_email(email: str) -> bool:
+    return bool(EMAIL_RE.match((email or "").strip()))
+
+
+def password_validation_error(password: str) -> str | None:
+    if not password or len(password) < MIN_PASSWORD_LENGTH:
+        return f"Password must be at least {MIN_PASSWORD_LENGTH} characters."
+    if not PASSWORD_COMPLEXITY_RE.search(password):
+        return "Password must include at least one letter and one number."
+    return None
+
 
 _pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

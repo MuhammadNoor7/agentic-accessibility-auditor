@@ -5,7 +5,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Document version** | 2.7 |
+| **Document version** | 2.9 |
 | **Status** | Implementation reference |
 | **Prepared by** | Muhammad Noor (Lead — primary author); Salar + Ayesha (SRS inputs, parser/UI design) |
 | **Institution** | FAST-NUCES |
@@ -27,6 +27,8 @@
 | **2.5** | 2026-07-13 | Noor | Figma screenshots restored from formatted DOCX into `docs/assets/figma/`; DOCX export embeds images |
 | **2.6** | 2026-07-14 | Noor | `POST /audit` requires `screenshot` + `xml`; server-side pair validation; tests updated |
 | **2.7** | 2026-07-15 | Noor | Week 6: JWT auth + records routers synced from Salar; Records UI live; eval sheet (40 stratified-random); validation logs; `.gitignore` from Salar |
+| **2.8** | 2026-07-16 | Noor | OTP/SMTP/Google OAuth design implemented; env credentials documented; report export persistence + autoescape; eval 40/40; auth suite 22 tests |
+| **2.9** | 2026-07-16 | Noor | API mount accuracy (`/auth`, `/records`, `/api/v1/audit`); records store `records.db.json`; docker = backend+auditor; 146 tests; drop planned/stretch leftovers |
 
 ---
 
@@ -100,13 +102,13 @@ This document provides:
 | JSON Schema | `docs/schemas/auditor_schema.json`, `docs/json_schemas.md` | Noor | **Done** |
 | Validation scripts | `scripts/validate_output.py`, `scripts/noor_week3_validate.py`, `scripts/noor_week4_validate.py`, `scripts/noor_week5_validate.py`, `scripts/noor_week6_validate.py`, `scripts/masc_parse_signoff.py` | Noor / Salar | **Done** |
 | FastAPI audit API | `backend/routers/audit.py` | Noor | **Done** (paired upload + violations + report + download) |
-| Auth (JWT) | `backend/auth.py`, `backend/routers/auth_router.py` | Salar | **Done** (synced to `noor` Week 6) |
+| Auth (JWT + OTP + OAuth) | `backend/auth.py`, `otp_store.py`, `email_service.py`, `routers/auth_router.py` | Salar + **Noor (OTP/SMTP/Google)** | **Done** on `noor` Week 6 |
 | Records API | `backend/routers/records_router.py` | Salar / Noor | **Done** (list/create/get/delete + score/filename fields) |
 | Rule engine | `src/rules.py` | Salar + Noor + Ayesha | **Done** (R01–R30; reviewed by all) |
 | Agent layer | `src/agent.py`, `src/explainer.py`, `src/llm_providers.py` | Noor | **Done** (API-wired; template + live LLM) |
 | Report generator | `src/report.py` | Noor | **Done** (Jinja2 HTML + PIL + Playwright PDF) |
-| Axion React UI | `frontend/` | Ayesha / Salar | **Done** for MVP screens (Upload/Dashboard/Report/Records/Login; OTP stretch) |
-| pytest suite | `tests/`, `backend/tests/` | Salar / Noor | **Done** (120+ tests; auth suite added) |
+| Axion React UI | `frontend/` | Ayesha / Salar / Noor | **Done** for MVP screens including Forgot/OTP/Reset + Google Sign-In + profile initials |
+| pytest suite | `tests/`, `backend/tests/` | Salar / Noor | **Done** (**146** collected; auth 22, rules 78, audit 9, …) |
 
 ---
 
@@ -151,11 +153,11 @@ Screenshot + UIAutomator XML
 
 | Service | Image | Port | Role |
 |---------|-------|------|------|
-| `frontend` | `./frontend/Dockerfile` | 5173 | Axion React (Vite) |
-| `backend` | `./backend/Dockerfile` | 8000 | FastAPI + pipeline |
-| `auditor` | `./Dockerfile` | — | Batch parser worker |
+| `backend` | `./backend/Dockerfile` | 8000 | FastAPI + JWT (`JWT_SECRET`) + pipeline |
+| `auditor` | `./Dockerfile` | — | Batch parser worker (`DATASET_ROOT`) |
 
-Network: `auditor-network` (bridge). Repo root mounted at `/app`.
+Network: `auditor-network` (bridge). Repo root mounted at `/app`.  
+**Frontend:** Vite app runs locally (`npm run dev`); **not** packaged in current `docker-compose.yml` (no `frontend/Dockerfile` yet).
 
 ### 2.4 Per-audit run directory
 
@@ -171,17 +173,14 @@ outputs/runs/{audit_id}/
 └── audit_report.pdf
 ```
 
-### 2.5 Per-user Records directory
+### 2.5 Per-user Records storage (prototype)
 
-```
-outputs/records/{user_id}/
-├── index.json                 # list of record summaries
-└── {record_id}/
-    ├── metadata.json          # screen_id, score, dates, paths
-    ├── report.json
-    ├── audit_report.html
-    └── audit_report.pdf
-```
+MVP persistence is a **flat JSON store**, not per-user folders:
+
+- Records: `backend/data/records.db.json` — each row includes `record_id`, `user_id`, `screen_id`, `created_at`, `total_violations`, `violations_by_severity`, `accessibility_score`, `screenshot_name`, `xml_name`, artefact paths
+- Report reopen: `GET /records/{id}/report` loads `outputs/reports/{screen_id}_report.json` when present
+
+(Folder design `outputs/records/{user_id}/…` remains a Should/future layout; not required for current Axion Records UI.)
 
 ---
 
@@ -423,18 +422,20 @@ Adds `summary` object and agent fields per violation:
 - `agent_why_it_matters`
 - `agent_developer_fix`
 
-### 4.5 records metadata (`metadata.json`)
+### 4.5 records store (`backend/data/records.db.json`)
 
 | Field | Type | Description |
 |-------|------|-------------|
 | `record_id` | string | UUID |
 | `user_id` | string | Owner |
-| `audit_id` | string | Pipeline run ID |
-| `screen_id` | string | e.g. `screen_014` |
-| `score` | int | 0–100 |
-| `total_issues` | int | Violation count |
-| `severity_summary` | object | `{critical, high, medium, low}` |
+| `screen_id` | string | e.g. `r01_missing_label_fail` |
 | `created_at` | ISO datetime | Audit timestamp |
+| `total_violations` | int | Violation count |
+| `violations_by_severity` | object | Severity histogram |
+| `accessibility_score` | int/null | 0–100 score from agent |
+| `screenshot_name` | string/null | Original upload filename |
+| `xml_name` | string/null | Original upload filename |
+| `components_path` / `violations_path` | string/null | Artefact paths when available |
 | `report_html_path` | string | Relative path |
 | `report_pdf_path` | string | Relative path |
 
@@ -480,18 +481,21 @@ Run after each pipeline stage or via `python scripts/noor_week3_validate.py`.
 
 ## 5. API design
 
-Base URL: `http://localhost:8000`  
-Prefix: `/api/v1`  
-Auth: `Authorization: Bearer <JWT>` (except auth endpoints)
+Base URL: `http://localhost:8000` (or `8002` in local multi-server demos)  
+**Mounts:** audit pipeline under `/api/v1/audit/*`; auth under `/auth/*`; records under `/records/*` (no `/api/v1` on auth/records).  
+Auth: `Authorization: Bearer <JWT>` (except public auth endpoints and `/health`).
 
 ### 5.1 Auth endpoints
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/auth/signup` | Email + password (≥ 8 chars) |
-| POST | `/auth/login` | Returns JWT |
-| POST | `/auth/google` | Google OAuth token exchange |
-| POST | `/auth/forgot-password` | Send 6-digit OTP |
+| POST | `/auth/register` | Email + password (≥ 8, letter+digit); optional `name` |
+| POST | `/auth/login` | Returns JWT + user profile |
+| GET | `/auth/me` | Current user (JWT) |
+| POST | `/auth/google` | Google OAuth ID-token exchange |
+| GET | `/auth/config` | Public flags (Google client configured?) |
+| POST | `/auth/forgot-password` | Send 6-digit OTP via SMTP |
+| POST | `/auth/resend-otp` | Resend OTP |
 | POST | `/auth/verify-otp` | Validate OTP |
 | POST | `/auth/reset-password` | Set new password |
 
@@ -499,12 +503,12 @@ Auth: `Authorization: Bearer <JWT>` (except auth endpoints)
 
 | Method | Path | Description |
 |--------|------|-------------|
-| POST | `/audit` | Upload **screenshot + XML** (`multipart`: `screenshot`, `xml`); validates PNG/JPG + matching pair; optional `use_llm` query; start pipeline |
-| GET | `/audit/{audit_id}/status` | Pipeline status (`pending` → `parsing` → `checking` → `explaining` → `complete`) |
-| GET | `/audit/{audit_id}/violations` | Violations JSON (**implemented**) |
-| GET | `/audit/{audit_id}/report` | Report JSON with score + agent fields (**implemented** Week 4) |
-| GET | `/audit/{audit_id}/report/download?format=html\|pdf` | File download (HTML or PDF) |
-| POST | `/audit/batch` | Batch over dataset path (Should) |
+| POST | `/api/v1/audit` | Upload **screenshot + XML** (`multipart`: `screenshot`, `xml`); validates PNG/JPG + matching pair; optional `use_llm` query; start pipeline |
+| GET | `/api/v1/audit/{audit_id}/status` | Pipeline status (`pending` → `parsing` → `checking` → `explaining` → `complete`) |
+| GET | `/api/v1/audit/{audit_id}/violations` | Violations JSON (**implemented**) |
+| GET | `/api/v1/audit/{audit_id}/report` | Report JSON with score + agent fields (**implemented** Week 4) |
+| GET | `/api/v1/audit/{audit_id}/report/download?format=html\|pdf` | File download (HTML or PDF); upload pair persisted under `outputs/runs/{audit_id}/input/` |
+| POST | `/api/v1/audit/batch` | Batch over dataset path (Should) |
 
 ### 5.3 Records endpoints
 
@@ -516,7 +520,7 @@ Auth: `Authorization: Bearer <JWT>` (except auth endpoints)
 | GET | `/records/{record_id}/report` | Re-open persisted `outputs/reports/{screen_id}_report.json` |
 | DELETE | `/records/{record_id}` | Delete record |
 
-Auth endpoints (implemented Week 6 on `noor`): `POST /auth/register`, `POST /auth/login`, `GET /auth/me` (OTP/forgot-password remain stretch).
+Auth endpoints (implemented Week 6 on `noor`): `POST /auth/register`, `POST /auth/login`, `GET /auth/me`, `POST /auth/forgot-password`, `POST /auth/resend-otp`, `POST /auth/verify-otp`, `POST /auth/reset-password`, `POST /auth/google`, `GET /auth/config`.
 
 ### 5.4 Example: POST /audit
 
@@ -832,73 +836,89 @@ Visual source of truth: SRS Appendix F. Screenshots were restored from the legac
 
 **SRS:** FR-AUTH.*, FR-REC.*, FR-UI.40–45
 
-### 10.1 Auth model (prototype)
+### 10.1 Auth model (implemented Week 6)
 
 | Component | Design |
 |-----------|--------|
-| Password storage | bcrypt hash in `data/users.json` or SQLite |
-| Session | JWT (HS256), 24h expiry |
-| OTP | 6-digit code, 5 min TTL, stored in memory or Redis (prototype: JSON file) |
-| Google OAuth | Verify ID token server-side; create/link user |
+| Password storage | bcrypt hash in flat JSON user store (`data/` scratch / prototype DB path) |
+| Session | JWT (HS256); secret from `JWT_SECRET` |
+| Sign up / login | Email + password (min 8, letter+digit); optional display `name`; **any valid email domain** (Yahoo, Outlook, education/university, …) |
+| OTP | 6-digit code, TTL + resend; purposes: email verify + password reset; store in `backend/otp_store.py` (JSON file prototype) |
+| SMTP delivery | `backend/email_service.py` — Gmail SMTP App Password (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_FROM`, `SMTP_PASSWORD`); sender is Gmail, recipients are unrestricted domains |
+| Dev flag | `AUTH_DEV_SHOW_OTP=0` when real mail works (hides debug OTP in API/UI) |
+| Google OAuth | GIS frontend + `POST /auth/google`; verify ID token with `GOOGLE_CLIENT_ID` |
+| Profile UI | Frontend `UserAvatar` shows initials from name/email |
+
+**Credentials:** copy `.env.example` → `.env`. Never commit `SMTP_PASSWORD` or `JWT_SECRET`. `GOOGLE_CLIENT_ID` is the public OAuth Web client ID from Google Cloud Console.
 
 ### 10.2 Records lifecycle
 
-1. User completes audit pipeline
-2. `RecordsService.save(user_id, audit_artifacts)` copies HTML/PDF + metadata
-3. Append summary to `outputs/records/{user_id}/index.json`
-4. Records page reads index; detail view loads `metadata.json` + report
+1. User completes audit pipeline (`POST /api/v1/audit` …)
+2. Frontend (when logged in) calls `POST /records` with score + screenshot/XML names
+3. Row appended to `backend/data/records.db.json` (user-scoped)
+4. Records page calls `GET /records`; detail/reopen uses `GET /records/{id}` / `…/report`
 
 ### 10.3 Access control
 
 - All `/records/*` queries filter by JWT `user_id`
 - No cross-user record access
-- File paths validated to stay under `outputs/records/{user_id}/`
+- Prototype rows live in `backend/data/records.db.json` (user-scoped by `user_id`)
 
 ---
 
 ## 11. Deployment design
 
-### 11.1 docker-compose.yml (target)
+### 11.1 docker-compose.yml (as implemented)
 
 ```yaml
 services:
-  frontend:
-    build: ./frontend
-    ports: ["5173:5173"]
-    environment:
-      VITE_API_BASE: http://backend:8000
-    depends_on: [backend]
-
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     ports: ["8000:8000"]
-    env_file: .env
     volumes: [".:/app"]
     working_dir: /app/backend
+    environment:
+      - JWT_SECRET=dev-secret-change-in-prod
+    networks: [auditor-network]
 
   auditor:
     build: .
-    command: python /app/test_run.py
+    volumes: [".:/app"]
+    working_dir: /app
     environment:
-      DATASET_ROOT: /app/data/data-masc
+      - DATASET_ROOT=/app/data
+    networks: [auditor-network]
+
+networks:
+  auditor-network:
+    driver: bridge
 ```
+
+**Note:** Axion frontend is run with Vite locally (`frontend/`). Packaging frontend into Compose remains a future Should item.
 
 ### 11.2 Environment variables
 
 | Variable | Service | Purpose |
 |----------|---------|---------|
-| `OPENAI_API_KEY` | backend | LLM |
 | `JWT_SECRET` | backend | Token signing |
-| `CORS_ORIGINS` | backend | `http://localhost:5173` |
+| `GOOGLE_CLIENT_ID` | backend | Google Sign-In |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_TLS` | backend | OTP mail transport |
+| `SMTP_USER` / `SMTP_FROM` / `SMTP_PASSWORD` | backend | Gmail App Password sender |
+| `AUTH_DEV_SHOW_OTP` | backend | Hide/show debug OTP |
+| `LLM_*` / provider keys | backend | Optional live explanations |
+| `CORS_ORIGINS` | backend | e.g. `http://localhost:5173` |
 | `DATASET_ROOT` | auditor | Batch parse path |
+| `VITE_API_BASE` | frontend (local) | Points Axion at API |
 
 ### 11.3 Startup
 
 ```bash
 docker-compose up --build
-# Frontend: http://localhost:5173
 # API docs:  http://localhost:8000/docs
 # Health:    http://localhost:8000/health
+# Frontend:  cd frontend && npm run dev  → http://localhost:5173
 ```
 
 ---
@@ -925,7 +945,7 @@ docker-compose up --build
 | Schema | `validate_output.py` | `components.json` / `violations.json` artefacts |
 | API | pytest + TestClient | Audit violations + report (`test_audit.py`) |
 | Integration | `noor_week3_validate.py`, `noor_week4_validate.py`, `noor_week5_validate.py`, `masc_parse_signoff.py` | Full pipeline + report download smoke |
-| E2E | Manual / Playwright | Axion upload → Records (planned) |
+| E2E | Manual demo | Axion signup/login → upload pair → report download → Records (**working**; walkthrough for Friday) |
 | Evaluation | MASC train/val/test splits | 7,068 screens, sign-off JSON |
 
 ### 13.1 Golden files
@@ -968,8 +988,8 @@ tests/test_explainer.py    # anti-hallucination / batching (mocked LLM)
 | FR-AG.1–8 | §7 | `src/agent.py`, `src/explainer.py` (**Done**; API-wired) |
 | FR-RP.1–7 | §8 | `src/report.py` |
 | FR-UI.* | §9, Appendix D | `frontend/` |
-| FR-AUTH.* | §10.1, §5.1 | `backend/routers/auth.py` (planned) |
-| FR-REC.* | §10.2, §5.3 | `backend/services/records.py` (planned) |
+| FR-AUTH.* | §10.1, §5.1 | `backend/routers/auth_router.py` + `auth.py` / `otp_store.py` / `email_service.py` (**Done**) |
+| FR-REC.* | §10.2, §5.3 | `backend/routers/records_router.py` (**Done**; flat `backend/data/records.db.json`) |
 | Audit API (violations + report) | §5.2 | `backend/routers/audit.py` |
 | FR-DK.* | §11 | `docker-compose.yml` |
 | NFR-1–20 | §2, §7, §11, §12 | Cross-cutting |
@@ -1077,26 +1097,22 @@ components:
 | `src/report.py` | HTML/PDF generator (Jinja2 + Playwright) |
 | `backend/main.py` | FastAPI entry |
 | `backend/routers/audit.py` | Violations + report + download API (**Done**) |
-| `backend/auth.py` / `routers/auth_router.py` | JWT register/login/me (**Done** — Salar, synced Week 6) |
-| `backend/routers/records_router.py` | Per-user records CRUD + report reopen (**Done**) |
-| `backend/routers/` | Auth, records (planned) |
-| `scripts/noor_week3_validate.py` | Week 3 validation pipeline |
-| `scripts/noor_week4_validate.py` | Week 4 agent + report API validation |
-| `scripts/noor_week5_validate.py` | Week 5 HTML/PDF + download validation |
-| `scripts/masc_parse_signoff.py` | MASC parse sign-off |
-| `scripts/run_explainer_sample.py` | Stage 3 LLM sample runner |
+| `backend/auth.py` / `otp_store.py` / `email_service.py` / `routers/auth_router.py` | JWT + OTP/SMTP + Google OAuth (**Done** — Salar base + Noor Week 6) |
+| `backend/routers/records_router.py` | Per-user records CRUD + report reopen (**Done**; store `backend/data/records.db.json`) |
+| `scripts/noor_week6_validate.py` | Week 6 auth/records + eval sheet validation |
 | `tests/test_parser.py` | Parser unit tests |
 | `tests/test_rules.py` | Rules R01–R30 unit tests |
 | `tests/test_audit.py` | Audit API tests (violations + report + download) |
 | `tests/test_report.py` | Report HTML/PDF export tests |
 | `tests/test_explainer.py` | Explainer anti-hallucination tests |
-| `frontend/src/` | Axion React app (**Done** for Upload/Dashboard/Report/Records/Login; OTP flows stretch) |
+| `backend/tests/test_auth.py` | Auth/OTP/Google/records suite (**22** tests) |
+| `frontend/src/` | Axion React app (**Done** for Upload/Dashboard/Report/Records/Login/SignUp/Forgot/OTP/Reset + Google Sign-In) |
 | `docs/schemas/auditor_schema.json` | Normative JSON Schema |
 | `docs/json_schemas.md` | Schema documentation |
+| `docs/week6/` | 40-screen eval sheet + R26–R30 design + assisted FP/miss notes |
 | `outputs/reports/` | Agent-enriched `*_report.json` + generated `.html` / `.pdf` |
-| `outputs/records/` | Per-user saved audits (planned) |
-| `data/data-masc/` | Primary dataset |
-| `data/data-rico-holdout/` | Unseen evaluation |
+| `outputs/validation_logs/` | `noor_week1`–`week6` validation logs + summaries |
+| `backend/data/records.db.json` | Prototype per-user audit history (score + screenshot/XML names) |
 
 ---
 

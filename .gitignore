@@ -70,4 +70,9 @@ data/data-rico-holdout/manifest/category_sheets/
 data/data-rico-holdout/manifest/google_sheets/
 data/data-rico-holdout/manifest/*.xlsx
 
-PROJECT_EXPLAINED.md
+# Runtime auth/records/OTP JSON stores (local prototype DBs — do not commit user data)
+backend/data/*.db.json
+backend/data/*.json
+
+# Local one-off helpers at repo root only
+/_*.py

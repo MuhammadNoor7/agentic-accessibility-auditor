@@ -4,6 +4,7 @@ import AuthLayout from '../../components/layout/AuthLayout';
 import TextField from '../../components/ui/TextField';
 import Button from '../../components/ui/Button';
 import { apiPost } from '../../utils/api';
+import { emailError } from '../../utils/validation';
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -13,12 +14,9 @@ export default function ForgotPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email.trim()) {
-      setError('Please enter the email address associated with your account.');
-      return;
-    }
-    if (!/\S+@\S+\.\S+/.test(email)) {
-      setError('Enter a valid email address, e.g. name@example.com.');
+    const eMsg = emailError(email);
+    if (eMsg) {
+      setError(eMsg);
       return;
     }
     setError('');
@@ -30,6 +28,8 @@ export default function ForgotPassword() {
           email: email.trim(),
           purpose: 'password_reset',
           debugCode: data.debug_code || null,
+          emailSent: Boolean(data.email_sent),
+          mailHint: data.message || '',
         },
       });
     } catch (err) {

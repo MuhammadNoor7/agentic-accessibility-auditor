@@ -1513,7 +1513,6 @@ def check_font_scale_overflow(components: list[dict], dpi: int = ASSUMED_DENSITY
         )
     return violations
 
-
 def check_all_caps_body_text(components: list[dict]) -> list[dict]:
     """R29: flag textAllCaps text longer than a short label (word count > 3).
 

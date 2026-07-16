@@ -9,6 +9,7 @@ import FooterLink from '../../components/ui/FooterLink';
 import { apiPost } from '../../utils/api';
 import { setToken } from '../../utils/auth';
 import { signInWithGoogle } from '../../utils/googleAuth';
+import { emailError, passwordError } from '../../utils/validation';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -21,16 +22,10 @@ export default function Login() {
 
   const validate = () => {
     const next = {};
-    if (!form.email.trim()) {
-      next.email = 'Please enter your email address.';
-    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-      next.email = 'Enter a valid email address, e.g. name@example.com.';
-    }
-    if (!form.password) {
-      next.password = 'Please enter your password.';
-    } else if (form.password.length < 8) {
-      next.password = 'Password must be at least 8 characters.';
-    }
+    const e = emailError(form.email);
+    if (e) next.email = e;
+    const p = passwordError(form.password, { requiredMessage: 'Please enter your password.' });
+    if (p) next.password = p;
     setErrors(next);
     return Object.keys(next).length === 0;
   };

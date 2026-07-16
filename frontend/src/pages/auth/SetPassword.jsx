@@ -4,6 +4,7 @@ import AuthLayout from '../../components/layout/AuthLayout';
 import PasswordField from '../../components/ui/PasswordField';
 import Button from '../../components/ui/Button';
 import { apiPost } from '../../utils/api';
+import { passwordError } from '../../utils/validation';
 
 export default function SetPassword() {
   const navigate = useNavigate();
@@ -24,11 +25,8 @@ export default function SetPassword() {
 
   const validate = () => {
     const next = {};
-    if (!form.password) {
-      next.password = 'Please enter a new password.';
-    } else if (form.password.length < 8) {
-      next.password = 'Password must be at least 8 characters.';
-    }
+    const p = passwordError(form.password, { requiredMessage: 'Please enter a new password.' });
+    if (p) next.password = p;
     if (!form.confirm) {
       next.confirm = 'Please confirm your new password.';
     } else if (form.confirm !== form.password) {
@@ -69,7 +67,7 @@ export default function SetPassword() {
           placeholder="Enter new password"
           autoComplete="new-password"
           required
-          hint="Must be at least 8 characters."
+          hint="Must be at least 8 characters and include a letter and a number."
           error={errors.password}
         />
         <PasswordField

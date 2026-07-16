@@ -12,6 +12,8 @@ export default function VerifyCode() {
   const email = location.state?.email || '';
   const purpose = location.state?.purpose || 'password_reset';
   const [debugCode, setDebugCode] = useState(location.state?.debugCode || null);
+  const [emailSent, setEmailSent] = useState(location.state?.emailSent ?? null);
+  const [mailHint, setMailHint] = useState(location.state?.mailHint || '');
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [secondsLeft, setSecondsLeft] = useState(30);
@@ -64,6 +66,8 @@ export default function VerifyCode() {
     try {
       const data = await apiPost('/auth/resend-otp', { email, purpose });
       setDebugCode(data.debug_code || null);
+      setEmailSent(Boolean(data.email_sent));
+      setMailHint(data.message || '');
       setSecondsLeft(30);
       setCode('');
     } catch (err) {
@@ -72,6 +76,12 @@ export default function VerifyCode() {
   };
 
   const subtitleEmail = email || 'your email';
+  const debugLabel =
+    emailSent === false
+      ? 'Dev code (Gmail SMTP login failed — fix App Password in .env):'
+      : emailSent === true
+        ? 'Dev code (also emailed):'
+        : 'Dev code (for local testing):';
 
   return (
     <AuthLayout
@@ -92,7 +102,12 @@ export default function VerifyCode() {
         <OtpInput value={code} onChange={setCode} error={error} />
         {debugCode ? (
           <p className="text-sm text-[var(--color-gray-text)] mb-4" aria-live="polite">
-            Dev code (SMTP not configured): <strong>{debugCode}</strong>
+            {debugLabel} <strong>{debugCode}</strong>
+          </p>
+        ) : null}
+        {mailHint && emailSent === false ? (
+          <p className="text-sm text-[var(--color-critical-text)] mb-4" role="status">
+            {mailHint}
           </p>
         ) : null}
         <Button type="submit" disabled={submitting}>

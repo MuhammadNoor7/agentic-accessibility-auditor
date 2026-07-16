@@ -634,7 +634,7 @@ function AuditPopup({ screenshotFile, xmlFile, onViewDashboard }) {
             {error}
           </p>
           <p style={{ fontSize: 12, color: '#94a3b8', margin: '0 0 20px' }}>
-            Check that the backend server is running at http://127.0.0.1:8000
+            Check that the backend server is running at http://127.0.0.1:8002
           </p>
         </div>
       </div>

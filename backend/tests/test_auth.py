@@ -25,9 +25,14 @@ def isolated_data_dir(tmp_path, monkeypatch):
     monkeypatch.setattr(records_module, "RECORDS_DB_PATH", data_dir / "records.db.json")
     monkeypatch.setattr(otp_module, "DATA_DIR", data_dir)
     monkeypatch.setattr(otp_module, "OTP_DB_PATH", data_dir / "otp.db.json")
+    # Never hit real Gmail SMTP during unit tests — use debug_code path.
     monkeypatch.setenv("AUTH_DEV_SHOW_OTP", "1")
     monkeypatch.delenv("SMTP_HOST", raising=False)
     monkeypatch.delenv("SMTP_FROM", raising=False)
+    monkeypatch.delenv("SMTP_USER", raising=False)
+    monkeypatch.delenv("SMTP_PASSWORD", raising=False)
+    monkeypatch.setenv("GOOGLE_CLIENT_ID", "")
+    monkeypatch.setattr(auth_module, "GOOGLE_CLIENT_ID", "")
     yield
 
 
@@ -80,8 +85,20 @@ def test_register_duplicate_email_conflict():
     assert response.status_code == 409
 
 
-def test_register_short_password_unprocessable():
-    response = _register(password="short")
+def test_register_rejects_password_without_digit():
+    response = _register(password="longpassword")
+    assert response.status_code == 422
+
+
+def test_register_accepts_non_gmail_domains():
+    for email in ("user@yahoo.com", "student@university.edu", "dev@outlook.com"):
+        response = _register(email=email, password="password123", name="Domain User")
+        assert response.status_code == 200, email
+        assert response.json()["email"] == email
+
+
+def test_register_rejects_malformed_email():
+    response = _register(email="not-an-email", password="password123")
     assert response.status_code == 422
 
 
@@ -219,21 +236,16 @@ def test_forgot_password_unknown_email_no_enumeration():
 # --- Google Sign-In ----------------------------------------------------------
 
 
-def test_google_auth_when_not_configured():
-    monkey_id = auth_module.GOOGLE_CLIENT_ID
-    auth_router_module.GOOGLE_CLIENT_ID = ""
-    auth_module.GOOGLE_CLIENT_ID = ""
-    try:
-        response = client.post("/auth/google", json={"id_token": "fake.token"})
-        assert response.status_code == 503
-    finally:
-        auth_router_module.GOOGLE_CLIENT_ID = monkey_id
-        auth_module.GOOGLE_CLIENT_ID = monkey_id
+def test_google_auth_when_not_configured(monkeypatch):
+    monkeypatch.setenv("GOOGLE_CLIENT_ID", "")
+    monkeypatch.setattr(auth_module, "GOOGLE_CLIENT_ID", "")
+    response = client.post("/auth/google", json={"id_token": "fake.token"})
+    assert response.status_code == 503
 
 
 def test_google_auth_with_mocked_token(monkeypatch):
+    monkeypatch.setenv("GOOGLE_CLIENT_ID", "test-client-id.apps.googleusercontent.com")
     monkeypatch.setattr(auth_module, "GOOGLE_CLIENT_ID", "test-client-id.apps.googleusercontent.com")
-    monkeypatch.setattr(auth_router_module, "GOOGLE_CLIENT_ID", "test-client-id.apps.googleusercontent.com")
 
     def fake_verify(id_token: str) -> dict:
         assert id_token == "valid-google-token"
@@ -261,14 +273,16 @@ def test_google_auth_with_mocked_token(monkeypatch):
 
 
 def test_auth_config_reports_google_flag(monkeypatch):
+    monkeypatch.setenv("GOOGLE_CLIENT_ID", "")
     monkeypatch.setattr(auth_module, "GOOGLE_CLIENT_ID", "")
-    monkeypatch.setattr(auth_router_module, "GOOGLE_CLIENT_ID", "")
     off = client.get("/auth/config")
     assert off.status_code == 200
     assert off.json()["google_enabled"] is False
+    assert "smtp_configured" in off.json()
+    assert "dev_show_otp" in off.json()
 
+    monkeypatch.setenv("GOOGLE_CLIENT_ID", "abc.apps.googleusercontent.com")
     monkeypatch.setattr(auth_module, "GOOGLE_CLIENT_ID", "abc.apps.googleusercontent.com")
-    monkeypatch.setattr(auth_router_module, "GOOGLE_CLIENT_ID", "abc.apps.googleusercontent.com")
     on = client.get("/auth/config")
     assert on.status_code == 200
     assert on.json()["google_enabled"] is True

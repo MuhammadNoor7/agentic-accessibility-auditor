@@ -127,7 +127,6 @@ def build_audit_report(
         "violations": enriched_violations,
     }
 
-
 class AgenticEnricher:
     """Enrich violations.json into report.json (SRS FR-AG.1–FR-AG.8)."""
 

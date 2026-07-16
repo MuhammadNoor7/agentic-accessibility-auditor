@@ -12,6 +12,14 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+# Load repo-root .env so SMTP_USER / GOOGLE_CLIENT_ID / JWT_SECRET work locally.
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv(ROOT / ".env", override=True)
+except ImportError:
+    pass
+
 from backend.routers.audit import router as audit_router
 from backend.routers.auth_router import router as auth_router
 from backend.routers.records_router import router as records_router

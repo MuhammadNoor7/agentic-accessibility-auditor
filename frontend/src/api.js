@@ -2,7 +2,7 @@
 // Base URL of your local FastAPI server (started with `uvicorn backend.main:app`).
 import { getAuthHeaders } from './utils/auth';
 
-const API_BASE = 'http://127.0.0.1:8000';
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8002';
 
 // Step 1: upload screenshot + XML pair, kicks off parse -> rules -> agent explain.
 // Returns { audit_id, status }

@@ -5,7 +5,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Document version** | 2.0 |
+| **Document version** | 2.5 (content); filename retained `v2.0` for continuity |
 | **Status** | Draft for SDS handoff |
 | **Prepared by** | Ayesha Naveed + Salar (primary authors); Muhammad Noor (Lead — review, integration, API/report sections) |
 | **Institution** | National University of Computer and Emerging Sciences (FAST-NUCES) |
@@ -25,6 +25,8 @@
 | **2.1** | 2026-07-13 | Noor | Figma screenshots restored from formatted DOCX into `docs/assets/figma/`; team ownership alignment |
 | **2.2** | 2026-07-14 | Noor | `POST /api/v1/audit` requires paired screenshot + XML; pair validation aligned with Axion Upload |
 | **2.3** | 2026-07-15 | Noor | Week 6 status: JWT auth + Records API implemented on `noor`; FR-AUTH/FR-REC/FR-UI.40–45 marked Done; eval sheet started |
+| **2.4** | 2026-07-16 | Noor | Week 6 close-out: OTP/forgot/reset + Gmail SMTP; Google OAuth (`GOOGLE_CLIENT_ID`); any-domain emails (Yahoo/edu/…); 40/40 eval notes; HTML/PDF export fix; FR-AUTH/FR-EV updated Done |
+| **2.5** | 2026-07-16 | Noor | Align §4.9 / §9 with live mounts (`/auth`, `/records`); FR-REC.5 DELETE Done; FR-IN.2 pair validation Done |
 
 > **Note on UI specifications:** Screen layouts, branding, and interaction flows in Section 3.1 and **Appendix F** are derived from **Ayesha Naveed's Figma designs** shared in `#tem-all-dynamo` Slack. Reference screenshots are embedded in Appendix F (`docs/assets/figma/`). Screens covered: Sign Up, Log In, Forgot Password, OTP Verify, Reset Password, Upload (all states), Audit Complete modal, Dashboard, Issue Detail drawer, Audit Report, Generate Report modal, and **Records (Reports)** page.
 
@@ -624,26 +626,34 @@ Full rule logic: **Section 7**.
 
 | ID | Requirement | Priority |
 |----|-------------|----------|
-| FR-AUTH.1 | **Sign Up** with email + password (min 8 characters) and optional **Continue with Google** | Must |
-| FR-AUTH.2 | **Log In** with email + password; issue JWT session token | Must |
-| FR-AUTH.3 | **Forgot Password** flow: email → 6-digit OTP (5-minute expiry, resend) → set new password → success screen | Must |
+| FR-AUTH.1 | **Sign Up** with email + password (min 8 characters, letter+digit) and optional **Continue with Google**; email may be any valid domain (Gmail, Yahoo, Outlook, university/education, etc.) | Must |
+| FR-AUTH.2 | **Log In** with email + password; issue JWT session token; return display `name` for UI initials | Must |
+| FR-AUTH.3 | **Forgot Password** flow: email → 6-digit OTP (TTL + resend) delivered by **SMTP** → set new password → success screen | Must |
 | FR-AUTH.4 | Password fields masked; strength indicator on sign-up and reset | Must |
 | FR-AUTH.5 | Protected routes require valid JWT; unauthenticated users redirected to Log In | Must |
+| FR-AUTH.6 | **Google Sign-In (OAuth)**: verify ID token server-side using configured `GOOGLE_CLIENT_ID`; create or link user | Must |
+| FR-AUTH.7 | OTP emails sent via configured SMTP (prototype: Gmail App Password); `AUTH_DEV_SHOW_OTP` may expose debug code only in development | Should |
 | FR-REC.1 | Associate each completed audit with **authenticated user_id** | Must |
 | FR-REC.2 | Persist audit metadata and report artifacts for Records page retrieval | Must |
 | FR-REC.3 | User shall only access their own records (no cross-user visibility) | Must |
-| FR-REC.4 | API: `GET /api/v1/records` (list) and `GET /api/v1/records/{record_id}` (detail) scoped to current user | Must |
-| FR-REC.5 | `DELETE /api/v1/records/{record_id}` (Stretch) | Stretch |
+| FR-REC.4 | API: `GET /records` (list) and `GET /records/{record_id}` (detail) scoped to current user; list includes screenshot/XML names + accessibility score | Must |
+| FR-REC.5 | `DELETE /records/{record_id}` removes the user's record | Must |
 
-**Auth API (Must):**
+**Auth API (Must) — implemented on `noor` (Week 6).** Note: auth and records are mounted at root (`/auth`, `/records`); only the audit pipeline uses the `/api/v1` prefix.
 
 | Endpoint | Method | Purpose |
 |----------|--------|---------|
-| `/api/v1/auth/signup` | POST | Register account |
-| `/api/v1/auth/login` | POST | Login → JWT |
-| `/api/v1/auth/forgot-password` | POST | Send OTP email |
-| `/api/v1/auth/verify-otp` | POST | Verify 6-digit code |
-| `/api/v1/auth/reset-password` | POST | Set new password |
+| `/auth/register` | POST | Register account (UI route `/signup` calls this) |
+| `/auth/login` | POST | Login → JWT |
+| `/auth/me` | GET | Current user profile |
+| `/auth/forgot-password` | POST | Send OTP email (SMTP) |
+| `/auth/resend-otp` | POST | Resend OTP |
+| `/auth/verify-otp` | POST | Verify 6-digit code |
+| `/auth/reset-password` | POST | Set new password |
+| `/auth/google` | POST | Google OAuth ID-token exchange |
+| `/auth/config` | GET | Public auth config (e.g. whether Google client is configured) |
+
+**Configuration (local `.env`, see `.env.example`):** `JWT_SECRET`, `GOOGLE_CLIENT_ID`, `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_FROM` / `SMTP_PASSWORD`, `AUTH_DEV_SHOW_OTP`. SMTP **sender** is the project Gmail; **recipients** are not restricted to Gmail. Never commit App Passwords.
 
 ---
 
@@ -854,13 +864,20 @@ Minimum API contract for Axion ↔ FastAPI (normative OpenAPI in SDS):
 | GET | `/api/v1/audit/{audit_id}/report` | Returns report JSON with score + agent fields (**Week 4 implemented**; template or live LLM) |
 | GET | `/api/v1/audit/{audit_id}/report/download?format=html\|pdf` | File download (**Week 5 implemented** — Jinja2 HTML + Playwright PDF) |
 | POST | `/api/v1/audit/batch` | Batch run over server-side dataset path (**Should**) |
-| POST | `/api/v1/auth/signup` | Register account (**Must**) |
-| POST | `/api/v1/auth/login` | Login → JWT (**Must**) |
-| POST | `/api/v1/auth/forgot-password` | Send OTP email (**Must**) |
-| POST | `/api/v1/auth/verify-otp` | Verify 6-digit code (**Must**) |
-| POST | `/api/v1/auth/reset-password` | Set new password (**Must**) |
-| GET | `/api/v1/records` | List authenticated user's audit history (**Must**) |
-| GET | `/api/v1/records/{record_id}` | Fetch one saved audit record (**Must**) |
+| POST | `/auth/register` | Register account (**Must** — UI `/signup`) |
+| POST | `/auth/login` | Login → JWT (**Must**) |
+| GET | `/auth/me` | Current user (**Must**) |
+| POST | `/auth/forgot-password` | Send OTP email via SMTP (**Must**) |
+| POST | `/auth/resend-otp` | Resend OTP (**Must**) |
+| POST | `/auth/verify-otp` | Verify 6-digit code (**Must**) |
+| POST | `/auth/reset-password` | Set new password (**Must**) |
+| POST | `/auth/google` | Google OAuth ID-token exchange (**Must**) |
+| GET | `/auth/config` | Public auth config (**Must**) |
+| POST | `/records` | Create audit history row (**Must**) |
+| GET | `/records` | List authenticated user's audit history (**Must**) |
+| GET | `/records/{record_id}` | Fetch one saved audit record (**Must**) |
+| GET | `/records/{record_id}/report` | Re-open persisted report JSON (**Must**) |
+| DELETE | `/records/{record_id}` | Delete own record (**Must**) |
 
 **Error responses:** JSON body with `detail` message; 400 invalid pair; 422 validation; 500 pipeline failure.
 
@@ -877,7 +894,7 @@ Minimum API contract for Axion ↔ FastAPI (normative OpenAPI in SDS):
 | **UI Dashboard (Axion)** | Upload, validation panel, issues table, report view, PDF/HTML download | Ayesha |
 | **Report generator** | Readable HTML/PDF with score, summary, per-violation detail, fixes | Noor |
 | **Docker** | `docker-compose up --build` starts backend + auditor; `/health` responds | Salar |
-| **Evaluation** | 25–40 screens tested; Rico holdout final summary; manual validation documented | All |
+| **Evaluation** | Week 6: 40 stratified screens + 40/40 assisted FP/miss notes (`docs/week6/`); Rico holdout final summary Week 8 | All |
 
 ---
 
@@ -981,7 +998,7 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 | Req ID | Description | Priority | Feature | Owner | Status |
 |--------|-------------|----------|---------|-------|--------|
 | FR-IN.1 | Accept screenshot + XML | Must | §4.1 | Ayesha | **Done** (paired upload + validation; API enforces pair) |
-| FR-IN.2 | Validate pair screen ID | Must | §4.1 | Salar | Pending |
+| FR-IN.2 | Validate pair screen ID | Must | §4.1 | Noor | **Done** (frontend `filesMatch` + API pair check) |
 | FR-PS.1 | Extract XML attributes | Must | §4.2 | Salar | **Done** |
 | FR-RU.1–10 | Rules R01–R10 | Must | §4.3 | Salar | **Done** |
 | FR-RU.11–30 | Rules R11–R30 | Should/Stretch | §4.3 | Team | **Done** (R09/R28 limited without colors/text-size) |
@@ -991,10 +1008,10 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 | FR-UI.20–27 | Dashboard + drawer | Must | §3.1 | Ayesha | **Done** (wired to `GET …/report`) |
 | FR-UI.30–35 | Report screen + modal + PDF | Must | §3.1 | Ayesha | **Done** (report view + `GET …/report/download`) |
 | FR-UI.40–45 | Records page | Must | §3.1 | Ayesha / Salar | **Done** (live `GET /records`) |
-| FR-AUTH.1–5 | Authentication | Must | §4.9 | Ayesha / Salar | **Done** (JWT register/login on `noor`; OTP stretch) |
-| FR-REC.1–4 | Records storage | Must | §4.9 | Salar / Ayesha | **Done** (flat JSON store + report reopen) |
+| FR-AUTH.1–7 | Authentication | Must | §4.9 | Ayesha / Salar / **Noor (OTP+SMTP+OAuth)** | **Done** (JWT register/login/me; forgot/OTP/reset; Google Sign-In; any-domain email) |
+| FR-REC.1–4 | Records storage | Must | §4.9 | Salar / Ayesha / Noor | **Done** (flat JSON store + score/filename fields + report reopen) |
 | FR-DK.1–3 | Docker Compose | Must | §4.7 | Salar | **Done** (synced to `noor`) |
-| FR-EV.1–6 | Evaluation | Must | §4.8 | Noor | **Partial** (40-screen stratified-random sheet; manual fill ongoing) |
+| FR-EV.1–6 | Evaluation | Must | §4.8 | Noor | **Done for Week 6 batch** (40 stratified-random screens + 40/40 assisted FP/miss notes; Rico holdout remains Week 8) |
 | FR-CV.1–3 | CV/CNN/R09 | Stretch | §4.4 | Noor | Stretch |
 | FR-AAA-01 … 40 | Legacy IDs | — | Mapped above | — | — |
 

@@ -25,7 +25,6 @@ DEFAULT_MODELS: dict[str, str] = {
     "groq": "llama-3.3-70b-versatile",
 }
 
-
 class LLMError(RuntimeError):
     """Raised when an LLM provider call fails for any reason (auth, network, API error).
 

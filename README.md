@@ -26,6 +26,7 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 | **8-week plan** | [`updated_plan.md`](updated_plan.md) · [`docs/updated_plan_v2.0.docx`](docs/updated_plan_v2.0.docx) |
 | **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) · [`.docx`](docs/progress/Supplementary_Progress_Report_v1.0.docx) |
 | **Week 6 eval** | [`docs/week6/evaluation_sheet.md`](docs/week6/evaluation_sheet.md) · CSV · R26–R30 design DOCX |
+| **SMTP + Google setup (free)** | [`docs/auth_smtp_google_setup.md`](docs/auth_smtp_google_setup.md) |
 | **Figma screenshots** | `docs/assets/figma/` (also mirrored under `docs/progress/assets/figma/` for the progress DOCX) |
 | **Week 6 validation** | `outputs/validation_logs/noor_week6_summary.md` · `noor_week6_validation_log.txt` |
 

@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
+import UserAvatar from '../components/ui/UserAvatar';
 import { setAuditFiles, setAuditId } from '../state/auditFiles';
 import { createAudit, getAuditViolations, getAuditReport } from '../api';
 import { apiPost } from '../utils/api';
@@ -864,10 +865,7 @@ export default function Upload() {
               }}
               style={{ background: '#f4f6fb', border: '0.5px solid #dde2f0', borderRadius: 6, padding: '9px 16px', fontSize: 15, color: '#1a2240', width: 210 }}
             />
-            <div role="img" aria-label="User: Ayesha Naveed" title="Ayesha Naveed"
-              style={{ width: 42, height: 42, borderRadius: '50%', background: '#1D9E75', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 15, fontWeight: 700, flexShrink: 0 }}>
-              <span aria-hidden="true">AN</span>
-            </div>
+            <UserAvatar />
           </div>
         </div>
 

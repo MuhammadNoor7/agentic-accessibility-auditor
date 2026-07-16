@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import Logo from '../ui/Logo';
+import UserAvatar from '../ui/UserAvatar';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: DashboardIcon },
@@ -88,13 +89,7 @@ export default function MainLayout({ title, subtitle, actions, children }) {
           </div>
           <div className="flex items-center gap-4 shrink-0">
             {actions}
-            <div
-              className="w-10 h-10 rounded-full bg-[var(--color-green)] text-white flex items-center justify-center font-semibold text-sm"
-              aria-label="Account: Ayesha"
-              title="Ayesha"
-            >
-              A
-            </div>
+            <UserAvatar size={40} fontSize={14} />
           </div>
         </header>
 

@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
 
-from jinja2 import Environment, FileSystemLoader, select_autoescape
+from jinja2 import Environment, FileSystemLoader
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE_DIR = Path(__file__).resolve().parent / "templates"
@@ -124,7 +124,9 @@ def render_html_report(report_doc: dict, *, project_root: Path | None = None) ->
     root = project_root or ROOT
     env = Environment(
         loader=FileSystemLoader(TEMPLATE_DIR),
-        autoescape=select_autoescape(["html", "xml"]),
+        # Template is named *.html.j2, so suffix-based select_autoescape would
+        # leave escaping OFF and inject raw XML/HTML into the page. Force it on.
+        autoescape=True,
     )
     template = env.get_template("audit_report.html.j2")
     xml_path = _resolve_existing_path(report_doc.get("xml_path", ""), root)

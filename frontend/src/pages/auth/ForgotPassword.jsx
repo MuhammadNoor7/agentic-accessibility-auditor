@@ -3,13 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import AuthLayout from '../../components/layout/AuthLayout';
 import TextField from '../../components/ui/TextField';
 import Button from '../../components/ui/Button';
+import { apiPost } from '../../utils/api';
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email.trim()) {
       setError('Please enter the email address associated with your account.');
@@ -20,7 +22,21 @@ export default function ForgotPassword() {
       return;
     }
     setError('');
-    navigate('/verify-code', { state: { email } });
+    setSubmitting(true);
+    try {
+      const data = await apiPost('/auth/forgot-password', { email: email.trim() });
+      navigate('/verify-code', {
+        state: {
+          email: email.trim(),
+          purpose: 'password_reset',
+          debugCode: data.debug_code || null,
+        },
+      });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -42,7 +58,9 @@ export default function ForgotPassword() {
           required
           error={error}
         />
-        <Button type="submit">Send reset code</Button>
+        <Button type="submit" disabled={submitting}>
+          {submitting ? 'Sending…' : 'Send reset code'}
+        </Button>
       </form>
     </AuthLayout>
   );

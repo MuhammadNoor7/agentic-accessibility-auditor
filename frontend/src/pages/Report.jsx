@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { getAuditFiles, getAuditId } from '../state/auditFiles'
 import { getAuditReport, getRecordReport, downloadAuditReport } from '../api'
 import Sidebar from '../components/Sidebar'
+import UserAvatar from '../components/ui/UserAvatar'
 
 /* ────────────────────────────────────────────────────────────────────────────
    RULE REFERENCE — same lookup used in Dashboard.jsx, sourced from
@@ -599,16 +600,7 @@ export default function Report() {
                 color: '#1a2240',
               }}
             />
-            <div
-              role="img" aria-label="User: Ayesha Naveed" title="Ayesha Naveed"
-              style={{
-                width: 42, height: 42, borderRadius: '50%',
-                background: '#1D9E75', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', color: '#fff', fontSize: 15, fontWeight: 700,
-              }}
-            >
-              <span aria-hidden="true">AN</span>
-            </div>
+            <UserAvatar />
           </div>
         </div>
 

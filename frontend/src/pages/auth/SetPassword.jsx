@@ -1,13 +1,23 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import AuthLayout from '../../components/layout/AuthLayout';
 import PasswordField from '../../components/ui/PasswordField';
 import Button from '../../components/ui/Button';
+import { apiPost } from '../../utils/api';
 
 export default function SetPassword() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const resetToken = location.state?.resetToken || '';
   const [form, setForm] = useState({ password: '', confirm: '' });
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!resetToken) {
+      navigate('/forgot-password', { replace: true });
+    }
+  }, [resetToken, navigate]);
 
   const handleChange = (field) => (e) =>
     setForm((f) => ({ ...f, [field]: e.target.value }));
@@ -28,9 +38,21 @@ export default function SetPassword() {
     return Object.keys(next).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validate()) navigate('/reset-success');
+    if (!validate()) return;
+    setSubmitting(true);
+    try {
+      await apiPost('/auth/reset-password', {
+        reset_token: resetToken,
+        password: form.password,
+      });
+      navigate('/reset-success');
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, password: err.message }));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -60,7 +82,9 @@ export default function SetPassword() {
           required
           error={errors.confirm}
         />
-        <Button type="submit">Reset password</Button>
+        <Button type="submit" disabled={submitting}>
+          {submitting ? 'Saving…' : 'Reset password'}
+        </Button>
       </form>
     </AuthLayout>
   );

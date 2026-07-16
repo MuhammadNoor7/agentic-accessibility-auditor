@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Sidebar from '../components/Sidebar'
+import UserAvatar from '../components/ui/UserAvatar'
 import { apiGet } from '../utils/api'
 import { isLoggedIn } from '../utils/auth'
 
@@ -159,16 +160,7 @@ export default function AuditHistory() {
                 color: '#1a2240',
               }}
             />
-            <div
-              role="img" aria-label="User: Ayesha Naveed" title="Ayesha Naveed"
-              style={{
-                width: 42, height: 42, borderRadius: '50%',
-                background: '#1D9E75', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', color: '#fff', fontSize: 15, fontWeight: 700,
-              }}
-            >
-              <span aria-hidden="true">AN</span>
-            </div>
+            <UserAvatar />
           </div>
         </div>
 

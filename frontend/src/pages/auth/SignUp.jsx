@@ -7,7 +7,7 @@ import Button from '../../components/ui/Button';
 import GoogleButton from '../../components/ui/GoogleButton';
 import FooterLink from '../../components/ui/FooterLink';
 import { apiPost } from '../../utils/api';
-import { setToken } from '../../utils/auth';
+import { signInWithGoogle } from '../../utils/googleAuth';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -19,7 +19,6 @@ export default function SignUp() {
     setForm((f) => ({ ...f, [field]: e.target.value }));
 
   const validate = () => {
-    // Specific, field-identifying error messages (G21 / R21)
     const next = {};
     if (!form.name.trim()) next.name = 'Please enter your full name.';
     if (!form.email.trim()) {
@@ -41,9 +40,23 @@ export default function SignUp() {
     if (!validate()) return;
     setSubmitting(true);
     try {
-      const data = await apiPost('/auth/register', { email: form.email, password: form.password });
-      setToken(data.access_token, data.user_id, data.email);
-      navigate('/upload');
+      // Creates the account and emails a verification OTP (debug_code when SMTP is off).
+      await apiPost('/auth/register', {
+        email: form.email,
+        password: form.password,
+        name: form.name.trim(),
+      });
+      const resent = await apiPost('/auth/resend-otp', {
+        email: form.email.trim(),
+        purpose: 'email_verify',
+      });
+      navigate('/verify-code', {
+        state: {
+          email: form.email.trim(),
+          purpose: 'email_verify',
+          debugCode: resent.debug_code || null,
+        },
+      });
     } catch (err) {
       setErrors((prev) => ({ ...prev, email: err.message }));
     } finally {
@@ -51,8 +64,17 @@ export default function SignUp() {
     }
   };
 
-  const handleGoogleClick = () => {
-    setErrors((prev) => ({ ...prev, password: 'Google auth not yet implemented.' }));
+  const handleGoogleClick = async () => {
+    setErrors({});
+    setSubmitting(true);
+    try {
+      await signInWithGoogle();
+      navigate('/upload');
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, password: err.message }));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -93,7 +115,9 @@ export default function SignUp() {
           hint="Must be at least 8 characters."
           error={errors.password}
         />
-        <Button type="submit" disabled={submitting}>Create account</Button>
+        <Button type="submit" disabled={submitting}>
+          {submitting ? 'Creating…' : 'Create account'}
+        </Button>
       </form>
 
       <div className="flex items-center gap-3 my-6" role="presentation">

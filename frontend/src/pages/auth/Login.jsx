@@ -8,6 +8,7 @@ import GoogleButton from '../../components/ui/GoogleButton';
 import FooterLink from '../../components/ui/FooterLink';
 import { apiPost } from '../../utils/api';
 import { setToken } from '../../utils/auth';
+import { signInWithGoogle } from '../../utils/googleAuth';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -19,7 +20,6 @@ export default function Login() {
     setForm((f) => ({ ...f, [field]: e.target.value }));
 
   const validate = () => {
-    // Specific, field-identifying error messages (G21 / R21)
     const next = {};
     if (!form.email.trim()) {
       next.email = 'Please enter your email address.';
@@ -41,7 +41,7 @@ export default function Login() {
     setSubmitting(true);
     try {
       const data = await apiPost('/auth/login', { email: form.email, password: form.password });
-      setToken(data.access_token, data.user_id, data.email);
+      setToken(data.access_token, data.user_id, data.email, data.name || '');
       navigate('/upload');
     } catch (err) {
       setErrors((prev) => ({ ...prev, password: err.message }));
@@ -50,8 +50,17 @@ export default function Login() {
     }
   };
 
-  const handleGoogleClick = () => {
-    setErrors((prev) => ({ ...prev, password: 'Google auth not yet implemented.' }));
+  const handleGoogleClick = async () => {
+    setErrors({});
+    setSubmitting(true);
+    try {
+      await signInWithGoogle();
+      navigate('/upload');
+    } catch (err) {
+      setErrors((prev) => ({ ...prev, password: err.message }));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -86,7 +95,9 @@ export default function Login() {
             Forgot password?
           </Link>
         </div>
-        <Button type="submit" disabled={submitting}>Log in</Button>
+        <Button type="submit" disabled={submitting}>
+          {submitting ? 'Signing in…' : 'Log in'}
+        </Button>
       </form>
 
       <div className="flex items-center gap-3 my-6" role="presentation">

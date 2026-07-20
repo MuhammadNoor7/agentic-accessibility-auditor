@@ -3,7 +3,7 @@
 Automated accessibility auditing for **Android mobile UIs**.  
 Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `components.json`, rule-based `violations.json`, LLM-enriched explanations, and HTML/PDF reports mapped to **G01–G30** guidelines and **R01–R30** detection rules.
 
-**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — Weeks 1–6 complete: parser + **R01–R30**, agent + HTML/PDF export, Axion UI (Upload/Dashboard/Report/Records), **JWT + OTP/SMTP + Google OAuth**, 40-screen Week 6 eval, **146 pytest** collected (16 Jul 2026, `995f6d31`+).
+**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — Weeks 1–6 complete + **Week 7 QA analysis** (Noor): rule/guideline summaries on MASC 40-screen sample; parser + **R01–R30**, agent + HTML/PDF export, Axion UI, **JWT + OTP/SMTP + Google OAuth**, validation logs; Rico holdout **deferred**.
 
 ---
 
@@ -13,7 +13,7 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 |--------|--------|-------|
 | **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | MASC data, parser, **rules** (with Noor + Ayesha), JWT/records base, Docker, tests |
 | **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | Rico holdout, Figma, React frontend, SRS co-author, rules (with Salar + Noor) |
-| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | Backend API, OTP/SMTP/OAuth, JSON schemas, SDS, agent, report template, Week 6 eval, docs, QA |
+| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | Backend API, OTP/SMTP/OAuth, JSON schemas, SDS, agent, report template, **Week 7 QA eval**, docs, coordination |
 
 ---
 
@@ -21,14 +21,16 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 | Document | Path |
 |----------|------|
-| **SRS v2.5** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.0.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.md) · [`.docx`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.docx) |
-| **SDS v2.9** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) · [`.docx`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.docx) |
+| **SRS v2.6** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.0.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.md) · [`.docx`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.docx) |
+| **SDS v2.10** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) · [`.docx`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.docx) |
 | **8-week plan** | [`updated_plan.md`](updated_plan.md) · [`docs/updated_plan_v2.0.docx`](docs/updated_plan_v2.0.docx) |
 | **Progress report** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) · [`.docx`](docs/progress/Supplementary_Progress_Report_v1.0.docx) |
 | **Week 6 eval** | [`docs/week6/evaluation_sheet.md`](docs/week6/evaluation_sheet.md) · CSV · R26–R30 design DOCX |
+| **Week 7 QA** | [`docs/week7/README.md`](docs/week7/README.md) · rule/guideline summaries · team priorities |
 | **SMTP + Google setup (free)** | [`docs/auth_smtp_google_setup.md`](docs/auth_smtp_google_setup.md) |
 | **Figma screenshots** | `docs/assets/figma/` (also mirrored under `docs/progress/assets/figma/` for the progress DOCX) |
 | **Week 6 validation** | `outputs/validation_logs/noor_week6_summary.md` · `noor_week6_validation_log.txt` |
+| **Week 7 validation** | `outputs/validation_logs/noor_week7_summary.md` · `noor_week7_validation_log.txt` · `outputs/week7_summary.md` |
 
 Regenerate Word exports: `python scripts/md_to_docx.py <input.md> -o <output.docx>`.
 
@@ -53,6 +55,7 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 | UI — Axion | Ayesha / Noor | React app | **Done (Week 6 MVP)** — Upload/Dashboard/Report/Records + Sign Up/Log In/Forgot/OTP/Reset + Google |
 | Auth / Records | Salar + Noor | JWT + history | **Done** — `/auth/*`, `/records/*`; SMTP OTP; Google OAuth |
 | Week 6 eval | Noor | 40-screen sheet | **Done** — stratified seed `20260715`; 40/40 assisted FP/miss notes |
+| Week 7 QA (Noor) | Noor | Rule/guideline summaries | **Done** — `docs/week7/` + `outputs/week7_eval/`; Rico holdout deferred |
 
 **API mounts:** audit under `/api/v1/audit/*`; auth under `/auth/*`; records under `/records/*`.
 
@@ -112,7 +115,8 @@ agentic-accessibility-auditor/
 │
 ├── scripts/
 │   ├── md_to_docx.py
-│   ├── noor_week3_validate.py … noor_week6_validate.py
+│   ├── noor_week3_validate.py … noor_week6_validate.py · noor_week7_validate.py
+│   ├── run_week7_eval_analysis.py · run_rico_holdout_eval.py
 │   ├── fill_week6_manual_eval.py
 │   ├── masc_parse_signoff.py
 │   ├── validate_output.py
@@ -212,10 +216,18 @@ python test_run.py data/data-masc/xml/chat/49879.xml
 python scripts/validate_output.py
 ```
 
-### 4. Tests & Week 6 validation
+### 4. Tests & validation
 
 ```bash
 python -m pytest tests/ backend/tests/ -q
+python scripts/noor_week7_validate.py
+```
+
+Logs: `outputs/validation_logs/noor_week7_summary.md` · `outputs/week7_summary.md`
+
+Week 6 validation:
+
+```powershell
 python scripts/noor_week6_validate.py
 ```
 
@@ -269,6 +281,9 @@ streamlit run app.py
 |--------|---------|
 | [`md_to_docx.py`](scripts/md_to_docx.py) | Markdown → formatted Word |
 | [`noor_week6_validate.py`](scripts/noor_week6_validate.py) | Auth/records + eval sheet QA |
+| [`noor_week7_validate.py`](scripts/noor_week7_validate.py) | Week 7 QA analysis + pytest + logs |
+| [`run_week7_eval_analysis.py`](scripts/run_week7_eval_analysis.py) | MASC 40-screen rule/guideline summaries |
+| [`run_rico_holdout_eval.py`](scripts/run_rico_holdout_eval.py) | Rico holdout batch (when dataset ready) |
 | [`fill_week6_manual_eval.py`](scripts/fill_week6_manual_eval.py) | Assisted FP/miss fill for 40-screen CSV |
 | [`noor_week3_validate.py`](scripts/noor_week3_validate.py) … `week5` | Earlier week QA pipelines |
 | [`masc_parse_signoff.py`](scripts/masc_parse_signoff.py) | MASC parse sign-off |

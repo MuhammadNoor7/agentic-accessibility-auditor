@@ -2,8 +2,8 @@
 
 **Project:** Agentic Accessibility Auditor (Axion)  
 **Duration:** 8 weeks (Summer 2026)  
-**Last updated:** 16 July 2026  
-**Status:** Week 6 assigned deliverables complete on `noor` (`995f6d31`) — JWT/OTP/SMTP/Google auth, records, 40/40 eval sheet, Weeks 1–5 done; Friday demo walkthrough optional
+**Last updated:** 20 July 2026  
+**Status:** Week 6 complete · **Week 7 (Noor) QA analysis complete** on `noor` — rule/guideline summaries, validation logs; Rico holdout batch **deferred**; Salar/Ayesha Week 7 tasks pending
 
 ---
 
@@ -208,6 +208,8 @@ Minimum policy:
 | **Salar** | Fix rule false positives; complete assigned R-block gaps | Stable rule engine across all 30 rules |
 | **Ayesha** | UI polish; finalize model/prompt comparison notes; close R-block test gaps | Production-quality Axion + model comparison |
 | **Noor** | Rico holdout evaluation; compile rule-wise and guideline-wise summary | Holdout results + G01–G30 coverage report |
+
+**Week 7 Noor status (20 Jul):** MASC 40-screen QA complete — `docs/week7/`, `outputs/week7_eval/`, validation logs. Rico holdout batch deferred to later in Week 7/8.
 
 #### Week 8 — Final deliverables
 

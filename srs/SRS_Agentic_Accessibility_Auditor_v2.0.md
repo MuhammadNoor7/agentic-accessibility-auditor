@@ -5,7 +5,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Document version** | 2.5 (content); filename retained `v2.0` for continuity |
+| **Document version** | 2.6 (content); filename retained `v2.0` for continuity |
 | **Status** | Draft for SDS handoff |
 | **Prepared by** | Ayesha Naveed + Salar (primary authors); Muhammad Noor (Lead — review, integration, API/report sections) |
 | **Institution** | National University of Computer and Emerging Sciences (FAST-NUCES) |
@@ -27,6 +27,7 @@
 | **2.3** | 2026-07-15 | Noor | Week 6 status: JWT auth + Records API implemented on `noor`; FR-AUTH/FR-REC/FR-UI.40–45 marked Done; eval sheet started |
 | **2.4** | 2026-07-16 | Noor | Week 6 close-out: OTP/forgot/reset + Gmail SMTP; Google OAuth (`GOOGLE_CLIENT_ID`); any-domain emails (Yahoo/edu/…); 40/40 eval notes; HTML/PDF export fix; FR-AUTH/FR-EV updated Done |
 | **2.5** | 2026-07-16 | Noor | Align §4.9 / §9 with live mounts (`/auth`, `/records`); FR-REC.5 DELETE Done; FR-IN.2 pair validation Done |
+| **2.6** | 2026-07-20 | Noor | Week 7 QA: rule-wise + guideline-wise summaries on MASC 40-screen sample (`docs/week7/`); Rico holdout eval deferred; team priority fixes for Salar/Ayesha |
 
 > **Note on UI specifications:** Screen layouts, branding, and interaction flows in Section 3.1 and **Appendix F** are derived from **Ayesha Naveed's Figma designs** shared in `#tem-all-dynamo` Slack. Reference screenshots are embedded in Appendix F (`docs/assets/figma/`). Screens covered: Sign Up, Log In, Forgot Password, OTP Verify, Reset Password, Upload (all states), Audit Complete modal, Dashboard, Issue Detail drawer, Audit Report, Generate Report modal, and **Records (Reports)** page.
 
@@ -894,7 +895,7 @@ Minimum API contract for Axion ↔ FastAPI (normative OpenAPI in SDS):
 | **UI Dashboard (Axion)** | Upload, validation panel, issues table, report view, PDF/HTML download | Ayesha |
 | **Report generator** | Readable HTML/PDF with score, summary, per-violation detail, fixes | Noor |
 | **Docker** | `docker-compose up --build` starts backend + auditor; `/health` responds | Salar |
-| **Evaluation** | Week 6: 40 stratified screens + 40/40 assisted FP/miss notes (`docs/week6/`); Rico holdout final summary Week 8 | All |
+| **Evaluation** | Week 6: 40 stratified screens + 40/40 assisted FP/miss notes (`docs/week6/`); **Week 7:** rule/guideline QA summaries + cross-check (`docs/week7/`); Rico holdout batch **deferred** (Week 8) | All |
 
 ---
 
@@ -1011,7 +1012,7 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 | FR-AUTH.1–7 | Authentication | Must | §4.9 | Ayesha / Salar / **Noor (OTP+SMTP+OAuth)** | **Done** (JWT register/login/me; forgot/OTP/reset; Google Sign-In; any-domain email) |
 | FR-REC.1–4 | Records storage | Must | §4.9 | Salar / Ayesha / Noor | **Done** (flat JSON store + score/filename fields + report reopen) |
 | FR-DK.1–3 | Docker Compose | Must | §4.7 | Salar | **Done** (synced to `noor`) |
-| FR-EV.1–6 | Evaluation | Must | §4.8 | Noor | **Done for Week 6 batch** (40 stratified-random screens + 40/40 assisted FP/miss notes; Rico holdout remains Week 8) |
+| FR-EV.1–6 | Evaluation | Must | §4.8 | Noor | **Week 6 done** (40 stratified-random + 40/40 assisted notes). **Week 7 (Noor):** rule-wise R01–R30 + G01–G30 coverage reports on same sample (`docs/week7/`, `outputs/week7_eval/`). **Rico holdout (FR-EV.5) deferred** |
 | FR-CV.1–3 | CV/CNN/R09 | Stretch | §4.4 | Noor | Stretch |
 | FR-AAA-01 … 40 | Legacy IDs | — | Mapped above | — | — |
 

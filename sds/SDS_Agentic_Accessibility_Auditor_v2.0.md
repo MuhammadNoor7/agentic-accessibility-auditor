@@ -5,7 +5,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Document version** | 2.9 |
+| **Document version** | 2.10 |
 | **Status** | Implementation reference |
 | **Prepared by** | Muhammad Noor (Lead — primary author); Salar + Ayesha (SRS inputs, parser/UI design) |
 | **Institution** | FAST-NUCES |
@@ -29,6 +29,7 @@
 | **2.7** | 2026-07-15 | Noor | Week 6: JWT auth + records routers synced from Salar; Records UI live; eval sheet (40 stratified-random); validation logs; `.gitignore` from Salar |
 | **2.8** | 2026-07-16 | Noor | OTP/SMTP/Google OAuth design implemented; env credentials documented; report export persistence + autoescape; eval 40/40; auth suite 22 tests |
 | **2.9** | 2026-07-16 | Noor | API mount accuracy (`/auth`, `/records`, `/api/v1/audit`); records store `records.db.json`; docker = backend+auditor; 146 tests; drop planned/stretch leftovers |
+| **2.10** | 2026-07-20 | Noor | Week 7 QA scripts (`run_week7_eval_analysis.py`, `noor_week7_validate.py`); tracked outputs `outputs/week7_eval/`; Rico holdout script ready (`run_rico_holdout_eval.py`) — batch deferred |
 
 ---
 
@@ -1100,6 +1101,9 @@ components:
 | `backend/auth.py` / `otp_store.py` / `email_service.py` / `routers/auth_router.py` | JWT + OTP/SMTP + Google OAuth (**Done** — Salar base + Noor Week 6) |
 | `backend/routers/records_router.py` | Per-user records CRUD + report reopen (**Done**; store `backend/data/records.db.json`) |
 | `scripts/noor_week6_validate.py` | Week 6 auth/records + eval sheet validation |
+| `scripts/run_week7_eval_analysis.py` | Week 7 MASC 40-screen rule/guideline QA analysis |
+| `scripts/noor_week7_validate.py` | Week 7 eval + pytest + artifact checks + validation logs |
+| `scripts/run_rico_holdout_eval.py` | Rico holdout batch eval (deferred; ready when dataset local) |
 | `tests/test_parser.py` | Parser unit tests |
 | `tests/test_rules.py` | Rules R01–R30 unit tests |
 | `tests/test_audit.py` | Audit API tests (violations + report + download) |

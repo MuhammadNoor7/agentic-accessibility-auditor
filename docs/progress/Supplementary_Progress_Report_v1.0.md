@@ -2,7 +2,7 @@
 
 ## Agentic Accessibility Auditor (Axion)
 
-**Practical work completed — Weeks 1–6 (baseline 1 July 2026; updated 16 July 2026)**  
+**Practical work completed — Weeks 1–6 (baseline 1 July 2026; updated 20 July 2026)**  
 **Living document — see §15 for team updates; §12–§13 for literature + rule ownership**
 
 | Field | Value |
@@ -41,9 +41,9 @@ This document gathers what has actually been built, run, and produced so far. It
 | FastAPI audit API | **Done** — paired `POST /api/v1/audit`, violations, report, download |
 | Auth + Records | **Done on `noor`** — JWT + OTP/SMTP + Google OAuth + per-user `/records` (score/filename fields) |
 | Docker | **Synced** — compose services **backend + auditor** (frontend via local Vite) |
-| Documentation | SRS **v2.5**, SDS **v2.9**, progress report **v1.13**, plan updated 16 Jul |
+| Documentation | SRS **v2.6**, SDS **v2.10**, progress report **v1.14**, plan updated 20 Jul |
 
-**Bottom line (16 Jul):** Week 6 **complete** on `noor` (`995f6d31`): Salar JWT/records + Ayesha auth UI + Noor OTP/SMTP/Google OAuth, 40/40 eval sheet, HTML/PDF export fix, validation logs refreshed. Optional: Friday demo walkthrough; training stretch / Rico holdout in Weeks 7–8.
+**Bottom line (20 Jul):** Week 6 **complete** on `noor`. **Week 7 (Noor):** MASC 40-screen QA analysis — rule-wise R01–R30 + guideline G01–G30 summaries, FP/miss QA notes, Week 6 cross-check, team priority fixes; validation logs refreshed. **Rico holdout batch deferred.** Salar/Ayesha Week 7 tasks (FP tuning, UI polish) pending.
 
 ---
 
@@ -80,6 +80,7 @@ This document gathers what has actually been built, run, and produced so far. It
 | API — Audit | Noor | FastAPI | **Done** | `/api/v1/audit/*` |
 | Auth / Records | Salar + Noor | JWT + OTP/SMTP/OAuth + history | **Done** | `/auth/*`, `/records/*`; **146** pytest collected |
 | Week 6 eval | Noor | 40-screen sheet | **Done** | `docs/week6/` + validation logs |
+| Week 7 QA | Noor | Rule/guideline summaries | **Done** (holdout deferred) | `docs/week7/` · `outputs/week7_eval/` |
 
 ---
 
@@ -791,6 +792,76 @@ Full log file (also copied under progress assets):
 
 ---
 
+## 15B. Week 7 evidence pack (QA analysis — Noor)
+
+> **Scope:** MASC 40-screen stratified sample (seed `20260715`). Rico holdout batch **not run** in this pass.  
+> Artifacts: `docs/week7/` · `outputs/week7_eval/` · `outputs/validation_logs/noor_week7_*`
+
+### 15B.1 Week 7 deliverables (Noor)
+
+| Item | Path | Status |
+|------|------|--------|
+| Per-screen results (violations, score, R01–R30 counts) | `outputs/week7_eval/per_screen_results.csv` | Done |
+| Rule-wise summary R01–R30 | `docs/week7/rule_summary.md` + CSV | Done |
+| Guideline coverage G01–G30 | `docs/week7/guideline_summary.md` + CSV | Done |
+| QA notes (FP / miss / Week 7 vs 8) | `docs/week7/qa_notes.md` | Done |
+| Week 6 cross-check | `docs/week7/week6_crosscheck.md` | Done |
+| Team priorities (Salar/Ayesha) | `docs/week7/team_priority_fixes.md` | Done |
+| Validation | `scripts/noor_week7_validate.py` | PASS (20 Jul) |
+| Rico holdout batch | `scripts/run_rico_holdout_eval.py` | **Deferred** |
+
+### 15B.2 Key metrics (MASC n=40)
+
+| Metric | Value |
+|--------|------:|
+| Screens evaluated | 40 |
+| Failures | 0 |
+| Mean violations / screen | 64.3 |
+| Median violations / screen | 42 |
+| Mean accessibility score | 6.8 |
+| Manual mostly_agree | 32 |
+| Manual agree_clean | 3 |
+| Manual over_flagging | 2 |
+| Manual mixed_r30_noise | 3 |
+
+#### Top rules by violation count
+
+| Rule | Violations | Notes |
+|------|----------:|-------|
+| R07 | 1127 | 100% of screens — primary FP cluster (nesting/zero-size) |
+| R08 | 629 | 60% of screens — overlap pairs |
+| R01 | 324 | Missing labels — mix of real + decorative FP |
+| R18 | 102 | Multi-touch heuristic |
+| R02 | 89 | Image buttons without description |
+| R30 | 89 | Icon-only density — 3 manual mixed_r30_noise screens |
+
+#### Guidelines with zero hits in sample
+
+G09, G10, G12, G13, G22, G27, G28, G29 — mostly media/CV/stretch rules not triggered on this XML sample.
+
+### 15B.3 Week 7 validation (20 Jul 2026)
+
+```
+STEP 1: run_week7_eval_analysis.py  → 40 screens, 0 failures
+STEP 2: pytest tests/test_rules.py → PASS
+STEP 3: pytest backend/tests/test_auth.py → PASS
+STEP 4: pytest tests/test_audit.py → PASS
+STEP 5–6: week7_eval outputs + docs/week7 → PASS
+Overall → PASS
+```
+
+Full log: `outputs/validation_logs/noor_week7_validation_log.txt`  
+Summary: `outputs/validation_logs/noor_week7_summary.md` · `outputs/week7_summary.md`
+
+### 15B.4 Team priority handoff (Week 7 → Salar/Ayesha)
+
+1. **P0 Salar** — R07/R08 nesting FP suppression  
+2. **P0 Salar** — R30 overlap tolerance (list/chat/map/search)  
+3. **P1 Ayesha** — UI polish for demo path  
+4. **P2 Noor** — Rico holdout when dataset local  
+
+---
+
 ## 16. Document history
 
 | Version | Date | Author | Changes |
@@ -810,6 +881,7 @@ Full log file (also copied under progress assets):
 | **1.11** | **15 Jul 2026** | **Noor** | Week 6: Salar auth/records + Ayesha prompt/Dashboard synced; random 40-screen eval sheet; Week 6 validation logs; `.gitignore` from Salar |
 | **1.12** | **16 Jul 2026** | **Noor** | Week 6 close-out: OTP/SMTP/Google OAuth; any-domain emails; 40/40 eval notes; report export fix; SRS/SDS/plan DOCX regen; auth 22 / audit 9 tests |
 | **1.13** | **16 Jul 2026** | **Noor** | Progress evidence pack §15A (validation log excerpt + tables + Figma images); pipeline status Done; SRS/SDS path accuracy sync |
+| **1.14** | **20 Jul 2026** | **Noor** | Week 7 QA evidence §15B: rule/guideline summaries, metrics tables, validation logs; Rico holdout deferred; SRS v2.6 / SDS v2.10 sync |
 
 ---
 

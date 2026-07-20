@@ -1,0 +1,68 @@
+{
+  "generated_at": "2026-07-20 10:46 UTC",
+  "dataset": "MASC Week 6 stratified sample",
+  "sample_seed": "20260715",
+  "screens": 40,
+  "failures": 0,
+  "mean_violations": 64.3,
+  "median_violations": 42,
+  "mean_score": 6.75,
+  "rico_holdout": "deferred \u2014 run scripts/run_rico_holdout_eval.py when ready",
+  "manual_verdicts": {
+    "over_flagging": 2,
+    "mostly_agree": 32,
+    "agree_clean": 3,
+    "mixed_r30_noise": 3
+  },
+  "auto_verdicts": {
+    "over_flagging": 18,
+    "mostly_agree": 19,
+    "mixed_r30_noise": 3
+  },
+  "verdict_match": {
+    "yes": 24,
+    "no": 16
+  },
+  "top_rules": [
+    [
+      "R07",
+      1127
+    ],
+    [
+      "R08",
+      629
+    ],
+    [
+      "R01",
+      324
+    ],
+    [
+      "R18",
+      102
+    ],
+    [
+      "R02",
+      89
+    ],
+    [
+      "R30",
+      89
+    ],
+    [
+      "R03",
+      66
+    ],
+    [
+      "R17",
+      44
+    ],
+    [
+      "R11",
+      25
+    ],
+    [
+      "R15",
+      21
+    ]
+  ]
+}

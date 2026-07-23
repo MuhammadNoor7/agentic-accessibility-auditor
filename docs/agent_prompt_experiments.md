@@ -1,5 +1,5 @@
 # Agent Prompt Experiments — Week 4
-
+**Status:** FINAL (as of Week 7 — re-tested blockers, no change)
 **Author:** Ayesha Naveed
 **Date:** July 2026
 **Goal:** Compare the 4 configured LLM providers (Anthropic, OpenAI, Gemini, Groq) for the explainer agent, to resolve TBD-01.
@@ -235,3 +235,7 @@ See `docs/TBD-01-decision.md` for the formal resolution.
 - **Explanation:** The ToggleButton with resource_id 'com.mixlr.android:id/bioSwitch' has an empty text and content description. As a toggle button, it likely has a purpose or action associated with it, but without a content description, screen readers will not be able to inform users about the button's purpose.
 - **User impact:** Blind users will not be able to understand the purpose of this button, as their screen readers will not provide any information about it. This will make it difficult or impossible for them to use this button.
 - **Fix:** Add a content description to this button, for example: android:contentDescription="@string/bio_switch_description" where bio_switch_description is a string resource describing the action of the button, such as 'Toggle bio visibility'.
+
+## Finalization note (Week 7)
+
+As of Week 7, Anthropic and OpenAI still require paid billing (no free tier), and Gemini remains blocked by Google's free-tier quota bug — confirmed unchanged since original testing. This doc is being finalized with Groq as the sole tested and recommended provider. If team budget or Google's quota issue changes in the future, re-run `scripts/run_explainer_sample.py` against the newly-available provider(s) and update this doc with a real comparison at that time.

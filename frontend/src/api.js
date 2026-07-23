@@ -38,14 +38,17 @@ export async function getAuditReport(auditId) {
   return res.json();
 }
 
-// Raw violations doc — used to persist severity counts via POST /records.
+// Raw violations doc for a just-completed audit — used to build the summary
+// (screen_id, total_violations, per-severity counts) persisted via POST /records.
 export async function getAuditViolations(auditId) {
   const res = await fetch(`${API_BASE}/api/v1/audit/${auditId}/violations`);
   if (!res.ok) throw new Error(`Violations fetch failed (${res.status})`);
   return res.json();
 }
 
-// Re-open a past record's report from disk (survives backend restart).
+// Re-open the full report for a past record from Audit History (Records page).
+// Unlike getAuditReport, this reads the persisted report off disk by record_id,
+// so it works even after the backend has restarted since the audit ran.
 export async function getRecordReport(recordId) {
   const res = await fetch(`${API_BASE}/records/${recordId}/report`, {
     headers: { ...getAuthHeaders() },

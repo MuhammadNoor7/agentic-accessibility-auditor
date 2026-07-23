@@ -388,7 +388,9 @@ export default function Report() {
   // or the shared store (getAuditId) if the page was refreshed / reached another way.
   const auditId = location.state?.auditId || getAuditId()
 
-  // recordId arrives when opened from Audit History (Records page).
+  // recordId arrives when opened from Audit History (Records page) — it loads
+  // straight from the persisted report on disk instead of the in-memory audit job,
+  // so it works for past records even after the backend has restarted.
   const recordId = location.state?.recordId || null
 
   const [report, setReport] = useState(null)

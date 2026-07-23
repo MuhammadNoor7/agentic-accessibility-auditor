@@ -27,7 +27,8 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
-
+data/
+outputs/
 # Generic runtime uploads / outputs (not for Git)
 # Note: do not use a bare `data/` or `outputs/` rule — it blocks the
 # !exceptions below (validation_logs + samples must remain trackable).
@@ -79,3 +80,9 @@ backend/data/*.json
 
 # Local one-off helpers at repo root only
 /_*.py
+
+PROJECT_EXPLAINED.md
+
+# YOLO UI detector training artifacts (notebooks/train_yolo_ui_detector.ipynb)
+runs/
+models/*.pt

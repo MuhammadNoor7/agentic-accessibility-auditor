@@ -28,7 +28,7 @@
 | **2.4** | 2026-07-16 | Noor | Week 6 close-out: OTP/forgot/reset + Gmail SMTP; Google OAuth (`GOOGLE_CLIENT_ID`); any-domain emails (Yahoo/edu/…); 40/40 eval notes; HTML/PDF export fix; FR-AUTH/FR-EV updated Done |
 | **2.5** | 2026-07-16 | Noor | Align §4.9 / §9 with live mounts (`/auth`, `/records`); FR-REC.5 DELETE Done; FR-IN.2 pair validation Done |
 | **2.6** | 2026-07-20 | Noor | Week 7 QA: rule-wise + guideline-wise summaries on MASC 40-screen sample (`docs/week7/`); Rico holdout eval deferred; team priority fixes for Salar/Ayesha |
-| **2.7** | 2026-07-27 | Noor | Post–Week 7 YOLO track: new FR-CV.4–FR-CV.7 screenshot-only UI-element detector fallback requirement (§4.4); F13 product function; Appendix B traceability updated; Progress Report v1.22 reference (§15C.8 artifact inventory) |
+| **2.7** | 2026-07-27 | Noor | Post–Week 7 YOLO track: new FR-CV.4–FR-CV.7 screenshot-only UI-element detector fallback requirement (§4.4); F13 product function; Appendix B traceability updated; Progress Report v1.23 comprehensive embedded visualizations + outputs inventory (§15D–15F) |
 
 > **Note on UI specifications:** Screen layouts, branding, and interaction flows in Section 3.1 and **Appendix F** are derived from **Ayesha Naveed's Figma designs** shared in `#tem-all-dynamo` Slack. Reference screenshots are embedded in Appendix F (`docs/assets/figma/`). Screens covered: Sign Up, Log In, Forgot Password, OTP Verify, Reset Password, Upload (all states), Audit Complete modal, Dashboard, Issue Detail drawer, Audit Report, Generate Report modal, and **Records (Reports)** page.
 

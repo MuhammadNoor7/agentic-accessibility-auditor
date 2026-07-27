@@ -26,7 +26,7 @@
 |----------|------|---------|
 | **SRS v2.7** | `srs/SRS_Agentic_Accessibility_Auditor_v2.0.md` (+ `.docx`) | What the system must do |
 | **SDS v2.11** | `sds/SDS_Agentic_Accessibility_Auditor_v2.0.md` (+ `.docx`) | How to implement it |
-| **Progress report v1.22** | `docs/progress/Supplementary_Progress_Report_v1.0.md` (+ `.docx`) | What is actually done — §15C/§15C.7–8 has complete YOLO `runs/` artifact inventory |
+| **Progress report v1.23** | `docs/progress/Supplementary_Progress_Report_v1.0.md` (+ `.docx`) | What is actually done — §15D–15F comprehensive: 20 embedded images from YOLO runs/, 9,260+ outputs/ folder inventory (violations JSON, reports, logs), integration checklist |
 | **This plan** | `updated_plan.md` (+ `docs/updated_plan_v2.0.docx`) | Weekly schedule + folder map |
 
 Word exports: `scripts/md_to_docx.py` · Figma assets: `docs/assets/figma/`

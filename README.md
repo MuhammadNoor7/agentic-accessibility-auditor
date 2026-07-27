@@ -24,7 +24,7 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 | **SRS v2.7** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.0.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.md) · [`.docx`](srs/SRS_Agentic_Accessibility_Auditor_v2.0.docx) |
 | **SDS v2.11** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.0.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.md) · [`.docx`](sds/SDS_Agentic_Accessibility_Auditor_v2.0.docx) |
 | **8-week plan** | [`updated_plan.md`](updated_plan.md) · [`docs/updated_plan_v2.0.docx`](docs/updated_plan_v2.0.docx) |
-| **Progress report v1.22** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) · [`.docx`](docs/progress/Supplementary_Progress_Report_v1.0.docx) — §15C/§15C.7–8 comprehensive YOLO `runs/` artifact inventory (metrics, plots, samples, weights, notebooks) |
+| **Progress report v1.23** | [`docs/progress/Supplementary_Progress_Report_v1.0.md`](docs/progress/Supplementary_Progress_Report_v1.0.md) · [`.docx`](docs/progress/Supplementary_Progress_Report_v1.0.docx) — §15D–15F comprehensive embedded visualizations + outputs: 20 images from YOLO runs/ + 9,260+ pipeline artefacts inventory from outputs/ with tables + integration readiness checklist |
 | **Week 6 eval** | [`docs/week6/evaluation_sheet.md`](docs/week6/evaluation_sheet.md) · CSV · R26–R30 design DOCX |
 | **Week 7 QA** | [`docs/week7/README.md`](docs/week7/README.md) · rule/guideline summaries · team priorities |
 | **YOLO UI detector (post–Week 7)** | `notebooks/train_yolo_ui_detector.ipynb` · `runs/runs/yolo_ui_detector/` (config, metrics, plots, exported `best.pt`) · `src/yolo_ui_detector.py` |

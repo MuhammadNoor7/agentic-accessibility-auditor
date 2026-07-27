@@ -30,7 +30,7 @@
 | **2.8** | 2026-07-16 | Noor | OTP/SMTP/Google OAuth design implemented; env credentials documented; report export persistence + autoescape; eval 40/40; auth suite 22 tests |
 | **2.9** | 2026-07-16 | Noor | API mount accuracy (`/auth`, `/records`, `/api/v1/audit`); records store `records.db.json`; docker = backend+auditor; 146 tests; drop planned/stretch leftovers |
 | **2.10** | 2026-07-20 | Noor | Week 7 QA scripts (`run_week7_eval_analysis.py`, `noor_week7_validate.py`); tracked outputs `outputs/week7_eval/`; Rico holdout script ready (`run_rico_holdout_eval.py`) — batch deferred |
-| **2.11** | 2026-07-27 | Noor | §3.6 added: YOLO UI-element detector module design (training config, dataset split, class taxonomy, results, `src/yolo_ui_detector.py`); Appendix B file map + §14 traceability updated; SRS FR-CV.4–7 cross-reference; Progress Report v1.22 artifact inventory sync |
+| **2.11** | 2026-07-27 | Noor | §3.6 added: YOLO UI-element detector module design (training config, dataset split, class taxonomy, results, `src/yolo_ui_detector.py`); Appendix B file map + §14 traceability updated; SRS FR-CV.4–7 cross-reference; Progress Report v1.23 comprehensive embedded visuals + outputs sync (§15D–15F) |
 
 ---
 

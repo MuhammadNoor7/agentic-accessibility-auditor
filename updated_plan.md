@@ -2,8 +2,8 @@
 
 **Project:** Agentic Accessibility Auditor (Axion)  
 **Duration:** 8 weeks (Summer 2026)  
-**Last updated:** 20 July 2026  
-**Status:** Week 6 complete · **Week 7 (Noor) QA analysis complete** on `noor` — rule/guideline summaries, validation logs; Rico holdout batch **deferred**; Salar/Ayesha Week 7 tasks pending
+**Last updated:** 27 July 2026  
+**Status:** Week 6 complete · **Week 7 (Noor) QA analysis complete** on `noor` — rule/guideline summaries, validation logs; Rico holdout batch **deferred**; Salar/Ayesha Week 7 tasks pending · **Post–Week 7 YOLO track:** MASC-only training run 1 epoch logged (mAP50-95 0.285), `best.pt` exported, inference module scaffolded — see `runs/` + Progress Report §15C/§15C.7
 
 ---
 
@@ -24,9 +24,9 @@
 
 | Document | Path | Purpose |
 |----------|------|---------|
-| **SRS v2.3** | `srs/SRS_Agentic_Accessibility_Auditor_v2.0.md` (+ `.docx`) | What the system must do |
-| **SDS v2.7** | `sds/SDS_Agentic_Accessibility_Auditor_v2.0.md` (+ `.docx`) | How to implement it |
-| **Progress report** | `docs/progress/Supplementary_Progress_Report_v1.0.md` (+ `.docx`) v1.11 | What is actually done |
+| **SRS v2.7** | `srs/SRS_Agentic_Accessibility_Auditor_v2.0.md` (+ `.docx`) | What the system must do |
+| **SDS v2.11** | `sds/SDS_Agentic_Accessibility_Auditor_v2.0.md` (+ `.docx`) | How to implement it |
+| **Progress report v1.22** | `docs/progress/Supplementary_Progress_Report_v1.0.md` (+ `.docx`) | What is actually done — §15C/§15C.7–8 has complete YOLO `runs/` artifact inventory |
 | **This plan** | `updated_plan.md` (+ `docs/updated_plan_v2.0.docx`) | Weekly schedule + folder map |
 
 Word exports: `scripts/md_to_docx.py` · Figma assets: `docs/assets/figma/`
@@ -54,6 +54,9 @@ agentic-accessibility-auditor/          ★ MAIN REPO (branch: noor)
 │   │   ├── violations/samples/         ✅ 56 fixture JSON samples (R01–R30, no R28)
 │   │   ├── reports/samples/            ✅ Example JSON/HTML/PDF report
 │   │   └── validation_logs/            noor_week1–6 logs + summaries
+│   ├── runs/                           🟡 YOLO UI detector track (post–Week 7)
+│   │   ├── notebooks/                  train_yolo_ui_detector.ipynb + base weights
+│   │   └── runs/yolo_ui_detector/      args.yaml, results.csv, plots, export/best.pt
 │   ├── docker-compose.yml              ✅ Synced from Salar (Week 6)
 │   └── test_run.py                     batch + single + --fixtures
 ```
@@ -211,6 +214,8 @@ Minimum policy:
 
 **Week 7 Noor status (20 Jul):** MASC 40-screen QA complete — `docs/week7/`, `outputs/week7_eval/`, validation logs. Rico holdout batch deferred to later in Week 7/8.
 
+**Post–Week 7 status (27 Jul):** YOLO UI-element detector track — MASC-only training run, 1 epoch logged (precision 0.471, recall 0.420, mAP50 0.397, mAP50-95 0.285); best checkpoint exported (`runs/runs/yolo_ui_detector/export/yolo_ui_detector_best.pt`); `src/yolo_ui_detector.py` inference module scaffolded, not yet wired into the audit pipeline. Full results: Progress Report §15C/§15C.7.
+
 #### Week 8 — Final deliverables
 
 | Person | Tasks | Deliverable |
@@ -227,7 +232,7 @@ Minimum policy:
 |------|-------|
 | **Must Have** | Parser ✅ · R01–R30 rules ✅ · LLM explanations ✅ · HTML/PDF ✅ · Upload/Dashboard/Report ✅ · Auth + Records ✅ · Docker ✅ · 25–40 screen eval ✅ (40/40 assisted notes) · OTP/forgot/reset + SMTP ✅ · Google OAuth ✅ |
 | **Should Have** | Batch API · annotated screenshot regions in UI · deeper prompt comparison notes |
-| **Stretch** | R09 contrast (CV) · CNN / lightweight training on MASC train→val→test · click-to-highlight in HTML · Rico holdout batch (Week 8) |
+| **Stretch** | R09 contrast (CV) · **YOLO UI-element detector** (MASC train→val→test; 1 epoch logged, mAP50-95 0.285; `runs/` — see Progress Report §15C) · click-to-highlight in HTML · Rico holdout batch (Week 8) |
 
 ---
 

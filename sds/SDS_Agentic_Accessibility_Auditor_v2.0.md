@@ -5,7 +5,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Document version** | 2.10 |
+| **Document version** | 2.11 |
 | **Status** | Implementation reference |
 | **Prepared by** | Muhammad Noor (Lead — primary author); Salar + Ayesha (SRS inputs, parser/UI design) |
 | **Institution** | FAST-NUCES |
@@ -30,6 +30,7 @@
 | **2.8** | 2026-07-16 | Noor | OTP/SMTP/Google OAuth design implemented; env credentials documented; report export persistence + autoescape; eval 40/40; auth suite 22 tests |
 | **2.9** | 2026-07-16 | Noor | API mount accuracy (`/auth`, `/records`, `/api/v1/audit`); records store `records.db.json`; docker = backend+auditor; 146 tests; drop planned/stretch leftovers |
 | **2.10** | 2026-07-20 | Noor | Week 7 QA scripts (`run_week7_eval_analysis.py`, `noor_week7_validate.py`); tracked outputs `outputs/week7_eval/`; Rico holdout script ready (`run_rico_holdout_eval.py`) — batch deferred |
+| **2.11** | 2026-07-27 | Noor | §3.6 added: YOLO UI-element detector module design (training config, dataset split, class taxonomy, results, `src/yolo_ui_detector.py`); Appendix B file map + §14 traceability updated; SRS FR-CV.4–7 cross-reference; Progress Report v1.22 artifact inventory sync |
 
 ---
 
@@ -110,6 +111,7 @@ This document provides:
 | Report generator | `src/report.py` | Noor | **Done** (Jinja2 HTML + PIL + Playwright PDF) |
 | Axion React UI | `frontend/` | Ayesha / Salar / Noor | **Done** for MVP screens including Forgot/OTP/Reset + Google Sign-In + profile initials |
 | pytest suite | `tests/`, `backend/tests/` | Salar / Noor | **Done** (**146** collected; auth 22, rules 78, audit 9, …) |
+| YOLO UI detector (screenshot-only fallback) | `src/yolo_ui_detector.py`, `notebooks/train_yolo_ui_detector.ipynb`, `runs/` | Salar (notebook) / Noor (Colab train) | **In progress** — MASC-only training run 1 epoch logged (mAP50-95 0.285); `best.pt` exported; not yet wired into pipeline |
 
 ---
 
@@ -372,6 +374,63 @@ async def run_audit(audit_id: str, user_id: str) -> None:
 ```
 
 Statuses: `pending` → `parsing` → `checking` → `explaining` → `reporting` → `complete` | `error`
+
+---
+
+### 3.6 YOLO UI-element detector module (screenshot-only fallback)
+
+**SRS:** FR-CV.4–FR-CV.7 | **Owner:** Salar (training notebook) / Noor (Colab training + inference module) | **Status:** In progress (training) — inference module scaffolded, not pipeline-wired
+
+#### 3.6.1 Purpose
+
+The primary pipeline (§2.2) requires a **paired screenshot + XML** and derives `components.json` from the XML hierarchy. The YOLO module exists to make the auditor **degrade gracefully** when the XML view hierarchy is unavailable, malformed, or intentionally blocked (e.g. some hardened apps suppress the accessibility tree) — the detector infers UI element boxes and coarse types directly from screenshot pixels, so the rest of the pipeline (rule engine → agent → report) can still run on a best-effort `components.json`.
+
+#### 3.6.2 Data and training design
+
+| Decision | Detail |
+|----------|--------|
+| Train / val / test | **MASC only**, via existing stratified splits (`data/data-masc/splits/`) — never Rico |
+| Rico holdout | Reserved for **generalization eval only** (zero-shot / fine-tuned comparison); enforced by a separate `rico_yolo_dataset/dataset.yaml` whose `train`/`val`/`test` all point at `images/test` so it can never accidentally be used to train |
+| Label source | Generated from XML bounds at **label-generation time only** — the trained model sees pixels only at inference, never XML |
+| Base architecture | Ultralytics YOLO (`yolo11s.pt` pretrained checkpoint as starting weights, per `notebooks/train_yolo_ui_detector.ipynb`) |
+| Runtime | Google Colab **T4** GPU (~16 GB) |
+| Key hyperparameters | `epochs=60` (early-stop `patience=10`), `batch=8`, `imgsz=960`, `optimizer=auto` (`lr0=0.01`, `lrf=0.01`, `cos_lr=true`), `seed=42`, `deterministic=true` — full config in `runs/runs/yolo_ui_detector/runs/yolo_ui_detector/args.yaml` |
+| Class taxonomy (9) | `text`, `image`, `icon`, `button_labeled`, `button_icon_only`, `input_field`, `checkbox_toggle`, `tab_item`, `list_item` |
+| Smoke test mode | `LOCAL_MODE=True` (~20 images, 1 epoch) validates paths before the full Colab run |
+
+#### 3.6.3 Results (local run, verified 27 Jul 2026)
+
+One completed epoch is logged in the local run mirror (`runs/runs/yolo_ui_detector/runs/yolo_ui_detector/results.csv`):
+
+| Metric | Value |
+|--------|------:|
+| Precision | 0.4711 |
+| Recall | 0.4196 |
+| mAP50 | 0.3971 |
+| mAP50-95 | 0.2846 |
+| Train box/cls/dfl loss | 0.987 / 1.390 / 1.194 |
+| Val box/cls/dfl loss | 1.095 / 1.604 / 1.285 |
+
+Full run artifacts (PR/F1/confusion-matrix plots, prediction samples) and the longer multi-epoch Colab/Drive progression are documented in the Supplementary Progress Report §15C / §15C.7. Best checkpoint exported to `runs/runs/yolo_ui_detector/export/yolo_ui_detector_best.pt` (~19 MB).
+
+#### 3.6.4 Inference module design
+
+```python
+# src/yolo_ui_detector.py (scaffolded)
+def detect_ui(image_path: str, weights_path: str = "models/yolo_ui_detector_best.pt") -> dict:
+    """Run the fine-tuned YOLO detector on a screenshot and return a
+    components.json-compatible structure (component_id, class, bounds,
+    inferred=True) built purely from pixel detections."""
+```
+
+| Design point | Detail |
+|---------------|--------|
+| Output shape | Matches §4.2 `components.json` schema, with each component tagged `inferred: true` (no `text` / `content_desc` — YOLO does not read text) |
+| Confidence | Detections below a configurable confidence threshold are dropped before rule checking |
+| Integration point (planned) | `backend/services/pipeline.py` — if XML parsing fails or is absent, fall back to `detect_ui(screenshot)` instead of `parse_xml_file(...)` before handing off to the rule engine (§3.2) |
+| Rule-engine impact | Rules that depend on XML-only fields (`content-desc`, `focus_order`, `hint`, etc. — see §3.1.5) are expected to under-fire on YOLO-only input; this is a known, documented limitation, not silently hidden (FR-CV.7) |
+
+**Not yet done:** pipeline wiring (fallback trigger in `pipeline.py`), Rico holdout zero-shot/fine-tuned comparison, and full 60-epoch convergence. Tracked in Progress Report §15C.6 Next steps.
 
 ---
 
@@ -996,6 +1055,7 @@ tests/test_explainer.py    # anti-hallucination / batching (mocked LLM)
 | NFR-1–20 | §2, §7, §11, §12 | Cross-cutting |
 | §8 JSON schemas | §4 | `auditor_schema.json` |
 | §9 REST API | §5, Appendix A | `backend/routers/` |
+| FR-CV.4–7 | §3.6 | `src/yolo_ui_detector.py`, `notebooks/train_yolo_ui_detector.ipynb` (**In progress**) |
 
 ---
 
@@ -1117,6 +1177,11 @@ components:
 | `outputs/reports/` | Agent-enriched `*_report.json` + generated `.html` / `.pdf` |
 | `outputs/validation_logs/` | `noor_week1`–`week6` validation logs + summaries |
 | `backend/data/records.db.json` | Prototype per-user audit history (score + screenshot/XML names) |
+| `src/yolo_ui_detector.py` | Screenshot-only YOLO fallback inference (**In progress**; scaffolded) |
+| `notebooks/train_yolo_ui_detector.ipynb` | YOLO training notebook (Salar → Noor Colab T4 run) |
+| `runs/runs/yolo_ui_detector/export/yolo_ui_detector_best.pt` | Exported best checkpoint (~19 MB) |
+| `runs/runs/yolo_ui_detector/runs/yolo_ui_detector/{args.yaml,results.csv,*.png,*.jpg}` | Full local training run config, metrics, and plots (see SDS §3.6.3, Progress Report §15C.7) |
+| `runs/runs/yolo_ui_detector/{yolo_dataset,rico_yolo_dataset}/dataset.yaml` | MASC train config vs Rico holdout eval-only config |
 
 ---
 

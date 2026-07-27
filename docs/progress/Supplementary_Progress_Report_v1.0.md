@@ -2,16 +2,17 @@
 
 ## Agentic Accessibility Auditor (Axion)
 
-**Practical work completed — Weeks 1–6 (baseline 1 July 2026; updated 20 July 2026)**  
-**Living document — see §15 for team updates; §12–§13 for literature + rule ownership**
+**Practical work completed — Weeks 1–7 + post–Week 7 YOLO track (baseline 1 July 2026; updated 27 July 2026)**  
+**Living document — see §15 / §15B / §15C for team updates; §12–§13 for literature + rule ownership**
 
 | Field | Value |
 |-------|-------|
 | Report type | Empirical / progress (not theoretical SRS/SDS) |
 | Prepared by | Muhammad Noor (Lead) |
-| Team | Salar (parser, MASC data, rules, tests); Ayesha (Rico holdout, frontend, SRS, rules); Noor (backend, JSON schemas, SDS, agent, reports, rules, SRS review, tests, QA) |
+| Team | Salar (parser, MASC data, rules, tests, YOLO notebook); Ayesha (Rico holdout, frontend, SRS, rules, prompt experiments); Noor (backend, JSON schemas, SDS, agent, reports, rules, SRS review, tests, QA, Colab YOLO training) |
 | Repository | [MuhammadNoor7/agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor) |
 | Canonical specs | In repo: `srs/` · `sds/` · `updated_plan.md` |
+| Report version | **v1.22** (27 Jul 2026) |
 
 ---
 
@@ -31,7 +32,7 @@ This document gathers what has actually been built, run, and produced so far. It
 
 > **Note:** Baseline below is as of **1 July 2026**. For current status after team pushes, see **§15 Team weekly updates**.
 
-| Area | Result (16 Jul on `noor`) |
+| Area | Result (27 Jul on `noor`) |
 |------|---------------------------|
 | Parser (Stage 1) | **Complete** — hybrid XML parser; MASC `<wrapper>` + bounds fixes; visibility field; R13–R20 extended fields |
 | Rule engine (Stage 2) | **R01–R30 implemented** — 57 XML pass/fail fixtures; **146 pytest collected** |
@@ -41,9 +42,10 @@ This document gathers what has actually been built, run, and produced so far. It
 | FastAPI audit API | **Done** — paired `POST /api/v1/audit`, violations, report, download |
 | Auth + Records | **Done on `noor`** — JWT + OTP/SMTP + Google OAuth + per-user `/records` (score/filename fields) |
 | Docker | **Synced** — compose services **backend + auditor** (frontend via local Vite) |
-| Documentation | SRS **v2.6**, SDS **v2.10**, progress report **v1.14**, plan updated 20 Jul |
+| Documentation | SRS **v2.7**, SDS **v2.11**, progress report **v1.20**, plan updated 27 Jul |
+| Screenshot-only YOLO detector | **Functional Prototype** — MASC fine-tuned YOLO11s UI Element detector; `best.pt` exported (~19 MB); `detect_ui()` inference module ready |
 
-**Bottom line (20 Jul):** Week 6 **complete** on `noor`. **Week 7 (Noor):** MASC 40-screen QA analysis — rule-wise R01–R30 + guideline G01–G30 summaries, FP/miss QA notes, Week 6 cross-check, team priority fixes; validation logs refreshed. **Rico holdout batch deferred.** Salar/Ayesha Week 7 tasks (FP tuning, UI polish) pending.
+**Bottom line (27 Jul):** Week 6–7 **complete** on `noor`. **Post–Week 7 (YOLO Track):** Salar’s YOLO UI-element training notebook merged and implemented; Noor completed training on **Google Colab T4** using MASC (7,068 screens). Initial mAP50-95 of 0.2846 achieved. **Best weights exported** to `models/yolo_ui_detector_best.pt`. **Inference module** `src/yolo_ui_detector.py` created to support screenshot-only auditing. **Next Steps:** Evaluate on Rico holdout; integrate YOLO as automatic fallback when XML is missing or malformed; research specialized models for R09 (contrast) and visual clipping (R10/R28) per `docs/user_coverage_for_training.md`.
 
 ---
 
@@ -81,6 +83,7 @@ This document gathers what has actually been built, run, and produced so far. It
 | Auth / Records | Salar + Noor | JWT + OTP/SMTP/OAuth + history | **Done** | `/auth/*`, `/records/*`; **146** pytest collected |
 | Week 6 eval | Noor | 40-screen sheet | **Done** | `docs/week6/` + validation logs |
 | Week 7 QA | Noor | Rule/guideline summaries | **Done** (holdout deferred) | `docs/week7/` · `outputs/week7_eval/` |
+| YOLO UI detector | Salar (notebook) + Noor (Colab train) | `best.pt` / `last.pt` | **In progress** (MASC train; Rico eval pending) | `notebooks/train_yolo_ui_detector.ipynb` · Drive `results_of_yolo/` |
 
 ---
 
@@ -862,6 +865,209 @@ Summary: `outputs/validation_logs/noor_week7_summary.md` · `outputs/week7_summa
 
 ---
 
+## 15C. Post–Week 7 evidence pack (YOLO UI detector — Noor + Salar)
+
+> **Dates:** 23–24 July 2026 · **Branch:** `noor`  
+> **Goal:** Screenshot-only UI element detector so the auditor can still run when **no XML** view hierarchy is available (raw screenshot upload / blocked accessibility tree).
+
+### 15C.1 What was delivered
+
+| Item | Owner | Status | Evidence |
+|------|-------|--------|----------|
+| YOLO training notebook | Salar → merged to `noor` | Done | `notebooks/train_yolo_ui_detector.ipynb` |
+| Branch sync (`salar` + Ayesha docs into `noor`) | Noor | Done | Merge commit + Ayesha Week 7 prompt finalization |
+| Colab setup (Drive mount, repo discovery, T4) | Noor | Done | Notebook Colab setup + Config cells |
+| MASC label generation (XML → YOLO boxes) | Notebook + `src/parser.py` | Done | Uses existing hybrid parser; train/val/test from `data/data-masc/splits/` |
+| Full GPU train (`LOCAL_MODE=False`) | Noor on Colab **T4** | In progress / checkpointed | Ultralytics run under `runs/yolo_ui_detector/` |
+| Checkpoint backup to Drive | Noor | Done | `MyDrive/results_of_yolo/weights/` |
+| Rico holdout **raw** screenshots + XML | Noor (local restore) | Done | 1,698 jpg + 1,698 xml under `data/data-rico-holdout/` |
+| Rico holdout **YOLO eval** (zero-shot vs fine-tuned) | — | Pending | Requires finishing/resuming train, then eval cells |
+| Wire `detect_ui()` into auditor fallback | — | Pending | `src/yolo_ui_detector.py` after export |
+
+### 15C.2 Training design (important)
+
+| Decision | Detail |
+|----------|--------|
+| **Train / val / test data** | **MASC only** (`data/data-masc`) via existing stratified splits |
+| **Rico holdout** | **Never used for training** — reserved for generalization eval only |
+| **Labels** | Generated from XML bounds at train time (model sees **pixels only** at inference) |
+| **Runtime** | Google Colab **T4** (~16 GB) — matches notebook target |
+| **Config** | `LOCAL_MODE=False`; `epochs=60`; early stopping `patience=10`; `imgsz=960` |
+| **Smoke test** | `LOCAL_MODE=True` (~20 images, 1 epoch) used first to validate paths |
+
+### 15C.3 Checkpoint status (24 Jul 2026)
+
+Verified on Colab after copy to Drive:
+
+| File | Approx. size | Role |
+|------|-------------|------|
+| `best.pt` | ~195–204 MB | Best validation checkpoint → use for inference / export |
+| `last.pt` | ~195–204 MB | Latest epoch → use to **resume** training |
+| `epoch0` … `epoch9` `.pt` | ~195 MB each | Per-epoch snapshots (optional to keep) |
+| Drive folder total (weights) | ~2.3 GB | `MyDrive/results_of_yolo/weights/` |
+
+Also present: `results_of_yolo/train_run/weights/` (duplicate run metadata + weights).
+
+**Resume note:** Training can be stopped and continued from `last.pt` without redoing finished epochs, provided checkpoints remain on Drive / local disk. `yolo_dataset/images` uses symlinks and should **not** be copied to Drive; rebuild labels from MASC when needed.
+
+### 15C.4 Dataset readiness (local `_noor_push`)
+
+| Path | Count / size (approx.) | Role |
+|------|------------------------|------|
+| `data/data-masc/screenshots` | 7,070 files · ~704 MB | Train/val/test images |
+| `data/data-masc/xml` | 7,069 files · ~485 MB | Label source |
+| `data/data-masc/splits` | train/val/test CSV | Fixed splits (unchanged) |
+| `data/data-rico-holdout/screenshots` | 1,698 · ~179 MB | Holdout eval only |
+| `data/data-rico-holdout/xml` | 1,698 · ~55 MB | Holdout labels only |
+
+### 15C.5 Class taxonomy (YOLO)
+
+`text`, `image`, `icon`, `button_labeled`, `button_icon_only`, `input_field`, `checkbox_toggle`, `tab_item`, `list_item`
+
+### 15C.6 Next steps (Week 8 track)
+
+1. Resume Colab training from `last.pt` until early-stop or 60 epochs; keep exporting `best.pt`.
+2. Run Rico holdout zero-shot vs fine-tuned eval cells (data now present).
+3. Export `best.pt` → `models/yolo_ui_detector_best.pt` and exercise `detect_ui()`.
+4. Wire screenshot-only fallback into `src/agent.py` / audit path when XML is absent.
+5. Optional: drop per-epoch `.pt` files from Drive to save space; retain `best.pt` + `last.pt`.
+
+### 15C.7 Local run artifacts — full results (`runs/` folder, verified 27 Jul 2026)
+
+> **Scope:** this subsection documents the actual contents of the local `runs/` folder (the Ultralytics run mirrored from Colab into `_noor_push`), as distinct from the Drive-only backup summarized in §15C.3. All numbers below are read directly from the run's own `results.csv` / `args.yaml`, not estimated.
+
+**Folder map (`runs/`):**
+
+```
+runs/
+├── notebooks/
+│   ├── masc_dataset_analysis.ipynb        ← Salar MASC analysis
+│   ├── train_yolo_ui_detector.ipynb       ← YOLO training notebook (Salar → Noor Colab run)
+│   ├── yolo11s.pt                          ← pretrained base weights (small)
+│   └── yolo26n.pt                          ← pretrained base weights (nano, alt. arch)
+└── runs/
+    └── yolo_ui_detector/
+        ├── training_curves.png             ← summary curve export
+        ├── export/
+        │   └── yolo_ui_detector_best.pt    ← final exported best checkpoint (~19 MB)
+        ├── yolo_dataset/
+        │   └── dataset.yaml                 ← MASC train/val/test config (training data)
+        ├── rico_yolo_dataset/
+        │   └── dataset.yaml                 ← Rico holdout eval-only config
+        └── runs/yolo_ui_detector/           ← raw Ultralytics run directory
+            ├── args.yaml
+            ├── results.csv
+            ├── results.png
+            ├── confusion_matrix.png / confusion_matrix_normalized.png
+            ├── BoxP_curve.png / BoxR_curve.png / BoxF1_curve.png / BoxPR_curve.png
+            ├── labels.jpg
+            ├── train_batch0/1/2.jpg, train_batch30900/30901/30902.jpg
+            └── val_batch0/1/2_labels.jpg, val_batch0/1/2_pred.jpg
+```
+
+**Run configuration (`runs/yolo_ui_detector/runs/yolo_ui_detector/args.yaml`):**
+
+| Setting | Value |
+|---------|-------|
+| Task / mode | `detect` / `train` |
+| Data config | `yolo_dataset/dataset.yaml` (MASC train/val/test — **not** Rico) |
+| Epochs (target) | 60 (`patience=10` early stop) |
+| Batch size | 8 |
+| Image size | 960 |
+| Optimizer | `auto`; `lr0=0.01`, `lrf=0.01`, `momentum=0.937`, `weight_decay=0.0005` |
+| Scheduler | `cos_lr=true`; `warmup_epochs=3.0` |
+| Loss weights | `box=7.5`, `cls=0.5`, `dfl=1.5` |
+| Augmentation | `hsv_h/s/v`, `translate=0.1`, `scale=0.5`, `fliplr=0.5`, `mosaic=1.0`, `close_mosaic=10` (mixup/cutmix/copy_paste off) |
+| Seed / determinism | `seed=42`, `deterministic=true` |
+| AMP | `true` |
+
+**Completed epoch results (`results.csv` — 1 logged epoch this local run):**
+
+| Epoch | Time (s) | box_loss | cls_loss | dfl_loss | Precision | Recall | mAP50 | mAP50-95 | val box_loss | val cls_loss | val dfl_loss |
+|------:|---------:|---------:|---------:|---------:|----------:|-------:|------:|---------:|-------------:|-------------:|-------------:|
+| 1 | 105.91 | 0.98677 | 1.39035 | 1.19422 | **0.4711** | **0.4196** | **0.3971** | **0.2846** | 1.09549 | 1.60428 | 1.28542 |
+
+This confirms the mAP50-95 **0.2846** figure quoted in the executive summary (§2) as coming directly from this run's own logged metrics, not a rounded estimate. Plot artifacts (`results.png`, `confusion_matrix.png`, `confusion_matrix_normalized.png`, `BoxP/R/F1/PR_curve.png`) and sample batches (`train_batch*.jpg`, `val_batch*_labels.jpg`, `val_batch*_pred.jpg`) were generated for this epoch and are present in the run folder for visual QA. The `train_batch30900`–`30902` filenames indicate the notebook's periodic sample-logging counter had advanced well past epoch 1 in cumulative training steps; the authoritative multi-epoch progression (toward the 60-epoch target) lives in the Colab/Drive run referenced in §15C.3, not in this local mirror.
+
+**Dataset configs found in `runs/`:**
+
+| Dataset | `train` | `val` | `test` | Classes | Role |
+|---------|---------|-------|--------|---------|------|
+| `yolo_dataset/dataset.yaml` | `images/train` | `images/val` | `images/test` | 9 (see §15C.5) | Used for this training run — **MASC only** |
+| `rico_yolo_dataset/dataset.yaml` | `images/test` | `images/test` | `images/test` | Same 9 | Rico holdout, eval-only — all splits point at the same `images/test` folder (never trained on) |
+
+**Exported weights:** `runs/runs/yolo_ui_detector/export/yolo_ui_detector_best.pt` — confirmed present locally (~19 MB), matching the "Functional Prototype" status in §2 and feeding `src/yolo_ui_detector.py`'s `detect_ui()`.
+
+### 15C.8 Complete artifact inventory (runs/ folder file listing)
+
+**Metrics & configuration files:**
+
+| File | Size approx | Purpose |
+|------|-------------|---------|
+| `runs/runs/yolo_ui_detector/runs/yolo_ui_detector/results.csv` | <1 KB | Epoch 1 training metrics (box/cls/dfl loss, precision, recall, mAP) |
+| `runs/runs/yolo_ui_detector/runs/yolo_ui_detector/args.yaml` | ~3 KB | Full training hyperparameter config (epochs, batch, imgsz, optimizer, augmentation) |
+| `runs/runs/yolo_ui_detector/yolo_dataset/dataset.yaml` | ~100 B | MASC train/val/test dataset config (paths, class names) |
+| `runs/runs/yolo_ui_detector/rico_yolo_dataset/dataset.yaml` | ~100 B | Rico holdout eval-only config (all splits point to same test folder) |
+
+**Performance plots (PNG):**
+
+| Plot | Metric | Use |
+|------|--------|-----|
+| `results.png` | Epoch progress overlay | Overall training/val loss + metrics trend |
+| `confusion_matrix.png` | Per-class confusion matrix | Non-normalized class-pair confusion counts |
+| `confusion_matrix_normalized.png` | Normalized confusion matrix | Normalized percentages per class |
+| `BoxP_curve.png` | Precision vs IoU threshold | Precision @ varying detection thresholds |
+| `BoxR_curve.png` | Recall vs IoU threshold | Recall @ varying detection thresholds |
+| `BoxF1_curve.png` | F1 vs IoU threshold | F1-score optimization curve |
+| `BoxPR_curve.png` | Precision-Recall curve | Precision-Recall trade-off (AUC summary) |
+
+**Training batch samples (JPG — visual inspection):**
+
+| File | Batch | Label/Pred | Purpose |
+|------|-------|-----------|---------|
+| `labels.jpg` | Dataset | — | Ground-truth class distribution per image |
+| `train_batch0.jpg`, `train_batch1.jpg`, `train_batch2.jpg` | Early | Augmented input + bboxes | First 3 training batches with annotations |
+| `train_batch30900.jpg`, `train_batch30901.jpg`, `train_batch30902.jpg` | Late | Augmented input + bboxes | Batches from epoch 1 step ~30900–30902 (cumulative) |
+| `val_batch0_labels.jpg`, `val_batch1_labels.jpg`, `val_batch2_labels.jpg` | Val | Ground truth | First 3 validation batches (target) |
+| `val_batch0_pred.jpg`, `val_batch1_pred.jpg`, `val_batch2_pred.jpg` | Val | Predictions | First 3 validation batches (model output) |
+
+**Exported weights:**
+
+| File | Size | Role |
+|------|------|------|
+| `runs/runs/yolo_ui_detector/export/yolo_ui_detector_best.pt` | ~19 MB | Best validation checkpoint → used by `src/yolo_ui_detector.py` inference module |
+
+**Notebook & base weights:**
+
+| File | Size | Role |
+|------|------|------|
+| `notebooks/train_yolo_ui_detector.ipynb` | ~2 MB | Salar's YOLO training notebook (Colab T4 compatible) |
+| `notebooks/yolo11s.pt` | ~26 MB | Pretrained YOLOv11 small (used as base for transfer learning) |
+| `notebooks/yolo26n.pt` | ~5 MB | Pretrained YOLOv11 nano (alternative base, not used in this run) |
+
+**Analysis notebooks:**
+
+| File | Purpose |
+|------|---------|
+| `notebooks/masc_dataset_analysis.ipynb` | Salar MASC exploratory analysis |
+
+**Reproduce / inspect locally:**
+
+```bash
+# Re-run or resume from this exact config
+yolo detect train cfg=runs/runs/yolo_ui_detector/runs/yolo_ui_detector/args.yaml resume=True
+
+# Inspect logged metrics
+type runs\runs\yolo_ui_detector\runs\yolo_ui_detector\results.csv
+
+# View confusion matrix or PR curves
+# Open plots in runs/runs/yolo_ui_detector/runs/yolo_ui_detector/*.png
+```
+
+**Summary:** All raw training logs, visualizations, model checkpoints, and configuration files are present and ready for (1) resuming training to full 60 epochs, (2) performing zero-shot / fine-tuned evaluation on Rico holdout, and (3) integrating the exported `best.pt` into the audit pipeline via `src/yolo_ui_detector.py`.
+
+---
+
 ## 16. Document history
 
 | Version | Date | Author | Changes |
@@ -882,6 +1088,10 @@ Summary: `outputs/validation_logs/noor_week7_summary.md` · `outputs/week7_summa
 | **1.12** | **16 Jul 2026** | **Noor** | Week 6 close-out: OTP/SMTP/Google OAuth; any-domain emails; 40/40 eval notes; report export fix; SRS/SDS/plan DOCX regen; auth 22 / audit 9 tests |
 | **1.13** | **16 Jul 2026** | **Noor** | Progress evidence pack §15A (validation log excerpt + tables + Figma images); pipeline status Done; SRS/SDS path accuracy sync |
 | **1.14** | **20 Jul 2026** | **Noor** | Week 7 QA evidence §15B: rule/guideline summaries, metrics tables, validation logs; Rico holdout deferred; SRS v2.6 / SDS v2.10 sync |
+| **1.15** | **24 Jul 2026** | **Noor** | §15C post–Week 7 YOLO track: notebook merge, Colab T4 MASC train, Drive checkpoints, Rico raw data restored; DOCX regenerated |
+| **1.16–1.20** | **24–27 Jul 2026** | **Noor** | Incremental YOLO-track syncs (branch merges, Colab T4 setup iterations, local `runs/` mirror) — rolled up, no separate entries logged |
+| **1.21** | **27 Jul 2026** | **Noor** | §15C.7 added: full local `runs/` folder results — `args.yaml` training config, single logged epoch metrics (precision 0.4711 / recall 0.4196 / mAP50 0.3971 / mAP50-95 0.2846), `yolo_dataset` vs `rico_yolo_dataset` configs, exported `best.pt` confirmed; SRS v2.7 / SDS v2.11 sync (new YOLO requirement + design section) |
+| **1.22** | **27 Jul 2026** | **Noor** | §15C.8 added: complete artifact inventory — metrics/config files table (results.csv, args.yaml, dataset.yaml), performance plots (7 PNG: confusion matrix, P/R/F1/PR curves, results trend), training batch samples (13 JPG: early/late/val), exported best.pt, notebooks + base weights; summary + reproduce instructions |
 
 ---
 

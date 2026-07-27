@@ -5,7 +5,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Document version** | 2.6 (content); filename retained `v2.0` for continuity |
+| **Document version** | 2.7 (content); filename retained `v2.0` for continuity |
 | **Status** | Draft for SDS handoff |
 | **Prepared by** | Ayesha Naveed + Salar (primary authors); Muhammad Noor (Lead — review, integration, API/report sections) |
 | **Institution** | National University of Computer and Emerging Sciences (FAST-NUCES) |
@@ -28,6 +28,7 @@
 | **2.4** | 2026-07-16 | Noor | Week 6 close-out: OTP/forgot/reset + Gmail SMTP; Google OAuth (`GOOGLE_CLIENT_ID`); any-domain emails (Yahoo/edu/…); 40/40 eval notes; HTML/PDF export fix; FR-AUTH/FR-EV updated Done |
 | **2.5** | 2026-07-16 | Noor | Align §4.9 / §9 with live mounts (`/auth`, `/records`); FR-REC.5 DELETE Done; FR-IN.2 pair validation Done |
 | **2.6** | 2026-07-20 | Noor | Week 7 QA: rule-wise + guideline-wise summaries on MASC 40-screen sample (`docs/week7/`); Rico holdout eval deferred; team priority fixes for Salar/Ayesha |
+| **2.7** | 2026-07-27 | Noor | Post–Week 7 YOLO track: new FR-CV.4–FR-CV.7 screenshot-only UI-element detector fallback requirement (§4.4); F13 product function; Appendix B traceability updated; Progress Report v1.22 reference (§15C.8 artifact inventory) |
 
 > **Note on UI specifications:** Screen layouts, branding, and interaction flows in Section 3.1 and **Appendix F** are derived from **Ayesha Naveed's Figma designs** shared in `#tem-all-dynamo` Slack. Reference screenshots are embedded in Appendix F (`docs/assets/figma/`). Screens covered: Sign Up, Log In, Forgot Password, OTP Verify, Reset Password, Upload (all states), Audit Complete modal, Dashboard, Issue Detail drawer, Audit Report, Generate Report modal, and **Records (Reports)** page.
 
@@ -223,6 +224,7 @@ All stages are orchestrated behind Docker-managed backend services (Appendix E).
 | F10 | **Optional CV contrast + CNN signal** — Supplementary visual analysis | Stretch |
 | F11 | **User authentication (Axion)** — Sign up, login, forgot password + OTP reset flow | Must |
 | F12 | **Records page** — Per-user audit history; store and retrieve reports against authenticated account | Must |
+| F13 | **Screenshot-only fallback detection (YOLO)** — Detect UI elements directly from the screenshot pixels when no (or a malformed) XML hierarchy is available | Stretch |
 
 ### 2.3 User classes and characteristics
 
@@ -553,13 +555,19 @@ Requirements are grouped by module. Legacy `FR-AAA-xx` IDs from the Axion SRS ar
 
 Full rule logic: **Section 7**.
 
-### 4.4 Computer vision and legacy CNN module (Stretch)
+### 4.4 Computer vision, legacy CNN, and YOLO UI-detector module (Stretch)
 
 | ID | Requirement | Priority |
 |----|-------------|----------|
 | FR-CV.1 | Optionally run legacy CNN accessibility classifier on screenshot as supplementary signal | Stretch |
 | FR-CV.2 | CNN outputs clearly distinguished from rule violations; never silently override rule results | Stretch |
 | FR-CV.3 | R09 contrast: crop screenshot using XML bounds; compute WCAG-style ratio (< 4.5:1 text, < 3:1 large/icons) | Stretch |
+| FR-CV.4 | System **should** run a screenshot-only YOLO UI-element detector as a fallback when the paired XML is missing, malformed, or fails to parse, producing a `components.json`-compatible component list from pixel detections alone | Stretch |
+| FR-CV.5 | YOLO detector **shall** be trained and validated only on **MASC** (train/val/test); **Rico holdout shall never be used for training** — reserved strictly for generalization evaluation, consistent with BR-4/BR-5 | Stretch |
+| FR-CV.6 | Detected classes limited to a fixed 9-class taxonomy: `text`, `image`, `icon`, `button_labeled`, `button_icon_only`, `input_field`, `checkbox_toggle`, `tab_item`, `list_item` | Stretch |
+| FR-CV.7 | YOLO fallback outputs **shall** be clearly flagged as pixel-inferred (not XML-derived) in `components.json` so downstream rule confidence can be adjusted accordingly | Stretch |
+
+**Status (27 Jul 2026):** initial MASC-only training run completed 1 epoch — precision 0.471, recall 0.420, mAP50 0.397, mAP50-95 0.285 (see Supplementary Progress Report §15C for full run results). Best checkpoint exported; `src/yolo_ui_detector.py` inference module scaffolded; not yet wired into the audit pipeline. See SDS §3.6 for design detail.
 
 ### 4.5 Agentic layer — LLM explanation and fix generation
 
@@ -1014,6 +1022,7 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 | FR-DK.1–3 | Docker Compose | Must | §4.7 | Salar | **Done** (synced to `noor`) |
 | FR-EV.1–6 | Evaluation | Must | §4.8 | Noor | **Week 6 done** (40 stratified-random + 40/40 assisted notes). **Week 7 (Noor):** rule-wise R01–R30 + G01–G30 coverage reports on same sample (`docs/week7/`, `outputs/week7_eval/`). **Rico holdout (FR-EV.5) deferred** |
 | FR-CV.1–3 | CV/CNN/R09 | Stretch | §4.4 | Noor | Stretch |
+| FR-CV.4–7 | Screenshot-only YOLO UI-detector fallback | Stretch | §4.4 | Noor (+ Salar notebook) | **In progress** — MASC-only training run 1 epoch (mAP50-95 0.285); `best.pt` exported; not wired into pipeline |
 | FR-AAA-01 … 40 | Legacy IDs | — | Mapped above | — | — |
 
 ---

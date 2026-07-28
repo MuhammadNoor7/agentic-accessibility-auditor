@@ -84,5 +84,10 @@ backend/data/*.json
 PROJECT_EXPLAINED.md
 
 # YOLO UI detector training artifacts (notebooks/train_yolo_ui_detector.ipynb)
+# NOTE: The 'runs/' folder and local model weights (.pt) contain multi-megabyte
+# training checkpoints (best.pt/last.pt ~195MB each), tensorboard logs, confusion
+# matrices, and generated dataset plots. They must NEVER be pushed to git as they
+# bloat repository size and exceed GitHub push limits. Use Google Drive / S3
+# for checkpoint backups and gitignore local runs.
 runs/
-models/*.pt
+models/*.pt/

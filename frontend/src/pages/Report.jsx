@@ -614,7 +614,7 @@ export default function Report() {
               style={{
                 background: '#1a2240', color: '#fff', border: 'none',
                 borderRadius: 8, padding: '12px 22px', fontSize: 15,
-                fontWeight: 700, cursor: 'pointer', marginTop: 4,
+                fontWeight: 600, cursor: 'pointer', marginTop: 4,
                 display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
               }}
             >

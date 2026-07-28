@@ -15,7 +15,7 @@ const injectResponsiveStyles = (() => {
     style.textContent = `
     @media (max-width: 767px) {
       .axion-topbar { padding: 14px 16px 14px 64px !important; flex-wrap: wrap; gap: 10px; }
-      .axion-search { display: none !important; }
+      .axion-search { width: 100% !important; }
       .axion-content { padding: 16px !important; }
       .axion-upload-zone { padding: 28px 18px 22px !important; }
       .axion-cta-bar { flex-direction: column !important; align-items: stretch !important; }

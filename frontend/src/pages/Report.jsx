@@ -706,7 +706,9 @@ export default function Report() {
             </p>
             {filteredViolations.length === 0 && (
               <p style={{ padding: '24px 0', textAlign: 'center', color: '#94a3b8', fontSize: 14 }}>
-                No issues match "{searchQuery}"
+                {totalIssues === 0
+                  ? 'No issues found — this screen looks clean! 🎉'
+                  : `No issues match "${searchQuery}"`}
               </p>
             )}
             {filteredViolations.map((v, i) => {

@@ -939,7 +939,9 @@ export default function Dashboard() {
                 {groupedIssues.length === 0 && (
                   <tr>
                     <td colSpan={5} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8', fontSize: 14 }}>
-                      {searchQuery.trim()
+                      {total === 0
+                        ? 'No issues found — this screen looks clean! 🎉'
+                        : searchQuery.trim()
                         ? `No issues match "${searchQuery}"`
                         : `No issues found for "${severityFilter}"`}
                     </td>

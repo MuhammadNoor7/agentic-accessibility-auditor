@@ -158,8 +158,8 @@ function extractNumber(filename) {
 // This fixes the false-positive bug: photo1.jpg no longer matches data1.xml,
 // since "photo" !== "data" even though both contain "1".
 function filesMatch(screenshotName, xmlName) {
-  const stem1 = getStem(screenshotName);
-  const stem2 = getStem(xmlName);
+  const stem1 = getStem(screenshotName).toLowerCase();
+  const stem2 = getStem(xmlName).toLowerCase();
   if (stem1 === stem2) return true;
 
   const n1 = extractNumber(screenshotName);

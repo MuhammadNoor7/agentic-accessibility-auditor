@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { getAuditFiles, getAuditId } from '../state/auditFiles'
-import { getAuditReport, getRecordReport, downloadAuditReport } from '../api'
+import { getAuditReport } from '../api'
 import Sidebar from '../components/Sidebar'
-import UserAvatar from '../components/ui/UserAvatar'
 
 /* ────────────────────────────────────────────────────────────────────────────
    RULE REFERENCE — same lookup used in Dashboard.jsx, sourced from
@@ -388,11 +387,6 @@ export default function Report() {
   // or the shared store (getAuditId) if the page was refreshed / reached another way.
   const auditId = location.state?.auditId || getAuditId()
 
-  // recordId arrives when opened from Audit History (Records page) — it loads
-  // straight from the persisted report on disk instead of the in-memory audit job,
-  // so it works for past records even after the backend has restarted.
-  const recordId = location.state?.recordId || null
-
   const [report, setReport] = useState(null)
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(null)
@@ -400,19 +394,17 @@ export default function Report() {
   const [showConfirm, setShowConfirm] = useState(false)
   const [flowStep, setFlowStep] = useState('idle') // idle | processing | preview
   const [format, setFormat] = useState(null)
-  const [downloadError, setDownloadError] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
-    if (!recordId && !auditId) {
+    if (!auditId) {
       setLoadError('No audit found. Please run a new audit from the Upload page.')
       setLoading(false)
       return
     }
     let cancelled = false
     setLoading(true)
-    const fetchReport = recordId ? getRecordReport(recordId) : getAuditReport(auditId)
-    fetchReport
+    getAuditReport(auditId)
       .then(data => {
         if (!cancelled) { setReport(data); setLoading(false) }
       })
@@ -420,7 +412,7 @@ export default function Report() {
         if (!cancelled) { setLoadError(err.message || 'Could not load report.'); setLoading(false) }
       })
     return () => { cancelled = true }
-  }, [auditId, recordId])
+  }, [auditId])
 
   const violations = report?.violations || []
   const totalIssues = violations.length
@@ -445,33 +437,17 @@ export default function Report() {
   })
 
   function handleDownloadClick() {
-    if (!auditId) {
-      setDownloadError("Download isn't available for past records opened from Audit History — run a new audit to download its report.")
-      return
-    }
     setShowConfirm(true)
   }
 
   function handleChooseFormat(fmt) {
     setFormat(fmt)
-    setDownloadError(null)
     setShowConfirm(false)
     setFlowStep('processing')
   }
 
-  async function handleProcessingDone() {
-    if (!auditId || !format) {
-      setFlowStep('preview')
-      return
-    }
-    try {
-      await downloadAuditReport(auditId, format)
-      setFlowStep('preview')
-    } catch (err) {
-      setDownloadError(err.message || 'Could not download report.')
-      setFlowStep('idle')
-      setFormat(null)
-    }
+  function handleProcessingDone() {
+    setFlowStep('preview')
   }
 
   function handleClosePreview() {
@@ -602,7 +578,16 @@ export default function Report() {
                 color: '#1a2240',
               }}
             />
-            <UserAvatar />
+            <div
+              role="img" aria-label="User: Ayesha Naveed" title="Ayesha Naveed"
+              style={{
+                width: 42, height: 42, borderRadius: '50%',
+                background: '#1D9E75', display: 'flex', alignItems: 'center',
+                justifyContent: 'center', color: '#fff', fontSize: 15, fontWeight: 700,
+              }}
+            >
+              <span aria-hidden="true">AN</span>
+            </div>
           </div>
         </div>
 
@@ -645,45 +630,39 @@ export default function Report() {
             </button>
           </div>
 
-          {/* ── SCORE + SUMMARY CARD (accessibility_score from agent.py) ── */}
+          {/* ── SCORE + SUMMARY CARD ── */}
           <div className="axion-score-card" style={{
             background: '#fff', borderRadius: 14, border: '0.5px solid #e2e6f0',
             padding: '28px 32px', display: 'flex', alignItems: 'center', gap: 32,
           }}>
             <div
               role="img"
-              aria-label={`Accessibility score: ${report?.accessibility_score ?? '—'} out of 100. ${totalIssues} issue${totalIssues !== 1 ? 's' : ''} detected.`}
+              aria-label={`Total issues detected: ${totalIssues}`}
               style={{ position: 'relative', width: 90, height: 90, flexShrink: 0 }}
             >
               <svg width="90" height="90" viewBox="0 0 90 90" aria-hidden="true">
                 <circle cx="45" cy="45" r="38" fill="none" stroke="#e2e6f0" strokeWidth="8" />
                 <circle cx="45" cy="45" r="38" fill="none" stroke="#1D9E75" strokeWidth="8"
                   strokeDasharray="238.8"
-                  strokeDashoffset={238.8 - (238.8 * (report?.accessibility_score ?? 0)) / 100}
+                  strokeDashoffset={238.8 - (238.8 * Math.min(totalIssues, 10)) / 10}
                   strokeLinecap="round" transform="rotate(-90 45 45)" />
               </svg>
               <div aria-hidden="true" style={{
                 position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
                 alignItems: 'center', justifyContent: 'center',
               }}>
-                <span style={{ fontSize: 24, fontWeight: 700, color: '#0f1422' }}>
-                  {report?.accessibility_score ?? '—'}
-                </span>
-                <span style={{ fontSize: 10, color: '#5a6a8a', fontWeight: 600 }}>SCORE</span>
+                <span style={{ fontSize: 24, fontWeight: 700, color: '#0f1422' }}>{totalIssues}</span>
+                <span style={{ fontSize: 10, color: '#5a6a8a', fontWeight: 600 }}>ISSUES</span>
               </div>
             </div>
 
             <div style={{ flex: 1 }}>
               <p style={{ fontSize: 17, fontWeight: 700, color: '#0f1422', margin: '0 0 6px' }}>
-                Accessibility score {report?.accessibility_score ?? '—'} / 100
-                <span style={{ fontWeight: 500, color: '#5a6a8a' }}>
-                  {' '}· {totalIssues} issue{totalIssues !== 1 ? 's' : ''} on {screenId}
-                </span>
+                This audit reviewed {screenId} and surfaced {totalIssues} issue{totalIssues !== 1 ? 's' : ''}
               </p>
               <p style={{ fontSize: 15, color: '#5a6a8a', margin: '0 0 14px', lineHeight: 1.6 }}>
-                Score from agent.py (100 − severity penalties). Mode:{' '}
-                {report?.enrichment_mode === 'llm' ? 'AI explanations (LLM)' : 'template explanations'}.
-                Resolving High and Medium issues moves this app closer to WCAG 2.2 AA.
+                Most findings relate to missing accessible labels and unlabeled input fields.
+                Resolving the High and Medium severity issues below moves this app closer to WCAG 2.2 AA conformance.
               </p>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 {summaryPills.map(({ label, color, bg }) => (
@@ -814,9 +793,6 @@ export default function Report() {
               Download Report →
             </button>
           </div>
-          {downloadError && (
-            <p style={{ color: '#fecaca', fontSize: 13, margin: '12px 0 0' }}>{downloadError}</p>
-          )}
         </div>
       </main>
 

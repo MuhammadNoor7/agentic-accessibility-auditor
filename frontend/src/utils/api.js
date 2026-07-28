@@ -1,6 +1,6 @@
 import { getAuthHeaders } from './auth';
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8002';
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000';
 
 async function handleResponse(response) {
   let data = null;

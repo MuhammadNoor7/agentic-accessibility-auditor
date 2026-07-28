@@ -1,11 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
-import UserAvatar from '../components/ui/UserAvatar';
 import { setAuditFiles, setAuditId } from '../state/auditFiles';
-import { createAudit, getAuditViolations, getAuditReport } from '../api';
-import { apiPost } from '../utils/api';
-import { isLoggedIn } from '../utils/auth';
+import { createAudit } from '../api';
 
 // ── Responsive rules (inline styles can't do @media, so inject CSS) ───────────
 const injectResponsiveStyles = (() => {
@@ -535,32 +532,6 @@ function AuditPopup({ screenshotFile, xmlFile, onViewDashboard }) {
         }
         setAuditIdState(result.audit_id);
         setAuditId(result.audit_id); // persist so Dashboard/Report can read it later
-
-        // Best-effort: save this audit to the user's Records history. Skipped
-        // for guests (no JWT) and never blocks the audit flow itself.
-        if (isLoggedIn()) {
-          Promise.all([
-            getAuditViolations(result.audit_id),
-            getAuditReport(result.audit_id),
-          ])
-            .then(([violationsDoc, reportDoc]) => {
-              const bySeverity = { High: 0, Medium: 0, Low: 0 };
-              (violationsDoc.violations || []).forEach(v => {
-                bySeverity[v.severity] = (bySeverity[v.severity] || 0) + 1;
-              });
-              return apiPost('/records', {
-                screen_id: violationsDoc.screen_id,
-                total_violations: violationsDoc.total_violations,
-                violations_by_severity: bySeverity,
-                components_path: '',
-                violations_path: `outputs/violations/${violationsDoc.screen_id}_violations.json`,
-                accessibility_score: reportDoc.accessibility_score ?? null,
-                screenshot_name: screenshotFile?.name || null,
-                xml_name: xmlFile?.name || null,
-              }, true);
-            })
-            .catch(() => {});
-        }
       })
       .catch(err => {
         if (!cancelled) setError(err.message || 'Could not reach the audit server.');
@@ -634,7 +605,7 @@ function AuditPopup({ screenshotFile, xmlFile, onViewDashboard }) {
             {error}
           </p>
           <p style={{ fontSize: 12, color: '#94a3b8', margin: '0 0 20px' }}>
-            Check that the backend server is running at http://127.0.0.1:8002
+            Check that the backend server is running at http://127.0.0.1:8000
           </p>
         </div>
       </div>
@@ -865,7 +836,10 @@ export default function Upload() {
               }}
               style={{ background: '#f4f6fb', border: '0.5px solid #dde2f0', borderRadius: 6, padding: '9px 16px', fontSize: 15, color: '#1a2240', width: 210 }}
             />
-            <UserAvatar />
+            <div role="img" aria-label="User: Ayesha Naveed" title="Ayesha Naveed"
+              style={{ width: 42, height: 42, borderRadius: '50%', background: '#1D9E75', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 15, fontWeight: 700, flexShrink: 0 }}>
+              <span aria-hidden="true">AN</span>
+            </div>
           </div>
         </div>
 

@@ -1,31 +1,31 @@
 guideline_id,screens_triggered,violation_count,description
-G01,37,418,Every interactive element must have a visible or programmatic label for screen readers.
-G02,37,413,ImageButton and clickable ImageView must have a content description.
-G03,10,66,No two interactive elements should share identical text/content-desc unless same action.
+G01,36,240,Every interactive element must have a visible or programmatic label for screen readers.
+G02,36,237,ImageButton and clickable ImageView must have a content description.
+G03,5,26,No two interactive elements should share identical text/content-desc unless same action.
 G04,2,2,Tappable elements must meet minimum size (48x48 dp).
-G05,11,17,"Every EditText must have a programmatic label (hint, labelFor, or content-desc)."
-G06,3,5,Critical controls must not be disabled without explanation or alternative.
-G07,40,1127,Zero-area or invalid bounds must be removed from focus tree.
-G08,24,629,Elements must not overlap in ways that hide content or break focus order.
+G05,6,9,"Every EditText must have a programmatic label (hint, labelFor, or content-desc)."
+G06,2,3,Critical controls must not be disabled without explanation or alternative.
+G07,0,0,Zero-area or invalid bounds must be removed from focus tree.
+G08,18,305,Elements must not overlap in ways that hide content or break focus order.
 G09,0,0,Text and UI components must meet minimum contrast ratios.
 G10,0,0,Text bounds must fit full content without clipping.
-G11,6,25,Color must not be the only indicator of state or meaning.
+G11,4,23,Color must not be the only indicator of state or meaning.
 G12,0,0,Video with spoken audio must provide captions/subtitles.
 G13,0,0,Audio-only content must have a text transcript in the UI.
-G14,4,5,"Alerts must include visual indicators, not sound alone."
-G15,30,650,Focus order must follow natural top-to-bottom reading sequence.
-G16,21,23,Decorative elements must be excluded from accessibility focus.
-G17,14,46,Adjacent targets need >=8 dp spacing to prevent mis-taps.
-G18,25,102,All functionality must work with a single pointer.
-G19,4,13,Irreversible actions must require confirmation.
-G20,11,17,Labels must remain visible while typing.
-G21,1,1,Errors must identify the field and how to fix it.
+G14,3,4,"Alerts must include visual indicators, not sound alone."
+G15,26,325,Focus order must follow natural top-to-bottom reading sequence.
+G16,20,21,Decorative elements must be excluded from accessibility focus.
+G17,9,22,Adjacent targets need >=8 dp spacing to prevent mis-taps.
+G18,22,75,All functionality must work with a single pointer.
+G19,0,0,Irreversible actions must require confirmation.
+G20,6,9,Labels must remain visible while typing.
+G21,0,0,Errors must identify the field and how to fix it.
 G22,0,0,Password fields should offer reveal/hide control.
-G23,1,5,"Back, home, close, menu buttons must have descriptive labels."
-G24,6,6,Every screen needs a visible title or heading.
-G25,40,1127,Animation/auto-update must be pausable/stoppable.
-G26,3,5,Timed sessions must warn >=20s before expiry with extend option.
+G23,1,3,"Back, home, close, menu buttons must have descriptive labels."
+G24,0,0,Every screen needs a visible title or heading.
+G25,0,0,Animation/auto-update must be pausable/stoppable.
+G26,2,3,Timed sessions must warn >=20s before expiry with extend option.
 G27,0,0,"Use plain, simple language in labels and hints."
 G28,0,0,Text must remain readable at 200% system font size.
 G29,0,0,All-caps must not be used for paragraph or instruction text.
-G30,37,502,Icon-only buttons must have content-desc describing the action.
+G30,36,285,Icon-only buttons must have content-desc describing the action.

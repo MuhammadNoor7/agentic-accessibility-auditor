@@ -1,15 +1,15 @@
 # Week 7 — Team Priority Fixes (from Holdout Eval)
 
 **For:** Salar + Ayesha + Noor  
-**Date:** 2026-07-28 08:32 UTC  
+**Date:** 2026-07-28 18:43 UTC  
 **Basis:** Rico holdout n=1698 + Week 6 cross-check
 
 ## Interim numbers (share in standup)
 
 - Holdout screens run: **1698** (failures: 0)
-- Mean violations/screen: **51.7**; mean score: **26.3**
-- Noise heuristic: over_flagging **513**, mixed_r30_noise **118**
-- Top violation rules: R07 (46367), R01 (13970), R08 (12738), R18 (3191), R30 (2514)
+- Mean violations/screen: **31.7**; mean score: **32.0**
+- Noise heuristic: over_flagging **251**, mixed_r30_noise **129**
+- Top violation rules: R07 (18143), R01 (13970), R08 (7238), R18 (3191), R02 (2492)
 
 ## Priority queue
 

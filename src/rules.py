@@ -216,6 +216,38 @@ def _overlap_area(bounds_a: list[int], bounds_b: list[int]) -> int:
     return (right - left) * (bottom - top)
 
 
+def _dedupe_repeated(components: list[dict]) -> list[tuple[dict, int]]:
+    """Collapse components that are repeated instances of the same
+    list/grid row template into one (representative, count) pair each.
+
+    Input: components - flagged component dicts to dedupe.
+    Output: list of (representative_component, occurrence_count) pairs, in
+        first-seen order. Grouped by (resource_id, width, height) — the
+        signature a repeated RecyclerView/ListView row template shares
+        across instances. Components with no resource_id can't be safely
+        correlated this way, so each is kept as its own count-1 entry.
+    """
+    groups: dict[tuple[str, int, int], list[dict]] = defaultdict(list)
+    order: list[tuple[str, int, int]] = []
+    singles: list[dict] = []
+    for component in components:
+        resource_id = component.get("resource_id", "")
+        if not resource_id:
+            singles.append(component)
+            continue
+        width_px, height_px = _bounds_wh(component["bounds"])
+        key = (resource_id, width_px, height_px)
+        if key not in groups:
+            order.append(key)
+        groups[key].append(component)
+
+    result = [(component, 1) for component in singles]
+    for key in order:
+        members = groups[key]
+        result.append((members[0], len(members)))
+    return result
+
+
 def _make_violation(
     rule_id: str,
     issue: str,
@@ -609,8 +641,26 @@ def check_disabled_control(components: list[dict]) -> list[dict]:
     return violations
 
 
+def _is_a11y_relevant(component: dict) -> bool:
+    """True when a component would ever be exposed to a screen reader.
+
+    Purely structural nodes (layout containers, spacers) that are neither
+    interactive nor carry any text/content_desc are never announced by
+    TalkBack regardless of their bounds, so a zero-size structural node
+    isn't an accessibility defect the way a zero-size button is.
+    """
+    if component.get("clickable") or component.get("focusable"):
+        return True
+    return bool(component.get("text") or component.get("content_desc"))
+
+
 def check_zero_size(components: list[dict]) -> list[dict]:
-    """R07: flag elements whose bounds width or height is zero (or otherwise invalid).
+    """R07: flag elements whose bounds width or height is zero (or otherwise
+    invalid), restricted to elements that are actually accessibility-relevant
+    (clickable/focusable, or carrying text/content_desc) via
+    _is_a11y_relevant. Plain layout scaffolding (ViewGroups, Space) that
+    happens to measure zero is never exposed to a screen reader, so it isn't
+    flagged even when its bounds are zero/invalid.
 
     Input: components - parsed component dicts.
     Output: list of R07 violation dicts.
@@ -618,7 +668,7 @@ def check_zero_size(components: list[dict]) -> list[dict]:
     violations = []
     for component in components:
         width_px, height_px = _bounds_wh(component["bounds"])
-        if width_px <= 0 or height_px <= 0:
+        if (width_px <= 0 or height_px <= 0) and _is_a11y_relevant(component):
             violations.append(
                 _make_violation(
                     rule_id="R07",
@@ -635,6 +685,24 @@ def check_zero_size(components: list[dict]) -> list[dict]:
     return violations
 
 
+def _is_ancestor(ancestor_id: str, component: dict, by_id: dict[str, dict]) -> bool:
+    """True when ancestor_id is a strict ancestor of component in the parent_id tree.
+
+    Walks parent_id links (not just the immediate parent), so a clickable
+    RecyclerView/ListView row nested several containers deep inside a
+    clickable scrollable list is still recognized as contained by it.
+    """
+    seen: set[str] = set()
+    parent_id = component.get("parent_id", "")
+    while parent_id and parent_id not in seen:
+        if parent_id == ancestor_id:
+            return True
+        seen.add(parent_id)
+        parent = by_id.get(parent_id)
+        parent_id = parent.get("parent_id", "") if parent else ""
+    return False
+
+
 def check_layout_overlap(components: list[dict]) -> list[dict]:
     """R08: flag pairs of clickable elements whose bounds overlap by more than
     50% of the smaller element's area.
@@ -642,10 +710,16 @@ def check_layout_overlap(components: list[dict]) -> list[dict]:
     Input: components - parsed component dicts. Restricted to clickable
         elements with a positive bounds area (via _area()), to avoid flagging
         expected container/child nesting and to guard zero-size/inverted
-        rects out before any overlap math runs on them.
+        rects out before any overlap math runs on them. Pairs where one
+        element is an ancestor of the other (via _is_ancestor, walking the
+        full parent_id chain, not just the immediate parent) are also
+        skipped — a clickable scrollable container (e.g. a clickable
+        ListView) fully containing its own clickable rows is expected
+        Android structure, not an overlap defect.
     Output: list of R08 violation dicts, one per overlapping pair, anchored on
         the smaller element with related_component pointing at the larger one.
     """
+    by_id = {component["component_id"]: component for component in components}
     clickable = [
         component
         for component in components
@@ -663,6 +737,10 @@ def check_layout_overlap(components: list[dict]) -> list[dict]:
             if overlap_area <= 0.5 * smaller_area:
                 continue
             smaller, larger = (first, second) if area1 <= area2 else (second, first)
+            if _is_ancestor(smaller["component_id"], larger, by_id) or _is_ancestor(
+                larger["component_id"], smaller, by_id
+            ):
+                continue
             violations.append(
                 _make_violation(
                     rule_id="R08",
@@ -1561,9 +1639,17 @@ def check_icon_only_no_label(components: list[dict]) -> list[dict]:
         ("no text alternative") is about the content_desc being absent, and
         R02 already establishes this AND-both-empty convention for the same
         underlying "unlabeled icon control" case.
+
+        Repeated instances of the same list/grid row template (same
+        resource_id and same bounds width/height — the signature confirmed
+        against real Rico/MASC ListView rows, where every row reuses one
+        resource_id) are one design decision, not N independent bugs, so
+        they're collapsed into a single violation via _dedupe_repeated. A
+        component with no resource_id can't be safely correlated this way
+        and is always kept as its own violation.
     Output: list of R30 violation dicts.
     """
-    violations = []
+    hits = []
     for component in components:
         if not component.get("clickable"):
             continue
@@ -1574,11 +1660,18 @@ def check_icon_only_no_label(components: list[dict]) -> list[dict]:
             continue
         if component.get("content_desc"):
             continue
+        hits.append(component)
+
+    violations = []
+    for representative, count in _dedupe_repeated(hits):
+        issue = "Icon-only control with no label"
+        if count > 1:
+            issue += f" ({count} repeated instances of the same row/grid template)"
         violations.append(
             _make_violation(
                 rule_id="R30",
-                issue="Icon-only control with no label",
-                component=component,
+                issue=issue,
+                component=representative,
                 guideline="G30 — Icon-only button with no text alternative",
                 severity="High",
                 recommendation="Add android:contentDescription describing the icon's action.",

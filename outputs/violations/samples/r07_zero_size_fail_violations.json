@@ -3,13 +3,28 @@
   "screen_id": "r07_zero_size_fail",
   "image_path": "tests/fixtures/screenshots/rules/r07_zero_size_fail.jpg",
   "xml_path": "tests/fixtures/rules/r07_zero_size_fail.xml",
-  "total_violations": 1,
+  "total_violations": 2,
   "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_002",
+      "class": "android.widget.Button",
+      "bounds": [
+        100,
+        100,
+        100,
+        100
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
     {
       "rule_id": "R07",
       "issue": "Invisible or zero-size component",
       "component_id": "c_002",
-      "class": "android.widget.View",
+      "class": "android.widget.Button",
       "bounds": [
         100,
         100,

@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r08_ancestor_nesting_pass",
+  "image_path": "tests/fixtures/screenshots/rules/r08_ancestor_nesting_pass.jpg",
+  "xml_path": "tests/fixtures/rules/r08_ancestor_nesting_pass.xml",
+  "total_violations": 1,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_002",
+      "class": "android.widget.ListView",
+      "bounds": [
+        0,
+        100,
+        1080,
+        1920
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    }
+  ],
+  "component_count": 4,
+  "hidden_component_count": 0
+}

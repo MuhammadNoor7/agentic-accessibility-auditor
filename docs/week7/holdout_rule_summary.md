@@ -1,6 +1,6 @@
 # Rico Holdout — Rule-wise Summary (R01–R30)
 
-**Generated:** 2026-07-28 08:32 UTC  
+**Generated:** 2026-07-28 18:43 UTC  
 **Screens evaluated:** 1698 / 1698  
 **Failures:** 0  
 **XML source:** D:/internship/_noor_push/data/data-rico-holdout
@@ -9,25 +9,25 @@
 
 | Metric | Value |
 |--------|------:|
-| Mean violations / screen | 51.7 |
-| Median violations / screen | 21 |
-| Mean accessibility score | 26.3 |
-| Screens with 0 violations | 60 |
-| over_flagging (heuristic) | 513 |
-| mixed_r30_noise | 118 |
-| mostly_agree | 1007 |
-| clean | 60 |
+| Mean violations / screen | 31.7 |
+| Median violations / screen | 14 |
+| Mean accessibility score | 32.0 |
+| Screens with 0 violations | 87 |
+| over_flagging (heuristic) | 251 |
+| mixed_r30_noise | 129 |
+| mostly_agree | 1231 |
+| clean | 87 |
 
 ## Rule trigger frequency (sorted by violation count)
 
 | Rule | Screens triggered | % screens | Violations | Avg/screen when triggered |
 |------|------------------:|----------:|-----------:|--------------------------:|
-| R07 | 1385 | 81.6% | 46367 | 33.5 |
+| R07 | 1078 | 63.5% | 18143 | 16.8 |
 | R01 | 1449 | 85.3% | 13970 | 9.6 |
-| R08 | 700 | 41.2% | 12738 | 18.2 |
+| R08 | 467 | 27.5% | 7238 | 15.5 |
 | R18 | 798 | 47.0% | 3191 | 4.0 |
-| R30 | 649 | 38.2% | 2514 | 3.9 |
 | R02 | 645 | 38.0% | 2492 | 3.9 |
+| R30 | 649 | 38.2% | 2307 | 3.6 |
 | R17 | 428 | 25.2% | 1929 | 4.5 |
 | R03 | 212 | 12.5% | 835 | 3.9 |
 | R11 | 201 | 11.8% | 709 | 3.5 |
@@ -55,8 +55,8 @@
 
 ## Obvious noise clusters (Week 6 themes confirmed on holdout)
 
-1. **R07/R08 nesting** — R07 triggered on 1385 screens (81.6%), R08 on 700 (41.2%). 560 screens show R07+R08 dominating (>=45% of violations, total>=40) — same pattern as Week 6 MASC chat/list FP notes.
-2. **R30 density** — triggered on 649 screens; 118 screens classified `mixed_r30_noise` (R30>=5, total<120).
+1. **R07/R08 nesting** — R07 triggered on 1078 screens (63.5%), R08 on 467 (27.5%). 279 screens show R07+R08 dominating (>=45% of violations, total>=40) — same pattern as Week 6 MASC chat/list FP notes.
+2. **R30 density** — triggered on 649 screens; 129 screens classified `mixed_r30_noise` (R30>=5, total<120).
 3. **R01/R02 label gaps** — remain top volume rules on holdout; many are real missing labels but some are decorative ImageViews (Week 6 partial FP theme).
 
 ## Severity distribution by rule (violation-level totals)

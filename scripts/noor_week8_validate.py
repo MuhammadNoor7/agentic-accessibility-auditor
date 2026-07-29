@@ -106,10 +106,25 @@ def write_week8_summary(run_meta: dict, checks: dict[str, bool]) -> None:
         lines.append(f"- {'PASS' if passed else 'FAIL'} — {name}")
     lines.extend([
         "",
+        "## R07/R08/R30/R20/R05 fix verification (2026-07-28, Noor)",
+        "",
+        "- **R07** (`src/rules.py::check_zero_size`) — now skips non-interactive/non-content zero-size "
+        "elements via `_is_a11y_relevant` (clickable/focusable/text/content_desc only).",
+        "- **R08** (`src/rules.py::check_layout_overlap`) — now skips clickable ancestor/descendant "
+        "pairs via `_is_ancestor` (full parent_id chain, not just immediate parent).",
+        "- **R30** (`src/rules.py::check_icon_only_no_label`) — now collapses repeated same-template "
+        "list-row icons (same resource_id + bounds size) via `_dedupe_repeated`.",
+        "- **R20/R05** (`src/parser.py::_get_hint`) — now reads MASC's real `text-hint` attribute "
+        "(was only checking `hint`/`android:hint`, which MASC never emits), unblocking R20 "
+        "(0 -> 749 hits on full MASC) and correcting R05's false positives (2117 -> 717 on full MASC).",
+        "- Full MASC sweep (7068 screens, 0 failures) confirms rule counts moved as expected; "
+        "see `outputs/violations/*.json` (regenerated) and `notebooks/masc_dataset_analysis.ipynb` "
+        "(re-executed) for before/after detail.",
+        "",
         "## Next",
         "",
-        "- Salar: use holdout R07/R08/R30 numbers to validate FP fixes at scale (see `holdout_team_priority_fixes.md`).",
-        "- Noor: re-run this script after Salar's fixes land to quantify the FP-rate delta vs this baseline.",
+        "- Salar: R07/R08/R30 FP fixes already landed (this run) — no longer blocking; revisit R30's "
+        "remaining per-instance volume if further reduction is wanted (see `holdout_team_priority_fixes.md`).",
         "",
     ])
     WEEK8_SUMMARY.write_text("\n".join(lines), encoding="utf-8")
@@ -143,6 +158,12 @@ def main() -> int:
         [sys.executable, "-m", "pytest", "tests/test_rules.py", "-q", "--tb=no"],
     )
     checks["pytest_rules"] = code == 0
+
+    code, _ = run_cmd(
+        "STEP 2b: pytest tests/test_parser.py (R20 text-hint fix + MASC bounds/visibility)",
+        [sys.executable, "-m", "pytest", "tests/test_parser.py", "-q", "--tb=no"],
+    )
+    checks["pytest_parser"] = code == 0
 
     code, _ = run_cmd(
         "STEP 3: pytest backend/tests/test_auth.py",

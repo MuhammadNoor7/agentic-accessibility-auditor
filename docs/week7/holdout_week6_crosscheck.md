@@ -1,6 +1,6 @@
 # Week 6 MASC (n=40) vs Rico Holdout Cross-check
 
-**Generated:** 2026-07-28 08:32 UTC  
+**Generated:** 2026-07-28 18:43 UTC  
 **Week 6 sample:** stratified MASC 40 screens (seed 20260715) with assisted FP/miss notes.  
 **Holdout:** 1698 Rico screens (MASC-disjoint).
 
@@ -8,11 +8,11 @@
 
 | Label | Week 6 (MASC 40) | Holdout (heuristic) |
 |-------|-----------------:|--------------------:|
-| clean | 3 | 60 |
+| clean | 3 | 87 |
 | agree_clean | 3 | 0 |
-| mostly_agree | 32 | 1007 |
-| over_flagging | 2 | 513 |
-| mixed_r30_noise | 3 | 118 |
+| mostly_agree | 32 | 1231 |
+| over_flagging | 2 | 251 |
+| mixed_r30_noise | 3 | 129 |
 
 ## Top rules — consistent themes
 
@@ -20,8 +20,8 @@
 |------|-------------------------:|---------------------:|:-----------:|
 | R01 | 0% | 85% | Review |
 | R02 | 0% | 38% | Review |
-| R07 | 0% | 82% | Review |
-| R08 | 0% | 41% | Review |
+| R07 | 0% | 63% | Review |
+| R08 | 0% | 28% | Yes |
 | R17 | 0% | 25% | Yes |
 | R18 | 0% | 47% | Review |
 | R30 | 57% | 38% | Yes |

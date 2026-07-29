@@ -88,6 +88,7 @@ def test_rule_triggers_on_fail_fixture(filename: str, expected_rule: str) -> Non
     [
         ("r01_missing_label_pass.xml", "R01"),
         ("r02_image_button_pass.xml", "R02"),
+        ("r07_zero_size_pass.xml", "R07"),
         ("r04_small_target_pass.xml", "R04"),
         ("r05_unlabeled_input_pass.xml", "R05"),
         ("r05_unlabeled_input_hint_pass.xml", "R05"),
@@ -156,6 +157,33 @@ def test_layout_overlap_references_related_component() -> None:
 def test_layout_overlap_ignores_zero_size_elements() -> None:
     """R08 must not crash or falsely flag a pair of zero-size (0-area) elements."""
     result = _violations_for("r08_zero_size_no_crash.xml")
+    rule_ids = {violation["rule_id"] for violation in result["violations"]}
+    assert "R08" not in rule_ids
+
+
+def test_hint_only_label_fires_on_masc_text_hint_attribute() -> None:
+    """R20 must fire end-to-end on MASC's real `text-hint` attribute, not
+    just the UIAutomator-style `hint` attribute the original fixture used."""
+    result = _violations_for("r20_hint_only_label_masc_fail.xml")
+    rule_ids = {violation["rule_id"] for violation in result["violations"]}
+    assert "R20" in rule_ids
+
+
+def test_icon_only_dedupes_repeated_row_template() -> None:
+    """R30 must collapse repeated instances of the same list-row icon
+    template (same resource_id + same bounds size) into a single violation
+    instead of one per row, while still counting the repeat in the issue text."""
+    result = _violations_for("r30_icon_only_repeated_dedup.xml")
+    r30 = [v for v in result["violations"] if v["rule_id"] == "R30"]
+    assert len(r30) == 1
+    assert "3" in r30[0]["issue"]
+
+
+def test_layout_overlap_ignores_ancestor_descendant_pairs() -> None:
+    """R08 must not flag a clickable scrollable container (e.g. ListView) against
+    its own clickable row nested several levels below it — expected Android
+    list/RecyclerView structure, not an overlap defect."""
+    result = _violations_for("r08_ancestor_nesting_pass.xml")
     rule_ids = {violation["rule_id"] for violation in result["violations"]}
     assert "R08" not in rule_ids
 

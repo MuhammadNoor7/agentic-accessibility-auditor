@@ -27,8 +27,8 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
-data/
-outputs/
+.claude/
+
 # Generic runtime uploads / outputs (not for Git)
 # Note: do not use a bare `data/` or `outputs/` rule — it blocks the
 # !exceptions below (validation_logs + samples must remain trackable).
@@ -54,6 +54,8 @@ outputs/reports/*
 
 # Raw Rico source corpus (local only)
 data/final_rico/
+# 249MB — exceeds the 25MB size budget, not pushed
+data/data-rico-holdout.zip
 
 # MASC — ignore raw dataset; track parser output & splits only (on azeem branch)
 data/data-masc/*
@@ -83,11 +85,13 @@ backend/data/*.json
 
 PROJECT_EXPLAINED.md
 
-# YOLO UI detector training artifacts (notebooks/train_yolo_ui_detector.ipynb)
-# NOTE: The 'runs/' folder and local model weights (.pt) contain multi-megabyte
-# training checkpoints (best.pt/last.pt ~195MB each), tensorboard logs, confusion
-# matrices, and generated dataset plots. They must NEVER be pushed to git as they
-# bloat repository size and exceed GitHub push limits. Use Google Drive / S3
-# for checkpoint backups and gitignore local runs.
-runs/
-models/*.pt/
+# Training checkpoints (.pt) are the only thing excluded under runs/ and models/ —
+# multi-megabyte weights that bloat repo size. Everything else under runs/
+# (manifests, crops, notebooks, confusion matrices, YOLO-format datasets) is
+# tracked. Use Google Drive / S3 for checkpoint backups.
+runs/**/*.pt
+models/*.pt
+
+# Editor backup/lock files (LibreOffice/Word autosave artifacts)
+*.docx~
+*.doc~

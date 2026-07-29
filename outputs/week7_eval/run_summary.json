@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-07-20 10:46 UTC",
+  "generated_at": "2026-07-28 19:13 UTC",
   "dataset": "MASC Week 6 stratified sample",
   "sample_seed": "20260715",
   "screens": 40,
   "failures": 0,
-  "mean_violations": 64.3,
-  "median_violations": 42,
-  "mean_score": 6.75,
+  "mean_violations": 19.4,
+  "median_violations": 11,
+  "mean_score": 32.125,
   "rico_holdout": "deferred \u2014 run scripts/run_rico_holdout_eval.py when ready",
   "manual_verdicts": {
     "over_flagging": 2,
@@ -15,54 +15,55 @@
     "mixed_r30_noise": 3
   },
   "auto_verdicts": {
-    "over_flagging": 18,
-    "mostly_agree": 19,
-    "mixed_r30_noise": 3
+    "over_flagging": 3,
+    "mostly_agree": 33,
+    "mixed_r30_noise": 3,
+    "clean": 1
   },
   "verdict_match": {
-    "yes": 24,
-    "no": 16
+    "yes": 37,
+    "no": 3
   },
   "top_rules": [
     [
-      "R07",
-      1127
-    ],
-    [
       "R08",
-      629
+      305
     ],
     [
       "R01",
-      324
+      189
     ],
     [
       "R18",
-      102
+      75
     ],
     [
       "R02",
-      89
+      48
     ],
     [
       "R30",
-      89
+      48
     ],
     [
       "R03",
-      66
-    ],
-    [
-      "R17",
-      44
+      26
     ],
     [
       "R11",
-      25
+      23
     ],
     [
       "R15",
-      21
+      20
+    ],
+    [
+      "R17",
+      20
+    ],
+    [
+      "R20",
+      6
     ]
   ]
 }

@@ -10,11 +10,27 @@ from __future__ import annotations
 
 from lxml import etree
 
-from src.parser import _is_visible, _parse_masc_bounds, parse_xml_tree
+from src.parser import _get_hint, _is_visible, _parse_masc_bounds, parse_xml_tree
 
 
 def _elem(xml: str) -> etree._Element:
     return etree.fromstring(xml.encode("utf-8"))
+
+
+# --- _get_hint ---------------------------------------------------------------
+
+def test_get_hint_reads_masc_text_hint_attribute() -> None:
+    """MASC's real XML uses `text-hint`, not `hint`/`android:hint` — confirmed
+    against real data-masc dumps, where `hint`/`android:hint` never appear at
+    all. Missing this alias silently zeroed every MASC EditText's hint, which
+    is why R20 (hint-only label) could never fire on real MASC data."""
+    elem = _elem('<node class="android.widget.EditText" text-hint="Join the chat now" />')
+    assert _get_hint(elem) == "Join the chat now"
+
+
+def test_get_hint_prefers_hint_over_text_hint_when_both_present() -> None:
+    elem = _elem('<node class="android.widget.EditText" hint="A" text-hint="B" />')
+    assert _get_hint(elem) == "A"
 
 
 # --- _is_visible -----------------------------------------------------------

@@ -1,6 +1,6 @@
 # Rico Holdout — Guideline Coverage Summary (G01–G30)
 
-**Generated:** 2026-07-28 08:32 UTC  
+**Generated:** 2026-07-28 18:43 UTC  
 **Mapping source:** `src/guidelines.py` (RULE_GUIDELINES)  
 **Screens evaluated:** 1698
 
@@ -8,13 +8,13 @@ Guideline hit counts are derived from rule violations (one violation may map to 
 
 | Guideline | Description (short) | Screens hit | % screens | Violation refs |
 |-----------|---------------------|------------:|----------:|---------------:|
-| G07 | Zero-area or invalid bounds must be removed from focus tree. | 1385 | 81.6% | 46367 |
-| G25 | Animation/auto-update must be pausable/stoppable. | 1385 | 81.6% | 46367 |
-| G30 | Icon-only buttons must have content-desc describing the action. | 1449 | 85.3% | 18976 |
-| G01 | Every interactive element must have a visible or programmatic label fo… | 1449 | 85.3% | 16608 |
+| G30 | Icon-only buttons must have content-desc describing the action. | 1449 | 85.3% | 18769 |
+| G07 | Zero-area or invalid bounds must be removed from focus tree. | 1078 | 63.5% | 18143 |
+| G25 | Animation/auto-update must be pausable/stoppable. | 1078 | 63.5% | 18143 |
 | G02 | ImageButton and clickable ImageView must have a content description. | 1449 | 85.3% | 16462 |
-| G15 | Focus order must follow natural top-to-bottom reading sequence. | 956 | 56.3% | 13394 |
-| G08 | Elements must not overlap in ways that hide content or break focus ord… | 700 | 41.2% | 12738 |
+| G01 | Every interactive element must have a visible or programmatic label fo… | 1449 | 85.3% | 16401 |
+| G15 | Focus order must follow natural top-to-bottom reading sequence. | 788 | 46.4% | 7894 |
+| G08 | Elements must not overlap in ways that hide content or break focus ord… | 467 | 27.5% | 7238 |
 | G18 | All functionality must work with a single pointer. | 798 | 47.0% | 3191 |
 | G17 | Adjacent targets need >=8 dp spacing to prevent mis-taps. | 483 | 28.4% | 2218 |
 | G16 | Decorative elements must be excluded from accessibility focus. | 840 | 49.5% | 1048 |

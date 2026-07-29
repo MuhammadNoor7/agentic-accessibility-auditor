@@ -23,33 +23,41 @@
 |--------|------:|
 | Screens evaluated | 1698 / 1698 |
 | Failures | 0 |
-| Mean violations / screen | 51.7 |
-| Median violations / screen | 21 |
-| Mean accessibility score | 26.3 |
-| Screens with 0 violations | 60 |
-| mostly_agree (heuristic) | 1007 |
-| over_flagging | 513 |
-| mixed_r30_noise | 118 |
-| clean | 60 |
+| Mean violations / screen | 31.7 |
+| Median violations / screen | 14 |
+| Mean accessibility score | 32.0 |
+| Screens with 0 violations | 87 |
+| mostly_agree (heuristic) | 1231 |
+| over_flagging | 251 |
+| mixed_r30_noise | 129 |
+| clean | 87 |
 
 ## Top rules
 
-- **R07** — 46367 violations
+- **R07** — 18143 violations
 - **R01** — 13970 violations
-- **R08** — 12738 violations
+- **R08** — 7238 violations
 - **R18** — 3191 violations
-- **R30** — 2514 violations
+- **R02** — 2492 violations
 
 ## Validation checks
 
 - PASS — rico_holdout_eval
 - PASS — pytest_rules
+- PASS — pytest_parser
 - PASS — pytest_auth
 - PASS — pytest_audit
 - PASS — week8_holdout_outputs
 - PASS — week8_holdout_docs
 
+## R07/R08/R30/R20/R05 fix verification (2026-07-28, Noor)
+
+- **R07** (`src/rules.py::check_zero_size`) — now skips non-interactive/non-content zero-size elements via `_is_a11y_relevant` (clickable/focusable/text/content_desc only).
+- **R08** (`src/rules.py::check_layout_overlap`) — now skips clickable ancestor/descendant pairs via `_is_ancestor` (full parent_id chain, not just immediate parent).
+- **R30** (`src/rules.py::check_icon_only_no_label`) — now collapses repeated same-template list-row icons (same resource_id + bounds size) via `_dedupe_repeated`.
+- **R20/R05** (`src/parser.py::_get_hint`) — now reads MASC's real `text-hint` attribute (was only checking `hint`/`android:hint`, which MASC never emits), unblocking R20 (0 -> 749 hits on full MASC) and correcting R05's false positives (2117 -> 717 on full MASC).
+- Full MASC sweep (7068 screens, 0 failures) confirms rule counts moved as expected; see `outputs/violations/*.json` (regenerated) and `notebooks/masc_dataset_analysis.ipynb` (re-executed) for before/after detail.
+
 ## Next
 
-- Salar: use holdout R07/R08/R30 numbers to validate FP fixes at scale (see `holdout_team_priority_fixes.md`).
-- Noor: re-run this script after Salar's fixes land to quantify the FP-rate delta vs this baseline.
+- Salar: R07/R08/R30 FP fixes already landed (this run) — no longer blocking; revisit R30's remaining per-instance volume if further reduction is wanted (see `holdout_team_priority_fixes.md`).

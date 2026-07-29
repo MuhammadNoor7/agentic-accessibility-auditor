@@ -1,0 +1,116 @@
+{
+  "schema_version": "1.0",
+  "screen_id": "r30_icon_only_repeated_dedup",
+  "image_path": "tests/fixtures/screenshots/rules/r30_icon_only_repeated_dedup.jpg",
+  "xml_path": "tests/fixtures/rules/r30_icon_only_repeated_dedup.xml",
+  "total_violations": 7,
+  "violations": [
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_002",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        20,
+        100,
+        188,
+        268
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_003",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        20,
+        300,
+        188,
+        468
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R01",
+      "issue": "Missing accessible label",
+      "component_id": "c_004",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        20,
+        500,
+        188,
+        668
+      ],
+      "guideline": "G01 \u2014 Missing accessible label",
+      "severity": "High",
+      "recommendation": "Add a visible text label or android:contentDescription so screen readers can announce this control."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_002",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        20,
+        100,
+        188,
+        268
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_003",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        20,
+        300,
+        188,
+        468
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R02",
+      "issue": "Image button without description",
+      "component_id": "c_004",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        20,
+        500,
+        188,
+        668
+      ],
+      "guideline": "G02 \u2014 Image button without description",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription with the action name, such as Back."
+    },
+    {
+      "rule_id": "R30",
+      "issue": "Icon-only control with no label (3 repeated instances of the same row/grid template)",
+      "component_id": "c_002",
+      "class": "android.widget.ImageView",
+      "bounds": [
+        20,
+        100,
+        188,
+        268
+      ],
+      "guideline": "G30 \u2014 Icon-only button with no text alternative",
+      "severity": "High",
+      "recommendation": "Add android:contentDescription describing the icon's action."
+    }
+  ],
+  "component_count": 4,
+  "hidden_component_count": 0
+}

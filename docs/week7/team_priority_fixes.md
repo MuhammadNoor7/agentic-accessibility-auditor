@@ -1,15 +1,15 @@
 # Week 7 — Team Priority Fixes (share with Salar + Ayesha)
 
-**Date:** 2026-07-20 10:46 UTC  
+**Date:** 2026-07-28 19:13 UTC  
 **Owner:** Muhammad Noor  
 **Basis:** MASC 40-screen Week 6 eval (Rico holdout deferred)
 
 ## Interim numbers for standup
 
 - Sample: **40/40** stratified MASC screens (seed `20260715`)
-- Mean violations/screen: **64.3**; mean score: **6.8**
+- Mean violations/screen: **19.4**; mean score: **32.1**
 - Manual verdicts: mostly_agree **32**, agree_clean **3**, over_flagging **2**, mixed_r30_noise **3**
-- Top violation rules: R07 (1127), R08 (629), R01 (324), R18 (102), R02 (89)
+- Top violation rules: R08 (305), R01 (189), R18 (75), R02 (48), R30 (48)
 
 ## Priority queue
 

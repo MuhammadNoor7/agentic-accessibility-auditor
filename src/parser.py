@@ -231,10 +231,14 @@ def _get_hint(elem: etree._Element) -> str:
     """Extract an input field's hint text, if present.
 
     Input: elem - the source XML element.
-    Output: normalized hint string from the `hint` or `android:hint`
-        attribute, or "" if neither is present.
+    Output: normalized hint string from the `hint`/`android:hint`/`text-hint`
+        attribute, or "" if none is present. `text-hint` is MASC's actual
+        attribute name (confirmed against real data-masc XML — `hint` and
+        `android:hint` never appear there at all), so without it every MASC
+        EditText's hint was silently dropped and R20 (hint-only label) could
+        never fire on real MASC screens.
     """
-    return _normalize_string(elem.get("hint") or elem.get("android:hint"))
+    return _normalize_string(elem.get("hint") or elem.get("android:hint") or elem.get("text-hint"))
 
 
 def _get_first_attr(elem: etree._Element, *names: str) -> str:

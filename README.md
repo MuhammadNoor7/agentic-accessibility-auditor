@@ -28,7 +28,7 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 | **Week 6 eval** | [`docs/week6/evaluation_sheet.md`](docs/week6/evaluation_sheet.md) · CSV · R26–R30 design DOCX |
 | **Week 7 QA** | [`docs/week7/README.md`](docs/week7/README.md) · rule/guideline summaries (MASC sample + Rico holdout variants) · team priorities |
 | **YOLO UI detector (post–Week 7)** | `notebooks/train_yolo_ui_detector.ipynb` · `runs/runs/yolo_ui_detector/` (config, metrics, plots, exported `best.pt`) — not yet pipeline-wired into `src/` |
-| **Crop-violation classifier (Week 8)** | `notebooks/train_crop_violation_classifier.ipynb` · `src/crop_violation_classifier.py` (inference) · `models/crop_violation_classifier_best.pt` — pixel-level confirmation for R09/R04/R17/R10/R28/R08 |
+| **Crop-violation classifier (Week 8)** | `notebooks/train_crop_violation_classifier.ipynb` (now includes a §9 Rico holdout generalization check) · `src/crop_violation_classifier.py` (inference) · `models/crop_violation_classifier_best.pt` (gitignored) — pixel-level confirmation for R09/R04/R17/R10/R28/R08; Rico-validated (R08 F1 0.70→0.46 on unseen apps, real but moderate generalization gap) |
 | **SMTP + Google setup (free)** | [`docs/auth_smtp_google_setup.md`](docs/auth_smtp_google_setup.md) |
 | **Figma screenshots** | `docs/assets/figma/` (also mirrored under `docs/progress/assets/figma/` for the progress DOCX) |
 | **Validation logs** | `outputs/validation_logs/` — `noor_week1`…`noor_week8_{summary.md,validation_log.txt}` (append-only, one dated block per run) |
@@ -58,7 +58,7 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 | Week 6 eval | Noor | 40-screen sheet | **Done** — stratified seed `20260715`; 40/40 assisted FP/miss notes |
 | Week 7 QA (Noor) | Noor | Rule/guideline summaries | **Done** — MASC 40-screen sample + full Rico holdout (1,698 screens) both re-evaluated post-fix |
 | YOLO UI detector (post–Week 7) | Salar (notebook) / Noor (Colab train) | `best.pt`, YOLO-format datasets | **Trained** — `runs/runs/yolo_ui_detector/`; zero-shot vs fine-tuned eval built for Rico holdout; **not pipeline-wired** (no `src/yolo_ui_detector.py` yet) |
-| Crop-violation classifier (Week 8) | Noor (Colab train) | `crop_violation_classifier_best.pt` | **Trained (epoch 17, val macro-F1 0.265)** — retrained after the R08 fix since R08 is one of its 6 label classes; `src/crop_violation_classifier.py` inference wrapper wired, **not called from the main pipeline yet** |
+| Crop-violation classifier (Week 8) | Noor (Colab train) | `crop_violation_classifier_best.pt` | **Trained + Rico-validated** (epoch 17, val macro-F1 0.265; Rico holdout macro F1 0.18, R08 0.46/0.40 precision/recall) — retrained after the R08 fix since R08 is one of its 6 label classes; `src/crop_violation_classifier.py` inference wrapper wired, **not called from the main pipeline yet** |
 | R01–R30 accuracy fixes (Week 8) | Noor | Fixed `src/rules.py` + `src/parser.py` | **Done, 29 Jul** — verified against full MASC (7,068) + Rico holdout (1,698), not just fixtures; see §16 v1.24 in the progress report |
 
 **API mounts:** audit under `/api/v1/audit/*`; auth under `/auth/*`; records under `/records/*`.
@@ -146,13 +146,13 @@ agentic-accessibility-auditor/
 │
 ├── notebooks/
 │   ├── masc_dataset_analysis.ipynb          # exploratory analysis of outputs/violations/ (MASC-only, filtered)
-│   ├── train_crop_violation_classifier.ipynb # Week 8: crop-level CV classifier training (Colab)
+│   ├── train_crop_violation_classifier.ipynb # Week 8: crop-level CV classifier training + §9 Rico holdout eval (Colab)
 │   └── train_yolo_ui_detector.ipynb          # post–Week 7: screenshot-only UI detector training (Colab)
 │
 ├── docs/
 │   ├── week6/              # eval sheet CSV/MD/DOCX + R26–R30 design
 │   ├── week7/              # rule/guideline summaries — MASC sample + `holdout_*` Rico variants
-│   ├── progress/           # supplementary report + assets/ (figma + logs)
+│   ├── progress/           # supplementary report + assets/ (figma + logs + crop_classifier/ visualizations)
 │   ├── assets/figma/       # Figma PNG references
 │   └── …                   # schemas, guidelines, QA plan, technical overview
 │
@@ -175,7 +175,7 @@ agentic-accessibility-auditor/
 ├── models/                 # crop_violation_classifier_best.pt (gitignored — .pt weights never committed)
 │
 └── runs/                   # training artifacts — everything EXCEPT .pt weights is tracked
-    ├── notebooks/           # executed copies with saved outputs (masc_dataset_analysis, train_crop_violation_classifier, train_yolo_ui_detector)
+    ├── notebooks/           # executed copies with saved outputs (masc_dataset_analysis, train_crop_violation_classifier incl. §9 Rico eval results, train_yolo_ui_detector)
     ├── crop_violation_classifier/
     │   ├── crops/           # extracted training/val/test crop images
     │   ├── manifests/       # train/val/test.csv (labels)

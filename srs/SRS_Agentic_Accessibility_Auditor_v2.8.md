@@ -29,6 +29,7 @@
 | **2.5** | 2026-07-16 | Noor | Align §4.9 / §9 with live mounts (`/auth`, `/records`); FR-REC.5 DELETE Done; FR-IN.2 pair validation Done |
 | **2.6** | 2026-07-20 | Noor | Week 7 QA: rule-wise + guideline-wise summaries on MASC 40-screen sample (`docs/week7/`); Rico holdout eval deferred; team priority fixes for Salar/Ayesha |
 | **2.7** | 2026-07-27 | Noor | Post–Week 7 YOLO track: new FR-CV.4–FR-CV.7 screenshot-only UI-element detector fallback requirement (§4.4); F13 product function; Appendix B traceability updated; Progress Report v1.23 comprehensive embedded visualizations + outputs inventory (§15D–15F) |
+| **2.8–2.9** | 2026-07-29 | Noor | Rule-accuracy fixes verified against real MASC (7,068 screens) and Rico holdout (1,698 screens) data, not just fixtures: **FR-RU.7** (R07) and **FR-RU.8** (R08) false-positive sources eliminated (R08 -43.2% on Rico holdout); **R30** collapses repeated list/grid-row icon instances; **R20** unblocked from a parser bug (0 → 749 hits), which also corrected an R05 false-positive pattern (2,117 → 717). §4.4 renamed and expanded: **FR-CV.8–9 added** (crop classifier is multi-label across R09/R04/R17/R10/R28/R08, MASC-only training — the actual implementation is broader than FR-CV.3's original R09-only framing); F10 (§2.2) updated from "optional CV contrast + CNN signal" to the trained crop classifier; status paragraphs added for both the crop classifier (val macro-F1 0.265) and YOLO detector, correcting a stale claim that `src/yolo_ui_detector.py` was scaffolded (it does not exist). Appendix B: FR-EV.5 (Rico holdout) updated Done, no longer deferred. Progress Report v1.24–1.25 / SDS v2.12–2.13 sync. |
 
 > **Note on UI specifications:** Screen layouts, branding, and interaction flows in Section 3.1 and **Appendix F** are derived from **Ayesha Naveed's Figma designs** shared in `#tem-all-dynamo` Slack. Reference screenshots are embedded in Appendix F (`docs/assets/figma/`). Screens covered: Sign Up, Log In, Forgot Password, OTP Verify, Reset Password, Upload (all states), Audit Complete modal, Dashboard, Issue Detail drawer, Audit Report, Generate Report modal, and **Records (Reports)** page.
 
@@ -130,7 +131,7 @@ The Agentic Accessibility Auditor is a **standalone prototype tool** targeting *
 |------|-------|
 | **Must Have (MVP)** | Parser → R01–R10 rule engine → LLM explanations → HTML/PDF report → Axion Upload + Issues + Report screens → **Auth + Records** → Docker Compose → evaluation on 25–40 screens |
 | **Should Have** | R11–R20 rules; Issues dashboard filtering; batch CLI/API; annotated screenshot regions in UI; Figma-approved Axion branding |
-| **Stretch** | R21–R30 rules; CV contrast (R09); legacy CNN classifier signal; interactive click-to-highlight in HTML report; benchmark dataset export |
+| **Stretch** | R21–R30 rules; CV contrast (R09) — trained via the crop classifier (§4.4), not yet pipeline-wired; interactive click-to-highlight in HTML report; benchmark dataset export |
 
 #### 1.4.3 Out of scope
 
@@ -221,10 +222,10 @@ All stages are orchestrated behind Docker-managed backend services (Appendix E).
 | F7 | **Issues dashboard** — Filterable violation table in web UI | Must |
 | F8 | **Report download** — PDF and HTML from interface | Must |
 | F9 | **Batch evaluation** — Run pipeline across curated dataset screens | Should |
-| F10 | **Optional CV contrast + CNN signal** — Supplementary visual analysis | Stretch |
+| F10 | **Crop-level pixel classifier** — Multi-label CV signal (R09/R04/R17/R10/R28/R08) supplementing the XML rule checker on rendered pixels | Stretch — **trained, not pipeline-wired** |
 | F11 | **User authentication (Axion)** — Sign up, login, forgot password + OTP reset flow | Must |
 | F12 | **Records page** — Per-user audit history; store and retrieve reports against authenticated account | Must |
-| F13 | **Screenshot-only fallback detection (YOLO)** — Detect UI elements directly from the screenshot pixels when no (or a malformed) XML hierarchy is available | Stretch |
+| F13 | **Screenshot-only fallback detection (YOLO)** — Detect UI elements directly from the screenshot pixels when no (or a malformed) XML hierarchy is available | Stretch — **trained, not pipeline-wired** |
 
 ### 2.3 User classes and characteristics
 
@@ -555,19 +556,23 @@ Requirements are grouped by module. Legacy `FR-AAA-xx` IDs from the Axion SRS ar
 
 Full rule logic: **Section 7**.
 
-### 4.4 Computer vision, legacy CNN, and YOLO UI-detector module (Stretch)
+### 4.4 Computer vision, crop classifier, and YOLO UI-detector module (Stretch)
 
 | ID | Requirement | Priority |
 |----|-------------|----------|
-| FR-CV.1 | Optionally run legacy CNN accessibility classifier on screenshot as supplementary signal | Stretch |
-| FR-CV.2 | CNN outputs clearly distinguished from rule violations; never silently override rule results | Stretch |
+| FR-CV.1 | Run a supplementary pixel-level classifier on screenshot crops as a secondary signal alongside the XML rule checker | Stretch |
+| FR-CV.2 | Classifier outputs clearly distinguished from rule violations; never silently override rule results | Stretch |
 | FR-CV.3 | R09 contrast: crop screenshot using XML bounds; compute WCAG-style ratio (< 4.5:1 text, < 3:1 large/icons) | Stretch |
 | FR-CV.4 | System **should** run a screenshot-only YOLO UI-element detector as a fallback when the paired XML is missing, malformed, or fails to parse, producing a `components.json`-compatible component list from pixel detections alone | Stretch |
 | FR-CV.5 | YOLO detector **shall** be trained and validated only on **MASC** (train/val/test); **Rico holdout shall never be used for training** — reserved strictly for generalization evaluation, consistent with BR-4/BR-5 | Stretch |
 | FR-CV.6 | Detected classes limited to a fixed 9-class taxonomy: `text`, `image`, `icon`, `button_labeled`, `button_icon_only`, `input_field`, `checkbox_toggle`, `tab_item`, `list_item` | Stretch |
 | FR-CV.7 | YOLO fallback outputs **shall** be clearly flagged as pixel-inferred (not XML-derived) in `components.json` so downstream rule confidence can be adjusted accordingly | Stretch |
+| FR-CV.8 | Crop classifier **shall** cover R09, R04, R17, R10, R28, and R08 as a **multi-label** problem (one crop can trigger more than one rule at once, e.g. a control that is both too small and too close to its neighbor) — not single-label limited to R09 contrast alone | Stretch |
+| FR-CV.9 | Crop classifier **shall** be trained on **MASC only**, same stratified splits as the parser/rule pipeline, consistent with BR-4/BR-5 | Stretch |
 
-**Status (27 Jul 2026):** initial MASC-only training run completed 1 epoch — precision 0.471, recall 0.420, mAP50 0.397, mAP50-95 0.285 (see Supplementary Progress Report §15C for full run results). Best checkpoint exported; `src/yolo_ui_detector.py` inference module scaffolded; not yet wired into the audit pipeline. See SDS §3.6 for design detail.
+**Status — YOLO detector (27 Jul 2026):** initial MASC-only training run completed 1 epoch — precision 0.471, recall 0.420, mAP50 0.397, mAP50-95 0.285 (see Supplementary Progress Report §15C for full run results). Best checkpoint exported; **`src/yolo_ui_detector.py` does not exist yet** (corrected 29 Jul — previously misreported as scaffolded); not wired into the audit pipeline. See SDS §3.6 for design detail.
+
+**Status — Crop classifier / FR-CV.1–3, FR-CV.8–9 (29 Jul 2026):** MobileNetV3-Small trained for 20 epochs on MASC (25,202/5,558/5,541 train/val/test crops), best val macro-F1 0.265 at epoch 17. Test-set F1: R08 0.70, R17 0.47, R04 0.36; R09/R10/R28 have zero positive test examples in the current MASC corpus (no declared color/text-size signal — a data-coverage gap, not a code gap). `src/crop_violation_classifier.py`'s `classify_crop()` is real, imports and runs — **unlike the YOLO module, the inference code itself is done** — but nothing in `backend/` calls it yet (FR-CV.1's "supplementary signal" is trained but not connected to the live pipeline). See SDS §3.7 and Supplementary Progress Report §15G for full design and results.
 
 ### 4.5 Agentic layer — LLM explanation and fix generation
 
@@ -1020,9 +1025,10 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 | FR-AUTH.1–7 | Authentication | Must | §4.9 | Ayesha / Salar / **Noor (OTP+SMTP+OAuth)** | **Done** (JWT register/login/me; forgot/OTP/reset; Google Sign-In; any-domain email) |
 | FR-REC.1–4 | Records storage | Must | §4.9 | Salar / Ayesha / Noor | **Done** (flat JSON store + score/filename fields + report reopen) |
 | FR-DK.1–3 | Docker Compose | Must | §4.7 | Salar | **Done** (synced to `noor`) |
-| FR-EV.1–6 | Evaluation | Must | §4.8 | Noor | **Week 6 done** (40 stratified-random + 40/40 assisted notes). **Week 7 (Noor):** rule-wise R01–R30 + G01–G30 coverage reports on same sample (`docs/week7/`, `outputs/week7_eval/`). **Rico holdout (FR-EV.5) deferred** |
-| FR-CV.1–3 | CV/CNN/R09 | Stretch | §4.4 | Noor | Stretch |
-| FR-CV.4–7 | Screenshot-only YOLO UI-detector fallback | Stretch | §4.4 | Noor (+ Salar notebook) | **In progress** — MASC-only training run 1 epoch (mAP50-95 0.285); `best.pt` exported; not wired into pipeline |
+| FR-RU.5/7/8/20/30 | R05/R07/R08/R20/R30 detection accuracy | Must/Stretch | §4.3 | Noor | **Fixed 29 Jul** — R07/R08/R30 false-positive sources eliminated (`_is_a11y_relevant`, `_is_ancestor`, `_dedupe_repeated`); R20 unblocked from a parser bug (0 → 749 hits); R05 corrected as a side effect (2,117 → 717). Verified on full MASC (7,068) + Rico holdout (1,698) |
+| FR-EV.1–6 | Evaluation | Must | §4.8 | Noor | **Week 6 done** (40 stratified-random + 40/40 assisted notes). **Week 7 (Noor):** rule-wise R01–R30 + G01–G30 coverage reports on same sample (`docs/week7/`, `outputs/week7_eval/`). **Rico holdout (FR-EV.5) done** — 1,698 screens, 0 failures, re-run post rule-fix 29 Jul; no longer deferred |
+| FR-CV.1–3, FR-CV.8–9 | Crop classifier (multi-label R09/R04/R17/R10/R28/R08) | Stretch | §4.4 | Noor | **Trained, not wired** — MobileNetV3-Small, 20 epochs, best val macro-F1 0.265 (epoch 17); `classify_crop()` real and working; not called from `backend/` |
+| FR-CV.4–7 | Screenshot-only YOLO UI-detector fallback | Stretch | §4.4 | Noor (+ Salar notebook) | **Trained, not wired** — MASC-only training run (mAP50-95 0.285); `best.pt` exported; `src/yolo_ui_detector.py` **does not exist** (corrected 29 Jul) |
 | FR-AAA-01 … 40 | Legacy IDs | — | Mapped above | — | — |
 
 ---

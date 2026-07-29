@@ -31,6 +31,7 @@
 | **2.9** | 2026-07-16 | Noor | API mount accuracy (`/auth`, `/records`, `/api/v1/audit`); records store `records.db.json`; docker = backend+auditor; 146 tests; drop planned/stretch leftovers |
 | **2.10** | 2026-07-20 | Noor | Week 7 QA scripts (`run_week7_eval_analysis.py`, `noor_week7_validate.py`); tracked outputs `outputs/week7_eval/`; Rico holdout script ready (`run_rico_holdout_eval.py`) — batch deferred |
 | **2.11** | 2026-07-27 | Noor | §3.6 added: YOLO UI-element detector module design (training config, dataset split, class taxonomy, results, `src/yolo_ui_detector.py`); Appendix B file map + §14 traceability updated; SRS FR-CV.4–7 cross-reference; Progress Report v1.23 comprehensive embedded visuals + outputs sync (§15D–15F) |
+| **2.12–2.13** | 2026-07-29 | Noor | §3.2 Rule engine + §6 Rule engine design updated with three false-positive fixes and one parser fix, verified against real data: `check_zero_size` (R07) gains `_is_a11y_relevant` gate; `check_layout_overlap` (R08) gains `_is_ancestor` helper skipping clickable ancestor/descendant pairs — root-caused on a real Rico screen where a clickable `ListView` was flagged against all 8 of its own clickable rows; `check_icon_only_no_label` (R30) gains `_dedupe_repeated`; §3.1 Parser `_get_hint` gains a `text-hint` attribute alias, unblocking R20 (0 → 749 hits) and fixing an R05 false-positive pattern (2,117 → 717). Full pytest 130/130; full MASC + Rico holdout re-verification, 0 failures. **§3.7 added:** complete crop-violation classifier module design — backbone selection rationale (MobileNetV3-Small vs. Large/EfficientNet-B0/ResNet-50/ViT), data/training design, 20-epoch results (best val macro-F1 0.265 at epoch 17, documented overfitting pattern confirmed), test classification report, `classify_crop()` inference module design — mirroring §3.6's YOLO treatment. §3.6.4 and §1.4 corrected: `src/yolo_ui_detector.py` does **not** exist (previously misreported as scaffolded). Progress Report v1.24–1.25 sync. |
 
 ---
 
@@ -416,7 +417,8 @@ Full run artifacts (PR/F1/confusion-matrix plots, prediction samples) and the lo
 #### 3.6.4 Inference module design
 
 ```python
-# src/yolo_ui_detector.py (scaffolded)
+# src/yolo_ui_detector.py (planned signature — file does not exist yet, corrected 29 Jul;
+# contrast with §3.7.5's classify_crop(), which is real and imports/runs today)
 def detect_ui(image_path: str, weights_path: str = "models/yolo_ui_detector_best.pt") -> dict:
     """Run the fine-tuned YOLO detector on a screenshot and return a
     components.json-compatible structure (component_id, class, bounds,
@@ -431,6 +433,112 @@ def detect_ui(image_path: str, weights_path: str = "models/yolo_ui_detector_best
 | Rule-engine impact | Rules that depend on XML-only fields (`content-desc`, `focus_order`, `hint`, etc. — see §3.1.5) are expected to under-fire on YOLO-only input; this is a known, documented limitation, not silently hidden (FR-CV.7) |
 
 **Not yet done:** pipeline wiring (fallback trigger in `pipeline.py`), Rico holdout zero-shot/fine-tuned comparison, and full 60-epoch convergence. Tracked in Progress Report §15C.6 Next steps.
+
+### 3.7 Crop-violation classifier module (pixel-level rule confirmation)
+
+**SRS:** FR-CV.1–FR-CV.3 (supplementary CV signal, R09 contrast, never silently override rule results) | **Owner:** Noor (Colab training + inference module) | **Status:** Trained, inference module working, **not pipeline-wired**
+
+#### 3.7.1 Purpose
+
+`src/rules.py` is XML-only: most rules read straight from the parsed hierarchy, but six rules describe something that only really exists once the layout is **rendered** — a contrast ratio, a rendered touch-target size, a rendered gap, clipped text, or a visual overlap. This module is a **multi-label crop classifier**: given a cropped region of a screenshot, predict which of `[R09, R04, R17, R10, R28, R08]` apply, so the pipeline can eventually confirm or downgrade an XML-only rule's verdict with a pixel-level signal instead of trusting bounds math alone.
+
+| Rule | Violation | Why it needs pixels |
+|---|---|---|
+| R09 | Low contrast (text/background ratio) | Needs actual foreground/background pixel colors |
+| R04 | Small touch target (< 48dp) | XML gives raw bounds; a crop confirms real on-screen tap size |
+| R17 | Insufficient spacing (< 8dp) | Visual crop confirms actual rendered gap |
+| R10 | Text overflow | Needs to see if rendered text is visually clipped |
+| R28 | Font-scale overflow (200% scale) | Visual confirmation of clipping |
+| R08 | Layout overlap | Bounding-box math catches some cases; a crop reduces false positives |
+
+Multi-label (not single-softmax) because one crop can trigger more than one rule at once — e.g. a button that is both too small **and** too close to its neighbor.
+
+#### 3.7.2 Backbone selection
+
+Dataset size drove the decision, not raw accuracy tables: 4,943 train screens is far below ImageNet scale, and the notebook's own documented risk is explicit — *"crops are small and this dataset is tiny, so overfitting is the main risk, not underfitting."*
+
+| Model | Params | Verdict | Why (not) |
+|---|---:|---|---|
+| **MobileNetV3-Small** | ~2.5M | **Chosen** | Fastest to train; lowest capacity acts as a built-in regularizer against overfitting on a small, imbalanced dataset |
+| MobileNetV3-Large | ~5.4M | Rejected | Double the params for no demonstrated benefit on simple geometric/color crop patterns; ~2x slower/epoch |
+| EfficientNet-B0 | ~5.3M | Rejected (for now) | Same capacity-vs-data mismatch, worse; more BatchNorm-sensitive with rare positives at `batch_size=32`. Escalation path if train **and** val F1 plateau together |
+| ResNet-50 | ~25M | Rejected (for now) | Documented fallback only if lighter models plateau — not a starting choice |
+| ViT | Varies | Rejected | No convolutional inductive bias; needs ImageNet-21k/JFT-300M-scale pretraining to beat CNNs from a light fine-tune |
+
+Full rationale: `docs/picking_model_for_crop.md`.
+
+#### 3.7.3 Data and training design
+
+| Decision | Detail |
+|----------|--------|
+| Train / val / test | **MASC only** (`data/data-masc/splits/`), same splits as the parser/YOLO tracks |
+| Label source | Generated at crop-build time by running the **existing, already-tested rule checker** (`src.rules.check()`) on each screen and keeping only the 6 target rules — reuses `src/rules.py` rather than re-implementing contrast/overlap/spacing math |
+| Crop extraction | Each flagged component becomes one positive crop (224×224, resized, ~15% context padding); `negatives_per_screen=3` non-violating clickable/text elements sampled per screen as negatives |
+| Backbone | `mobilenet_v3_small`, ImageNet-pretrained, final layer replaced with a 6-way linear head (1,524,006 total params) |
+| Two-phase fine-tune | Phase 1 (epochs 1–3): backbone frozen, head-only at `lr=1e-3`. Phase 2 (epochs 4–20): full unfreeze at `lr=1e-4` |
+| Loss | `BCEWithLogitsLoss`, per-rule `pos_weight` capped at 20.0 (severe class imbalance — R09/R04/R10/R28 hit the cap, R17=7.75, R08=2.12) |
+| Early stopping | `patience=5` epochs without val macro-F1 improvement (not triggered — full 20 epochs ran) |
+| Checkpoint policy | Only the single best-val-F1 checkpoint is ever saved (`torch.save` overwrites the same path each time a new best is found) — no per-epoch snapshots, by design |
+
+**Dataset build (Colab, 28 Jul 2026):**
+
+| Split | Total crops | Positive | Negative | Screens |
+|---|---:|---:|---:|---:|
+| train | 25,202 | 10,549 | 14,653 | 4,943/4,943 |
+| val | 5,558 | 2,433 | 3,125 | 1,056/1,056 |
+| test | 5,541 | 2,367 | 3,174 | 1,069/1,069 |
+
+Per-rule train positives: R08 = 8,089 (77% of all positives), R17 = 2,879, R04 = 288, R09/R10/R28 = 0 (same MASC data-coverage gap as §6.10/§6.21 — no declared color/text-size attributes in the corpus, so the rule checker that generates these labels never flags them on MASC either).
+
+#### 3.7.4 Results (verified from the executed Colab notebook, 28–29 Jul 2026)
+
+| Metric | Value |
+|--------|------:|
+| Best checkpoint | Epoch 17 of 20 |
+| Best val macro-F1 | 0.265 |
+| Train loss (epoch 1 → 20) | 0.350 → 0.082 |
+| Val loss (epoch 1 → 20) | 0.335 → 0.528 |
+
+Train loss falls monotonically and train F1 climbs steadily (0.195 → 0.399) while val loss bottoms out around epoch 6 and then *rises*, and val F1 plateaus/oscillates in the 0.24–0.27 band from epoch ~10 onward — the overfitting pattern §3.7.2 anticipated, playing out exactly as documented. This is why only the best-val-F1 epoch's weights are kept, not the final epoch's (epoch 20 has the lowest train loss but is measurably more overfit than epoch 17).
+
+**Test-set classification report:**
+
+```
+              precision    recall  f1-score   support
+         R09       0.00      0.00      0.00         0
+         R04       0.26      0.58      0.36        45
+         R17       0.43      0.52      0.47       660
+         R10       0.00      0.00      0.00         0
+         R28       0.00      0.00      0.00         0
+         R08       0.68      0.71      0.70      1805
+   macro avg       0.23      0.30      0.25      2510
+```
+
+R08 (0.70 F1) is where the model actually works — enough positive examples to learn real signal. R17 (0.47) is usable but weaker. R04 (0.36) is data-starved (45 test examples). R09/R10/R28 show `support=0` — undefined metrics, not a trained-and-failed result; there was nothing to evaluate against. Full curves, sample crops, and prediction grids: Progress Report §15G.
+
+#### 3.7.5 Inference module design
+
+```python
+# src/crop_violation_classifier.py (real — imports and runs, unlike §3.6.4's scaffold)
+def classify_crop(
+    image_path: str | Path,
+    bounds: list[int] | None = None,
+    weights_path: str | Path = DEFAULT_WEIGHTS,
+    threshold: float = 0.5,
+) -> dict[str, float]:
+    """Classify one crop (or region of a larger screenshot, if bounds given).
+    Returns {rule_id: probability} for every rule predicted above threshold,
+    plus every rule's raw probability under "_all"."""
+```
+
+| Design point | Detail |
+|---------------|--------|
+| Model loading | Lazily cached per `weights_path` in `_model_cache` — one load per process, not per call |
+| Output shape | `{"_all": {rule: prob, ...}, rule_above_threshold: prob, ...}` — raw probabilities always available, thresholded hits called out separately |
+| Weights default | `models/crop_violation_classifier_best.pt`, resolved relative to the module's own path |
+| Integration point (planned, not done) | After the XML rule check (§3.2) runs, call `classify_crop()` on the bounds of any R09/R04/R17/R10/R28/R08 candidate to confirm or downgrade it with a pixel-level signal, mirroring FR-CV.2's "never silently override" rule |
+
+**Not yet done:** pipeline wiring (nothing in `backend/` or `src/agent.py` calls `classify_crop()` yet — same open item as §3.6's YOLO detector), and no automated tests exist for this module. Tracked in Progress Report §15G.6.
 
 ---
 

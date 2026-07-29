@@ -1218,6 +1218,138 @@ type runs\runs\yolo_ui_detector\runs\yolo_ui_detector\results.csv
 
 ---
 
+## 15G. Crop-violation classifier evidence pack (Week 8 — Noor)
+
+> **Date:** 28–29 July 2026 · **Branch:** `noor` · **Notebook:** `notebooks/train_crop_violation_classifier.ipynb` (executed on Colab T4; local mirror with saved outputs at `runs/notebooks/train_crop_violation_classifier.ipynb`)
+
+### 15G.1 Why this model exists at all
+
+`docs/user_coverage_for_training.md` splits the 30 accessibility rules into two buckets: most rules are already fully solved by the XML parser + rule checker (`src/rules.py`), reading `text`, `content-desc`, `clickable`, `bounds` straight from the UI hierarchy — no model needed. A handful of rules need to look at **rendered pixels**, not just the XML, because the thing that makes them a violation only exists once the layout is actually rendered:
+
+| Rule | Violation | Why it needs pixels |
+|---|---|---|
+| **R09** | Low contrast (text/background ratio) | Needs actual foreground/background pixel colors |
+| **R04** | Small touch target (< 48dp) | XML gives raw bounds; a visual crop confirms real on-screen tap size |
+| **R17** | Insufficient spacing between clickable elements (< 8dp) | Visual crop confirms actual rendered gap |
+| **R10** | Text overflow (text taller than its box) | Needs to see if rendered text is visually clipped |
+| **R28** | Font-scale overflow (200% scale wouldn't fit) | Visual confirmation of clipping |
+| **R08** | Layout overlap between elements | Bounding-box math catches some cases; a crop reduces false positives |
+
+The notebook builds a **multi-label crop classifier** over exactly these 6 rules: given a crop, predict which (if any) of `[R09, R04, R17, R10, R28, R08]` apply — multi-label rather than single-softmax, since one crop can trigger more than one rule at once (e.g. a button that is both too small *and* too close to its neighbor). Full rationale: `docs/picking_model_for_crop.md`.
+
+### 15G.2 Model selection rationale
+
+Dataset size drives the decision: 4,943 train screens is nowhere near ImageNet scale (1.2M images), and the notebook's own documented risk is explicit — *"crops are small and this dataset is tiny, so overfitting is the main risk, not underfitting."* That flips the usual "bigger model = better" intuition.
+
+| Model | Verdict | Why (not) |
+|---|---|---|
+| **MobileNetV3-Small** | **Chosen** | ~2.5M params, fastest to train, lowest capacity acts as a built-in regularizer against overfitting on a small, class-imbalanced dataset |
+| MobileNetV3-Large | Rejected | Double the params for no demonstrated benefit — UI crops are simple geometric/color patterns, not the fine-grained texture discrimination Large's extra capacity was built for; ~2x slower per epoch |
+| EfficientNet-B0 | Rejected (for now) | Same capacity-vs-data mismatch, worse BatchNorm sensitivity with rare positives at `batch_size=32`; reserved as the escalation path if train **and** val F1 plateau together (true underfitting, not overfitting) |
+| ResNet-50 | Rejected (for now) | Explicitly reserved as a fallback only if the lighter models plateau — not a starting choice per the source comparison doc |
+| ViT | Rejected | No convolutional inductive bias; needs ImageNet-21k/JFT-300M-scale pretraining data to beat CNNs from a light fine-tune — this dataset is nowhere near that scale |
+
+**Escalation ladder (only if needed):** MobileNetV3-Small (default) → EfficientNet-B0 (one-line config swap) → ResNet-50 (documented fallback, not yet wired into `build_model()`) → ViT (deferred until more data exists).
+
+### 15G.3 Dataset build — exact numbers (Colab run, 28 Jul 2026)
+
+| Split | Total crops | Positive | Negative | Screens |
+|---|---:|---:|---:|---:|
+| train | 25,202 | 10,549 | 14,653 | 4,943/4,943 |
+| val | 5,558 | 2,433 | 3,125 | 1,056/1,056 |
+| test | 5,541 | 2,367 | 3,174 | 1,069/1,069 |
+
+**Per-rule positive counts (train split):**
+
+| Rule | Description | Train positives |
+|---|---|---:|
+| R09 | Low contrast | 0 |
+| R04 | Small touch target | 288 |
+| R17 | Insufficient spacing | 2,879 |
+| R10 | Text overflow | 0 |
+| R28 | Font-scale overflow | 0 |
+| R08 | Layout overlap | 8,089 |
+
+R09/R10/R28 sit at 0 train positives — consistent with the same MASC data-coverage gap documented elsewhere in this report (§15B.2 / Progress Report v1.24 note): MASC never declares `textColor`/`backgroundColor`/`textSize`, so the underlying rule checker itself never flags these on MASC, and the crop-labeling step inherits that gap. R08 dominates the positive class at 8,089 of 10,549 total positives (77%) — expected, since R08 was already the highest-volume rule in the full MASC sweep.
+
+**Sample training crops (red border = violation, green = clean):**
+
+![Sample training crops](assets/crop_classifier/sample_training_crops.png)
+
+### 15G.4 Training configuration and results
+
+| Setting | Value |
+|---|---|
+| Backbone | `mobilenet_v3_small`, ImageNet-pretrained, 1,524,006 params |
+| Crop size | 224×224 |
+| Phase 1 (frozen backbone, head only) | Epochs 1–3, `lr=1e-3` |
+| Phase 2 (unfrozen, full fine-tune) | Epochs 4–20, `lr=1e-4` |
+| Loss | `BCEWithLogitsLoss`, per-rule `pos_weight` capped at 20.0 (R09/R04/R10/R28=20.0, R17=7.75, R08=2.12) |
+| Early stopping | `patience=5` (not triggered — ran the full 20 epochs) |
+| Best checkpoint | **Epoch 17**, val macro-F1 **0.265** |
+
+**Training curves — train vs. val loss and macro-F1 over 20 epochs:**
+
+![Training curves](assets/crop_classifier/training_curves.png)
+
+The curves show the overfitting risk the model-selection doc anticipated, playing out exactly as predicted: train loss falls monotonically (0.35 → 0.08) and train F1 climbs steadily (0.195 → 0.399), while val loss bottoms out around epoch 6 (~0.29) and then *rises* back to 0.53 by epoch 20, and val F1 plateaus/oscillates in the 0.24–0.27 band from epoch ~10 onward instead of continuing to climb with train F1. This is why the run saves only the best-val-F1 checkpoint (epoch 17) rather than the final epoch's weights — epoch 20's weights are measurably more overfit than epoch 17's, even though epoch 20 has the lowest train loss.
+
+### 15G.5 Test-set evaluation
+
+```
+              precision    recall  f1-score   support
+
+         R09       0.00      0.00      0.00         0
+         R04       0.26      0.58      0.36        45
+         R17       0.43      0.52      0.47       660
+         R10       0.00      0.00      0.00         0
+         R28       0.00      0.00      0.00         0
+         R08       0.68      0.71      0.70      1805
+
+   micro avg       0.60      0.66      0.63      2510
+   macro avg       0.23      0.30      0.25      2510
+weighted avg       0.61      0.66      0.63      2510
+```
+
+R08 (0.70 F1, 1,805 test examples) is where the model actually works — enough positive examples to learn a real signal. R17 (0.47 F1, 660 examples) is usable but weaker. R04 (0.36 F1, only 45 test examples) is data-starved. R09/R10/R28 show `support=0` — zero positive test crops — so precision/recall/F1 are mathematically undefined 0s, not a trained-and-failed result; there was nothing to evaluate them against, same root cause as §15G.3.
+
+**Sample test predictions (true label vs. model prediction):**
+
+![Sample test predictions](assets/crop_classifier/sample_test_predictions.png)
+
+### 15G.6 Artifacts and integration status
+
+| Artifact | Location | Status |
+|---|---|---|
+| Trained checkpoint | `models/crop_violation_classifier_best.pt` + `runs/crop_violation_classifier/export/crop_violation_classifier_best.pt` | Present, loads cleanly (verified) |
+| Manifests | `runs/crop_violation_classifier/manifests/{train,val,test}.csv` | Present, row counts match §15G.3 exactly |
+| Inference module | `src/crop_violation_classifier.py` (`classify_crop()`) | Present, imports cleanly, **not called from `backend/` or `src/agent.py` yet** |
+| Training crops | `runs/crop_violation_classifier/crops/{train,test}/` | Present locally (11,057 PNG files) |
+
+**Not yet done:** wiring `classify_crop()` into the main audit pipeline. The natural integration point is running it on R09/R04/R17/R10/R28/R08 candidate regions after the XML rule check, to confirm or downgrade violations the XML-only pass can't fully verify visually — same open item as the YOLO detector (§15C.6).
+
+---
+
+## 15H. Remaining work — verified against SDS v2.12 (29 Jul 2026)
+
+Every "in progress" / "stretch" / "stub" claim in SDS §1.4 and §6 was checked directly against the repository (grepped for the files, not assumed from the docs) — several SDS claims turned out to be stale and are corrected here.
+
+| Item | SDS says | Actually verified | Remaining work |
+|------|----------|--------------------|-----------------|
+| **YOLO UI-element detector integration** | §1.4: "In progress... `src/yolo_ui_detector.py`... not yet wired into pipeline" | `src/yolo_ui_detector.py` **does not exist**. Checkpoint and Rico zero-shot-vs-fine-tuned eval exist; nothing in `backend/` or `src/agent.py` calls the model | Write `src/yolo_ui_detector.py`, wire as the screenshot-only fallback path per SRS FR-CV.4–7 |
+| **Crop-violation classifier integration** | Not in SDS yet (built after v2.12) | Trained, checkpoint + inference module exist (§15G.6); not called from anywhere in the pipeline | Decide the integration point (post-XML-check pixel confirmation) and wire it |
+| **R09 — Low contrast** | §6.10: "Screenshot crop + WCAG contrast ratio; requires `src/contrast.py`" | `src/contrast.py` **does not exist**. Current `check_low_contrast` is a correct declared-attribute check, reporting 0 hits since MASC/Rico never declare `textColor`/`backgroundColor` (confirmed: 0 occurrences across all 7,068 MASC files) | Build real screenshot-pixel contrast sampling, or route through the crop-classifier (already includes R09 as a label, just needs real positive examples) |
+| **R28 — Font-scale overflow** | Same category as R09 | `check_font_scale_overflow` reads `text_size_sp`, never declared in MASC/Rico (0 occurrences) — correct code, no signal in current datasets | Same as R09 |
+| **R22 / R29 (password toggle / all-caps)** | Not flagged as gaps in SDS | Genuine **data-coverage gaps**: 0 password fields and 0 `textAllCaps` attributes anywhere in the 7,068-file MASC corpus | Nothing to fix in code; would need a differently-curated sample to ever exercise these rules |
+| **SDS §6 rule-design prose is stale** | §6.12: "R11 — Color-only information (stub)" | `check_color_only_info` is **fully implemented** (checkable-state widgets with no text/content_desc), not a stub | Update SDS §6.10–6.12 prose to match actual implementation |
+| **R07/R08/R30 false positives + R20/R05 parser bug** | Not flagged in SDS v2.11 (predates the fix) | **Fixed and verified 29 Jul** — see v2.12 in §16 Document history | Done — no remaining action |
+| **Rico holdout final evaluation** | Progress snapshot: "Not started" (pre-29 Jul) | **Done** — 1,698 screens, 0 failures, re-run post rule-fix | Done — no remaining action |
+| **TBD-03 — dp/density for R04** | Open decision, owner Salar | Still assumes 160 dpi flat, no per-device density lookup | Resolve or explicitly accept 160dpi-flat as final for MVP |
+| **TBD-05 — Severity UI mapping** | Open decision, owner: All | Not resolved | Decide High→Critical/Serious, Medium→Moderate, Low→Minor and wire into frontend severity badges |
+| **Final internship report + demo** | Week 8 (Noor) | Not started | 5–7 min demo + final report covering 30/30 rule coverage |
+
+---
+
 ## 16. Document history
 
 | Version | Date | Author | Changes |
@@ -1240,9 +1372,8 @@ type runs\runs\yolo_ui_detector\runs\yolo_ui_detector\results.csv
 | **1.14** | **20 Jul 2026** | **Noor** | Week 7 QA evidence §15B: rule/guideline summaries, metrics tables, validation logs; Rico holdout deferred; SRS v2.6 / SDS v2.10 sync |
 | **1.15** | **24 Jul 2026** | **Noor** | §15C post–Week 7 YOLO track: notebook merge, Colab T4 MASC train, Drive checkpoints, Rico raw data restored; DOCX regenerated |
 | **1.16–1.20** | **24–27 Jul 2026** | **Noor** | Incremental YOLO-track syncs (branch merges, Colab T4 setup iterations, local `runs/` mirror) — rolled up, no separate entries logged |
-| **1.21** | **27 Jul 2026** | **Noor** | §15C.7 added: full local `runs/` folder results — `args.yaml` training config, single logged epoch metrics (precision 0.4711 / recall 0.4196 / mAP50 0.3971 / mAP50-95 0.2846), `yolo_dataset` vs `rico_yolo_dataset` configs, exported `best.pt` confirmed; SRS v2.7 / SDS v2.11 sync (new YOLO requirement + design section) |
-| **1.22** | **27 Jul 2026** | **Noor** | §15C.8 added: complete artifact inventory — metrics/config files table (results.csv, args.yaml, dataset.yaml), performance plots (7 PNG: confusion matrix, P/R/F1/PR curves, results trend), training batch samples (13 JPG: early/late/val), exported best.pt, notebooks + base weights; summary + reproduce instructions |
-| **1.23** | **27 Jul 2026 (final)** | **Noor** | §15D–§15F: **comprehensive embedded visualizations + outputs inventory** — §15D: all 20 images/plots from `runs/` (7 PNG curves + 13 JPG batch samples); §15E: complete `outputs/` folder inventory (9,200+ violations JSON, 13 report exports, 14 validation logs); §15F: integration readiness checklist. Total: 9,260+ pipeline artefacts catalogued with tables + image embeds. |
+| **1.21–1.23** | **27 Jul 2026** | **Noor** | Post–Week 7 YOLO evidence, consolidated: §15C.7 full local `runs/` results (`args.yaml` config, epoch metrics — precision 0.4711 / recall 0.4196 / mAP50 0.3971 / mAP50-95 0.2846 — `yolo_dataset` vs `rico_yolo_dataset` configs, exported `best.pt`); §15C.8 complete artifact inventory (metrics/config files, 7 PNG performance plots, 13 JPG training batch samples, notebooks + base weights); §15D–§15F comprehensive embedded visualizations (all 20 images/plots) + `outputs/` folder inventory (9,200+ violations JSON, 13 report exports, 14 validation logs) + integration readiness checklist — 9,260+ pipeline artefacts catalogued; SRS v2.7 / SDS v2.11 sync |
+| **1.24–1.25** | **29 Jul 2026** | **Noor** | Rule-accuracy fixes + crop-classifier evidence pack, consolidated: fixed three confirmed false-positive rule bugs and one parser bug, verified against real MASC/Rico data (not just fixtures) — **R07** (`check_zero_size`) skips non-interactive/non-content zero-size elements via `_is_a11y_relevant`; **R08** (`check_layout_overlap`) skips clickable ancestor/descendant pairs via new `_is_ancestor` (confirmed on a real Rico `chat` screen — a `ListView` flagged against all 8 of its own `ConversationItemView` rows), R08 -43.2% on the Rico holdout; **R30** (`check_icon_only_no_label`) collapses repeated same-template list/grid-row icons via `_dedupe_repeated`; **R20/R05** (`parser._get_hint`) reads MASC's real `text-hint` attribute — R20 unblocked (0 → 749 hits), R05 corrected (2,117 → 717). Verified: pytest 130/130; full MASC re-parse + re-check (7,068 screens, 0 failures); Rico holdout re-eval (1,698 screens, 0 failures); `masc_dataset_analysis.ipynb` re-executed with corrected §9 Findings; three real `.gitignore` bugs fixed (dead blanket `outputs`/`data` rule, `models/*.pt/` trailing-slash typo, oversized archives excluded); `scripts/noor_week8_validate.py` extended; committed (`7918113f`, 35,706 files) and pushed to `origin/noor`. **§15G added:** complete crop-violation classifier evidence pack — model-selection rationale (MobileNetV3-Small vs. Large/EfficientNet-B0/ResNet-50/ViT, from `docs/picking_model_for_crop.md`), exact dataset-build numbers (25,202/5,558/5,541 train/val/test crops, R08 = 77% of positives), 20-epoch training curves showing the documented overfitting risk playing out (best checkpoint epoch 17, val macro-F1 0.265), test-set classification report (R08 F1 0.70, R17 0.47, R04 0.36, R09/R10/R28 undefined), 3 embedded visualizations extracted from the executed Colab notebook. **§15H added:** remaining-work table cross-checking every SDS v2.12 claim against the actual repo — corrected two stale SDS claims (`src/yolo_ui_detector.py` and `src/contrast.py` do not exist; R11 is fully implemented, not a stub as SDS §6.12 states). |
 
 ---
 

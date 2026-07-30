@@ -2,8 +2,9 @@
 
 **Project:** Agentic Accessibility Auditor (Axion)  
 **Duration:** 8 weeks (Summer 2026)  
-**Last updated:** 29 July 2026  
-**Status:** Week 6 complete · **Week 7 (Noor) QA analysis complete** on `noor` — rule/guideline summaries; Rico holdout batch **now done** (1,698 screens, 0 failures — no longer deferred); Salar/Ayesha Week 7 tasks pending · **Post–Week 7 YOLO track:** MASC-only training run, checkpoint exported, zero-shot-vs-fine-tuned Rico holdout eval built — **not wired into the pipeline** (`src/yolo_ui_detector.py` does not exist yet; see "Remaining work" below) · **Week 8 rule-accuracy pass (29 Jul):** three false-positive rules (R07, R08, R30) and one parser bug blocking R20/R05 fixed and verified against full MASC (7,068) + Rico holdout (1,698) · Crop-violation classifier trained (R08 is one of its 6 labels) but **not wired into the pipeline either**
+**Plan version:** 2.1  
+**Last updated:** 30 July 2026  
+**Status:** Week 6 complete · **Week 7 (Noor) QA analysis complete** on `noor` — rule/guideline summaries; Rico holdout batch **now done** (1,698 screens, 0 failures — no longer deferred); Salar/Ayesha Week 7 tasks pending · **Post–Week 7 YOLO track:** full 60-epoch MASC-only training run **completed 30 Jul** (Salar, `salar` branch, merged into `noor`), checkpoint exported (51.2 MB), zero-shot-vs-fine-tuned Rico holdout eval done (mAP50 0.0258 → 0.2546) — `src/yolo_ui_detector.py` **now exists**, still **not wired into the pipeline** (deliberately deferred, Stretch requirement; see "Remaining work" below) · **Week 8 rule-accuracy pass (29 Jul):** three false-positive rules (R07, R08, R30) and one parser bug blocking R20/R05 fixed and verified against full MASC (7,068) + Rico holdout (1,698) · Crop-violation classifier trained and **Rico-evaluated 30 Jul** (weighted F1 0.43 vs. 0.63 MASC test; R08 is one of its 6 labels) but **not wired into the pipeline either** (same deliberate deferral) · 90/99 SRS requirements Done — the remaining 9 are exactly these two Stretch CV integrations
 
 ---
 
@@ -24,9 +25,9 @@
 
 | Document | Path | Purpose |
 |----------|------|---------|
-| **SRS v2.8** | `srs/SRS_Agentic_Accessibility_Auditor_v2.8.md` (+ `.docx`) | What the system must do |
-| **SDS v2.12** | `sds/SDS_Agentic_Accessibility_Auditor_v2.12.md` (+ `.docx`) | How to implement it |
-| **Progress report v1.24** | `docs/progress/Supplementary_Progress_Report_v1.24.md` (+ `.docx`) | What is actually done — §16 Document history through 29 Jul: Week 8 rule-accuracy fixes, full-dataset verification, crop-classifier retrain |
+| **SRS v2.10** | `srs/SRS_Agentic_Accessibility_Auditor_v2.10.md` (+ `.docx`) | What the system must do |
+| **SDS v2.14** | `sds/SDS_Agentic_Accessibility_Auditor_v2.14.md` (+ `.docx`) | How to implement it |
+| **Progress report v1.26** | `docs/progress/Supplementary_Progress_Report_v1.26.md` (+ `.docx`) | What is actually done — §16 Document history through 30 Jul: Salar's YOLO run + Rico eval merged, crop-classifier Rico eval added |
 | **This plan** | `updated_plan.md` (+ `updated_plan.docx`) | Weekly schedule + folder map + remaining work |
 
 Word exports: `scripts/md_to_docx.py` · Figma assets: `docs/assets/figma/`
@@ -39,7 +40,7 @@ Use this layout — the project was reorganized in late June:
 
 ```
 agentic-accessibility-auditor/          ★ MAIN REPO (branch: noor)
-│   ├── src/                            parser, rules, agent, report, explainer, crop_violation_classifier
+│   ├── src/                            parser, rules, agent, report, explainer, crop_violation_classifier, yolo_ui_detector
 │   ├── backend/                        audit + JWT auth + records routers
 │   ├── frontend/                       Upload/Dashboard/Report/Records/Login wired
 │   ├── tests/ + backend/tests/         rules/audit/report + auth suite — 152 collected
@@ -47,7 +48,7 @@ agentic-accessibility-auditor/          ★ MAIN REPO (branch: noor)
 │   ├── notebooks/                      masc_dataset_analysis, train_crop_violation_classifier, train_yolo_ui_detector
 │   ├── scripts/                        week1–8 validate + md_to_docx + utilities
 │   ├── docs/                           schemas, progress, week6/, week7/, figma/, plan DOCX
-│   ├── srs/ · sds/                     SRS v2.8 / SDS v2.12 markdown + DOCX
+│   ├── srs/ · sds/                     SRS v2.10 / SDS v2.14 markdown + DOCX
 │   ├── data/
 │   │   ├── data-masc/                  7,068 screens + parsed outputs + splits
 │   │   └── data-rico-holdout/          1,698 holdout — final eval now done
@@ -56,7 +57,7 @@ agentic-accessibility-auditor/          ★ MAIN REPO (branch: noor)
 │   │   ├── violations/samples/         ✅ 61 fixture JSON samples (R01–R27, R29–R30)
 │   │   ├── reports/samples/            ✅ Example JSON/HTML/PDF report
 │   │   └── validation_logs/            noor_week1–8 logs + summaries
-│   ├── runs/                           🟡 YOLO detector + crop classifier — trained, NOT pipeline-wired
+│   ├── runs/                           🟡 YOLO detector + crop classifier — trained + Rico-evaluated, NOT pipeline-wired (deferred)
 │   │   ├── notebooks/                  executed copies with saved outputs
 │   │   ├── crop_violation_classifier/  crops/, manifests/, export/best.pt
 │   │   └── runs/yolo_ui_detector/      args.yaml, results.csv, plots, export/best.pt
@@ -217,18 +218,18 @@ Minimum policy:
 
 **Week 7 Noor status (20 Jul):** MASC 40-screen QA complete — `docs/week7/`, `outputs/week7_eval/`, validation logs. Rico holdout batch deferred to later in Week 7/8.
 
-**Post–Week 7 status (27 Jul):** YOLO UI-element detector track — MASC-only training run, 1 epoch logged (precision 0.471, recall 0.420, mAP50 0.397, mAP50-95 0.285); best checkpoint exported (`runs/runs/yolo_ui_detector/export/yolo_ui_detector_best.pt`); zero-shot-vs-fine-tuned Rico holdout comparison built and run. **Correction (29 Jul):** `src/yolo_ui_detector.py` does **not** exist yet — the inference module is not scaffolded, and nothing calls the trained checkpoint from `backend/` or `src/agent.py`. Full training results: Progress Report §15C/§15C.7.
+**Post–Week 7 status (updated 30 Jul):** YOLO UI-element detector track — MASC-only training run, **full 60/60 epochs completed** by Salar on the `salar` branch, merged into `noor` (final precision 0.535, recall 0.447, mAP50 0.434, mAP50-95 0.322 — supersedes the earlier 1-epoch interim figures of 0.471/0.420/0.397/0.285); best checkpoint exported (`runs/runs/yolo_ui_detector/export/yolo_ui_detector_best.pt`, `models/yolo_ui_detector_best.pt`, both 51.2 MB); zero-shot-vs-fine-tuned Rico holdout comparison run: mAP50 0.0258 (zero-shot) → 0.2546 (fine-tuned). `src/yolo_ui_detector.py` **now exists** (ported from Salar's branch 30 Jul, correcting the 29 Jul "does not exist" claim) and works standalone — but nothing calls it from `backend/` or `src/agent.py` yet; this remains deliberately deferred (Stretch requirement). Full training results: Progress Report §15C/§15C.7/§15C.9.
 
 **Week 8 status (29 Jul):** rule-accuracy pass — fixed and verified R07/R08/R30 false positives + the R20/R05 parser bug (see "What changed" in `README.md`) against the full 7,068-screen MASC set and the 1,698-screen Rico holdout, not just fixtures. Also retrained the crop-violation classifier (`notebooks/train_crop_violation_classifier.ipynb`) since R08 is one of its 6 label classes — checkpoint + `src/crop_violation_classifier.py` inference wrapper exist but, same as the YOLO detector, **nothing in `backend/` calls it yet**.
 
-### Remaining work — verified against SDS v2.12 (29 Jul 2026)
+### Remaining work — verified against SDS v2.14 (30 Jul 2026)
 
 Cross-checked every "in progress" / "stretch" / "stub" claim in SDS §1.4 and §6 against what's actually in the repo right now (grepped for the files, not assumed from the docs — several SDS claims turned out to be stale):
 
 | Item | SDS says | Actually verified | Remaining work |
 |------|----------|--------------------|-----------------|
-| **YOLO UI-element detector integration** | §1.4: "In progress... `src/yolo_ui_detector.py`... not yet wired into pipeline" | `src/yolo_ui_detector.py` **does not exist**. Checkpoint (`runs/runs/yolo_ui_detector/export/yolo_ui_detector_best.pt`) and Rico zero-shot-vs-fine-tuned eval exist, but nothing in `backend/` or `src/agent.py` calls the model | Write `src/yolo_ui_detector.py` (load checkpoint, run inference on a screenshot, return boxes), wire it as the screenshot-only fallback path in `backend/routers/audit.py` per SRS FR-CV.4–7, when no XML is uploaded |
-| **Crop-violation classifier integration** | Not in SDS (added after v2.12 without an integration plan) | `src/crop_violation_classifier.py` (`classify_crop()`) and `models/crop_violation_classifier_best.pt` exist; not called from anywhere in `backend/` or `src/agent.py` | Decide where it plugs in (likely: run `classify_crop()` on R09/R04/R17/R10/R28/R08 candidate regions after the XML rule check, to confirm/downgrade pixel-only-detectable violations) and wire it |
+| **YOLO UI-element detector integration** | §1.4: "In progress... not yet wired into pipeline" | `src/yolo_ui_detector.py` **exists** (ported from Salar's `salar` branch, 30 Jul — corrects the 29 Jul "does not exist" claim). Full 60-epoch checkpoint (`runs/runs/yolo_ui_detector/export/yolo_ui_detector_best.pt`, `models/yolo_ui_detector_best.pt`) and Rico zero-shot-vs-fine-tuned eval (mAP50 0.0258 → 0.2546) exist, but nothing in `backend/` or `src/agent.py` calls the model | Wire it as the screenshot-only fallback path in `backend/routers/audit.py`/`src/agent.py` per SRS FR-CV.4–7, when no XML is uploaded — **deliberately deferred**, not started |
+| **Crop-violation classifier integration** | Now in SDS §3.7 (added after v2.12) | `src/crop_violation_classifier.py` (`classify_crop()`, `confirm_violations()`) and `models/crop_violation_classifier_best.pt` exist; Rico holdout eval done 30 Jul (weighted F1 0.43); not called from anywhere in `backend/` or `src/agent.py` | Decide where it plugs in (likely: run `classify_crop()` on R09/R04/R17/R10/R28/R08 candidate regions after the XML rule check, to confirm/downgrade pixel-only-detectable violations) and wire it — **deliberately deferred**, not started |
 | **R09 — Low contrast** | §6.10: "Screenshot crop + WCAG contrast ratio; requires `src/contrast.py`" | `src/contrast.py` **does not exist**. Current `check_low_contrast` is a pure declared-attribute check (`text_color`/`background_color` XML attrs) — correctly implemented, but reports 0 hits on MASC/Rico since neither dataset ever declares those attributes (confirmed: 0 occurrences across all 7,068 MASC files) | Build real screenshot-pixel contrast sampling (or route through the crop-classifier above, which already includes R09 as a label) if this rule needs to fire on real data |
 | **R28 — Font-scale overflow** | Same category as R09 (declared-size only) | `check_font_scale_overflow` reads `text_size_sp`, which MASC/Rico never declare (0 occurrences) — correct code, no signal in current datasets | Same as R09 — needs a screenshot/CV signal, or accept it as XML-only and out of scope for these datasets |
 | **R22 / R29 (password toggle / all-caps)** | Not flagged as gaps in SDS | Genuine **data-coverage gaps**, not code gaps: 0 password fields and 0 `textAllCaps` attributes anywhere in the 7,068-file MASC corpus (verified directly) | Nothing to fix in code; would need a differently-curated sample (e.g. deliberately including login/password screens) to ever exercise these rules for real |
@@ -247,13 +248,13 @@ Cross-checked every "in progress" / "stretch" / "stub" claim in SDS §1.4 and §
 
 ---
 
-## Priority tiers (from SRS v2.8)
+## Priority tiers (from SRS v2.10)
 
 | Tier | Scope |
 |------|-------|
 | **Must Have** | Parser ✅ · R01–R30 rules ✅ (R07/R08/R30 false positives + R20/R05 parser bug fixed 29 Jul) · LLM explanations ✅ · HTML/PDF ✅ · Upload/Dashboard/Report ✅ · Auth + Records ✅ · Docker ✅ · 25–40 screen eval ✅ (40/40 assisted notes) · OTP/forgot/reset + SMTP ✅ · Google OAuth ✅ · Rico holdout final eval ✅ |
 | **Should Have** | Batch API · annotated screenshot regions in UI · deeper prompt comparison notes |
-| **Stretch** | R09/R28 real CV signal (contrast + font-scale — currently correct code, no data signal) · **YOLO UI-element detector** trained but **not pipeline-wired** (`src/yolo_ui_detector.py` missing) · **Crop-violation classifier** trained but **not pipeline-wired** · click-to-highlight in HTML |
+| **Stretch** | R09/R28 real CV signal (contrast + font-scale — currently correct code, no data signal) · **YOLO UI-element detector** trained + Rico-evaluated but **not pipeline-wired** (`src/yolo_ui_detector.py` exists, deliberately deferred) · **Crop-violation classifier** trained + Rico-evaluated but **not pipeline-wired** (deliberately deferred) · click-to-highlight in HTML |
 
 ---
 
@@ -284,8 +285,8 @@ Cross-checked every "in progress" / "stretch" / "stub" claim in SDS §1.4 and §
 | Backend / FastAPI audit API | Noor | §9 | §3.5 |
 | Auth (JWT) + Records API | Salar (synced by Noor) | §4.9 | §10 |
 | Axion UI | Ayesha (+ Salar auth wiring) | §3.1, Appendix F | §9 |
-| SRS v2.8 | Ayesha + Salar (updates: Noor) | — | — |
-| SDS v2.12 | Noor | — | — |
+| SRS v2.10 | Ayesha + Salar (updates: Noor) | — | — |
+| SDS v2.14 | Noor | — | — |
 | pytest suite | Salar + Noor | §10 | §13 |
 | Docker | Salar | Appendix E | §11 |
 | Evaluation (40-screen sheet) | Noor | §11 | §13 |

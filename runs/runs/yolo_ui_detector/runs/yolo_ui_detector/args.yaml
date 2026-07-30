@@ -8,7 +8,7 @@ patience: 10
 batch: 8
 imgsz: 960
 save: true
-save_period: 1
+save_period: -1
 cache: false
 device: ''
 workers: 8
@@ -25,7 +25,7 @@ single_cls: false
 rect: false
 cos_lr: true
 close_mosaic: 10
-resume: false
+resume: d:\New folder\agentic-accessibility-auditor\runs\yolo_ui_detector\runs\yolo_ui_detector\weights\last.pt
 amp: true
 fraction: 1.0
 profile: false
@@ -77,7 +77,7 @@ momentum: 0.937
 weight_decay: 0.0005
 warmup_epochs: 3.0
 warmup_momentum: 0.8
-warmup_bias_lr: 0.1
+warmup_bias_lr: 0.0
 distill_model: null
 dis: 6.0
 box: 7.5

@@ -83,3 +83,33 @@ def classify_crop(
         if prob >= threshold:
             result[rule] = prob
     return result
+
+
+# Rules with real positive training signal (confirmed non-zero support in
+# both the MASC test split and the Rico holdout eval - see
+# docs/progress/Supplementary_Progress_Report_v1.24.md §15G.3/§15G.5).
+# R09/R10/R28 are in the checkpoint's label set but have ~0 positive
+# training examples, so a probability from them would be untrained noise,
+# not signal - deliberately excluded from confirmation.
+CV_CONFIRMABLE_RULES = {"R08", "R17", "R04"}
+
+
+def confirm_violations(violations_doc: dict, screenshot_path: str | Path) -> dict:
+    """Attach a pixel-level cv_confidence to violations whose rule has real
+    CV training signal. Mutates and returns violations_doc in place.
+
+    Additive only, per FR-CV.2: never removes a violation or changes its
+    severity based on the CV result. A CV failure (corrupt image, model
+    load issue) never raises - it just leaves cv_confidence as None, since
+    this is a supplementary signal and must not break the underlying,
+    already-valid XML-based audit.
+    """
+    for violation in violations_doc.get("violations", []):
+        if violation["rule_id"] not in CV_CONFIRMABLE_RULES:
+            continue
+        try:
+            result = classify_crop(screenshot_path, bounds=violation["bounds"])
+            violation["cv_confidence"] = round(result["_all"][violation["rule_id"]], 4)
+        except Exception:
+            violation["cv_confidence"] = None
+    return violations_doc

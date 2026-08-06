@@ -25,6 +25,8 @@ ReportFormat = Literal["html", "pdf"]
 
 
 def _resolve_existing_path(path_str: str, project_root: Path) -> Path | None:
+    """Resolve a path from report.json against project_root, trying raw/relative/
+    normalized-separator variants. Returns None if no candidate exists on disk."""
     if not path_str:
         return None
     raw = Path(path_str)
@@ -47,6 +49,7 @@ def _resolve_existing_path(path_str: str, project_root: Path) -> Path | None:
 
 
 def _sort_violations(violations: list[dict]) -> list[dict]:
+    """Sort violations by severity (Critical first), then rule_id, then component_id."""
     return sorted(
         violations,
         key=lambda item: (
@@ -58,6 +61,7 @@ def _sort_violations(violations: list[dict]) -> list[dict]:
 
 
 def _read_xml_snippet(xml_path: Path | None, *, limit: int = 2000) -> str:
+    """Read up to limit chars of the raw XML for report display; "" if unavailable."""
     if xml_path is None:
         return ""
     try:
@@ -70,6 +74,7 @@ def _read_xml_snippet(xml_path: Path | None, *, limit: int = 2000) -> str:
 
 
 def _image_to_data_uri(image_path: Path) -> str:
+    """Base64-encode an image file into an inline data: URI for the standalone HTML report."""
     suffix = image_path.suffix.lower()
     mime = {
         ".png": "image/png",
@@ -83,6 +88,8 @@ def _image_to_data_uri(image_path: Path) -> str:
 
 
 def _annotate_screenshot(image_path: Path, violations: list[dict]) -> str:
+    """Draw a severity-colored bounding box for each violation onto the screenshot
+    and return the annotated image as a base64 data: URI."""
     from PIL import Image, ImageDraw
 
     with Image.open(image_path) as image:
@@ -141,6 +148,7 @@ def render_html_report(report_doc: dict, *, project_root: Path | None = None) ->
 
 
 def _html_to_pdf(html: str) -> bytes:
+    """Render an HTML string to PDF bytes via a headless Playwright/Chromium page."""
     try:
         from playwright.sync_api import sync_playwright
     except ImportError as exc:
@@ -175,6 +183,7 @@ def render_pdf_report(report_doc: dict, *, project_root: Path | None = None) -> 
 
 
 def write_report_html(report_doc: dict, output_path: Path, *, project_root: Path | None = None) -> Path:
+    """Render report.json to HTML and write it to output_path."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(
         render_html_report(report_doc, project_root=project_root),
@@ -184,6 +193,7 @@ def write_report_html(report_doc: dict, output_path: Path, *, project_root: Path
 
 
 def write_report_pdf(report_doc: dict, output_path: Path, *, project_root: Path | None = None) -> Path:
+    """Render report.json to PDF and write it to output_path."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_bytes(render_pdf_report(report_doc, project_root=project_root))
     return output_path

@@ -160,6 +160,7 @@ def _hex_to_rgb(hex_color: str) -> tuple[int, int, int] | None:
 def _relative_luminance(rgb: tuple[int, int, int]) -> float:
     """WCAG relative luminance for an sRGB triple (0-255 per channel)."""
     def channel(value: int) -> float:
+        """Gamma-correct one 0-255 sRGB channel value per the WCAG formula."""
         c = value / 255
         return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
     r, g, b = rgb
@@ -290,10 +291,12 @@ def _combined_text(component: dict) -> str:
 
 
 def _contains_token(text: str, tokens: tuple[str, ...]) -> bool:
+    """True when any of tokens appears as a substring of text."""
     return any(token in text for token in tokens)
 
 
 def _is_input_field(component: dict) -> bool:
+    """True when component's class matches one of the known input-widget classes."""
     class_name = component.get("class", "")
     return any(input_class in class_name for input_class in INPUT_CLASSES)
 
@@ -387,6 +390,9 @@ def _has_sibling_token(anchor: dict, components: list[dict], tokens: tuple[str, 
 
 
 def _is_audio_component(component: dict, *, has_video: bool) -> bool:
+    """True when component looks like an audio player (media_type, class marker,
+    or resource-name token) — a bare MediaPlayer only counts as audio if the
+    screen has no separate video component."""
     if component.get("media_type") == "audio":
         return True
     class_name = component.get("class", "")
@@ -399,6 +405,7 @@ def _is_audio_component(component: dict, *, has_video: bool) -> bool:
 
 
 def _is_video_component(component: dict) -> bool:
+    """True when component looks like a video player (media_type or class marker)."""
     if component.get("media_type") == "video":
         return True
     class_name = component.get("class", "")
@@ -406,6 +413,9 @@ def _is_video_component(component: dict) -> bool:
 
 
 def _is_decorative_focusable(component: dict) -> bool:
+    """True when a focusable-but-not-clickable, textless element is likely
+    decorative (explicitly hidden from a11y, or a marker-class shape/divider
+    with real area) rather than a genuine unlabeled control."""
     important = component.get("important_for_accessibility", "").lower()
     if important in {"no", "nohideDescendants", "no_hide_descendants"}:
         return True
@@ -418,6 +428,7 @@ def _is_decorative_focusable(component: dict) -> bool:
 
 
 def _screen_has_token(components: list[dict], tokens: tuple[str, ...]) -> bool:
+    """True when any component anywhere on the screen matches one of tokens."""
     return any(_contains_token(_combined_text(component), tokens) for component in components)
 
 
@@ -427,6 +438,7 @@ def _has_nearby_token(
     tokens: tuple[str, ...],
     max_px: int,
 ) -> bool:
+    """True when a component within max_px of anchor matches one of tokens."""
     for candidate in components:
         if candidate["component_id"] == anchor["component_id"]:
             continue
@@ -438,6 +450,7 @@ def _has_nearby_token(
 
 
 def _has_nearby_image(anchor: dict, components: list[dict], max_px: int) -> bool:
+    """True when a non-empty ImageView/ImageButton sits within max_px of anchor."""
     for candidate in components:
         class_name = candidate.get("class", "")
         if "ImageView" not in class_name and "ImageButton" not in class_name:
@@ -1277,6 +1290,7 @@ def check_vague_error_message(components: list[dict]) -> list[dict]:
 
 
 def _is_password_toggle_control(component: dict) -> bool:
+    """True when component looks like a show/hide-password icon toggle."""
     class_name = component.get("class", "")
     if "ImageButton" not in class_name and "ImageView" not in class_name:
         return False
@@ -1445,6 +1459,7 @@ def check_uncontrolled_animation(components: list[dict]) -> list[dict]:
 
 
 def _is_session_or_countdown_text(component: dict) -> bool:
+    """True when a label/dialog-type component's text mentions session/countdown wording."""
     class_name = component.get("class", "")
     is_label_or_dialog = (
         any(marker in class_name for marker in LABEL_CLASS_MARKERS)
@@ -1457,6 +1472,7 @@ def _is_session_or_countdown_text(component: dict) -> bool:
 
 
 def _is_extend_or_ok_control(component: dict) -> bool:
+    """True when component is an enabled, clickable Extend-session or OK/Dismiss control."""
     if not component.get("clickable") or not component.get("enabled", True):
         return False
     if OK_BUTTON_RE.match(component.get("text", "").strip()):
@@ -1500,6 +1516,7 @@ def check_no_timeout_warning(components: list[dict]) -> list[dict]:
 
 
 def _is_jargon_heavy(text: str) -> bool:
+    """True when text is long enough and dense enough with jargon markers to flag as unclear."""
     words = text.split()
     if len(words) <= COMPLEX_LABEL_MIN_WORDS:
         return False

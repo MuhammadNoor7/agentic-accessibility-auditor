@@ -35,6 +35,7 @@ def compute_accessibility_score(violations: list[dict]) -> int:
 
 
 def _severity_counts(violations: list[dict]) -> dict[str, int]:
+    """Count violations per severity level (critical/high/medium/low)."""
     counts = {"critical": 0, "high": 0, "medium": 0, "low": 0}
     for violation in violations:
         key = violation.get("severity", "Medium").lower()
@@ -131,6 +132,7 @@ class AgenticEnricher:
     """Enrich violations.json into report.json (SRS FR-AG.1–FR-AG.8)."""
 
     def __init__(self, *, use_llm: bool | None = None) -> None:
+        """use_llm=None auto-detects from LLM_PROVIDER env config; True/False forces it."""
         self.use_llm = use_llm
 
     def enrich(self, violations_doc: dict, components_doc: dict | None = None) -> dict:

@@ -165,6 +165,7 @@ def _build_case(
 
 
 def _build_user_prompt(cases: list[dict]) -> str:
+    """Serialize the batch of violation cases into the user-turn prompt sent to the LLM."""
     return (
         "Explain each of the following already-detected accessibility "
         "violations. Do not add any case not listed here.\n\n"

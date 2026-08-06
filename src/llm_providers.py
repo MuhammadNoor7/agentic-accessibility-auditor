@@ -34,10 +34,12 @@ class LLMError(RuntimeError):
 
 
 def _provider_name() -> str:
+    """Return the active provider name from LLM_PROVIDER (default: anthropic)."""
     return os.environ.get("LLM_PROVIDER", "anthropic").strip().lower()
 
 
 def _model_name(provider: str) -> str:
+    """Return the model for a provider from its <PROVIDER>_MODEL env var, else the built-in default."""
     env_key = f"{provider.upper()}_MODEL"
     return os.environ.get(env_key) or DEFAULT_MODELS.get(provider, "")
 
@@ -88,6 +90,7 @@ def call_llm(system: str, user: str, *, max_tokens: int = 4096) -> str:
 
 
 def _call_anthropic(system: str, user: str, model: str, max_tokens: int) -> str:
+    """Call the Anthropic Messages API and return the concatenated text blocks."""
     import anthropic
 
     client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY")) if os.environ.get(
@@ -103,6 +106,7 @@ def _call_anthropic(system: str, user: str, model: str, max_tokens: int) -> str:
 
 
 def _call_openai(system: str, user: str, model: str, max_tokens: int) -> str:
+    """Call the OpenAI chat completions API (JSON response mode) and return the message content."""
     import openai
 
     client = openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
@@ -119,6 +123,7 @@ def _call_openai(system: str, user: str, model: str, max_tokens: int) -> str:
 
 
 def _call_gemini(system: str, user: str, model: str, max_tokens: int) -> str:
+    """Call the Gemini API (JSON MIME response) and return the response text."""
     from google import genai
     from google.genai import types
 
@@ -137,6 +142,7 @@ def _call_gemini(system: str, user: str, model: str, max_tokens: int) -> str:
 
 
 def _call_groq(system: str, user: str, model: str, max_tokens: int) -> str:
+    """Call the Groq chat completions API and return the message content."""
     from groq import Groq
 
     client = Groq(api_key=os.environ.get("GROQ_API_KEY"))

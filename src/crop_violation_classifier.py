@@ -62,6 +62,9 @@ _model_cache: dict[str, tuple] = {}
 
 
 def _build_backbone(name: str, num_classes: int):
+    """Construct an untrained backbone by name with its classifier head replaced
+    for num_classes outputs. One explicit branch per architecture (33-backbone
+    sweep), no generic dict lookup, so every name has an unambiguous constructor."""
     if name == "mobilenet_v3_small":
         model = mobilenet_v3_small(weights=None)
         model.classifier[-1] = nn.Linear(model.classifier[-1].in_features, num_classes)
@@ -196,6 +199,8 @@ def _build_backbone(name: str, num_classes: int):
 
 
 def _get_model(weights_path: str | Path):
+    """Load and cache (model, transform, rule_classes) for a checkpoint path —
+    one load per process, not per call."""
     key = str(weights_path)
     if key not in _model_cache:
         ckpt = torch.load(key, map_location="cpu")

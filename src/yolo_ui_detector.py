@@ -16,6 +16,7 @@ _model_cache: dict[str, YOLO] = {}
 
 
 def _get_model(weights_path: str | Path) -> YOLO:
+    """Load and cache a YOLO model for a checkpoint path — one load per process, not per call."""
     key = str(weights_path)
     if key not in _model_cache:
         _model_cache[key] = YOLO(key)

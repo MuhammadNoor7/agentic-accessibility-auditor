@@ -30,6 +30,8 @@ DEFAULT_DENSITY_DPI = 160
 
 
 def resolve_dataset_root(dataset_root: Path | None = None) -> Path | None:
+    """Resolve an explicit dataset_root, or auto-detect MASC/Rico/generic/container
+    layout by probing for an xml/ subfolder. None if nothing matches."""
     if dataset_root is not None:
         path = Path(dataset_root)
         if not path.is_absolute():
@@ -48,6 +50,7 @@ def resolve_dataset_root(dataset_root: Path | None = None) -> Path | None:
 
 
 def resolve_parsed_root(dataset_root: Path | None = None) -> Path:
+    """Return the parsed/ output folder for a dataset root, or the default output root if none resolves."""
     resolved = resolve_dataset_root(dataset_root)
     if resolved is not None:
         if resolved == GENERIC_DATASET_ROOT:
@@ -57,6 +60,7 @@ def resolve_parsed_root(dataset_root: Path | None = None) -> Path:
 
 
 def infer_dataset_root_for_xml(xml_path: Path) -> Path | None:
+    """Infer which known dataset (MASC/Rico) an XML file belongs to, from its path."""
     resolved_xml = xml_path.resolve()
     for candidate in DATASET_CANDIDATES:
         if candidate == DEFAULT_CONTAINER_DATASET_ROOT:
@@ -77,6 +81,8 @@ def resolve_paths(
     output_root: Path | None = None,
     dataset_root: Path | None = None,
 ) -> tuple[Path, Path, Path | None]:
+    """Fill in any unset xml_root/output_root from dataset_root auto-detection.
+    Returns (xml_root, output_root, resolved_dataset_root)."""
     resolved_dataset = resolve_dataset_root(dataset_root)
     if xml_root is None:
         if resolved_dataset is not None:
@@ -97,22 +103,26 @@ def load_xml_root(xml_path: Path) -> etree._Element:
 
 
 def _read_xml_root(xml_path: Path) -> etree._Element:
+    """Alias for load_xml_root (internal call sites)."""
     return load_xml_root(xml_path)
 
 
 def _parse_bool(value: str | None, default: bool = False) -> bool:
+    """Parse an XML attribute string ("true"/"1"/"yes") into a bool."""
     if value is None:
         return default
     return value.strip().lower() in {"true", "1", "yes"}
 
 
 def _normalize_string(value: str | None) -> str:
+    """Strip null bytes and collapse whitespace in an XML attribute value."""
     if value is None:
         return ""
     return " ".join(str(value).replace("\x00", "").split())
 
 
 def _parse_uiautomator_bounds(bounds: str | None) -> list[int] | None:
+    """Parse UIAutomator's "[l,t][r,b]" bounds format into [l, t, r, b]."""
     if not bounds:
         return None
     match = UIAUTOMATOR_BOUNDS_RE.search(bounds)
@@ -122,6 +132,7 @@ def _parse_uiautomator_bounds(bounds: str | None) -> list[int] | None:
 
 
 def _parse_space_bounds(bounds: str | None) -> list[int] | None:
+    """Parse Rico's space-separated "l t r b" bounds format into [l, t, r, b]."""
     if not bounds:
         return None
     match = SPACE_BOUNDS_RE.match(bounds.strip())
@@ -131,6 +142,7 @@ def _parse_space_bounds(bounds: str | None) -> list[int] | None:
 
 
 def _parse_bounds_attr(raw: str | None) -> list[int] | None:
+    """Parse bounds in either UIAutomator or Rico format, whichever matches."""
     return _parse_uiautomator_bounds(raw) or _parse_space_bounds(raw)
 
 
@@ -186,6 +198,7 @@ def _parse_masc_bounds(node: etree._Element) -> list[int] | None:
 
 
 def _get_text(elem: etree._Element) -> str:
+    """Extract an element's visible text from the direct attribute or a MASC wrapper block."""
     direct = _normalize_string(elem.get("text"))
     if direct:
         return direct
@@ -197,6 +210,7 @@ def _get_text(elem: etree._Element) -> str:
 
 
 def _get_content_desc(elem: etree._Element) -> str:
+    """Extract an element's accessibility content description, from the direct attribute or a MASC wrapper block."""
     direct = _normalize_string(elem.get("content-desc") or elem.get("content_desc"))
     if direct:
         return direct
@@ -251,10 +265,12 @@ def _get_first_attr(elem: etree._Element, *names: str) -> str:
 
 
 def _get_input_type(elem: etree._Element) -> str:
+    """Extract an EditText's declared input-type attribute, if present."""
     return _get_first_attr(elem, "input-type", "inputType", "android:inputType")
 
 
 def _is_password_input(elem: etree._Element, input_type: str) -> bool:
+    """True when the password attribute is set or input_type names a password variant."""
     if _parse_bool(elem.get("password")):
         return True
     lowered = input_type.lower()
@@ -262,6 +278,7 @@ def _is_password_input(elem: etree._Element, input_type: str) -> bool:
 
 
 def _get_important_for_accessibility(elem: etree._Element) -> str:
+    """Extract the element's importantForAccessibility attribute, lowercased."""
     return _get_first_attr(
         elem,
         "important-for-accessibility",
@@ -271,6 +288,7 @@ def _get_important_for_accessibility(elem: etree._Element) -> str:
 
 
 def _get_label_for(elem: etree._Element) -> str:
+    """Extract the resource-id an element's labelFor attribute points at, if present."""
     return _get_first_attr(elem, "label-for", "labelFor", "android:labelFor")
 
 
@@ -317,10 +335,12 @@ def _get_color_attr(elem: etree._Element, *names: str) -> str | None:
 
 
 def _get_text_color(elem: etree._Element) -> str | None:
+    """Extract a declared text color, if the source XML carries one (used by R09)."""
     return _get_color_attr(elem, "text-color", "textColor", "android:textColor")
 
 
 def _get_background_color(elem: etree._Element) -> str | None:
+    """Extract a declared background color, if the source XML carries one (used by R09)."""
     return _get_color_attr(
         elem, "background-color", "backgroundColor", "android:background", "background"
     )
@@ -346,6 +366,7 @@ def _infer_media_type(class_name: str, resource_id: str) -> str:
 
 
 def _is_dialog_class(class_name: str) -> bool:
+    """True when class_name matches one of the known dialog widget classes."""
     return any(
         marker in class_name
         for marker in ("Dialog", "AlertDialog", "BottomSheetDialog", "DialogTitle")
@@ -353,6 +374,8 @@ def _is_dialog_class(class_name: str) -> bool:
 
 
 def _tag_to_class(tag: str) -> str:
+    """Map a Rico-style XML tag name (e.g. "TextView") to its fully-qualified
+    Android class name (e.g. "android.widget.TextView")."""
     if tag in SKIP_TAGS or tag == "node":
         return ""
     if tag == "PhoneWindow_DecorView":
@@ -375,6 +398,8 @@ def _tag_to_class(tag: str) -> str:
 
 
 def _infer_class(elem: etree._Element) -> str:
+    """Determine an element's Android class name from its class attribute, or
+    fall back to mapping its raw XML tag via _tag_to_class."""
     for attr in ("class", "className", "class-name"):
         value = _normalize_string(elem.get(attr))
         if value:
@@ -385,6 +410,7 @@ def _infer_class(elem: etree._Element) -> str:
 
 
 def _extract_bounds(elem: etree._Element) -> list[int] | None:
+    """Extract an element's bounds from its bounds attribute, or fall back to MASC wrapper blocks."""
     bounds = _parse_bounds_attr(elem.get("bounds"))
     if bounds is not None:
         return bounds
@@ -397,6 +423,8 @@ def _element_to_component(
     *,
     parent_component_id: str | None = None,
 ) -> dict | None:
+    """Build one components.json entry (R13-R20 extended fields included) from
+    an XML element, or None if it's a non-widget/skip-tag node."""
     if elem.tag in SKIP_TAGS:
         return None
 
@@ -532,6 +560,7 @@ def infer_image_path(xml_path: str | Path) -> str:
 
 
 def _build_screen_id(xml_path: Path, xml_root: Path) -> str:
+    """Derive a screen_id from an XML file's category subfolder + filename stem."""
     relative_parent = xml_path.parent.name
     stem = xml_path.stem
     if relative_parent and relative_parent != xml_root.name:
@@ -540,6 +569,7 @@ def _build_screen_id(xml_path: Path, xml_root: Path) -> str:
 
 
 def _relative_dataset_path(path: Path) -> str:
+    """Return path as a POSIX-style string relative to the repo root, or absolute if outside it."""
     try:
         return path.resolve().relative_to(REPO_ROOT).as_posix()
     except ValueError:
@@ -547,6 +577,7 @@ def _relative_dataset_path(path: Path) -> str:
 
 
 def _find_screenshot_file(xml_path: Path, dataset_root: Path) -> Path | None:
+    """Locate the screenshot matching an XML file under dataset_root/screenshots/, by mirrored path or flat filename."""
     screenshots_root = dataset_root / "screenshots"
     relative_xml = xml_path.resolve().relative_to((dataset_root / "xml").resolve())
     for ext in (".jpg", ".jpeg", ".png"):
@@ -560,6 +591,7 @@ def _find_screenshot_file(xml_path: Path, dataset_root: Path) -> Path | None:
 
 
 def _screenshot_path(xml_path: Path, dataset_root: Path | None) -> str:
+    """Resolve the repo-relative screenshot path for an XML file within a dataset."""
     xml_path = xml_path.resolve()
     if dataset_root is None:
         return infer_image_path(xml_path)
@@ -574,6 +606,7 @@ def _screenshot_path(xml_path: Path, dataset_root: Path | None) -> str:
 
 
 def _xml_relative_path(xml_path: Path, dataset_root: Path | None) -> str:
+    """Return the XML file's path relative to the repo root (or dataset_root's convention)."""
     xml_path = xml_path.resolve()
     if dataset_root is None:
         try:
@@ -584,6 +617,7 @@ def _xml_relative_path(xml_path: Path, dataset_root: Path | None) -> str:
 
 
 def _parsed_output_path(xml_path: Path, output_dir: Path, dataset_root: Path | None) -> Path:
+    """Compute (and create) the output components.json path for an XML file, mirroring its category subfolder."""
     xml_path = xml_path.resolve()
     if dataset_root is not None and (dataset_root / "xml").is_dir():
         try:
@@ -639,6 +673,7 @@ def build_screen_document(
     xml_root_dir: Path,
     dataset_root: Path | None,
 ) -> dict:
+    """Parse one XML file into a full components.json document (screen_id, image_path, components, device_info)."""
     xml_path = xml_path.resolve()
     xml_root_dir = xml_root_dir.resolve()
     screen_id = _build_screen_id(xml_path, xml_root_dir)
@@ -659,6 +694,7 @@ def parse_xml_file(
     xml_root_dir: Path,
     dataset_root: Path | None,
 ) -> dict:
+    """Parse one XML file and write its components.json to output_dir; returns the parsed payload."""
     payload = build_screen_document(xml_path, xml_root_dir, dataset_root)
     output_file = _parsed_output_path(xml_path, output_dir, dataset_root)
     output_file.write_text(json.dumps(payload, indent=2), encoding="utf-8")
@@ -670,6 +706,8 @@ def parse_xml_directory(
     output_root: Path | None = None,
     dataset_root: Path | None = None,
 ) -> dict:
+    """Batch-parse every XML file under xml_root, writing each components.json and
+    collecting per-file errors. Returns a summary dict (processed/failed counts, errors)."""
     xml_root, output_root, dataset_root = resolve_paths(xml_root, output_root, dataset_root)
     xml_root.mkdir(parents=True, exist_ok=True)
     output_root.mkdir(parents=True, exist_ok=True)
@@ -696,6 +734,7 @@ def parse_dataset_folder(
     dataset_root: Path | None = None,
     output_root: Path | None = None,
 ) -> dict:
+    """Batch-parse an entire auto-detected (or explicit) dataset's xml/ folder."""
     resolved_dataset = resolve_dataset_root(dataset_root)
     if resolved_dataset is None:
         return parse_xml_directory(output_root=output_root)

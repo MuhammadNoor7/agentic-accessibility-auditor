@@ -15,3 +15,13 @@ playwright
 anthropic
 openai
 groq
+
+# CV models (src/crop_violation_classifier.py, src/yolo_ui_detector.py).
+# torch/torchvision cover the torchvision-native backbones (mobilenet_v3_*,
+# efficientnet_*, resnet50, vit_b_16, etc.); timm additionally covers the
+# backbone-sweep architectures torchvision doesn't ship (mobilevit*,
+# mobilenetv1/v4, ghostnet*, mobileone*, swin_tiny, convnext_tiny, ...).
+torch>=2.11.0
+torchvision>=0.26.0
+timm>=1.0.0
+ultralytics>=8.3.0

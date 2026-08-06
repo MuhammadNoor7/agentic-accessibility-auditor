@@ -1,7 +1,7 @@
 # Week 7 — Team Priority Fixes (from Holdout Eval)
 
 **For:** Salar + Ayesha + Noor  
-**Date:** 2026-07-28 18:43 UTC  
+**Date:** 2026-08-05 17:26 UTC  
 **Basis:** Rico holdout n=1698 + Week 6 cross-check
 
 ## Interim numbers (share in standup)

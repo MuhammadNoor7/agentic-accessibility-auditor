@@ -1,6 +1,6 @@
 # Rico Holdout — Rule-wise Summary (R01–R30)
 
-**Generated:** 2026-07-28 18:43 UTC  
+**Generated:** 2026-08-05 17:26 UTC  
 **Screens evaluated:** 1698 / 1698  
 **Failures:** 0  
 **XML source:** D:/internship/_noor_push/data/data-rico-holdout

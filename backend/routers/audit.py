@@ -10,6 +10,8 @@ from pathlib import Path
 
 from fastapi import APIRouter, File, HTTPException, Query, UploadFile
 from fastapi.responses import Response
+from lxml import etree
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
@@ -17,9 +19,11 @@ if str(ROOT) not in sys.path:
 
 from backend.models.audit import AuditCreateResponse, AuditStatusResponse
 from src.agent import build_audit_report
+from src.crop_violation_classifier import confirm_violations
 from src.parser import build_screen_document
 from src.report import render_report_bytes
 from src.rules import check as check_rules
+from src.yolo_ui_detector import detect_ui, detections_to_components
 
 router = APIRouter(prefix="/api/v1/audit", tags=["audit"])
 
@@ -44,15 +48,19 @@ def _path_for_report(path: Path) -> str:
 async def _persist_upload_pair(
     audit_id: str,
     screenshot: UploadFile,
-    xml: UploadFile,
-) -> tuple[Path, Path]:
-    """Save screenshot + XML under outputs/runs/{audit_id}/input/ (survives download)."""
+    xml: UploadFile | None,
+) -> tuple[Path, Path | None]:
+    """Save screenshot (+ XML, if provided) under outputs/runs/{audit_id}/input/
+    (survives download). xml is None for a screenshot-only, YOLO-fallback upload."""
     run_dir = RUNS_OUTPUT_ROOT / audit_id / "input"
     run_dir.mkdir(parents=True, exist_ok=True)
-    xml_path = run_dir / Path(xml.filename).name
     screenshot_path = run_dir / Path(screenshot.filename).name
-    xml_path.write_bytes(await xml.read())
     screenshot_path.write_bytes(await screenshot.read())
+
+    xml_path: Path | None = None
+    if xml is not None:
+        xml_path = run_dir / Path(xml.filename).name
+        xml_path.write_bytes(await xml.read())
     return screenshot_path, xml_path
 
 
@@ -103,24 +111,61 @@ def _write_report(report_doc: dict) -> None:
     output_file.write_text(json.dumps(report_doc, indent=2), encoding="utf-8")
 
 
+def _build_components_doc_via_yolo(screenshot_path: Path) -> dict:
+    """Build a components.json-shaped doc from pixels alone (FR-CV.4-7), used
+    when no XML was uploaded, or it's missing/malformed/parses to zero
+    components. Every component is tagged inferred: true."""
+    detections = detect_ui(screenshot_path)
+    with Image.open(screenshot_path) as im:
+        width_px, height_px = im.size
+    return {
+        "schema_version": "1.0",
+        "screen_id": screenshot_path.stem,
+        "image_path": "",
+        "xml_path": "",
+        "device_info": {"dpi": 160, "width_px": width_px, "height_px": height_px},
+        "components": detections_to_components(detections),
+    }
+
+
 def _run_pipeline(
     audit_id: str,
-    xml_path: Path,
+    xml_path: Path | None,
     screenshot_path: Path,
     *,
     use_llm: bool | None,
 ) -> None:
-    """Synchronous pipeline: parsing → checking → explaining → complete."""
+    """Synchronous pipeline: parsing → checking → explaining → complete.
+
+    Falls back to the screenshot-only YOLO detector (FR-CV.4) when xml_path
+    is None, the XML is missing/malformed, or parses to zero components.
+    """
     try:
         _set_status(audit_id, "parsing")
-        components_doc = build_screen_document(
-            xml_path,
-            xml_root_dir=xml_path.parent,
-            dataset_root=None,
-        )
+        components_doc = None
+        if xml_path is not None:
+            try:
+                candidate = build_screen_document(
+                    xml_path,
+                    xml_root_dir=xml_path.parent,
+                    dataset_root=None,
+                )
+                if candidate["components"]:
+                    components_doc = candidate
+            except (OSError, etree.XMLSyntaxError):
+                components_doc = None
+
+        used_xml = components_doc is not None
+        if not used_xml:
+            components_doc = _build_components_doc_via_yolo(screenshot_path)
+
         # Point at durable upload copies so report HTML/PDF can embed them.
+        # xml_path stays "" (already set by the YOLO builder) unless the XML
+        # branch was actually the one used - a malformed/empty XML upload
+        # still has a real xml_path parameter, but its content was discarded.
         components_doc["image_path"] = _path_for_report(screenshot_path)
-        components_doc["xml_path"] = _path_for_report(xml_path)
+        if used_xml:
+            components_doc["xml_path"] = _path_for_report(xml_path)
         job = _AUDIT_JOBS[audit_id]
         job["components"] = components_doc
         job["screenshot_path"] = components_doc["image_path"]
@@ -128,6 +173,7 @@ def _run_pipeline(
 
         _set_status(audit_id, "checking")
         violations_doc = check_rules(components_doc)
+        confirm_violations(violations_doc, screenshot_path)
         job["violations"] = violations_doc
         _write_violations(components_doc, violations_doc)
 
@@ -146,18 +192,20 @@ def _run_pipeline(
 @router.post("", response_model=AuditCreateResponse, status_code=202)
 async def create_audit(
     screenshot: UploadFile = File(...),
-    xml: UploadFile = File(...),
+    xml: UploadFile | None = File(
+        None,
+        description="UIAutomator XML. Optional - if omitted, malformed, or empty, "
+        "the audit falls back to the screenshot-only YOLO UI detector (FR-CV.4).",
+    ),
     use_llm: bool | None = Query(
         default=None,
         description="Use live LLM for explanations (default: auto-detect API key; "
         "falls back to templates when no key is set).",
     ),
 ) -> AuditCreateResponse:
-    """Upload a screenshot + UIAutomator XML pair and run parse → rules → report (R01–R30)."""
+    """Upload a screenshot (+ optional UIAutomator XML) and run parse → rules → report (R01–R30)."""
     if not screenshot.filename:
         raise HTTPException(status_code=400, detail="Screenshot file is required")
-    if not xml.filename or not xml.filename.lower().endswith(".xml"):
-        raise HTTPException(status_code=400, detail="Upload must include a .xml file")
 
     screenshot_suffix = Path(screenshot.filename).suffix.lower()
     if screenshot_suffix not in ALLOWED_SCREENSHOT_SUFFIXES:
@@ -166,11 +214,16 @@ async def create_audit(
             detail="Screenshot must be a PNG or JPG image",
         )
 
-    if not _files_match_pair(screenshot.filename, xml.filename):
-        raise HTTPException(
-            status_code=400,
-            detail="Screenshot and XML filenames do not match as a pair",
-        )
+    if xml is not None and xml.filename:
+        if not xml.filename.lower().endswith(".xml"):
+            raise HTTPException(status_code=400, detail="Upload must include a .xml file")
+        if not _files_match_pair(screenshot.filename, xml.filename):
+            raise HTTPException(
+                status_code=400,
+                detail="Screenshot and XML filenames do not match as a pair",
+            )
+    else:
+        xml = None
 
     audit_id = str(uuid.uuid4())
     _AUDIT_JOBS[audit_id] = {
@@ -181,7 +234,7 @@ async def create_audit(
         "report": None,
         "use_llm": use_llm,
         "screenshot_filename": screenshot.filename,
-        "xml_filename": xml.filename,
+        "xml_filename": xml.filename if xml is not None else None,
     }
 
     screenshot_path, xml_path = await _persist_upload_pair(audit_id, screenshot, xml)

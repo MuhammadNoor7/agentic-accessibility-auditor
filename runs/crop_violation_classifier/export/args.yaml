@@ -1,0 +1,44 @@
+# args.yaml — crop_violation_classifier training config
+# Documentation only - not read by any code path. Everything needed to
+# actually load/use the model (backbone, rule_classes, crop_size) is saved
+# directly inside the checkpoint itself (models/crop_violation_classifier_best.pt),
+# which is what classify_crop() and confirm_violations() actually read.
+# To retrain, use notebooks/train_crop_violation_classifier.ipynb's Config
+# cell (CFG dict) - this file is a snapshot record of one specific run, not
+# an input to reproduce it.
+
+run_name: crop_violation_classifier
+backbone: swin_tiny_patch4_window7_224
+pretrained: true
+
+# -- rule taxonomy --
+rule_classes: [R09, R04, R17, R10, R28, R08]
+
+# -- crop extraction --
+crop_size: 224
+context_pad_frac: 0.15
+min_crop_px: 8
+negatives_per_screen: 3
+
+# -- training --
+epochs: 20                 # max budget
+freeze_backbone_epochs: 3  # phase 1: head-only
+lr: 0.001                  # phase 1 lr
+finetune_lr: 0.0001        # phase 2 lr (backbone unfrozen)
+batch_size: 32
+patience: 5                # early-stopping patience
+pred_threshold: 0.5
+seed: 42
+
+# -- data --
+local_mode: false
+masc_root: data/data-masc
+splits_dir: data/data-masc/splits
+
+# -- this run's actual result (not a hyperparameter, recorded for reference) --
+best_epoch: 8
+best_val_f1: 0.2744
+stopped_at_epoch: 13        # patience triggered (8 + 5)
+run_time_minutes: 46.2
+device: cuda
+params: 27523968

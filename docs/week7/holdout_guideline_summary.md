@@ -1,6 +1,6 @@
 # Rico Holdout — Guideline Coverage Summary (G01–G30)
 
-**Generated:** 2026-07-28 18:43 UTC  
+**Generated:** 2026-08-05 17:26 UTC  
 **Mapping source:** `src/guidelines.py` (RULE_GUIDELINES)  
 **Screens evaluated:** 1698
 

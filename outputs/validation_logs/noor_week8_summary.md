@@ -1,7 +1,7 @@
 # Noor Week 8 Summary — Rico Holdout Batch Eval (deferred from Week 7)
 
 **Branch:** `noor`  
-**Date:** 2026-07-28  
+**Date:** 2026-08-05  
 **Owner:** Muhammad Noor  
 **Dataset:** `data/data-rico-holdout` (1698 screens, MASC-disjoint)
 
@@ -58,6 +58,15 @@
 - **R20/R05** (`src/parser.py::_get_hint`) — now reads MASC's real `text-hint` attribute (was only checking `hint`/`android:hint`, which MASC never emits), unblocking R20 (0 -> 749 hits on full MASC) and correcting R05's false positives (2117 -> 717 on full MASC).
 - Full MASC sweep (7068 screens, 0 failures) confirms rule counts moved as expected; see `outputs/violations/*.json` (regenerated) and `notebooks/masc_dataset_analysis.ipynb` (re-executed) for before/after detail.
 
+## Since 29 Jul — crop classifier, YOLO, backbone sweep, backend wiring (Noor)
+
+- **29 Jul**: crop classifier Rico holdout eval added and run end-to-end (1698 screens, 9343 crops) — R08 F1 0.70->0.46, R17 0.47->0.35, R04 0.36->0.25, macro avg 0.25->0.18 vs. the MASC test split (commit `06ad0ece`). Docs synced: SRS v2.8->2.9, SDS v2.12->2.13, Progress Report v1.24->1.25 (commit `7a1e6a4f`).
+- **30 Jul**: merged Salar's completed 60-epoch YOLO run + his `src/yolo_ui_detector.py` (`detect_ui()`) from the `salar` branch — final checkpoint mAP50 0.434 / mAP50-95 0.322 (up from a 1-epoch interim 0.397/0.285); merged his Rico zero-shot-vs-fine-tuned eval (mAP50 0.0258->0.2546). Crop-classifier Rico artifact inventory added (9343 crops tracked); SRS v2.10, SDS v2.14, Progress Report v1.26 synced (commit `12724e72`).
+- **30 Jul - 03 Aug: 33-backbone comparison sweep** (crop classifier, Task B): verified whether `mobilenet_v3_small` was actually the best pick by training/evaluating all 33 candidates (same pipeline, ImageNet-1k pretrained, MASC test + Rico holdout) via a new unattended `scripts/overnight_sweep.py`, plus all related tooling (`scripts/run_backbone_sweep.py`, `scripts/eval_masc_test.py`, `scripts/extract_notebook_results.py`) and documentation (`docs/crop_classifier_comparison_findings.md`, 1813 lines; `docs/crop_classifier_model_reference.md`, 291 lines - architecture/year/paper/authors for all 33, organized by family). Result: `mobilenet_v3_small` came in mid-pack (Rico macro-F1 0.18, beaten by 10+ models); `swin_tiny_patch4_window7_224` won outright (Rico macro-F1 0.22, evenly distributed across R04/R17/R08), confirmed via a `convnext_tiny` control that attention specifically drives the gap, not capacity. **Swin is now the pick**, replacing `mobilenet_v3_small`.
+- **04-05 Aug: connecting both trained models to the backend**: `confirm_violations()` (crop classifier) and a new `detections_to_components()` converter (YOLO) both wired into `backend/routers/audit.py::_run_pipeline`; `xml` upload made optional with a YOLO fallback on missing/malformed/empty-hierarchy XML; `docs/schemas/auditor_schema.json` updated (`cv_confidence`, `inferred`, relaxed `xml_path`, plus an unrelated pre-existing `component_count`/`hidden_component_count` gap fixed). 155/155 tests pass (153 baseline + 2 new), including two real bugs caught during implementation: a missing `ultralytics` install masked by a `pip`/`python` environment mismatch, and an `xml_path` field that was silently overwritten after the YOLO fallback ran (caught by the new malformed-XML test).
+
 ## Next
 
-- Salar: R07/R08/R30 FP fixes already landed (this run) — no longer blocking; revisit R30's remaining per-instance volume if further reduction is wanted (see `holdout_team_priority_fixes.md`).
+- Noor: commit the 33-model sweep + backend wiring to `origin/noor` — both are currently uncommitted locally.
+- Noor: sync Report/SDS/SRS/`updated_plan`/README to reflect Swin as the final backbone pick and both models now wired into the pipeline.
+- Noor: SRS Appendix D — TBD-01 row still shows "Open" though `docs/TBD-01-decision.md` resolved it in July.

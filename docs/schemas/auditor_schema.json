@@ -15,7 +15,7 @@
         "schema_version": { "$ref": "#/definitions/schema_version" },
         "screen_id": { "type": "string", "minLength": 1 },
         "image_path": { "type": "string", "minLength": 1 },
-        "xml_path": { "type": "string", "minLength": 1 }
+        "xml_path": { "type": "string" }
       },
       "additionalProperties": false
     },
@@ -78,7 +78,8 @@
         "important_for_accessibility": { "type": "string" },
         "media_type": { "type": "string", "enum": ["", "video", "audio", "animation"] },
         "is_dialog": { "type": "boolean" },
-        "label_for": { "type": "string" }
+        "label_for": { "type": "string" },
+        "inferred": { "type": "boolean" }
       },
       "additionalProperties": false
     },
@@ -113,7 +114,8 @@
         "guideline": { "type": "string", "minLength": 1 },
         "severity": { "$ref": "#/definitions/severity" },
         "recommendation": { "type": "string", "minLength": 1 },
-        "related_component": { "$ref": "#/definitions/component_id" }
+        "related_component": { "$ref": "#/definitions/component_id" },
+        "cv_confidence": { "type": ["number", "null"], "minimum": 0, "maximum": 1 }
       },
       "additionalProperties": false
     },
@@ -157,7 +159,7 @@
         "schema_version": { "$ref": "#/definitions/schema_version" },
         "screen_id": { "type": "string", "minLength": 1 },
         "image_path": { "type": "string", "minLength": 1 },
-        "xml_path": { "type": "string", "minLength": 1 },
+        "xml_path": { "type": "string" },
         "device_info": { "$ref": "#/definitions/device_info" },
         "components": {
           "type": "array",
@@ -180,12 +182,14 @@
         "schema_version": { "$ref": "#/definitions/schema_version" },
         "screen_id": { "type": "string", "minLength": 1 },
         "image_path": { "type": "string", "minLength": 1 },
-        "xml_path": { "type": "string", "minLength": 1 },
+        "xml_path": { "type": "string" },
         "total_violations": { "type": "integer", "minimum": 0 },
         "violations": {
           "type": "array",
           "items": { "$ref": "#/definitions/violation" }
-        }
+        },
+        "component_count": { "type": "integer", "minimum": 0 },
+        "hidden_component_count": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": false
     },
@@ -197,7 +201,7 @@
         "schema_version": { "$ref": "#/definitions/schema_version" },
         "screen_id": { "type": "string", "minLength": 1 },
         "image_path": { "type": "string", "minLength": 1 },
-        "xml_path": { "type": "string", "minLength": 1 },
+        "xml_path": { "type": "string" },
         "summary": { "$ref": "#/definitions/summary" },
         "violations": {
           "type": "array",

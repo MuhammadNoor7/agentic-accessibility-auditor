@@ -40,3 +40,55 @@ def detect_ui(image_path: str | Path, weights_path: str | Path = DEFAULT_WEIGHTS
             "conf": float(box.conf[0]),
         })
     return detections
+
+
+# Classes whose real-world Android widgets are normally interactive - used to
+# infer clickable/focusable, since YOLO only gives us a class name and box,
+# never the underlying view attributes an XML hierarchy would carry.
+CLICKABLE_CLASSES = {
+    "button_labeled", "button_icon_only", "input_field",
+    "checkbox_toggle", "tab_item", "list_item",
+}
+
+
+def detections_to_components(detections: list[dict]) -> list[dict]:
+    """Map detect_ui() output into components.json-shaped entries.
+
+    Every field the rule checker (src/rules.py) or its schema requires gets a
+    safe default (empty string / False), since pixel detections carry no text,
+    content_desc, or view-attribute data an XML hierarchy would have. Each
+    component is tagged inferred: true (FR-CV.7) so downstream consumers can
+    tell pixel-inferred components apart from real XML-parsed ones.
+    """
+    components = []
+    for i, det in enumerate(detections, start=1):
+        cls = det["class"]
+        clickable = cls in CLICKABLE_CLASSES
+        components.append({
+            "component_id": f"c_{i:03d}",
+            "class": cls,
+            "text": "",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "",
+            "clickable": clickable,
+            "enabled": True,
+            "focusable": clickable,
+            "bounds": [int(v) for v in det["bbox"]],
+            "focus_order": i,
+            "parent_id": "",
+            "long_clickable": False,
+            "scrollable": False,
+            "selected": False,
+            "checked": False,
+            "password": False,
+            "text_all_caps": False,
+            "input_type": "",
+            "important_for_accessibility": "",
+            "media_type": "",
+            "is_dialog": False,
+            "label_for": "",
+            "visible": True,
+            "inferred": True,
+        })
+    return components

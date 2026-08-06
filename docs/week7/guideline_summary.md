@@ -1,6 +1,6 @@
 # Week 7 — Guideline Coverage Summary (G01–G30)
 
-**Generated:** 2026-07-28 19:13 UTC  
+**Generated:** 2026-08-05 17:42 UTC  
 **Source:** `src/guidelines.py` RULE_GUIDELINES mapping  
 **Sample:** MASC n=40 (Week 6 stratified eval)
 

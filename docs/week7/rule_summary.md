@@ -1,6 +1,6 @@
 # Week 7 — Rule-wise Summary (R01–R30)
 
-**Generated:** 2026-07-28 19:13 UTC  
+**Generated:** 2026-08-05 17:42 UTC  
 **Dataset:** MASC Week 6 stratified sample (n=40, seed `20260715`)  
 **Rico holdout:** deferred (Noor will run later)
 

@@ -1,6 +1,6 @@
 # Rico Holdout — QA Notes (FP / Miss / Week 7 vs Week 8)
 
-**Generated:** 2026-07-28 18:43 UTC  
+**Generated:** 2026-08-05 17:26 UTC  
 **Method:** Automated batch on Rico holdout XML (unseen vs MASC). Heuristic noise classes mirror Week 6 assisted review labels.
 
 ## False-positive patterns (likely noisy flags)

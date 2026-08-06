@@ -832,3 +832,513 @@ OVERALL: PASS
 Summary: outputs\week8_summary.md
 Summary copy: outputs\validation_logs\noor_week8_summary.md
 ==================================================================
+
+
+##################################################################
+# RUN 2026-08-05
+##################################################################
+==================================================================
+NOOR WEEK 8 VALIDATION LOG
+Branch: noor   Date: 2026-08-05
+Owner: Muhammad Noor - Week 8 Rico holdout batch eval
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: Rico holdout batch eval (1698 screens)
+------------------------------------------------------------------
+Evaluating 1698 holdout screens...
+  100/1698 processed (100 ok, 0 failed)
+  200/1698 processed (200 ok, 0 failed)
+  300/1698 processed (300 ok, 0 failed)
+  400/1698 processed (400 ok, 0 failed)
+  500/1698 processed (500 ok, 0 failed)
+  600/1698 processed (600 ok, 0 failed)
+  700/1698 processed (700 ok, 0 failed)
+  800/1698 processed (800 ok, 0 failed)
+  900/1698 processed (900 ok, 0 failed)
+  1000/1698 processed (1000 ok, 0 failed)
+  1100/1698 processed (1100 ok, 0 failed)
+  1200/1698 processed (1200 ok, 0 failed)
+  1300/1698 processed (1300 ok, 0 failed)
+  1400/1698 processed (1400 ok, 0 failed)
+  1500/1698 processed (1500 ok, 0 failed)
+  1600/1698 processed (1600 ok, 0 failed)
+  1698/1698 processed (1698 ok, 0 failed)
+{
+  "generated_at": "2026-08-05 03:09 UTC",
+  "manifest_total": 1698,
+  "evaluated_screens": 1698,
+  "failure_count": 0,
+  "rico_source": "D:/internship/_noor_push/data/data-rico-holdout",
+  "mean_violations": 31.675500588928152,
+  "median_violations": 14,
+  "mean_score": 31.958775029446407,
+  "zero_violation_screens": 87,
+  "noise_distribution": {
+    "mostly_agree": 1231,
+    "clean": 87,
+    "over_flagging": 251,
+    "mixed_r30_noise": 129
+  },
+  "top_rules_by_violations": [
+    [
+      "R07",
+      18143
+    ],
+    [
+      "R01",
+      13970
+    ],
+    [
+      "R08",
+      7238
+    ],
+    [
+      "R18",
+      3191
+    ],
+    [
+      "R02",
+      2492
+    ],
+    [
+      "R30",
+      2307
+    ],
+    [
+      "R17",
+      1929
+    ],
+    [
+      "R03",
+      835
+    ],
+    [
+      "R11",
+      709
+    ],
+    [
+      "R15",
+      656
+    ]
+  ]
+}
+
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_rules.py (subset: quick)
+------------------------------------------------------------------
+........................................................................ [ 87%]
+..........                                                               [100%]
+82 passed in 0.27s
+
+
+------------------------------------------------------------------
+STEP 2b: pytest tests/test_parser.py (R20 text-hint fix + MASC bounds/visibility)
+------------------------------------------------------------------
+............                                                             [100%]
+12 passed in 0.06s
+
+
+------------------------------------------------------------------
+STEP 3: pytest backend/tests/test_auth.py
+------------------------------------------------------------------
+......................                                                   [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+backend\tests\test_auth.py:9
+  D:\internship\_noor_push\backend\tests\test_auth.py:9: UserWarning: JWT_SECRET is not set; falling back to an insecure default secret. Set the JWT_SECRET environment variable in production.
+    import backend.auth as auth_module
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+22 passed, 2 warnings in 31.93s
+
+
+------------------------------------------------------------------
+STEP 4: pytest tests/test_audit.py
+------------------------------------------------------------------
+............                                                             [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+12 passed, 1 warning in 38.40s
+
+
+------------------------------------------------------------------
+STEP 5: Week 8 holdout eval outputs
+------------------------------------------------------------------
+  [OK] outputs\week7_holdout\per_screen_results.csv
+  [OK] outputs\week7_holdout\rule_summary.csv
+  [OK] outputs\week7_holdout\guideline_summary.csv
+  [OK] outputs\week7_holdout\failures.csv
+  [OK] outputs\week7_holdout\run_summary.json
+  => PASS (5/5 present)
+
+------------------------------------------------------------------
+STEP 6: Week 8 holdout docs
+------------------------------------------------------------------
+  [OK] docs\week7\holdout_rule_summary.md
+  [OK] docs\week7\holdout_guideline_summary.md
+  [OK] docs\week7\holdout_qa_notes.md
+  [OK] docs\week7\holdout_week6_crosscheck.md
+  [OK] docs\week7\holdout_team_priority_fixes.md
+  => PASS (5/5 present)
+
+==================================================================
+OVERALL: PASS
+  PASS  rico_holdout_eval
+  PASS  pytest_rules
+  PASS  pytest_parser
+  PASS  pytest_auth
+  PASS  pytest_audit
+  PASS  week8_holdout_outputs
+  PASS  week8_holdout_docs
+Summary: outputs\week8_summary.md
+Summary copy: outputs\validation_logs\noor_week8_summary.md
+==================================================================
+
+
+##################################################################
+# RUN 2026-08-05
+##################################################################
+==================================================================
+NOOR WEEK 8 VALIDATION LOG
+Branch: noor   Date: 2026-08-05
+Owner: Muhammad Noor - Week 8 Rico holdout batch eval
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: Rico holdout batch eval (1698 screens)
+------------------------------------------------------------------
+Evaluating 1698 holdout screens...
+  100/1698 processed (100 ok, 0 failed)
+  200/1698 processed (200 ok, 0 failed)
+  300/1698 processed (300 ok, 0 failed)
+  400/1698 processed (400 ok, 0 failed)
+  500/1698 processed (500 ok, 0 failed)
+  600/1698 processed (600 ok, 0 failed)
+  700/1698 processed (700 ok, 0 failed)
+  800/1698 processed (800 ok, 0 failed)
+  900/1698 processed (900 ok, 0 failed)
+  1000/1698 processed (1000 ok, 0 failed)
+  1100/1698 processed (1100 ok, 0 failed)
+  1200/1698 processed (1200 ok, 0 failed)
+  1300/1698 processed (1300 ok, 0 failed)
+  1400/1698 processed (1400 ok, 0 failed)
+  1500/1698 processed (1500 ok, 0 failed)
+  1600/1698 processed (1600 ok, 0 failed)
+  1698/1698 processed (1698 ok, 0 failed)
+{
+  "generated_at": "2026-08-05 17:18 UTC",
+  "manifest_total": 1698,
+  "evaluated_screens": 1698,
+  "failure_count": 0,
+  "rico_source": "D:/internship/_noor_push/data/data-rico-holdout",
+  "mean_violations": 31.675500588928152,
+  "median_violations": 14,
+  "mean_score": 31.958775029446407,
+  "zero_violation_screens": 87,
+  "noise_distribution": {
+    "mostly_agree": 1231,
+    "clean": 87,
+    "over_flagging": 251,
+    "mixed_r30_noise": 129
+  },
+  "top_rules_by_violations": [
+    [
+      "R07",
+      18143
+    ],
+    [
+      "R01",
+      13970
+    ],
+    [
+      "R08",
+      7238
+    ],
+    [
+      "R18",
+      3191
+    ],
+    [
+      "R02",
+      2492
+    ],
+    [
+      "R30",
+      2307
+    ],
+    [
+      "R17",
+      1929
+    ],
+    [
+      "R03",
+      835
+    ],
+    [
+      "R11",
+      709
+    ],
+    [
+      "R15",
+      656
+    ]
+  ]
+}
+
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_rules.py (subset: quick)
+------------------------------------------------------------------
+........................................................................ [ 87%]
+..........                                                               [100%]
+82 passed in 0.59s
+
+
+------------------------------------------------------------------
+STEP 2b: pytest tests/test_parser.py (R20 text-hint fix + MASC bounds/visibility)
+------------------------------------------------------------------
+............                                                             [100%]
+12 passed in 0.04s
+
+
+------------------------------------------------------------------
+STEP 3: pytest backend/tests/test_auth.py
+------------------------------------------------------------------
+......................                                                   [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+backend\tests\test_auth.py:9
+  D:\internship\_noor_push\backend\tests\test_auth.py:9: UserWarning: JWT_SECRET is not set; falling back to an insecure default secret. Set the JWT_SECRET environment variable in production.
+    import backend.auth as auth_module
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+22 passed, 2 warnings in 55.44s
+
+
+------------------------------------------------------------------
+STEP 4: pytest tests/test_audit.py
+------------------------------------------------------------------
+............                                                             [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+12 passed, 1 warning in 30.40s
+
+
+------------------------------------------------------------------
+STEP 5: Week 8 holdout eval outputs
+------------------------------------------------------------------
+  [OK] outputs\week7_holdout\per_screen_results.csv
+  [OK] outputs\week7_holdout\rule_summary.csv
+  [OK] outputs\week7_holdout\guideline_summary.csv
+  [OK] outputs\week7_holdout\failures.csv
+  [OK] outputs\week7_holdout\run_summary.json
+  => PASS (5/5 present)
+
+------------------------------------------------------------------
+STEP 6: Week 8 holdout docs
+------------------------------------------------------------------
+  [OK] docs\week7\holdout_rule_summary.md
+  [OK] docs\week7\holdout_guideline_summary.md
+  [OK] docs\week7\holdout_qa_notes.md
+  [OK] docs\week7\holdout_week6_crosscheck.md
+  [OK] docs\week7\holdout_team_priority_fixes.md
+  => PASS (5/5 present)
+
+==================================================================
+OVERALL: PASS
+  PASS  rico_holdout_eval
+  PASS  pytest_rules
+  PASS  pytest_parser
+  PASS  pytest_auth
+  PASS  pytest_audit
+  PASS  week8_holdout_outputs
+  PASS  week8_holdout_docs
+Summary: outputs\week8_summary.md
+Summary copy: outputs\validation_logs\noor_week8_summary.md
+==================================================================
+
+
+##################################################################
+# RUN 2026-08-05
+##################################################################
+==================================================================
+NOOR WEEK 8 VALIDATION LOG
+Branch: noor   Date: 2026-08-05
+Owner: Muhammad Noor - Week 8 Rico holdout batch eval
+==================================================================
+
+------------------------------------------------------------------
+STEP 1: Rico holdout batch eval (1698 screens)
+------------------------------------------------------------------
+Evaluating 1698 holdout screens...
+  100/1698 processed (100 ok, 0 failed)
+  200/1698 processed (200 ok, 0 failed)
+  300/1698 processed (300 ok, 0 failed)
+  400/1698 processed (400 ok, 0 failed)
+  500/1698 processed (500 ok, 0 failed)
+  600/1698 processed (600 ok, 0 failed)
+  700/1698 processed (700 ok, 0 failed)
+  800/1698 processed (800 ok, 0 failed)
+  900/1698 processed (900 ok, 0 failed)
+  1000/1698 processed (1000 ok, 0 failed)
+  1100/1698 processed (1100 ok, 0 failed)
+  1200/1698 processed (1200 ok, 0 failed)
+  1300/1698 processed (1300 ok, 0 failed)
+  1400/1698 processed (1400 ok, 0 failed)
+  1500/1698 processed (1500 ok, 0 failed)
+  1600/1698 processed (1600 ok, 0 failed)
+  1698/1698 processed (1698 ok, 0 failed)
+{
+  "generated_at": "2026-08-05 17:26 UTC",
+  "manifest_total": 1698,
+  "evaluated_screens": 1698,
+  "failure_count": 0,
+  "rico_source": "D:/internship/_noor_push/data/data-rico-holdout",
+  "mean_violations": 31.675500588928152,
+  "median_violations": 14,
+  "mean_score": 31.958775029446407,
+  "zero_violation_screens": 87,
+  "noise_distribution": {
+    "mostly_agree": 1231,
+    "clean": 87,
+    "over_flagging": 251,
+    "mixed_r30_noise": 129
+  },
+  "top_rules_by_violations": [
+    [
+      "R07",
+      18143
+    ],
+    [
+      "R01",
+      13970
+    ],
+    [
+      "R08",
+      7238
+    ],
+    [
+      "R18",
+      3191
+    ],
+    [
+      "R02",
+      2492
+    ],
+    [
+      "R30",
+      2307
+    ],
+    [
+      "R17",
+      1929
+    ],
+    [
+      "R03",
+      835
+    ],
+    [
+      "R11",
+      709
+    ],
+    [
+      "R15",
+      656
+    ]
+  ]
+}
+
+
+------------------------------------------------------------------
+STEP 2: pytest tests/test_rules.py (subset: quick)
+------------------------------------------------------------------
+........................................................................ [ 87%]
+..........                                                               [100%]
+82 passed in 0.23s
+
+
+------------------------------------------------------------------
+STEP 2b: pytest tests/test_parser.py (R20 text-hint fix + MASC bounds/visibility)
+------------------------------------------------------------------
+............                                                             [100%]
+12 passed in 0.04s
+
+
+------------------------------------------------------------------
+STEP 3: pytest backend/tests/test_auth.py
+------------------------------------------------------------------
+......................                                                   [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+backend\tests\test_auth.py:9
+  D:\internship\_noor_push\backend\tests\test_auth.py:9: UserWarning: JWT_SECRET is not set; falling back to an insecure default secret. Set the JWT_SECRET environment variable in production.
+    import backend.auth as auth_module
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+22 passed, 2 warnings in 98.85s (0:01:38)
+
+
+------------------------------------------------------------------
+STEP 4: pytest tests/test_audit.py
+------------------------------------------------------------------
+............                                                             [100%]
+============================== warnings summary ===============================
+C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1
+  C:\Users\Muhammad Noor\AppData\Local\Programs\Python\Python313\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+12 passed, 1 warning in 75.16s (0:01:15)
+
+
+------------------------------------------------------------------
+STEP 5: Week 8 holdout eval outputs
+------------------------------------------------------------------
+  [OK] outputs\week7_holdout\per_screen_results.csv
+  [OK] outputs\week7_holdout\rule_summary.csv
+  [OK] outputs\week7_holdout\guideline_summary.csv
+  [OK] outputs\week7_holdout\failures.csv
+  [OK] outputs\week7_holdout\run_summary.json
+  => PASS (5/5 present)
+
+------------------------------------------------------------------
+STEP 6: Week 8 holdout docs
+------------------------------------------------------------------
+  [OK] docs\week7\holdout_rule_summary.md
+  [OK] docs\week7\holdout_guideline_summary.md
+  [OK] docs\week7\holdout_qa_notes.md
+  [OK] docs\week7\holdout_week6_crosscheck.md
+  [OK] docs\week7\holdout_team_priority_fixes.md
+  => PASS (5/5 present)
+
+==================================================================
+OVERALL: PASS
+  PASS  rico_holdout_eval
+  PASS  pytest_rules
+  PASS  pytest_parser
+  PASS  pytest_auth
+  PASS  pytest_audit
+  PASS  week8_holdout_outputs
+  PASS  week8_holdout_docs
+Summary: outputs\week8_summary.md
+Summary copy: outputs\validation_logs\noor_week8_summary.md
+==================================================================

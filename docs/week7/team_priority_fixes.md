@@ -1,6 +1,6 @@
 # Week 7 — Team Priority Fixes (share with Salar + Ayesha)
 
-**Date:** 2026-07-28 19:13 UTC  
+**Date:** 2026-08-05 17:42 UTC  
 **Owner:** Muhammad Noor  
 **Basis:** MASC 40-screen Week 6 eval (Rico holdout deferred)
 

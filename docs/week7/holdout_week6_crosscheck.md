@@ -1,6 +1,6 @@
 # Week 6 MASC (n=40) vs Rico Holdout Cross-check
 
-**Generated:** 2026-07-28 18:43 UTC  
+**Generated:** 2026-08-05 17:26 UTC  
 **Week 6 sample:** stratified MASC 40 screens (seed 20260715) with assisted FP/miss notes.  
 **Holdout:** 1698 Rico screens (MASC-disjoint).
 

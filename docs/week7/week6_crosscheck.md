@@ -1,6 +1,6 @@
 # Week 6 Manual Review vs Re-run Cross-check
 
-**Generated:** 2026-07-28 19:13 UTC  
+**Generated:** 2026-08-05 17:42 UTC  
 **Method:** Re-ran `check()` on 40 components.json files; compared auto heuristics to Week 6 `manual_verdict`.
 
 ## Verdict distribution

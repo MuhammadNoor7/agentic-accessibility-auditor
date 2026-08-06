@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+import io
 from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
+from PIL import Image
 
 from backend.main import app
 from src.agent import build_audit_report, compute_accessibility_score
@@ -16,12 +18,23 @@ from src.schema_documents import build_components_document
 FIXTURES_DIR = Path(__file__).resolve().parent / "fixtures" / "rules"
 R01_FIXTURE = FIXTURES_DIR / "r01_missing_label_fail.xml"
 R01_SCREENSHOT_NAME = "r01_missing_label_fail.png"
+R08_FIXTURE = FIXTURES_DIR / "r08_layout_overlap_fail.xml"
+R08_SCREENSHOT_NAME = "r08_layout_overlap_fail.png"
 
 MINIMAL_PNG = (
     b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01"
     b"\x08\x02\x00\x00\x00\x90wS\xde\x00\x00\x00\x0cIDATx\x9cc\xf8\xcf"
     b"\xc0\x00\x00\x00\x03\x00\x01\x00\x05\xfe\xd4\xef\x00\x00\x00\x00IEND\xaeB`\x82"
 )
+
+
+def _real_png(size: tuple[int, int] = (300, 300)) -> bytes:
+    """A genuinely decodable PNG (unlike MINIMAL_PNG, which passes Image.open()'s
+    header check but fails on .load() - fine for tests that only need the file
+    to exist, not for anything that actually crops/decodes pixels)."""
+    buf = io.BytesIO()
+    Image.new("RGB", size, color=(200, 200, 200)).save(buf, format="PNG")
+    return buf.getvalue()
 
 
 def _post_audit(client: TestClient, *, use_llm: bool | None = None) -> object:
@@ -80,6 +93,71 @@ def test_audit_pipeline_r01_fixture(client: TestClient) -> None:
     for key in ("schema_version", "screen_id", "image_path", "xml_path", "total_violations", "violations"):
         assert key in violations_doc
     assert violations_doc["total_violations"] == len(violations_doc["violations"])
+
+
+def test_audit_pipeline_attaches_cv_confidence_to_r08(client: TestClient) -> None:
+    """R08 (a CV-confirmable rule) gets a cv_confidence field from the crop
+    classifier; the field is a real float in [0, 1], not always None, which
+    proves the model is actually being called during the pipeline run."""
+    with R08_FIXTURE.open("rb") as handle:
+        response = client.post(
+            "/api/v1/audit",
+            files={
+                "screenshot": (R08_SCREENSHOT_NAME, _real_png(), "image/png"),
+                "xml": (R08_FIXTURE.name, handle, "application/xml"),
+            },
+        )
+
+    assert response.status_code == 202
+    audit_id = response.json()["audit_id"]
+    assert response.json()["status"] == "complete"
+
+    violations_doc = client.get(f"/api/v1/audit/{audit_id}/violations").json()
+    r08_violations = [v for v in violations_doc["violations"] if v["rule_id"] == "R08"]
+    assert len(r08_violations) == 1
+
+    cv_confidence = r08_violations[0]["cv_confidence"]
+    assert cv_confidence is not None, "classify_crop() was not actually called"
+    assert 0 <= cv_confidence <= 1
+
+
+def test_audit_falls_back_to_yolo_when_xml_omitted(client: TestClient) -> None:
+    """No xml part at all -> the pipeline uses the screenshot-only YOLO
+    detector (FR-CV.4) instead of 422ing or erroring."""
+    from backend.routers.audit import _AUDIT_JOBS
+
+    response = client.post(
+        "/api/v1/audit",
+        files={"screenshot": ("no_xml_screen.png", _real_png(), "image/png")},
+    )
+
+    assert response.status_code == 202
+    audit_id = response.json()["audit_id"]
+    assert response.json()["status"] == "complete"
+
+    violations_doc = client.get(f"/api/v1/audit/{audit_id}/violations").json()
+    assert violations_doc["xml_path"] == ""
+
+    components = _AUDIT_JOBS[audit_id]["components"]["components"]
+    assert all(c["inferred"] is True for c in components)
+
+
+def test_audit_falls_back_to_yolo_when_xml_malformed(client: TestClient) -> None:
+    """A .xml file that isn't valid XML -> same YOLO fallback, not a 500."""
+    response = client.post(
+        "/api/v1/audit",
+        files={
+            "screenshot": ("bad_xml_screen.png", _real_png(), "image/png"),
+            "xml": ("bad_xml_screen.xml", b"this is not < valid xml", "application/xml"),
+        },
+    )
+
+    assert response.status_code == 202
+    audit_id = response.json()["audit_id"]
+    assert response.json()["status"] == "complete"
+
+    violations_doc = client.get(f"/api/v1/audit/{audit_id}/violations").json()
+    assert violations_doc["xml_path"] == ""
 
 
 def test_audit_report_endpoint_returns_enriched_report(client: TestClient) -> None:

@@ -3,7 +3,7 @@
 Automated accessibility auditing for **Android mobile UIs**.  
 Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `components.json`, rule-based `violations.json`, LLM-enriched explanations, and HTML/PDF reports mapped to **G01–G30** guidelines and **R01–R30** detection rules.
 
-**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — Weeks 1–8 complete + **post–Week 7 YOLO UI-element detector** track (full 60-epoch run + Rico eval, merged from Salar's `salar` branch 30 Jul) + **Week 8 rule-accuracy fixes (29 Jul)**: three confirmed false-positive rules (R07, R08, R30) and one parser bug blocking R20/R05 fixed and verified against the full 7,068-screen MASC set and the 1,698-screen Rico holdout — not just fixtures. Crop-violation classifier also Rico-evaluated (30 Jul). 90/99 SRS requirements Done — the remaining 9 are the YOLO + crop-classifier backend integrations, both deliberately deferred as Stretch requirements.
+**Current integration branch:** [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) — Weeks 1–8 complete + **post–Week 7 YOLO UI-element detector** track (full 60-epoch run + Rico eval, merged from Salar's `salar` branch 30 Jul) + **Week 8 rule-accuracy fixes (29 Jul)**: three confirmed false-positive rules (R07, R08, R30) and one parser bug blocking R20/R05 fixed and verified against the full 7,068-screen MASC set and the 1,698-screen Rico holdout — not just fixtures + **33-backbone crop-classifier sweep (30 Jul–03 Aug)**: replaced MobileNetV3-Small with `swin_tiny_patch4_window7_224` (best in sweep) + **both CV models wired into the backend (04–05 Aug)**: no longer deferred + **Docker fixes (05 Aug)**: dependency sync, opencv system libraries, new `frontend` Compose service. **99/99 SRS requirements Done.**
 
 ---
 
@@ -11,9 +11,9 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 | Intern | Branch | Focus |
 |--------|--------|-------|
-| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | MASC data, parser, **rules** (with Noor + Ayesha), JWT/records base, Docker, tests |
-| **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | Rico holdout, Figma, React frontend, SRS co-author, rules (with Salar + Noor) |
-| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | Backend API, OTP/SMTP/OAuth, JSON schemas, SDS, agent, report template, Week 7 QA eval, **Week 8 rule-accuracy fixes**, docs, coordination |
+| **Salar** | [`salar`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/salar) | MASC data, parser, **rules** (with Noor + Ayesha), Model Training (Object Detection), JWT/records base, Docker, tests |
+| **Ayesha** | [`ayesha`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/ayesha) | Rico holdout, Figma, tests, React frontend, SRS co-author, rules (with Salar + Noor) |
+| **Noor (Lead)** | [`noor`](https://github.com/MuhammadNoor7/agentic-accessibility-auditor/tree/noor) | Backend API, OTP/SMTP/OAuth, JSON schemas, Model Training (Crop Classification), SDS, agent, Docker, tests, report template, Week 7 QA eval, **Week 8 rule-accuracy fixes**, docs, coordination |
 
 ---
 
@@ -21,14 +21,14 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 | Document | Path |
 |----------|------|
-| **SRS v2.10** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.10.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.10.md) · [`.docx`](srs/SRS_Agentic_Accessibility_Auditor_v2.10.docx) |
-| **SDS v2.14** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.14.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.14.md) · [`.docx`](sds/SDS_Agentic_Accessibility_Auditor_v2.14.docx) — §6 now documents pseudocode for all 30 rules (R01–R30, was R01–R20); §1.4 implementation table includes both YOLO and crop-classifier rows |
-| **8-week plan v2.1** | [`updated_plan.md`](updated_plan.md) · [`docs/progress/updated_plan_v2.1.docx`](docs/progress/updated_plan_v2.1.docx) (older exports: `docs/updated_plan_v2.0.docx`, `docs/updated_plan_formatted.docx`) |
-| **Progress report v1.26** | [`docs/progress/Supplementary_Progress_Report_v1.26.md`](docs/progress/Supplementary_Progress_Report_v1.26.md) · [`.docx`](docs/progress/Supplementary_Progress_Report_v1.26.docx) — §16 Document history through 30 Jul: Salar's full 60-epoch YOLO run + Rico eval merged in, crop-classifier Rico holdout eval added (§15G.7), crop-classifier artifact inventory (§15G.8), Week 8 evidence pack (§15I), Week 7/8 entries added to the weekly-updates log (§15) |
+| **SRS v2.11** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.11.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.11.md) · [`.docx`](srs/SRS_Agentic_Accessibility_Auditor_v2.11.docx) |
+| **SDS v2.15** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.15.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.15.md) · [`.docx`](sds/SDS_Agentic_Accessibility_Auditor_v2.15.docx) — §3.7 backbone changed to Swin-Tiny after a 33-model sweep; §3.6/§3.7 both now wired into the backend pipeline; §11 Docker updated with the frontend service + dependency fix |
+| **8-week plan v2.2** | [`updated_plan.md`](updated_plan.md) · [`docs/updated_plan_v2.2.docx`](docs/updated_plan_v2.2.docx) (older export: `docs/progress/updated_plan_v2.1.docx`, not yet regenerated) |
+| **Progress report v1.27** | [`docs/progress/Supplementary_Progress_Report_v1.27.md`](docs/progress/Supplementary_Progress_Report_v1.27.md) · [`.docx`](docs/progress/Supplementary_Progress_Report_v1.27.docx) — §16 Document history through 05 Aug: 33-backbone crop-classifier sweep (Swin-Tiny final pick), both CV models wired into the backend (§15J), Docker fixes, 9 crop-classifier visualizations embedded (§15G) |
 | **Week 6 eval** | [`docs/week6/evaluation_sheet.md`](docs/week6/evaluation_sheet.md) · CSV · R26–R30 design DOCX |
 | **Week 7 QA** | [`docs/week7/README.md`](docs/week7/README.md) · rule/guideline summaries (MASC sample + Rico holdout variants) · team priorities |
-| **YOLO UI detector (post–Week 7)** | `notebooks/train_yolo_ui_detector.ipynb` · `src/yolo_ui_detector.py` · `runs/runs/yolo_ui_detector/` (config, metrics, plots, exported `best.pt`, 51.2 MB) — trained (60/60 epochs) + Rico-evaluated; not pipeline-wired (deliberately deferred) |
-| **Crop-violation classifier (Week 8)** | `notebooks/train_crop_violation_classifier.ipynb` (now includes a §9 Rico holdout generalization check) · `src/crop_violation_classifier.py` (inference) · `models/crop_violation_classifier_best.pt` (gitignored) — pixel-level confirmation for R09/R04/R17/R10/R28/R08; Rico-validated (R08 F1 0.70→0.46 on unseen apps, real but moderate generalization gap); not pipeline-wired (deliberately deferred) |
+| **YOLO UI detector (post–Week 7)** | `notebooks/train_yolo_ui_detector.ipynb` · `src/yolo_ui_detector.py` · `runs/runs/yolo_ui_detector/` (config, metrics, plots, exported `best.pt`, 51.2 MB) — trained (60/60 epochs) + Rico-evaluated; **wired into the backend pipeline** (05 Aug) |
+| **Crop-violation classifier (Week 8)** | `notebooks/train_crop_violation_classifier.ipynb` (now includes a §9 Rico holdout generalization check) · `src/crop_violation_classifier.py` (inference) · `models/crop_violation_classifier_best.pt` (gitignored) — pixel-level confirmation for R09/R04/R17/R10/R28/R08; backbone `swin_tiny_patch4_window7_224` (33-model sweep winner, `docs/crop_classifier_comparison_findings.md`); Rico-validated (macro-F1 0.22, best in sweep); **wired into the backend pipeline** (05 Aug) |
 | **SMTP + Google setup (free)** | [`docs/auth_smtp_google_setup.md`](docs/auth_smtp_google_setup.md) |
 | **Figma screenshots** | `docs/assets/figma/` (also mirrored under `docs/progress/assets/figma/` for the progress DOCX) |
 | **Validation logs** | `outputs/validation_logs/` — `noor_week1`…`noor_week8_{summary.md,validation_log.txt}` (append-only, one dated block per run) |
@@ -37,7 +37,7 @@ Regenerate Word exports: `python scripts/md_to_docx.py <input.md> -o <output.doc
 
 ---
 
-## Pipeline status (`noor`, 30 Jul 2026)
+## Pipeline status (`noor`, 05 Aug 2026)
 
 ```
 Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
@@ -57,8 +57,8 @@ Screenshot + XML  →  Parser  →  Rule checker  →  Agent  →  Report
 | Auth / Records | Salar + Noor | JWT + history | **Done** — `/auth/*`, `/records/*`; SMTP OTP; Google OAuth |
 | Week 6 eval | Noor | 40-screen sheet | **Done** — stratified seed `20260715`; 40/40 assisted FP/miss notes |
 | Week 7 QA (Noor) | Noor | Rule/guideline summaries | **Done** — MASC 40-screen sample + full Rico holdout (1,698 screens) both re-evaluated post-fix |
-| YOLO UI detector (post–Week 7) | Salar (notebook, full 60-epoch train, Rico eval) / Noor (Colab train, merge) | `best.pt` (51.2 MB), YOLO-format datasets | **Trained (60/60 epochs, mAP50-95 0.322) + Rico-evaluated** (zero-shot mAP50 0.0258 → fine-tuned 0.2546); `src/yolo_ui_detector.py` exists and works; **not pipeline-wired** (deliberately deferred, Stretch requirement) |
-| Crop-violation classifier (Week 8) | Noor (Colab train) | `crop_violation_classifier_best.pt` (6.2 MB) | **Trained + Rico-validated** (epoch 17, val macro-F1 0.265; Rico holdout: precision 0.54/recall 0.40/F1 0.46 for R08, macro F1 0.18 overall) — retrained after the R08 fix since R08 is one of its 6 label classes; `src/crop_violation_classifier.py` inference wrapper works, **not called from the main pipeline yet** (deliberately deferred); full artifact inventory: Progress Report §15G.8 |
+| YOLO UI detector (post–Week 7) | Salar (notebook, full 60-epoch train, Rico eval) / Noor (Colab train, merge, backend wiring) | `best.pt` (51.2 MB), YOLO-format datasets | **Trained (60/60 epochs, mAP50-95 0.322) + Rico-evaluated** (zero-shot mAP50 0.0258 → fine-tuned 0.2546); **wired into the backend pipeline** (05 Aug) — `detect_ui()` + `detections_to_components()` called from `backend/routers/audit.py`, `xml` now optional on `POST /api/v1/audit` |
+| Crop-violation classifier (Week 8) | Noor (Colab train, 33-backbone sweep, backend wiring) | `crop_violation_classifier_best.pt` | **Trained + Rico-validated** — backbone changed to `swin_tiny_patch4_window7_224` after a 33-model comparison sweep (`docs/crop_classifier_comparison_findings.md`), best val macro-F1 0.274 (epoch 8), Rico holdout macro-F1 0.22 (best in sweep); **wired into the backend pipeline** (05 Aug) — `confirm_violations()` attaches `cv_confidence` to R08/R17/R04 after `check_rules()`; full artifact inventory: Progress Report §15G.8 |
 | R01–R30 accuracy fixes (Week 8) | Noor | Fixed `src/rules.py` + `src/parser.py` | **Done, 29 Jul** — verified against full MASC (7,068) + Rico holdout (1,698), not just fixtures; see §16 v1.26 in the progress report |
 
 **API mounts:** audit under `/api/v1/audit/*`; auth under `/auth/*`; records under `/records/*`.
@@ -87,7 +87,9 @@ Verified: full pytest suite (152 passed), full MASC re-parse + re-check (7,068 s
 ```
 agentic-accessibility-auditor/
 ├── app.py                  # Streamlit: upload XML + violations preview
-├── test_run.py             # CLI: single XML, batch dataset, or --fixtures
+├── test_run.py             # CLI: single XML, batch dataset, or --fixtures; auditor Docker entrypoint
+├── Dockerfile               # auditor service (python:3.11-slim)
+├── docker-compose.yml       # frontend + backend + auditor (frontend added 05 Aug)
 ├── requirements.txt
 ├── .env.example            # JWT, GOOGLE_CLIENT_ID, SMTP_*, LLM keys (no secrets)
 ├── updated_plan.md         # 8-week team plan
@@ -103,22 +105,25 @@ agentic-accessibility-auditor/
 │   ├── guidelines.py
 │   ├── llm_providers.py
 │   ├── schema_documents.py
-│   ├── crop_violation_classifier.py  # MobileNetV3 crop-level classifier (R09/R04/R17/R10/R28/R08), inference only
-│   └── yolo_ui_detector.py # Ultralytics YOLO screenshot-only UI detector, detect_ui(), inference only
+│   ├── crop_violation_classifier.py  # swin_tiny_patch4_window7_224 crop-level classifier (R09/R04/R17/R10/R28/R08), wired into backend
+│   └── yolo_ui_detector.py # Ultralytics YOLO screenshot-only UI detector, detect_ui() + detections_to_components(), wired into backend
 │
 ├── backend/                # FastAPI gateway
 │   ├── main.py             # load_dotenv(override=True)
+│   ├── Dockerfile           # installs torch/torchvision/timm/ultralytics + opencv system libs (05 Aug fixes)
+│   ├── requirements.txt
 │   ├── auth.py             # JWT helpers
 │   ├── otp_store.py        # OTP TTL store
 │   ├── email_service.py    # Gmail SMTP OTP mail
 │   ├── routers/
-│   │   ├── audit.py        # /api/v1/audit/*
+│   │   ├── audit.py        # /api/v1/audit/* (xml optional; YOLO/crop-classifier wired in)
 │   │   ├── auth_router.py  # /auth/* (register, login, OTP, Google)
 │   │   └── records_router.py
 │   ├── tests/test_auth.py  # 22 auth tests
 │   └── data/               # local users/records/otp JSON (gitignored)
 │
 ├── frontend/                # Axion React (Vite + React 19 + Tailwind)
+│   ├── Dockerfile           # new (05 Aug): node:20-slim, npm run dev -- --host, port 5173
 │   └── src/
 │       ├── api.js
 │       ├── utils/auth.js, googleAuth.js, validation.js, api.js
@@ -153,12 +158,14 @@ agentic-accessibility-auditor/
 ├── docs/
 │   ├── week6/              # eval sheet CSV/MD/DOCX + R26–R30 design
 │   ├── week7/              # rule/guideline summaries — MASC sample + `holdout_*` Rico variants
-│   ├── progress/           # supplementary report + updated_plan_v2.1.docx + assets/ (figma + logs week1-8 + crop_classifier/ visualizations)
+│   ├── progress/           # supplementary report + updated_plan_v2.1.docx + assets/figma (logs/ and crop_classifier/ copies removed 05 Aug — redundant with outputs/validation_logs/ and runs/)
 │   ├── assets/figma/       # Figma PNG references
+│   ├── crop_classifier_comparison_findings.md  # new: full 33-backbone sweep results
+│   ├── crop_classifier_model_reference.md      # new: architecture/year/paper for all 33
 │   └── …                   # schemas, guidelines, QA plan, technical overview
 │
-├── srs/                    # Software Requirements Spec (v2.10)
-├── sds/                    # Software Design Spec (v2.14)
+├── srs/                    # Software Requirements Spec (v2.11)
+├── sds/                    # Software Design Spec (v2.15)
 │
 ├── data/
 │   ├── data-masc/          # parsed/ + splits/ tracked; raw xml/screenshots local only
@@ -178,11 +185,12 @@ agentic-accessibility-auditor/
 └── runs/                   # training artifacts — everything EXCEPT .pt weights is tracked
     ├── notebooks/           # executed copies with saved outputs (masc_dataset_analysis, train_crop_violation_classifier incl. §9 Rico eval results, train_yolo_ui_detector)
     ├── crop_violation_classifier/
-    │   ├── crops/           # train/ (5,516 PNG, partial local sample) + test/ (5,541 PNG, full)
+    │   ├── crops/           # train/ (25,202 PNG, full) + val/ (5,558 PNG, full) + test/ (5,541 PNG, full) — 100% coverage as of 05 Aug
     │   ├── rico_crops/      # holdout/ — 9,343 PNG, full Rico holdout crop set (§15G.7)
     │   ├── manifests/       # train/val/test.csv (labels — full row counts even where PNGs aren't all local)
     │   ├── rico_manifest/   # holdout.csv (Rico holdout labels)
-    │   └── export/          # crop_violation_classifier_best.pt (gitignored)
+    │   ├── export/          # crop_violation_classifier_best.pt (gitignored), args.yaml
+    │   └── crop_classifier/ # new (05 Aug): 9 PNGs — confusion matrices, PR/P/R/F1 curves, sample crops/predictions
     └── runs/yolo_ui_detector/
         ├── export/          # yolo_ui_detector_best.pt (51.2 MB, gitignored)
         ├── yolo_dataset/, rico_yolo_dataset/  # MASC train vs Rico eval-only YOLO-format datasets

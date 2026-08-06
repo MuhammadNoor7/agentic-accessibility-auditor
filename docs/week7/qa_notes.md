@@ -1,6 +1,6 @@
 # Week 7 — QA Notes (FP / Miss / Priorities)
 
-**Generated:** 2026-07-28 19:13 UTC  
+**Generated:** 2026-08-05 17:42 UTC  
 **Basis:** Week 6 MASC 40-screen stratified sample with assisted FP/miss notes.
 
 ## False-positive patterns

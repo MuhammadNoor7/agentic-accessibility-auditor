@@ -55,6 +55,8 @@ except ImportError:
 
 DEFAULT_WEIGHTS = Path(__file__).resolve().parents[1] / "models" / "crop_violation_classifier_best.pt"
 
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
 
@@ -207,6 +209,7 @@ def _get_model(weights_path: str | Path):
         rule_classes = ckpt["rule_classes"]
         model = _build_backbone(ckpt["backbone"], num_classes=len(rule_classes))
         model.load_state_dict(ckpt["model_state"])
+        model.to(DEVICE)
         model.eval()
         transform = transforms.Compose([
             transforms.Resize((ckpt["crop_size"], ckpt["crop_size"])),
@@ -236,7 +239,7 @@ def classify_crop(
         img = img.crop(tuple(bounds))
 
     with torch.no_grad():
-        tensor = transform(img).unsqueeze(0)
+        tensor = transform(img).unsqueeze(0).to(DEVICE)
         probs = torch.sigmoid(model(tensor))[0].tolist()
 
     result = {"_all": dict(zip(rule_classes, probs))}

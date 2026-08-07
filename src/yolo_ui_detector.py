@@ -8,9 +8,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import torch
 from ultralytics import YOLO
 
 DEFAULT_WEIGHTS = Path(__file__).resolve().parents[1] / "models" / "yolo_ui_detector_best.pt"
+
+DEVICE = "cuda:0" if torch.cuda.is_available() else "cpu"
 
 _model_cache: dict[str, YOLO] = {}
 
@@ -30,7 +33,7 @@ def detect_ui(image_path: str | Path, weights_path: str | Path = DEFAULT_WEIGHTS
     dicts, one per detected UI element, in the original image's pixel space.
     """
     model = _get_model(weights_path)
-    result = model.predict(source=str(image_path), conf=conf, verbose=False)[0]
+    result = model.predict(source=str(image_path), conf=conf, device=DEVICE, verbose=False)[0]
     names = result.names
     detections = []
     for box in result.boxes:

@@ -1,0 +1,31 @@
+services:
+  backend:
+    image: noorrr07/auditor-backend:latest
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - auditor-network
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  frontend:
+    image: noorrr07/auditor-frontend:latest
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BASE: ${VITE_API_BASE}
+    depends_on:
+      - backend
+    networks:
+      - auditor-network
+
+networks:
+  auditor-network:
+    driver: bridge

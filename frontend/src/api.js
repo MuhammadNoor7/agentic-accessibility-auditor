@@ -2,14 +2,16 @@
 // Base URL of your local FastAPI server (started with `uvicorn backend.main:app`).
 import { getAuthHeaders } from './utils/auth';
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8002';
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://127.0.0.1:8000';
 
 // Step 1: upload screenshot + XML pair, kicks off parse -> rules -> agent explain.
 // Returns { audit_id, status }
 export async function createAudit(screenshotFile, xmlFile) {
   const formData = new FormData();
   formData.append('screenshot', screenshotFile);
-  formData.append('xml', xmlFile);
+  if (xmlFile) {
+    formData.append('xml', xmlFile);
+  }
 
   const res = await fetch(`${API_BASE}/api/v1/audit`, {
     method: 'POST',
@@ -43,6 +45,21 @@ export async function getAuditReport(auditId) {
 export async function getAuditViolations(auditId) {
   const res = await fetch(`${API_BASE}/api/v1/audit/${auditId}/violations`);
   if (!res.ok) throw new Error(`Violations fetch failed (${res.status})`);
+  return res.json();
+}
+
+// Persist a completed audit into the logged-in user's Audit History.
+// Called once per audit, right after its report loads (see Dashboard.jsx).
+export async function createRecord(payload) {
+  const res = await fetch(`${API_BASE}/records`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const errBody = await res.json().catch(() => ({}));
+    throw new Error(errBody.detail || `Record creation failed (${res.status})`);
+  }
   return res.json();
 }
 

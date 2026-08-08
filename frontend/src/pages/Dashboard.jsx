@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { getAuditFiles, getAuditId } from '../state/auditFiles'
-import { getAuditReport } from '../api'
+import { getAuditFiles, getAuditId, hasRecordedAudit, markAuditRecorded } from '../state/auditFiles'
+import { getAuditReport, createRecord } from '../api'
 import Sidebar from '../components/Sidebar'
 import UserAvatar from '../components/ui/UserAvatar'
 
@@ -336,6 +336,11 @@ function IssueDrawer({ issue, onClose }) {
               <span style={{ fontSize: 11, color: '#1D9E75', background: '#1e2d42', padding: '2px 8px', borderRadius: 6, fontWeight: 700 }}>
                 {issue.rule_id} · {rule?.guideline}
               </span>
+              {issue.cv_confidence != null && (
+                <span style={{ fontSize: 11, color: '#0f1422', background: '#1D9E75', padding: '2px 8px', borderRadius: 6, fontWeight: 700 }}>
+                  👁 CV-confirmed {Math.round(issue.cv_confidence * 100)}%
+                </span>
+              )}
             </div>
             <p style={{ color: '#fff', fontSize: 17, fontWeight: 700, margin: 0, lineHeight: 1.4 }}>
               {issue.issue}
@@ -416,7 +421,7 @@ function IssueDrawer({ issue, onClose }) {
 export default function Dashboard() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { screenshot } = getAuditFiles()
+  const { screenshot, xml } = getAuditFiles()
 
   // audit_id can arrive via route state (fresh navigation from Upload)
   // or the shared store (getAuditId) if the page was refreshed / reached another way.
@@ -441,7 +446,32 @@ export default function Dashboard() {
     setLoading(true)
     getAuditReport(auditId)
       .then(data => {
-        if (!cancelled) { setReport(data); setLoading(false) }
+        if (cancelled) return
+        setReport(data)
+        setLoading(false)
+
+        if (!hasRecordedAudit(auditId)) {
+          markAuditRecorded(auditId)
+          createRecord({
+            screen_id: data.screen_id,
+            total_violations: data.summary?.total_issues ?? (data.violations || []).length,
+            violations_by_severity: {
+              critical: data.summary?.critical ?? 0,
+              high: data.summary?.high ?? 0,
+              medium: data.summary?.medium ?? 0,
+              low: data.summary?.low ?? 0,
+            },
+            components_path: '',
+            violations_path: `outputs/violations/${data.screen_id}_violations.json`,
+            accessibility_score: data.accessibility_score ?? null,
+            screenshot_name: screenshot?.name || null,
+            xml_name: xml?.name || null,
+          }).catch(err => {
+            // History logging is best-effort — never break the report the
+            // user is already looking at over this.
+            console.error('Could not save this audit to history:', err.message)
+          })
+        }
       })
       .catch(err => {
         if (!cancelled) { setLoadError(err.message || 'Could not load report.'); setLoading(false) }
@@ -810,6 +840,11 @@ export default function Dashboard() {
                       <td style={{ padding: '13px 16px' }}>
                         <p style={{ fontSize: 15, fontWeight: 600, color: '#0f1422', margin: 0 }}>{v.issue}</p>
                         <p style={{ fontSize: 12, color: '#94a3b8', margin: '3px 0 0' }}>{v.class} · {v.component_id}</p>
+                        {v.cv_confidence != null && (
+                          <p style={{ fontSize: 11, color: '#1D9E75', margin: '3px 0 0', fontWeight: 600 }}>
+                            👁 CV-confirmed {Math.round(v.cv_confidence * 100)}%
+                          </p>
+                        )}
                       </td>
                       <td style={{ padding: '13px 16px', width: 120 }}>
                         <span style={{

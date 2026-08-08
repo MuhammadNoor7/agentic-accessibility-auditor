@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
+import UserAvatar from '../components/ui/UserAvatar';
 import { setAuditFiles, setAuditId } from '../state/auditFiles';
 import { createAudit } from '../api';
 
@@ -248,7 +249,7 @@ function FilePreviewPopup({ screenshot, xml, onClose }) {
                 File Preview
               </p>
               <p style={{ color: '#a8bbd4', fontSize: 12, margin: '3px 0 0' }}>
-                {screenshot?.name} + {xml?.name}
+                {xml ? `${screenshot?.name} + ${xml.name}` : `${screenshot?.name} (screenshot only)`}
               </p>
             </div>
           </div>
@@ -275,7 +276,7 @@ function FilePreviewPopup({ screenshot, xml, onClose }) {
         }}>
           {[
             { key: 'screenshot', label: 'Screenshot', icon: '🖼' },
-            { key: 'xml',        label: 'XML source',  icon: '📄' },
+            ...(xml ? [{ key: 'xml', label: 'XML source', icon: '📄' }] : []),
           ].map(t => (
             <button
               key={t.key}
@@ -385,7 +386,7 @@ function FilePreviewPopup({ screenshot, xml, onClose }) {
           flexWrap: 'wrap', gap: 10,
         }}>
           <span style={{ fontSize: 13, color: '#64748b' }}>
-            Both files look correct? Close this and click <strong>Start Audit</strong>.
+            {xml ? 'Both files look correct?' : 'Screenshot looks correct?'} Close this and click <strong>Start Audit</strong>.
           </span>
           <button
             onClick={onClose}
@@ -406,13 +407,23 @@ function FilePreviewPopup({ screenshot, xml, onClose }) {
 
 // ── Validation Popup ──────────────────────────────────────────────────────────
 function ValidationPopup({ result, screenshotName, xmlName, onClose }) {
-  const ok = result === 'matched';
+  const screenshotOnly = result === 'screenshot_only';
+  const ok = result === 'matched' || screenshotOnly;
   const missingScreenshot = result === 'missing_screenshot';
-  const title = ok ? 'Files Matched!' : missingScreenshot ? 'Screenshot Required' : 'File Mismatch';
-  const message = ok
+  const wrongScreenshotType = result === 'wrong_screenshot_type';
+  const title = result === 'matched' ? 'Files Matched!'
+    : screenshotOnly ? 'Screenshot-Only Audit Ready'
+    : missingScreenshot ? 'Screenshot Required'
+    : wrongScreenshotType ? 'Screenshot Required'
+    : 'File Mismatch';
+  const message = result === 'matched'
     ? 'Your screenshot and XML are a validated pair. You can now start the audit.'
+    : screenshotOnly
+    ? 'No XML provided — this screenshot will be analyzed using pixel-based UI detection instead.'
     : missingScreenshot
     ? 'Please upload a screenshot (PNG or JPG) before selecting the XML file.'
+    : wrongScreenshotType
+    ? 'You must pick a screenshot (PNG or JPG) first, not an XML file. Please select the screenshot.'
     : "The files don't share the same identifier. Upload a matching pair.";
 
   return (
@@ -472,9 +483,9 @@ function ValidationPopup({ result, screenshotName, xmlName, onClose }) {
           {message}
         </p>
 
-        {!missingScreenshot && (
+        {!missingScreenshot && !wrongScreenshotType && (
         <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {[screenshotName, xmlName].map(name => (
+          {[screenshotName, screenshotOnly ? null : xmlName].filter(Boolean).map(name => (
             <div key={name} style={{
               display: 'flex', alignItems: 'center', gap: 8,
               background: '#f8fafc', borderRadius: 8, padding: '10px 14px',
@@ -518,6 +529,7 @@ function AuditPopup({ screenshotFile, xmlFile, onViewDashboard }) {
   const [progress,       setProgress]       = useState(0);
   const [done,           setDone]           = useState(false);
   const [error,          setError]          = useState(null);
+  const [isNetworkError, setIsNetworkError] = useState(false);
   const [auditId,        setAuditIdState]   = useState(null);
 
   // Real backend call — fires once, independent of the cosmetic animation below.
@@ -534,7 +546,13 @@ function AuditPopup({ screenshotFile, xmlFile, onViewDashboard }) {
         setAuditId(result.audit_id); // persist so Dashboard/Report can read it later
       })
       .catch(err => {
-        if (!cancelled) setError(err.message || 'Could not reach the audit server.');
+        if (cancelled) return;
+        // A TypeError from fetch() itself means the request never reached the
+        // server (down, wrong URL, CORS) -- a backend-returned validation
+        // error (e.g. wrong file type) is a plain Error with its own message
+        // and doesn't need the "is the backend running" hint.
+        setIsNetworkError(err instanceof TypeError);
+        setError(err.message || 'Could not reach the audit server.');
       });
     return () => { cancelled = true; };
   }, [screenshotFile, xmlFile]);
@@ -604,9 +622,11 @@ function AuditPopup({ screenshotFile, xmlFile, onViewDashboard }) {
           <p style={{ fontSize: 14, color: '#64748b', margin: '0 0 24px', lineHeight: 1.6 }}>
             {error}
           </p>
-          <p style={{ fontSize: 12, color: '#94a3b8', margin: '0 0 20px' }}>
-            Check that the backend server is running at http://127.0.0.1:8000
-          </p>
+          {isNetworkError && (
+            <p style={{ fontSize: 12, color: '#94a3b8', margin: '0 0 20px' }}>
+              Check that the backend server is running at http://127.0.0.1:8000
+            </p>
+          )}
         </div>
       </div>
     );
@@ -744,16 +764,20 @@ export default function Upload() {
   const xmlRef        = useRef(null);
 
   const step =
-    !screenshot              ? 'empty'
-    : !xml                   ? 'waiting'
-    : validationResult === 'matched' ? 'matched'
+    !screenshot                            ? 'empty'
+    : validationResult === 'screenshot_only' ? 'screenshot_only'
+    : !xml                                 ? 'waiting'
+    : validationResult === 'matched'       ? 'matched'
     : 'mismatched';
 
   const progress =
-    step === 'empty' ? 0 : step === 'waiting' ? 50 : step === 'matched' ? 100 : 75;
+    step === 'empty' ? 0
+    : step === 'waiting' ? 50
+    : step === 'matched' || step === 'screenshot_only' ? 100
+    : 75;
 
   const progressColor =
-    step === 'matched'      ? '#1D9E75'
+    step === 'matched' || step === 'screenshot_only' ? '#1D9E75'
     : step === 'mismatched' ? '#ef4444'
     : '#f59e0b';
 
@@ -763,11 +787,11 @@ export default function Upload() {
     : '1.5px solid #1D9E75';
 
   const zoneBg =
-    step === 'matched'      ? '#f0fdf8'
+    step === 'matched' || step === 'screenshot_only' ? '#f0fdf8'
     : step === 'mismatched' ? '#fff5f5'
     : '#fff';
 
-  const canAudit = validationResult === 'matched';
+  const canAudit = validationResult === 'matched' || validationResult === 'screenshot_only';
 
   const handleMainClick = () => {
     if (validationResult) {
@@ -783,8 +807,19 @@ export default function Upload() {
   const handleScreenshotChange = useCallback(e => {
     const file = e.target.files[0];
     if (!file) return;
+    if (!/\.(png|jpe?g)$/i.test(file.name)) {
+      setValidationResult('wrong_screenshot_type');
+      setShowPopup(true);
+      e.target.value = '';
+      return;
+    }
     setScreenshot(file); setXml(null); setValidationResult(null);
     e.target.value = '';
+  }, []);
+
+  const handleScreenshotOnly = useCallback(() => {
+    setXml(null);
+    setValidationResult('screenshot_only');
   }, []);
 
   const handleXmlChange = useCallback(e => {
@@ -836,10 +871,7 @@ export default function Upload() {
               }}
               style={{ background: '#f4f6fb', border: '0.5px solid #dde2f0', borderRadius: 6, padding: '9px 16px', fontSize: 15, color: '#1a2240', width: 210 }}
             />
-            <div role="img" aria-label="User: Ayesha Naveed" title="Ayesha Naveed"
-              style={{ width: 42, height: 42, borderRadius: '50%', background: '#1D9E75', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 15, fontWeight: 700, flexShrink: 0 }}>
-              <span aria-hidden="true">AN</span>
-            </div>
+            <UserAvatar />
           </div>
         </div>
 
@@ -869,24 +901,27 @@ export default function Upload() {
                 background: step === 'mismatched' ? '#fee2e2' : '#e8f5f0',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18,
               }}>
-                {step === 'empty'      && Icon.folder('#1D9E75', 26)}
-                {step === 'waiting'    && Icon.xml('#1D9E75', 26)}
-                {step === 'matched'    && Icon.check('#1D9E75', 26)}
-                {step === 'mismatched' && Icon.alert('#ef4444', 26)}
+                {step === 'empty'          && Icon.folder('#1D9E75', 26)}
+                {step === 'waiting'        && Icon.xml('#1D9E75', 26)}
+                {step === 'matched'        && Icon.check('#1D9E75', 26)}
+                {step === 'screenshot_only' && Icon.check('#1D9E75', 26)}
+                {step === 'mismatched'     && Icon.alert('#ef4444', 26)}
               </div>
 
               <p style={{ fontSize: 17, fontWeight: 700, color: '#0f1422', margin: '0 0 6px', textAlign: 'center', wordBreak: 'break-word' }}>
-                {step === 'empty'      && 'Upload files'}
-                {step === 'waiting'    && screenshot?.name}
-                {step === 'matched'    && 'Files matched'}
-                {step === 'mismatched' && 'File mismatch'}
+                {step === 'empty'          && 'Upload files'}
+                {step === 'waiting'        && screenshot?.name}
+                {step === 'matched'        && 'Files matched'}
+                {step === 'screenshot_only' && 'Ready — screenshot only'}
+                {step === 'mismatched'     && 'File mismatch'}
               </p>
 
               <p style={{ fontSize: 14, color: '#5a6a8a', margin: '0 0 24px', textAlign: 'center', maxWidth: 440, lineHeight: 1.6 }}>
-                {step === 'empty'      && 'Select your PNG or JPG screenshot first, then the matching XML file'}
-                {step === 'waiting'    && 'Screenshot uploaded — now select the matching XML file'}
-                {step === 'matched'    && `"${screenshot?.name}" and "${xml?.name}" are a validated pair`}
-                {step === 'mismatched' && `"${screenshot?.name}" and "${xml?.name}" don't share the same identifier`}
+                {step === 'empty'          && 'Select your PNG or JPG screenshot first, then the matching XML file'}
+                {step === 'waiting'        && 'Screenshot uploaded — select the matching XML file, or continue with just the screenshot'}
+                {step === 'matched'        && `"${screenshot?.name}" and "${xml?.name}" are a validated pair`}
+                {step === 'screenshot_only' && `"${screenshot?.name}" will be analyzed from pixels alone (no XML) using the on-device UI detector`}
+                {step === 'mismatched'     && `"${screenshot?.name}" and "${xml?.name}" don't share the same identifier`}
               </p>
 
               <button
@@ -904,10 +939,11 @@ export default function Upload() {
 
               <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: 8 }}>
                 <span style={{ fontSize: 14, color: step === 'empty' ? '#5a6a8a' : progressColor, fontWeight: 500 }}>
-                  {step === 'empty'      && 'No files uploaded'}
-                  {step === 'waiting'    && 'Screenshot uploaded'}
-                  {step === 'matched'    && 'Files validated successfully'}
-                  {step === 'mismatched' && 'Mismatch detected'}
+                  {step === 'empty'          && 'No files uploaded'}
+                  {step === 'waiting'        && 'Screenshot uploaded'}
+                  {step === 'matched'        && 'Files validated successfully'}
+                  {step === 'screenshot_only' && 'Ready for screenshot-only audit'}
+                  {step === 'mismatched'     && 'Mismatch detected'}
                 </span>
                 <span style={{ fontSize: 14, fontWeight: 700, color: step === 'empty' ? '#5a6a8a' : progressColor }}>{progress}%</span>
               </div>
@@ -925,7 +961,19 @@ export default function Upload() {
                 <span style={{ fontSize: 14, color: '#f59e0b', fontWeight: 500 }}>Upload your screenshot to begin</span>
               )}
               {step === 'waiting' && (
-                <span style={{ fontSize: 14, color: '#f59e0b', fontWeight: 500 }}>Now select the matching XML file</span>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, marginBottom: 4 }}>
+                  <span style={{ fontSize: 14, color: '#f59e0b', fontWeight: 500 }}>Now select the matching XML file — or skip it</span>
+                  <button
+                    onClick={handleScreenshotOnly}
+                    style={{
+                      background: 'transparent', border: '1px solid #1D9E75', color: '#1D9E75',
+                      borderRadius: 99, fontSize: 13, fontWeight: 600,
+                      padding: '6px 16px', cursor: 'pointer', fontFamily: 'inherit',
+                    }}
+                  >
+                    Continue with screenshot only
+                  </button>
+                </div>
               )}
 
               {/* Action pills row — shown only when both files uploaded */}

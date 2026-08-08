@@ -1,6 +1,9 @@
 import { getAuthHeaders } from './auth';
 
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000';
+// Relative by default so requests go through the Vite dev-server proxy
+// (see vite.config.js) instead of a hardcoded host — set VITE_API_BASE
+// to override with an absolute URL if you're not using the proxy.
+const API_BASE = import.meta.env.VITE_API_BASE || '';
 
 async function handleResponse(response) {
   let data = null;

@@ -21,16 +21,17 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 
 | Document | Path |
 |----------|------|
-| **SRS v2.11** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.11.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.11.md) · [`.docx`](srs/SRS_Agentic_Accessibility_Auditor_v2.11.docx) |
-| **SDS v2.15** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.15.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.15.md) · [`.docx`](sds/SDS_Agentic_Accessibility_Auditor_v2.15.docx) — §3.7 backbone changed to Swin-Tiny after a 33-model sweep; §3.6/§3.7 both now wired into the backend pipeline; §11 Docker updated with the frontend service + dependency fix |
+| **SRS v2.12** | [`srs/SRS_Agentic_Accessibility_Auditor_v2.12.md`](srs/SRS_Agentic_Accessibility_Auditor_v2.12.md) · [`.docx`](srs/SRS_Agentic_Accessibility_Auditor_v2.12.docx) |
+| **SDS v2.16** | [`sds/SDS_Agentic_Accessibility_Auditor_v2.16.md`](sds/SDS_Agentic_Accessibility_Auditor_v2.16.md) · [`.docx`](sds/SDS_Agentic_Accessibility_Auditor_v2.16.docx) — §3.7 backbone changed to Swin-Tiny after a 33-model sweep; §3.6/§3.7 both now wired into the backend pipeline + GPU device selection; §11 Docker updated with the frontend service, self-contained backend build, and GPU/port config |
 | **8-week plan v2.2** | [`updated_plan.md`](updated_plan.md) · [`docs/updated_plan_v2.2.docx`](docs/updated_plan_v2.2.docx) (older export: `docs/progress/updated_plan_v2.1.docx`, not yet regenerated) |
-| **Progress report v1.27** | [`docs/progress/Supplementary_Progress_Report_v1.27.md`](docs/progress/Supplementary_Progress_Report_v1.27.md) · [`.docx`](docs/progress/Supplementary_Progress_Report_v1.27.docx) — §16 Document history through 05 Aug: 33-backbone crop-classifier sweep (Swin-Tiny final pick), both CV models wired into the backend (§15J), Docker fixes, 9 crop-classifier visualizations embedded (§15G) |
+| **Progress report v1.29** | [`docs/progress/Supplementary_Progress_Report_v1.29.md`](docs/progress/Supplementary_Progress_Report_v1.29.md) · [`.docx`](docs/progress/Supplementary_Progress_Report_v1.29.docx) — §16 Document history through 08 Aug: 33-backbone crop-classifier sweep (Swin-Tiny final pick), both CV models wired into the backend + GPU-accelerated (§15J/§15K), frontend completion (screenshot-only flow, `cv_confidence` badge, Records fix), lab GPU PC deployment, repo hygiene pass |
+| **Final Internship Report (IEEE)** | [`docs/final-report/Final_Internship_Report.tex`](docs/final-report/Final_Internship_Report.tex) · [`.pdf`](docs/final-report/Final_Internship_Report.pdf) |
 | **Week 6 eval** | [`docs/week6/evaluation_sheet.md`](docs/week6/evaluation_sheet.md) · CSV · R26–R30 design DOCX |
 | **Week 7 QA** | [`docs/week7/README.md`](docs/week7/README.md) · rule/guideline summaries (MASC sample + Rico holdout variants) · team priorities |
-| **YOLO UI detector (post–Week 7)** | `notebooks/train_yolo_ui_detector.ipynb` · `src/yolo_ui_detector.py` · `runs/runs/yolo_ui_detector/` (config, metrics, plots, exported `best.pt`, 51.2 MB) — trained (60/60 epochs) + Rico-evaluated; **wired into the backend pipeline** (05 Aug) |
-| **Crop-violation classifier (Week 8)** | `notebooks/train_crop_violation_classifier.ipynb` (now includes a §9 Rico holdout generalization check) · `src/crop_violation_classifier.py` (inference) · `models/crop_violation_classifier_best.pt` (gitignored) — pixel-level confirmation for R09/R04/R17/R10/R28/R08; backbone `swin_tiny_patch4_window7_224` (33-model sweep winner, `docs/crop_classifier_comparison_findings.md`); Rico-validated (macro-F1 0.22, best in sweep); **wired into the backend pipeline** (05 Aug) |
+| **YOLO UI detector (post–Week 7)** | `notebooks/train_yolo_ui_detector.ipynb` · `src/yolo_ui_detector.py` · `runs/runs/yolo_ui_detector/` (config, metrics, plots, exported `best.pt`, 51.2 MB) — trained (60/60 epochs) + Rico-evaluated; wired into the backend pipeline (05 Aug), GPU-accelerated (07 Aug) |
+| **Crop-violation classifier (Week 8)** | `notebooks/train_crop_violation_classifier.ipynb` (now includes a §9 Rico holdout generalization check) · `src/crop_violation_classifier.py` (inference) · `models/crop_violation_classifier_best.pt` (gitignored) — pixel-level confirmation for R09/R04/R17/R10/R28/R08; backbone `swin_tiny_patch4_window7_224` (33-model sweep winner, `docs/crop_classifier_comparison_findings.md`); Rico-validated (macro-F1 0.22, best in sweep); wired into the backend pipeline (05 Aug), GPU-accelerated (07 Aug) |
 | **SMTP + Google setup (free)** | [`docs/auth_smtp_google_setup.md`](docs/auth_smtp_google_setup.md) |
-| **Figma screenshots** | `docs/assets/figma/` (also mirrored under `docs/progress/assets/figma/` for the progress DOCX) |
+| **Figma screenshots** | `docs/assets/figma/` — 11 images (figma-01…08 design mockups + figma-09…11 screenshot-only/CV-confidence flow captures). The old `docs/progress/assets/figma/` mirror was a stale partial duplicate and was removed 08 Aug; the progress report now links directly to this folder. |
 | **Validation logs** | `outputs/validation_logs/` — `noor_week1`…`noor_week8_{summary.md,validation_log.txt}` (append-only, one dated block per run) |
 
 Regenerate Word exports: `python scripts/md_to_docx.py <input.md> -o <output.docx>`.
@@ -89,7 +90,8 @@ agentic-accessibility-auditor/
 ├── app.py                  # Streamlit: upload XML + violations preview
 ├── test_run.py             # CLI: single XML, batch dataset, or --fixtures; auditor Docker entrypoint
 ├── Dockerfile               # auditor service (python:3.11-slim)
-├── docker-compose.yml       # frontend + backend + auditor (frontend added 05 Aug)
+├── docker-compose.yml       # frontend + backend + auditor; backend build context = repo root (self-contained image, 07 Aug fix), GPU reservation, external port configurable (default 8000, 8001 on the lab GPU PC to avoid a clash with other lab members' services)
+├── docker-compose.deploy.yml  # new: pre-built-image variant (pulls noorrr07/auditor-backend:latest + auditor-frontend:latest) for standalone deployment without a local build
 ├── requirements.txt
 ├── .env.example            # JWT, GOOGLE_CLIENT_ID, SMTP_*, LLM keys (no secrets)
 ├── updated_plan.md         # 8-week team plan
@@ -105,12 +107,12 @@ agentic-accessibility-auditor/
 │   ├── guidelines.py
 │   ├── llm_providers.py
 │   ├── schema_documents.py
-│   ├── crop_violation_classifier.py  # swin_tiny_patch4_window7_224 crop-level classifier (R09/R04/R17/R10/R28/R08), wired into backend
-│   └── yolo_ui_detector.py # Ultralytics YOLO screenshot-only UI detector, detect_ui() + detections_to_components(), wired into backend
+│   ├── crop_violation_classifier.py  # swin_tiny_patch4_window7_224 crop-level classifier (R09/R04/R17/R10/R28/R08), wired into backend, explicit CUDA device selection (07 Aug)
+│   └── yolo_ui_detector.py # Ultralytics YOLO screenshot-only UI detector, detect_ui() + detections_to_components(), wired into backend, explicit CUDA device selection (07 Aug)
 │
 ├── backend/                # FastAPI gateway
 │   ├── main.py             # load_dotenv(override=True)
-│   ├── Dockerfile           # installs torch/torchvision/timm/ultralytics + opencv system libs (05 Aug fixes)
+│   ├── Dockerfile           # root-context build (07 Aug fix — was backend/, image now ships src/+models/ and is standalone-deployable); installs torch/torchvision/timm/ultralytics + opencv system libs (05 Aug fixes)
 │   ├── requirements.txt
 │   ├── auth.py             # JWT helpers
 │   ├── otp_store.py        # OTP TTL store
@@ -123,14 +125,15 @@ agentic-accessibility-auditor/
 │   └── data/               # local users/records/otp JSON (gitignored)
 │
 ├── frontend/                # Axion React (Vite + React 19 + Tailwind)
-│   ├── Dockerfile           # new (05 Aug): node:20-slim, npm run dev -- --host, port 5173
+│   ├── Dockerfile           # node:20-slim, npm run dev -- --host, port 5173
 │   └── src/
-│       ├── api.js
+│       ├── api.js          # createAudit(), createRecord() → POST /records
 │       ├── utils/auth.js, googleAuth.js, validation.js, api.js
-│       ├── components/ui/UserAvatar.jsx
-│       └── pages/          # Upload, Dashboard, Report, Records, auth/*
+│       ├── state/auditFiles.js  # module-level recordedAuditIds guard (08 Aug) — survives React Router remounts
+│       ├── components/ui/UserAvatar.jsx  # shared avatar (initials from logged-in user), now used on Upload/Dashboard/Report
+│       └── pages/          # Upload (screenshot-only flow, XML optional, 08 Aug), Dashboard (cv_confidence badge), Report, Records, auth/*
 │
-├── tests/                  # 152 pytest collected (tests/ + backend/tests/)
+├── tests/                  # 155 pytest collected (tests/ + backend/tests/)
 │   ├── test_parser.py
 │   ├── test_rules.py
 │   ├── test_agent.py
@@ -158,14 +161,16 @@ agentic-accessibility-auditor/
 ├── docs/
 │   ├── week6/              # eval sheet CSV/MD/DOCX + R26–R30 design
 │   ├── week7/              # rule/guideline summaries — MASC sample + `holdout_*` Rico variants
-│   ├── progress/           # supplementary report + updated_plan_v2.1.docx + assets/figma (logs/ and crop_classifier/ copies removed 05 Aug — redundant with outputs/validation_logs/ and runs/)
-│   ├── assets/figma/       # Figma PNG references
-│   ├── crop_classifier_comparison_findings.md  # new: full 33-backbone sweep results
-│   ├── crop_classifier_model_reference.md      # new: architecture/year/paper for all 33
+│   ├── progress/           # supplementary report (v1.29) + updated_plan_v2.1.docx (no assets/ subfolder anymore — the docs/progress/assets/figma/ mirror was a stale partial duplicate of docs/assets/figma/, removed 08 Aug; report images link to ../assets/figma/ directly)
+│   ├── final-report/       # new: IEEE-format Final Internship Report — Final_Internship_Report.tex + .pdf
+│   ├── assets/figma/       # 11 Figma/UI reference PNGs+JPGs (design mockups + screenshot-only/CV-confidence flow captures)
+│   ├── crop_classifier_comparison_findings.md  # full 33-backbone sweep results
+│   ├── crop_classifier_model_reference.md      # architecture/year/paper for all 33
+│   ├── training_explained.md                   # plain-language walkthrough of the YOLO + crop-classifier training runs
 │   └── …                   # schemas, guidelines, QA plan, technical overview
 │
-├── srs/                    # Software Requirements Spec (v2.11)
-├── sds/                    # Software Design Spec (v2.15)
+├── srs/                    # Software Requirements Spec (v2.12)
+├── sds/                    # Software Design Spec (v2.16)
 │
 ├── data/
 │   ├── data-masc/          # parsed/ + splits/ tracked; raw xml/screenshots local only
@@ -350,9 +355,9 @@ streamlit run app.py
 
 **Always commit:** source, `docs/`, `srs/`, `sds/`, `scripts/`, `tests/`, `frontend/`, `requirements.txt`, tracked validation logs / samples, `runs/` (everything except `.pt` weights)
 
-**Never commit:** `.venv/`, `.env`, `backend/data/*.db.json` (local user/OTP DBs), `.pt` model weights anywhere (`runs/**/*.pt`, `models/*.pt`), raw dataset archives over the size budget (`data/data-rico-holdout.zip`), App Passwords, Word lock/temp files (`~$*.docx`, `~$*.doc` — appear while a `.docx` is open in Word)
+**Never commit:** `.venv/`, `.env`, `backend/data/*.db.json` (local user/OTP DBs), `.pt` model weights anywhere (`runs/**/*.pt`, `models/*.pt`), raw dataset archives over the size budget (`data/data-rico-holdout.zip`), App Passwords, Word lock/temp files (`~$*.docx`, `~$*.doc` — appear while a `.docx` is open in Word), LaTeX build artifacts from compiling `docs/final-report/` (`*.aux`, `*.log`, `*.out`)
 
-**Tracked on `noor`:** `data/data-masc/parsed/` + `splits/`, `data/data-rico-holdout/parsed/` + `manifest/`, `outputs/validation_logs/`, `outputs/week7_eval/`, `outputs/*/samples/`, `docs/week6/`, `docs/week7/`, progress assets, `runs/` (non-`.pt`)
+**Tracked on `noor`:** `data/data-masc/parsed/` + `splits/`, `data/data-rico-holdout/parsed/` + `manifest/`, `outputs/validation_logs/`, `outputs/week7_eval/`, `outputs/*/samples/`, `docs/week6/`, `docs/week7/`, `docs/assets/figma/` (the single canonical Figma asset folder — do not re-create a mirror under `docs/progress/`), `runs/` (non-`.pt`)
 
 ---
 

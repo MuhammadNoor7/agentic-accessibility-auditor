@@ -101,3 +101,17 @@ models/
 # Internship grading paperwork — personal/administrative, not project code
 internship docs/
 internship_docs/
+
+# LaTeX build artifacts (docs/final-report/) — only the .tex source and the
+# regenerated .pdf are committed; intermediate pdflatex output is not.
+# Scoped to docs/final-report/ only: two other .log files (MASC parse log,
+# crop-classifier sweep log) are intentionally tracked elsewhere in the repo.
+docs/final-report/*.aux
+docs/final-report/*.log
+docs/final-report/*.out
+docs/final-report/*.synctex.gz
+docs/final-report/*.fls
+docs/final-report/*.fdb_latexmk
+docs/final-report/*.toc
+docs/final-report/*.bbl
+docs/final-report/*.blg

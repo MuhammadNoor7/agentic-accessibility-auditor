@@ -5,7 +5,7 @@
 
 | Field | Value |
 |-------|-------|
-| **Document version** | 2.11 |
+| **Document version** | 2.12 |
 | **Status** | Draft for SDS handoff |
 | **Prepared by** | Ayesha Naveed + Salar (primary authors); Muhammad Noor (Lead — review, integration, API/report sections) |
 | **Institution** | National University of Computer and Emerging Sciences (FAST-NUCES) |
@@ -32,6 +32,7 @@
 | **2.8–2.9** | 2026-07-29 | Noor | Rule-accuracy fixes verified against real MASC (7,068 screens) and Rico holdout (1,698 screens) data, not just fixtures: **FR-RU.7** (R07) and **FR-RU.8** (R08) false-positive sources eliminated (R08 -43.2% on Rico holdout); **R30** collapses repeated list/grid-row icon instances; **R20** unblocked from a parser bug (0 → 749 hits), which also corrected an R05 false-positive pattern (2,117 → 717). §4.4 renamed and expanded: **FR-CV.8–9 added** (crop classifier is multi-label across R09/R04/R17/R10/R28/R08, MASC-only training — the actual implementation is broader than FR-CV.3's original R09-only framing); F10 (§2.2) updated from "optional CV contrast + CNN signal" to the trained crop classifier; status paragraphs added for both the crop classifier (val macro-F1 0.265) and YOLO detector, correcting a stale claim that `src/yolo_ui_detector.py` was scaffolded (it does not exist). Appendix B: FR-EV.5 (Rico holdout) updated Done, no longer deferred. Progress Report v1.24–1.25 / SDS v2.12–2.13 sync. |
 | **2.10** | 2026-07-30 | Noor | Teammate Salar independently completed the full 60-epoch YOLO training run and the Rico holdout zero-shot-vs-fine-tuned evaluation on the `salar` branch; his finished checkpoint (`models/yolo_ui_detector_best.pt`, 51.2 MB) and exported `src/yolo_ui_detector.py` were merged into `noor`, **correcting the 29 Jul claim that the module does not exist** — it now exists but remains deliberately not wired into the backend (Stretch requirement, integration explicitly deferred by team decision, not started). Crop classifier: Rico holdout generalization eval also run (9,343 crops, all 1,698 holdout screens, weighted F1 0.43 vs. 0.63 on MASC test) — same not-wired, deliberately-deferred status. §4.4 status paragraphs and Appendix B (FR-CV.4–9) updated accordingly. Progress Report v1.26 / SDS v2.14 sync. Filename bumped from v2.8 to v2.10 to match content version (previous filename had drifted behind the 2.8–2.9 combined content update). |
 | **2.11** | 2026-08-05 | Noor | Both Stretch CV integrations wired into the backend pipeline — **FR-CV.1–9 all Done, no longer deferred**: crop classifier's `confirm_violations()` and YOLO's `detect_ui()` → `detections_to_components()` fallback are both now called from `backend/routers/audit.py`; `xml` is optional on `POST /api/v1/audit`. Crop classifier backbone changed from MobileNetV3-Small to **`swin_tiny_patch4_window7_224`** after a 33-backbone comparison sweep (`docs/crop_classifier_comparison_findings.md`, `docs/crop_classifier_model_reference.md`) — attention-based architectures won cleanly (Rico holdout macro-F1 0.22 vs. 0.18 for the original pick). Full 1,698-screen Rico holdout batch re-eval formalized via `scripts/run_rico_holdout_eval.py`. Docker fixes: `backend/requirements.txt` synced with torch/torchvision/timm/ultralytics (was missing, caused a container startup crash); `.env` now loaded via `env_file`; `frontend` service added to Compose (FR-DK.2 now literally satisfied). Appendix D: TBD-01 corrected from stale "Open" to **Resolved — Groq, provisional** (had actually been resolved in July; the table was never updated). **Project now 99/99 SRS requirements Done.** |
+| **2.12** | 2026-08-08 | Noor | `src/` docstring coverage 57% → 100%. **§4.4 GPU:** both CV models confirmed running on CUDA when available — `crop_violation_classifier.py` gained an explicit `DEVICE` (previously silently CPU-only despite `torch.cuda.is_available()`); `yolo_ui_detector.py`'s device selection made explicit rather than relying on Ultralytics' implicit default. **§4.4 frontend completion:** FR-CV.4's screenshot-only fallback was backend-only as of v2.11 — the Upload page had no way to reach it (XML was hard-required by the UI even though the API never required it). Frontend now exposes a "Continue with screenshot only" path (progress bar reaches 100%, Start Audit unlocks) and displays `cv_confidence` on eligible violations in the Dashboard (previously computed but never rendered anywhere). **§4.7/Appendix E Docker:** `backend/Dockerfile` rebuilt to be self-contained (bakes in `src/` + `models/` — previously only worked via the dev bind-mount, would crash standalone); GPU reservation added to Compose; external port made configurable (`8001:8000`) for lab GPU PC deployment where port 8000 was already in use by other lab members. **FR-REC:** found and fixed a real design-vs-implementation gap — SDS §10.2 documented "frontend calls `POST /records` after every audit" as already-implemented, but no code anywhere actually did this; every audit completed and reported correctly, but never appeared in Audit History. Now wired into `Dashboard.jsx`. New Appendix F.12 documents the screenshot-only flow and CV-confidence display with real-app screenshots (`figma-09/10/11`, distinct from the original Figma-source mockups in F.1–F.10). |
 
 > **Note on UI specifications:** Screen layouts, branding, and interaction flows in Section 3.1 and **Appendix F** are derived from **Ayesha Naveed's Figma designs** shared in `#tem-all-dynamo` Slack. Reference screenshots are embedded in Appendix F (`docs/assets/figma/`). Screens covered: Sign Up, Log In, Forgot Password, OTP Verify, Reset Password, Upload (all states), Audit Complete modal, Dashboard, Issue Detail drawer, Audit Report, Generate Report modal, and **Records (Reports)** page.
 
@@ -577,6 +578,8 @@ Full rule logic: **Section 7**.
 
 **Status — Crop classifier / FR-CV.1–3, FR-CV.8–9 (05 Aug 2026):** A controlled 33-backbone comparison sweep (all candidates ImageNet-1k pretrained, same training/eval pipeline, evaluated on both MASC test and the 1,698-screen Rico holdout — see `docs/crop_classifier_comparison_findings.md`) found the original `mobilenet_v3_small` pick mid-pack (Rico macro-F1 0.18, beaten by 10+ candidates). **Backbone changed to `swin_tiny_patch4_window7_224`** — the best result in the sweep, Rico holdout macro-F1 0.22 evenly distributed across R04/R17/R08, best val macro-F1 0.274 at epoch 8 (two-phase fine-tuning: frozen-backbone plateau ~0.20 for epochs 1–3 → fine-tuned 0.274 by epoch 8, a +37% relative gain from adapting the backbone). A `convnext_tiny` control (same modern-CNN design tricks, no attention) confirmed it's attention specifically — not capacity — driving the gap; `docs/crop_classifier_model_reference.md` documents architecture/year/paper for all 33 candidates. **Now wired into the audit pipeline** (05 Aug 2026): `confirm_violations()` runs immediately after `check_rules()`, attaching `cv_confidence` to R08/R17/R04 violations (the 3 rules with real positive training signal) — FR-CV.1 fully satisfied, no longer deferred. `docs/schemas/auditor_schema.json` updated with the new optional `cv_confidence` field. See SDS §3.7 and `docs/crop_classifier_comparison_findings.md` for full sweep results.
 
+**Status — GPU acceleration and frontend completion (08 Aug 2026):** Both models confirmed running on CUDA when a GPU is available, verified on the lab GPU deployment PC via `torch.cuda.is_available()` returning `True` inside the running container and `nvidia-smi` showing utilization during a live audit. `crop_violation_classifier.py` previously had no device handling at all — the model and every inference tensor stayed on CPU regardless of GPU availability; it now moves both onto an explicit `DEVICE` (`cuda` if available, else `cpu`). `yolo_ui_detector.py`'s device selection was made explicit (`device=DEVICE` passed to `model.predict()`) rather than relying on Ultralytics' implicit default. Separately, FR-CV.4's screenshot-only fallback had been wired into the **backend** since v2.11, but the **frontend Upload page still hard-required an XML file** before "Start Audit" would unlock — there was no way for a user to actually reach the fallback path through the UI. This is now fixed: selecting a screenshot alone surfaces a "Continue with screenshot only" action, the progress bar reaches 100%, and the audit runs end-to-end through `detect_ui()` exactly as FR-CV.4 specifies. The Dashboard also now renders `cv_confidence` (FR-CV.1's output) as a "CV-confirmed NN%" badge on eligible violations — computed since 05 Aug but never surfaced anywhere in the UI until now. See Appendix F.12 for screenshots of both.
+
 ### 4.5 Agentic layer — LLM explanation and fix generation
 
 **Description:** Generate human-readable content for each rule-detected violation.  
@@ -1078,9 +1081,9 @@ Sign-off aligns with `docs/qa_test_plan.md` (TC-01–TC-06).
 
 | Service | Role | Port |
 |---------|------|------|
-| `backend` | FastAPI API | 8000 |
+| `backend` | FastAPI API | 8000 internal, published externally per environment (default `8000`; `8001` on the lab GPU PC — see below) |
 | `auditor` | Batch parser (`test_run.py`) against MASC | internal |
-| `frontend` (planned) | React Axion dashboard | 5173 |
+| `frontend` | React Axion dashboard | 5173 |
 
 **Startup:**
 
@@ -1090,6 +1093,14 @@ docker-compose up --build
 ```
 
 Environment: `DATASET_ROOT=/app/data/data-masc`, `PARSER_MAX_FILES=0` (full batch)
+
+**Self-contained backend image (08 Aug 2026):** `backend/Dockerfile`'s build context was `./backend`, so it never included the repo-root `src/` and `models/` that `backend/routers/audit.py` imports at runtime — it only ever worked because `docker-compose.yml` bind-mounts the whole repo into the container for local dev, papering over the gap. Rebuilt with build context `.` (repo root), baking in `src/`, `models/`, and `backend/` directly, so the image now also runs standalone (`docker run`, or pushed to a registry and pulled on a separate machine) without needing the source tree mounted at runtime.
+
+**GPU reservation:** the `backend` service now declares an NVIDIA GPU reservation (`deploy.resources.reservations.devices`, `driver: nvidia`), required for the CUDA acceleration described in §4.4's GPU status note. Verified working end-to-end on a lab GPU PC running Docker Desktop + WSL2.
+
+**Lab GPU PC port conflict:** that machine already had other lab members' services bound to port 8000, so the backend's *externally published* port was changed to `8001` (`"8001:8000"` in `docker-compose.yml`) while the container's *internal* port stays `8000` — no image rebuild needed for this class of change, only a container recreate. `frontend`'s `VITE_API_BASE` must match whichever external port is actually in use for that environment.
+
+**Deploying pre-built images (`docker-compose.deploy.yml`, new):** a separate compose file for pulling `backend`/`frontend` images from a registry rather than building from source — used for the laptop-builds-image → lab-PC-pulls-image workflow, since the lab PC's Docker Desktop/WSL2 setup went through significant local troubleshooting (disk space exhaustion, WSL virtual-disk corruption) before landing on a working `git clone` + local-build setup instead. Both compose files carry the same port and GPU-reservation configuration.
 
 ---
 
@@ -1205,6 +1216,22 @@ No Figma screenshot was provided for Records; implement using the same design sy
               [Records / Reports]  (saved audits list)
 ```
 
+### F.12 Screenshot-only audit and CV-confidence display (implemented, Week 8)
+
+> Unlike F.1–F.10 (designer mockups restored from the legacy Figma DOCX export), the three screenshots below are captured directly from the **running implementation**, added 08 Aug 2026 alongside FR-CV.4's frontend completion (§4.4).
+
+![Upload screen — screenshot uploaded, offering "Continue with screenshot only"](../docs/assets/figma/figma-09-screenshot-only-waiting.jpg)
+
+- After a screenshot alone is selected, the panel now offers **Continue with screenshot only** alongside **Select XML file**, instead of forcing an XML pair (FR-CV.4)
+
+![Upload screen — screenshot-only audit ready, 100% progress](../docs/assets/figma/figma-10-screenshot-only-ready.jpg)
+
+- Confirming "screenshot only" moves the panel to a validated-ready state — progress bar reaches 100%, **Start Audit** unlocks — clarifying that the screen will be analyzed via the YOLO pixel detector (§4.4) rather than blocking on a missing XML
+
+![Dashboard violations table — CV-confirmed confidence badge on an R08 violation](../docs/assets/figma/figma-11-cv-confidence-badge.jpg)
+
+- Violations table and Issue Detail drawer both now render a "👁 CV-confirmed NN%" badge on R08/R17/R04 violations, sourced from `cv_confidence` (FR-CV.1) — previously computed by the backend since 05 Aug but never displayed anywhere
+
 ---
 
-**— End of Software Requirements Specification v2.0 —**
+**— End of Software Requirements Specification v2.12 —**

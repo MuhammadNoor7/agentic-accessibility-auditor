@@ -2,17 +2,17 @@
 
 ## Agentic Accessibility Auditor (Axion)
 
-**Practical work completed — Weeks 1–8 + post–Week 7 YOLO track + Aug backend integration (baseline 1 July 2026; updated 05 August 2026)**  
-**Living document — see §15 / §15B / §15C / §15J for team updates; §12–§13 for literature + rule ownership**
+**Practical work completed — Weeks 1–8 + post–Week 7 YOLO track + Aug backend integration + GPU/lab-deployment hardening + repo hygiene pass (baseline 1 July 2026; updated 08 August 2026)**  
+**Living document — see §15 / §15B / §15C / §15J / §15K for team updates; §12–§13 for literature + rule ownership**
 
 | Field | Value |
 |-------|-------|
 | Report type | Empirical / progress (not theoretical SRS/SDS) |
 | Prepared by | Muhammad Noor (Lead) |
-| Team | Salar (parser, MASC data, rules, tests, YOLO notebook, full YOLO train + Rico eval); Ayesha (Rico holdout, frontend, SRS, rules, prompt experiments); Noor (backend, JSON schemas, SDS, agent, reports, rules, SRS review, tests, QA, Colab YOLO training, 33-backbone crop-classifier sweep, both models' backend integration, Docker fixes) |
+| Team | Salar (parser, MASC data, rules, tests, YOLO notebook, full YOLO train + Rico eval); Ayesha (Rico holdout, frontend, SRS, rules, prompt experiments); Noor (backend, JSON schemas, SDS, agent, reports, rules, SRS review, tests, QA, Colab YOLO training, 33-backbone crop-classifier sweep, both models' backend integration, Docker fixes, GPU wiring, lab GPU PC deployment, frontend completion) |
 | Repository | [MuhammadNoor7/agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor) |
 | Canonical specs | In repo: `srs/` · `sds/` · `updated_plan.md` |
-| Report version | **v1.27** (05 Aug 2026) |
+| Report version | **v1.29** (08 Aug 2026) |
 
 ---
 
@@ -90,7 +90,7 @@ This document gathers what has actually been built, run, and produced so far. It
 
 ## 4. Project folder structure (repository root)
 
-> **As of 05 August 2026** on branch `noor` — canonical repo: [agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor). Supersedes the 12 Jul 2026 tree (Week 3–5 snapshot, collapsed below) — kept as a version-history reference, not deleted, per §16.
+> **As of 08 August 2026** on branch `noor` — canonical repo: [agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor). Supersedes the 12 Jul 2026 tree (Week 3–5 snapshot, collapsed below) — kept as a version-history reference, not deleted, per §16.
 
 ```
 agentic-accessibility-auditor/          ← repo root (clone / _noor_push locally)
@@ -106,13 +106,13 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │   ├── guidelines.py                   ← G01–G30 + R→G mapping for explainer
 │   ├── llm_providers.py                ← Anthropic / OpenAI / Gemini / Groq (default: Groq, TBD-01)
 │   ├── schema_documents.py             ← JSON envelope builders
-│   ├── crop_violation_classifier.py    ← Swin-Tiny crop classifier (classify_crop, confirm_violations) — wired into backend
-│   └── yolo_ui_detector.py             ← YOLO screenshot-only fallback (detect_ui, detections_to_components) — wired into backend
+│   ├── crop_violation_classifier.py    ← Swin-Tiny crop classifier (classify_crop, confirm_violations) — wired into backend; explicit CUDA device selection (07 Aug)
+│   └── yolo_ui_detector.py             ← YOLO screenshot-only fallback (detect_ui, detections_to_components) — wired into backend; explicit CUDA device selection (07 Aug)
 │
 ├── backend/                            ← FastAPI gateway
 │   ├── main.py                         ← App entry + CORS + routers
 │   ├── requirements.txt                ← now includes torch/torchvision/timm/ultralytics (05 Aug fix)
-│   ├── Dockerfile                      ← now installs libgl1/libglib2.0-0/libsm6/libxext6/libxrender1 (05 Aug fix)
+│   ├── Dockerfile                      ← installs libgl1/libglib2.0-0/libsm6/libxext6/libxrender1 (05 Aug); root-context build so src/ + models/ ship inside the image, GPU-ready (07 Aug fix — image is now standalone-deployable, no bind mount required)
 │   ├── auth.py, otp_store.py, email_service.py
 │   ├── models/
 │   │   └── audit.py                    ← Pydantic audit response models
@@ -129,14 +129,15 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │   └── src/
 │       ├── App.jsx                     ← Routes (auth + Upload/Dashboard/Report/Records)
 │       ├── main.jsx, index.css
-│       ├── state/auditFiles.js         ← Upload file state (wired to POST /audit)
+│       ├── state/auditFiles.js         ← Upload file state (wired to POST /audit) + module-level recordedAuditIds guard (08 Aug fix — survives Router remounts, was duplicating Records entries)
 │       ├── components/
 │       │   ├── Sidebar.jsx
 │       │   ├── layout/                 ← AuthLayout, MainLayout
-│       │   └── ui/                     ← Button, TextField, OtpInput, FileDropzone, …
+│       │   └── ui/                     ← Button, TextField, OtpInput, FileDropzone, UserAvatar, …
 │       └── pages/
 │           ├── auth/                   ← Login, SignUp, ForgotPassword, VerifyCode, …
-│           ├── Upload.jsx, Dashboard.jsx, Report.jsx, Records.jsx
+│           ├── Upload.jsx               ← now exposes "Continue with screenshot only" (XML optional, YOLO fallback) (08 Aug)
+│           ├── Dashboard.jsx, Report.jsx, Records.jsx   ← Dashboard now shows the cv_confidence badge and calls POST /records on audit completion (08 Aug fix — was never wired despite being documented)
 │           └── main/Placeholder.jsx
 │
 ├── tests/ + backend/tests/             ← pytest suite (**155/155** passed on `noor`)
@@ -173,14 +174,16 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │
 ├── docs/                               ← project documentation
 │   ├── progress/
-│   │   ├── Supplementary_Progress_Report_v1.27.md   ← this report
-│   │   └── assets/                     ← figma/, week6/week7 UI refs (crop_classifier/ and logs/ copies removed 05 Aug — redundant with runs/ and outputs/validation_logs/)
+│   │   └── Supplementary_Progress_Report_v1.28.md   ← this report (figma images now read directly from docs/assets/figma/ — the old docs/progress/assets/ mirror was removed 08 Aug, it had gone stale at 7/11 images)
+│   ├── final-report/                   ← new (08 Aug): IEEE-format Final Internship Report — Final_Internship_Report.tex + .pdf
+│   ├── assets/figma/                   ← 11 Figma/UI reference images (figma-01…08 design mockups + figma-09…11 screenshot-only/CV-confidence flow captures, added 07–08 Aug) + README.md
 │   ├── schemas/auditor_schema.json     ← cv_confidence, inferred fields added (05 Aug)
 │   ├── week6/, week7/                  ← evaluation sheets, QA summaries
 │   ├── crop_classifier_comparison_findings.md   ← new: full 33-backbone sweep results
 │   ├── crop_classifier_model_reference.md       ← new: architecture/year/paper for all 33
 │   ├── TBD-01-decision.md              ← new: Groq default-provider decision record
-│   └── examples/, assets/              ← sample JSON, Figma exports (SRS Appendix F)
+│   ├── training_explained.md           ← new (08 Aug): plain-language walkthrough of the YOLO + crop-classifier training runs
+│   └── examples/                       ← sample JSON (components/violations/report)
 │
 ├── scripts/                            ← batch + validation + sweep utilities
 │   ├── noor_week3–8_validate.py, validate_output.py, masc_parse_signoff.py
@@ -189,13 +192,14 @@ agentic-accessibility-auditor/          ← repo root (clone / _noor_push locall
 │   ├── plot_crop_classifier_curves.py  ← new: confusion matrices + PR/P/R/F1 curves for the crop classifier
 │   ├── split_masc_dataset.py, build_rico_holdout.py, md_to_docx.py
 │
-├── srs/                                ← SRS v2.11 (md + docx*)
-├── sds/                                ← SDS v2.15 (md + docx*)   *docx exports pending regen
+├── srs/                                ← SRS v2.12 (md + docx)
+├── sds/                                ← SDS v2.16 (md + docx)
 │
 ├── app.py                              ← Streamlit dev UI (parse + violations preview)
 ├── test_run.py                         ← CLI batch / single-file parser + rules (auditor Docker service entrypoint)
 ├── Dockerfile                          ← auditor service (python:3.11-slim)
-├── docker-compose.yml                  ← frontend + backend + auditor (frontend added 05 Aug; backend loads .env via env_file)
+├── docker-compose.yml                  ← frontend + backend + auditor; backend build context is repo root (07 Aug fix, was backend/ — image now self-contained); backend GPU reservation (deploy.resources.reservations.devices); backend external port configurable (default 8000, 8001 used on the lab GPU PC to avoid a port clash)
+├── docker-compose.deploy.yml           ← new (07 Aug): pre-built-image variant for standalone deployment (pulls noorrr07/auditor-backend:latest + auditor-frontend:latest instead of building), same GPU reservation
 ├── requirements.txt                    ← root Python deps (+ torch/torchvision/timm/ultralytics)
 ├── updated_plan.md                     ← 8-week team plan
 ├── conftest.py
@@ -926,19 +930,19 @@ Full log file:
 
 ### 15A.3 UI reference images (Figma → Axion)
 
-![Sign Up and Log In](assets/figma/figma-01-signup-login.png)
+![Sign Up and Log In](../assets/figma/figma-01-signup-login.png)
 
-![Forgot Password and OTP Verify](assets/figma/figma-02-forgot-verify-otp.png)
+![Forgot Password and OTP Verify](../assets/figma/figma-02-forgot-verify-otp.png)
 
-![Reset Password success](assets/figma/figma-03-reset-password-success.png)
+![Reset Password success](../assets/figma/figma-03-reset-password-success.png)
 
-![Upload files matched](assets/figma/figma-08-upload-files-matched.png)
+![Upload files matched](../assets/figma/figma-08-upload-files-matched.png)
 
-![Audit complete and Dashboard](assets/figma/figma-05-audit-complete-dashboard.png)
+![Audit complete and Dashboard](../assets/figma/figma-05-audit-complete-dashboard.png)
 
-![Issue detail and Report](assets/figma/figma-06-dashboard-detail-report.png)
+![Issue detail and Report](../assets/figma/figma-06-dashboard-detail-report.png)
 
-![Generate report modal / PDF layout](assets/figma/figma-07-generate-report-modal-pdf.png)
+![Generate report modal / PDF layout](../assets/figma/figma-07-generate-report-modal-pdf.png)
 
 ### 15A.4 End-to-end demo path (working)
 
@@ -1261,6 +1265,10 @@ Fine-tuning gives roughly a **10x lift** in mAP50 over the untrained base model 
 **Epoch 1 overall results trend:**
 
 ![Results PNG](../../runs/runs/yolo_ui_detector/runs/yolo_ui_detector/results.png)
+
+**Training curves summary export** (added 08 Aug 2026, mirrors the crop classifier's own `training_curves.png` summary export referenced in §15G):
+
+![YOLO training curves summary](../../runs/runs/yolo_ui_detector/yolo_training_curves.png)
 
 **Confusion matrices:**
 
@@ -1743,6 +1751,57 @@ Also: `docker-compose.yml`'s `backend` service now loads `.env` via `env_file` i
 
 ---
 
+## 15K. Since 05 Aug — docstrings, GPU wiring, frontend completion, lab GPU PC deployment (Noor, 07–08 Aug 2026)
+
+### 15K.1 07 Aug: docstring coverage 57% → 100%
+
+All public functions/classes across `src/` documented. No design or behavior changes — pure documentation pass, called out here only because it's the starting point this whole section is scoped from.
+
+### 15K.2 08 Aug: GPU device wiring for both CV models
+
+Neither model had ever been verified to actually use a GPU, despite both running on a machine with one available. `src/crop_violation_classifier.py` had **no device handling at all** — model and every inference tensor stayed on CPU unconditionally; added a module-level `DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")`, moved the model onto it in `_get_model()`, and each inference tensor onto it before the forward pass in `classify_crop()`. `src/yolo_ui_detector.py` was relying on Ultralytics' own implicit device default rather than an explicit choice — made explicit via `device=DEVICE` passed to `model.predict()`. Verified on the lab GPU deployment PC (§15K.5): `docker compose exec backend python -c "import torch; print(torch.cuda.is_available())"` → `True`; `nvidia-smi` showed real GPU utilization during a live audit run through the actual app, not a synthetic script.
+
+### 15K.3 08 Aug: frontend completion — screenshot-only flow and CV-confidence display
+
+Both were backend-complete since 05 Aug (§15J.3) but had **no way to reach them through the UI**:
+
+- **Screenshot-only audit.** `frontend/src/pages/Upload.jsx` still hard-required an XML file — `handleXmlChange` blocked selecting XML before a screenshot, and nothing ever let the user proceed with a screenshot alone, even though `POST /api/v1/audit` had accepted an optional `xml` since 05 Aug. Added a "Continue with screenshot only" action (progress bar reaches 100%, `Start Audit` unlocks) and fixed `api.js`'s `createAudit()`, which unconditionally appended `xml` to the request `FormData` even when `null` — sending the literal string `"undefined"`/`"null"` as a bogus file field instead of omitting it.
+- **CV-confidence display.** `confirm_violations()` had been attaching `cv_confidence` to R08/R17/R04 violations since 05 Aug, but nothing in the frontend ever read that field — confirmed by grepping the entire frontend for `cv_confidence` and finding zero matches. Added a "👁 CV-confirmed NN%" badge to `Dashboard.jsx`'s violations table and Issue Detail drawer, shown only when the value is present.
+
+**Two real bugs found by actually testing the screenshot-only flow in a browser, not by reading the diff:**
+1. `ValidationPopup` (the "Files Matched!" / "File Mismatch" modal) only explicitly handled `result === 'matched'` and `result === 'missing_screenshot'` — the new `'screenshot_only'` result value fell through to the default **"File Mismatch"** branch. Since there's no `xml` file in that mode, the popup rendered a mismatch row with a blank/undefined second filename. Screenshotted by the user mid-testing (`492.jpg` shown twice under "Files Matched!"), which is what surfaced it. Fixed by giving `ValidationPopup` an explicit `screenshotOnly` branch with its own title/message and filtering the file-name list to just the screenshot.
+2. `FilePreviewPopup`'s footer hard-coded **"Both files look correct? Close this and click Start Audit."** regardless of mode — also user-caught, from a live screenshot. Fixed with a one-line conditional (`{xml ? 'Both files...' : 'Screenshot looks correct?'}`).
+
+Both fixes re-verified live in a browser afterward (not just read back), including a regression check that the ordinary matched-pair flow still works.
+
+### 15K.4 08 Aug: Records — a real design-vs-implementation gap, and a duplicate-record bug caught by testing
+
+The user asked why Records only ever showed 5 audits despite running several more. Investigation: SDS §10.2 documents step 2 of the Records lifecycle as "Frontend (when logged in) calls `POST /records`..." — but grepping the entire frontend found **zero** call sites; `Records.jsx` only ever `GET`s. The 5 existing rows in `backend/data/records.db.json` all cluster within a single ~2-hour window on 15–16 Jul, consistent with someone manually exercising the endpoint via the `/docs` Swagger UI during Week 6 development, not real app usage. The audit pipeline itself was never broken — reports generated and displayed correctly every time — the "save this to history" step had simply never been wired up.
+
+Fix attempt #1: call `createRecord()` from `Dashboard.jsx` once per audit, guarded against duplicates with a component-local `useRef(new Set())`. **Tested live and found broken:** React Router unmounts and remounts `Dashboard` on every navigation away and back, so the ref resets to empty each time. A test script that revisited the dashboard 3 times for the same completed audit produced **3 duplicate records** (4 total from 1 real audit), not zero. Fixed by moving the "already recorded" tracking into the same module-level store (`state/auditFiles.js`) that already tracks the current `auditId` — that store is a plain JS module scope, not React component state, so it survives route changes within a session. Re-tested the identical 3-revisit scenario: exactly 2 records (1 pre-existing + 1 new from the actual audit run in the test), zero duplicates.
+
+### 15K.5 07–08 Aug: lab GPU PC deployment
+
+Deploying to a second machine (a lab GPU PC, for GPU-accelerated inference and a live demo) surfaced problems invisible on a single dev machine:
+
+- **`backend/Dockerfile`'s build context bug.** Context was `./backend`, so the image never actually included the repo-root `src/`/`models/` that `backend/routers/audit.py` imports — it only ever worked locally because `docker-compose.yml` bind-mounts the whole repo at runtime. First build attempt on the lab PC failed with `ModuleNotFoundError: No module named 'jose'` because the backend build was silently picking up the *root* `requirements.txt` (via a lab-PC clone that hadn't yet received this fix — traced to the fix having been made locally but not yet committed/pushed at that point in the session). Fixed by changing the build context to repo root and `COPY`-ing `src/`, `models/`, `backend/` explicitly, then committing and pushing so `git pull` on the lab PC actually received it.
+- **Docker Desktop / WSL2 instability on the lab PC**, not caused by this project's code: a build filled the `C:` drive to `SizeRemaining: 0 B`, which cascaded into `read-only file system` and `input/output error` failures from Docker's containerd store, then `wsl --list --verbose` reporting zero installed distributions after an attempted reset. Root cause was the 0-free-space condition itself, not corruption — resolved by freeing real disk space (Windows Storage cleanup, disabling hibernation), reinstalling WSL, and relocating Docker Desktop's WSL virtual disk to `D:` (where the project already lives) to avoid recurrence.
+- **Port conflict.** Other lab members already had services bound to port 8000 on that machine. `backend`'s externally published port changed to `8001` (`"8001:8000"` — container stays on 8000 internally, so no rebuild needed for this specific change) with `.env`'s `VITE_API_BASE` updated to match.
+- **`docker-compose.deploy.yml` added** for a laptop-builds/pushes → lab-PC-pulls-image workflow as an alternative path; the lab PC ended up on `git clone` + local build instead, once the above issues were resolved, since it avoided needing a registry round-trip.
+
+Verified end-to-end on the lab PC after all fixes: containers build and start cleanly, `torch.cuda.is_available()` → `True` inside the backend container, and a full audit (including the new screenshot-only flow) completes successfully through the real app.
+
+### 15K.6 08 Aug: additional bugs found via live testing (not code review)
+
+- **`frontend/src/api.js` vs. `frontend/src/utils/api.js` disagreed on the default backend port** (`8002` vs `8000`) when `VITE_API_BASE` isn't set — auth calls (which go through `utils/api.js`) worked while audit calls (through `api.js`) failed with "Failed to fetch," surfaced when a manually-started frontend (no explicit `VITE_API_BASE`) hit exactly this split. Fixed by aligning both defaults to `8000`.
+- **Wrong-file-type acceptance on the screenshot picker.** `handleScreenshotChange` never validated the selected file's extension — an XML file selected into the screenshot slot was silently accepted, only caught later when the backend rejected the resulting request with "Screenshot must be a PNG or JPG image." Reproduced live (Playwright `set_input_files` bypassing the `accept=""` hint, matching what a user changing the OS file-dialog filter can also do) and fixed by validating the extension at selection time, rejecting immediately with a clear "pick a screenshot first, not an XML file" message instead of letting it reach the backend at all.
+- **Misleading error message.** The "Audit failed" popup's "Check that the backend server is running..." hint was shown for *every* error, including legitimate backend validation responses (like the screenshot-type rejection above) where the backend was demonstrably fine. Fixed by only showing that hint when the caught error is a `TypeError` from `fetch()` itself (a genuine connectivity failure) rather than an `Error` constructed from a real HTTP response.
+- **Hardcoded avatar initials.** The top-right avatar showed a hardcoded "AN" ("Ayesha Naveed") on the Upload and Report pages regardless of who was actually logged in — `Dashboard.jsx` already had a working `UserAvatar` shared component (reading real initials from the logged-in user's name/email) that the other two pages simply weren't using. Fixed by wiring both pages to the existing shared component rather than duplicating the logic inline.
+
+All of §15K verified through live testing — a running backend + frontend, driven through an actual browser (Playwright), not read-only code review — including deliberately re-testing the exact failure scenarios once fixed to confirm they were actually resolved, not just plausible-looking.
+
+---
+
 ## 16. Document history
 
 | Version | Date | Author | Changes |
@@ -1769,7 +1828,9 @@ Also: `docker-compose.yml`'s `backend` service now loads `.env` via `env_file` i
 | **1.24–1.25** | **29 Jul 2026** | **Noor** | Rule-accuracy fixes + crop-classifier evidence pack, consolidated: fixed three confirmed false-positive rule bugs and one parser bug, verified against real MASC/Rico data (not just fixtures) — **R07** (`check_zero_size`) skips non-interactive/non-content zero-size elements via `_is_a11y_relevant`; **R08** (`check_layout_overlap`) skips clickable ancestor/descendant pairs via new `_is_ancestor` (confirmed on a real Rico `chat` screen — a `ListView` flagged against all 8 of its own `ConversationItemView` rows), R08 -43.2% on the Rico holdout; **R30** (`check_icon_only_no_label`) collapses repeated same-template list/grid-row icons via `_dedupe_repeated`; **R20/R05** (`parser._get_hint`) reads MASC's real `text-hint` attribute — R20 unblocked (0 → 749 hits), R05 corrected (2,117 → 717). Verified: pytest 130/130; full MASC re-parse + re-check (7,068 screens, 0 failures); Rico holdout re-eval (1,698 screens, 0 failures); `masc_dataset_analysis.ipynb` re-executed with corrected §9 Findings; three real `.gitignore` bugs fixed (dead blanket `outputs`/`data` rule, `models/*.pt/` trailing-slash typo, oversized archives excluded); `scripts/noor_week8_validate.py` extended; committed (`7918113f`, 35,706 files) and pushed to `origin/noor`. **§15G added:** complete crop-violation classifier evidence pack — model-selection rationale (MobileNetV3-Small vs. Large/EfficientNet-B0/ResNet-50/ViT, from `docs/picking_model_for_crop.md`), exact dataset-build numbers (25,202/5,558/5,541 train/val/test crops, R08 = 77% of positives), 20-epoch training curves showing the documented overfitting risk playing out (best checkpoint epoch 17, val macro-F1 0.265), test-set classification report (R08 F1 0.70, R17 0.47, R04 0.36, R09/R10/R28 undefined), 3 embedded visualizations extracted from the executed Colab notebook. **§15H added:** remaining-work table cross-checking every SDS v2.12 claim against the actual repo — corrected two stale SDS claims (`src/yolo_ui_detector.py` and `src/contrast.py` do not exist; R11 is fully implemented, not a stub as SDS §6.12 states). |
 | **1.26** | **30 Jul 2026** | **Noor** | Teammate Salar independently completed the full 60-epoch YOLO training run and the Rico holdout zero-shot-vs-fine-tuned evaluation on his `salar` branch (final mAP50 0.434 / mAP50-95 0.322 on MASC val, superseding the 1-epoch interim figures; Rico mAP50 0.0258 → 0.2546). His finished checkpoint (`models/yolo_ui_detector_best.pt`, 51.2 MB) and exported `src/yolo_ui_detector.py` were pulled into `noor`, **correcting §15C/§15H's 29 Jul claim that the module does not exist** — §15C.1, §15C.3, §15C.6, §15C.7 updated; new **§15C.9** added with full Rico eval results and per-class breakdown. **§15G.7 added:** crop-violation classifier Rico holdout evaluation — 9,343 crops from all 1,698 holdout screens, weighted F1 0.42 (vs. 0.63 on MASC test), embedded sample-prediction visualization. §15H remaining-work table and §15F integration checklist updated: both CV modules now **trained + Rico-evaluated**, backend integration explicitly reframed as a **deliberately deferred** Stretch-requirement decision (not an unfinished blocker) — user has chosen to update documentation first and integrate afterward. SRS v2.10 / SDS v2.14 sync. Filename bumped from v1.24 to v1.26 to match content version (previous filename had drifted behind the 1.24–1.25 combined content update). |
 | **1.27** | **05 Aug 2026** | **Noor** | **§15G.2 backbone changed:** a 33-model comparison sweep (`docs/crop_classifier_comparison_findings.md`) found the original `mobilenet_v3_small` pick mid-pack (Rico macro-F1 0.18); replaced with **`swin_tiny_patch4_window7_224`**, the sweep's best result (Rico macro-F1 0.22) — §15G.4/§15G.5/§15G.7 rewritten with real Swin numbers; 5 new embedded visualizations (confusion matrices, PR curves, P/R/F1-vs-threshold curves) generated by new `scripts/plot_crop_classifier_curves.py`, all 9 crop-classifier images re-pointed to embed directly from `runs/crop_violation_classifier/crop_classifier/` (matching how §15D already embeds YOLO's images from `runs/`, instead of the separate `docs/progress/assets/crop_classifier/` copy). **New §15J added:** both CV models wired into the backend pipeline (`confirm_violations()` and `detect_ui()`/`detections_to_components()` called from `backend/routers/audit.py`; `xml` now optional on `POST /api/v1/audit`), with the two real bugs found and fixed along the way (wrong-Python `pip`/`ultralytics` install; an `xml_path`-overwrite logic bug caught by a new test); Rico holdout batch eval formalized via `scripts/run_rico_holdout_eval.py`; two real Docker bugs found by actually building and running the containers (missing torch/ultralytics in `backend/requirements.txt`; missing system libraries for `opencv-python`, `ImportError: libxcb.so.1`) and fixed, plus a new `frontend` Compose service satisfying FR-DK.2 literally for the first time. §15H remaining-work table: both CV-integration rows moved from deferred to **Done**. **Cleanup:** deleted `docs/progress/assets/crop_classifier/` (4 files, now-redundant duplicate of `runs/crop_violation_classifier/crop_classifier/`) and `docs/progress/assets/logs/` (6 files — week6/7 pairs were byte-identical duplicates of `outputs/validation_logs/`, week8 pair had gone stale/out of sync); §15A/§15I "Machine log copy" references removed accordingly, canonical `outputs/validation_logs/` path is now the single source. **§4 folder structure rewritten** (was stale at a 12 Jul snapshot) to reflect the repo as of 05 Aug — old tree kept collapsed inline as a version-history reference rather than deleted. SRS v2.11 / SDS v2.15 sync. |
+| **1.28** | **08 Aug 2026** | **Noor** | **New §15K added**, covering 07–08 Aug: `src/` docstring coverage 57% → 100%; GPU device selection added to both CV models (neither had any device handling before — both silently ran on CPU regardless of GPU availability), verified on a lab GPU deployment PC (`torch.cuda.is_available()` → `True` in-container, `nvidia-smi` utilization during a live audit); **frontend completion** of both 05-Aug backend integrations — the screenshot-only flow and `cv_confidence` display had no UI path to reach them at all until now, with two real bugs caught by live browser testing (`ValidationPopup` falling through to "File Mismatch" for the new screenshot-only state; `FilePreviewPopup`'s hardcoded "both files" footer text); a genuine **design-vs-implementation gap** found and fixed in the Records flow — SDS §10.2 had documented automatic record-saving as already implemented since v2.0, but no frontend code anywhere actually called `POST /records`, so completed audits silently never appeared in Audit History (root-caused by comparing `records.db.json`'s 5 existing rows, all clustered in one July testing window, against a full grep of the frontend for the endpoint); the fix's first attempt (`useRef` duplicate-guard) was tested live and found broken by React Router's component remount behavior, producing real duplicate records, then fixed properly via the existing module-level `auditId` store. **Docker round 2 / lab GPU PC deployment:** `backend/Dockerfile`'s build context bug fixed (image now genuinely self-contained, doesn't require the dev bind-mount to run — a real gap that broke the lab PC's first build attempt with `ModuleNotFoundError: No module named 'jose'`); GPU reservation added to Compose; external port changed to `8001` for the lab PC (port 8000 already in use by other lab members); new `docker-compose.deploy.yml` for a registry-based deploy path; extensive non-code troubleshooting on the lab PC itself (Docker Desktop/WSL2 instability traced to the `C:` drive filling to 0 bytes free, resolved by freeing space and relocating Docker's WSL virtual disk to `D:`). Three further bugs found via live testing, unrelated to the above: `api.js`/`utils/api.js` disagreeing on the default backend port (8002 vs 8000); the screenshot picker silently accepting non-image files (now validated at selection time); a misleading "check the backend is running" hint shown even for legitimate backend validation errors. Hardcoded "AN" avatar initials on Upload/Report replaced with the already-existing (but unused there) `UserAvatar` component. SRS v2.12 / SDS v2.16 sync. |
+| **1.29** | **08 Aug 2026** | **Noor** | **Repo hygiene pass:** removed `docs/progress/assets/figma/` — a stale, partial mirror (7 of 11 images, byte-identical to `docs/assets/figma/`, which had since gained figma-09/10/11 that the mirror never received); this report's §15A.3 image links repointed from the mirror to `../assets/figma/` (the canonical folder) and the DOCX regenerated to confirm all 7 images still embed correctly. **§4 folder structure updated:** `docs/final-report/` (new — IEEE Final Internship Report, `.tex` + `.pdf`), `docker-compose.deploy.yml` (new — registry-based deploy variant), `docs/training_explained.md` (new), `docs/assets/figma/` now 11 images, backend Dockerfile/compose GPU + self-contained-build notes carried into the tree comments, frontend tree annotated with the screenshot-only flow / `cv_confidence` badge / Records-fix / `UserAvatar` changes from v1.28. Root `README.md` and `docs/progress/README.md` folder-structure sections and stale doc-version references (SRS v2.11→v2.12, SDS v2.15→v2.16, report v1.27→v1.29) brought back in sync with the actual repo state; `.gitignore` reviewed for gaps (LaTeX build artifacts from compiling `docs/final-report/`). |
 
 ---
 
-**— End of Supplementary Progress Report —**
+**— End of Supplementary Progress Report v1.28 —**

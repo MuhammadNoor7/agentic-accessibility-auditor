@@ -5,11 +5,11 @@
 
 | Field | Value |
 |-------|-------|
-| **Document version** | 2.15 |
+| **Document version** | 2.16 |
 | **Status** | Implementation reference |
 | **Prepared by** | Muhammad Noor (Lead — primary author); Salar + Ayesha (SRS inputs, parser/UI design) |
 | **Institution** | FAST-NUCES |
-| **Related SRS** | `SRS_Agentic_Accessibility_Auditor_v2.11.md` (v2.11) |
+| **Related SRS** | `SRS_Agentic_Accessibility_Auditor_v2.12.md` (v2.12) |
 | **Repository** | [MuhammadNoor7/agentic-accessibility-auditor](https://github.com/MuhammadNoor7/agentic-accessibility-auditor) |
 
 ---
@@ -34,6 +34,7 @@
 | **2.12–2.13** | 2026-07-29 | Noor | §3.2 Rule engine + §6 Rule engine design updated with three false-positive fixes and one parser fix, verified against real data: `check_zero_size` (R07) gains `_is_a11y_relevant` gate; `check_layout_overlap` (R08) gains `_is_ancestor` helper skipping clickable ancestor/descendant pairs — root-caused on a real Rico screen where a clickable `ListView` was flagged against all 8 of its own clickable rows; `check_icon_only_no_label` (R30) gains `_dedupe_repeated`; §3.1 Parser `_get_hint` gains a `text-hint` attribute alias, unblocking R20 (0 → 749 hits) and fixing an R05 false-positive pattern (2,117 → 717). Full pytest 130/130; full MASC + Rico holdout re-verification, 0 failures. **§3.7 added:** complete crop-violation classifier module design — backbone selection rationale (MobileNetV3-Small vs. Large/EfficientNet-B0/ResNet-50/ViT), data/training design, 20-epoch results (best val macro-F1 0.265 at epoch 17, documented overfitting pattern confirmed), test classification report, `classify_crop()` inference module design — mirroring §3.6's YOLO treatment. §3.6.4 and §1.4 corrected: `src/yolo_ui_detector.py` does **not** exist (previously misreported as scaffolded). Progress Report v1.24–1.25 sync. |
 | **2.14** | 2026-07-30 | Noor | §3.6 YOLO detector fully updated: teammate Salar completed the full 60-epoch training run and Rico holdout zero-shot-vs-fine-tuned eval on the `salar` branch (mAP50-95 0.322 final; Rico mAP50 0.0258 → 0.2546); his checkpoint (`models/yolo_ui_detector_best.pt`, 51.2 MB) and `src/yolo_ui_detector.py` merged into `noor`, **correcting the 29 Jul "does not exist" claim** — module now exists and works, still deliberately not pipeline-wired (Stretch requirement). §3.7 crop classifier: added §3.7.4 Rico holdout eval (9,343 crops, weighted F1 0.43 vs. 0.63 MASC test). Appendix B (FR-CV.4–7) and §2.1 artifact table updated to match. Progress Report v1.26 / SRS v2.10 sync. Filename bumped from v2.12 to v2.14 to match content version (previous filename had drifted behind the 2.12–2.13 combined content update). |
 | **2.15** | 2026-08-05 | Noor | **§3.7 backbone changed:** a 33-model comparison sweep (all ImageNet-1k pretrained, evaluated on MASC test + full Rico holdout — `docs/crop_classifier_comparison_findings.md`) found the original `mobilenet_v3_small` pick mid-pack (Rico macro-F1 0.18); replaced with **`swin_tiny_patch4_window7_224`**, the sweep's best result (Rico macro-F1 0.22, best val macro-F1 0.274 at epoch 8) — §3.7.2 backbone-selection table, §3.7.3 training design, and §3.7.4 results fully rewritten with real Swin numbers. **Both §3.6 (YOLO) and §3.7 (crop classifier) now wired into the backend pipeline** (`backend/routers/audit.py`): `confirm_violations()` runs after `check_rules()` attaching `cv_confidence` to R08/R17/R04; `xml` is optional on `POST /api/v1/audit` with `_run_pipeline` falling back to `detect_ui()` → new `detections_to_components()` converter on missing/malformed/empty-hierarchy XML. §3.6.4/§3.7.5 "not yet done" wiring notes removed accordingly. **§2.3 / §11.1 Docker:** `frontend` service added to Compose (own `Dockerfile`, port 5173) — the "not packaged, no frontend/Dockerfile yet" note no longer applies; two real Docker bugs found and fixed by actually building/running the containers — `backend/requirements.txt` synced with torch/torchvision/timm/ultralytics (was missing, caused a startup crash), and `backend/Dockerfile` now installs `libgl1`/`libglib2.0-0`/`libsm6`/`libxext6`/`libxrender1` (a second crash, `ImportError: libxcb.so.1`, surfaced only after fix 1 — `ultralytics` pulls in full `opencv-python`, not headless); backend now loads `.env` via `env_file` instead of a hardcoded dev `JWT_SECRET`. Both fixes' image rebuilds succeeded; live `/health` re-verification pending (Docker Desktop instability interrupted the check). SRS v2.11 sync. |
+| **2.16** | 2026-08-08 | Noor | `src/` docstring coverage 57% → 100% (no design changes, all public functions/classes documented). **§3.6.4/§3.7.5 GPU wiring:** both inference modules now select CUDA when available instead of defaulting silently to CPU — `crop_violation_classifier.py` gained a module-level `DEVICE` moving both the loaded model and every inference tensor onto it (previously had zero device handling); `yolo_ui_detector.py` now passes `device=DEVICE` explicitly to `model.predict()`. Verified on the lab GPU deployment PC: `torch.cuda.is_available()` → `True` inside the container, `nvidia-smi` utilization confirmed during a live audit. **§9.6 Figma reference screenshots:** three new implementation screenshots added (`figma-09/10/11`) documenting the screenshot-only flow and CV-confidence badge — see below. **§10.2 Records lifecycle — real gap found and fixed:** step 2 ("Frontend calls `POST /records` after every audit") was design intent documented since SDS v2.0 but **never actually implemented** — no code anywhere in the frontend called it; audits completed and reported correctly but silently never appeared in Audit History. The 5 pre-existing rows in `records.db.json` all clustered within one ~2-hour window (15–16 Jul), consistent with manual `/docs` Swagger testing at the time, not real usage. Now wired into `Dashboard.jsx`, guarded against duplicate records on SPA re-navigation to the same audit (a component-local `useRef` guard was tried first and found not to survive React Router unmounting/remounting `Dashboard` — moved to the module-level `state/auditFiles.js` store instead, which does survive route changes). **§11.1 Docker, rewritten to match the actual current `docker-compose.yml`:** `backend`'s build `context` changed from `./backend` to `.` (repo root) — the previous context never actually included `src/`/`models/` despite the code importing them, working only via the dev bind-mount; the image is now self-contained. GPU reservation block added. External port changed to `8001:8000` (container stays on 8000 internally) for the lab GPU PC, which had port 8000 already taken by other lab members' work — `VITE_API_BASE` must match whichever external port is live. New `docker-compose.deploy.yml` for pulling pre-built images from a registry instead of building from source. The "live `/health` re-verification pending" note from v2.15 is resolved — live containers, GPU access, and full audits (including the frontend screenshot-only flow) have since been verified working end-to-end on the lab PC. SRS v2.12 sync. |
 
 ---
 
@@ -456,6 +457,10 @@ def detections_to_components(detections: list[dict]) -> list[dict]:
 
 `backend/routers/audit.py` changes: `xml` is now optional on `POST /api/v1/audit` (`xml: UploadFile | None = File(None)`). `_run_pipeline` tries XML first when provided, catching `(OSError, etree.XMLSyntaxError)` plus an explicit empty-components check; on any of missing / malformed / empty-hierarchy XML, it falls back to `detect_ui(screenshot_path)` → `detections_to_components(...)`, wrapped into a components document with `xml_path=""`. `docs/schemas/auditor_schema.json`'s `xml_path` no longer requires `minLength: 1` (a screenshot-only audit has no real XML path to report), and `component` gained an optional `inferred: boolean` field. Verified end-to-end: real YOLO detections (13 elements, correct classes/confidence) on an actual MASC screenshot with no XML supplied; zero detections on a blank test image (no hallucination).
 
+**GPU device selection (08 Aug 2026).** `DEVICE = "cuda:0" if torch.cuda.is_available() else "cpu"`, passed explicitly to `model.predict(source=..., conf=conf, device=DEVICE, verbose=False)` — previously relied on Ultralytics' own implicit default rather than a module-level, explicit choice. Verified on the lab GPU deployment PC.
+
+**Frontend completion (08 Aug 2026).** This module was backend-complete since 05 Aug, but `frontend/src/pages/Upload.jsx` still hard-required an XML file before unlocking "Start Audit" — there was no UI path to actually reach this fallback. A "Continue with screenshot only" action was added (progress bar reaches 100%, audit runs through `detect_ui()` exactly as designed here). See SDS §9.6 and SRS Appendix F.12 for screenshots.
+
 ### 3.7 Crop-violation classifier module (pixel-level rule confirmation)
 
 **SRS:** FR-CV.1–FR-CV.3 (supplementary CV signal, R09 contrast, never silently override rule results) | **Owner:** Noor (Colab training + inference module + backend wiring) | **Status:** Done — trained, Rico-evaluated, and wired into the backend pipeline (05 Aug 2026)
@@ -589,6 +594,10 @@ def confirm_violations(violations_doc: dict, screenshot_path: str | Path) -> dic
 | Integration point | `backend/routers/audit.py`'s `_run_pipeline` calls `confirm_violations(violations_doc, screenshot_path)` immediately after `check_rules()` (§3.2). Only R08/R17/R04 are eligible (`CV_CONFIRMABLE_RULES`) — R09/R10/R28 have zero positive training examples (§3.7.3) so are excluded rather than given a meaningless confidence score |
 
 **Wired into the backend pipeline (05 Aug 2026).** `docs/schemas/auditor_schema.json`'s `violation` definition gained an optional `cv_confidence: number | null` field (0–1). Verified against real pipeline output: real `cv_confidence` values (e.g. 0.4515) attached to R08 violations from an actual audit run. `confirm_violations()` never overrides or removes a rule-detected violation (FR-CV.2) — it only annotates. No automated tests exist yet for this module specifically, beyond the integration tests in `tests/test_audit.py` covering the pipeline-level behavior (`test_audit_pipeline_attaches_cv_confidence_to_r08`).
+
+**GPU device selection (08 Aug 2026).** Previously had no device handling at all — model and every inference tensor stayed on CPU unconditionally regardless of GPU availability. Added a module-level `DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")`; the loaded model is moved onto it in `_get_model()` (`model.to(DEVICE)`), and each inference tensor in `classify_crop()` is moved onto it before the forward pass. Verified on the lab GPU deployment PC.
+
+**Frontend display (08 Aug 2026).** `cv_confidence` had been computed and attached to violations since 05 Aug but never rendered anywhere in the UI. `Dashboard.jsx` now shows a "👁 CV-confirmed NN%" badge on eligible violations (R08/R17/R04) in both the violations table and the Issue Detail drawer — hidden entirely for violations without a `cv_confidence` value, so it never implies confirmation for rules the classifier wasn't trained on. See SRS Appendix F.12 for a real screenshot (R08, 45–95% range observed across real audits).
 
 ---
 
@@ -1071,6 +1080,8 @@ Visual source of truth: SRS Appendix F. Screenshots were restored from the legac
 | Detail drawer + Report | `figma-06-dashboard-detail-report.png` | drawer; `/report/:id` |
 | Generate modal + PDF | `figma-07-generate-report-modal-pdf.png` | modal; PDF template |
 | Records | *(no screenshot — match Dashboard styling)* | `/records` |
+| Screenshot-only flow (implemented, not Figma-sourced) | `figma-09-screenshot-only-waiting.jpg`, `figma-10-screenshot-only-ready.jpg` | `/upload` |
+| CV-confidence badge (implemented, not Figma-sourced) | `figma-11-cv-confidence-badge.jpg` | `/dashboard/:id` |
 
 ![Sign Up and Log In — implementation reference](../docs/assets/figma/figma-01-signup-login.png)
 
@@ -1087,6 +1098,14 @@ Visual source of truth: SRS Appendix F. Screenshots were restored from the legac
 ![Issue Detail drawer and Audit Report — implementation reference](../docs/assets/figma/figma-06-dashboard-detail-report.png)
 
 ![Generate Report modal and PDF layout — implementation reference](../docs/assets/figma/figma-07-generate-report-modal-pdf.png)
+
+**Implementation screenshots (08 Aug 2026, not Figma-sourced — captured from the running app):**
+
+![Upload screen — screenshot-only "Continue with screenshot only" option](../docs/assets/figma/figma-09-screenshot-only-waiting.jpg)
+
+![Upload screen — screenshot-only audit ready, 100% progress](../docs/assets/figma/figma-10-screenshot-only-ready.jpg)
+
+![Dashboard — CV-confirmed confidence badge on an R08 violation](../docs/assets/figma/figma-11-cv-confidence-badge.jpg)
 
 ---
 
@@ -1116,6 +1135,8 @@ Visual source of truth: SRS Appendix F. Screenshots were restored from the legac
 3. Row appended to `backend/data/records.db.json` (user-scoped)
 4. Records page calls `GET /records`; detail/reopen uses `GET /records/{id}` / `…/report`
 
+**Step 2 gap found and fixed (08 Aug 2026).** This step was documented design intent since v2.0 but had never actually been implemented — nothing in the frontend called `POST /records` anywhere. Audits completed and their reports displayed correctly, but never appeared in Audit History; the endpoint itself worked fine (confirmed by the 5 pre-existing rows in `records.db.json`, all created within one ~2-hour window on 15–16 Jul, consistent with manual `/docs` Swagger testing rather than real app usage). Now wired into `Dashboard.jsx`, called once per audit right after its report loads. Duplicate-record prevention was attempted first with a component-local `useRef` (`recordedAuditIds`) — tested live and found to **not** work, since React Router unmounts/remounts `Dashboard` on every navigation away and back, resetting the ref each time (3 dashboard revisits for one audit produced 3 duplicate records in testing). Fixed by moving the "already recorded" tracking into the same module-level store `state/auditFiles.js` already uses for the current `auditId` — that store persists across route changes within a session, unlike component-local state.
+
 ### 10.3 Access control
 
 - All `/records/*` queries filter by JWT `user_id`
@@ -1126,7 +1147,7 @@ Visual source of truth: SRS Appendix F. Screenshots were restored from the legac
 
 ## 11. Deployment design
 
-### 11.1 docker-compose.yml (as implemented)
+### 11.1 docker-compose.yml (as implemented, updated 08 Aug 2026)
 
 ```yaml
 services:
@@ -1144,14 +1165,21 @@ services:
 
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports: ["8000:8000"]
+      context: .                 # repo root -- changed from ./backend (see below)
+      dockerfile: backend/Dockerfile
+    ports: ["8001:8000"]         # external:internal -- see port note below
     volumes: [".:/app"]
     working_dir: /app/backend
     env_file: [.env]            # real secrets (JWT_SECRET, SMTP_*, LLM keys) —
                                  # no hardcoded dev placeholder anymore
     networks: [auditor-network]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
   auditor:
     build: .
@@ -1168,7 +1196,15 @@ networks:
     driver: bridge
 ```
 
-`frontend/Dockerfile`: `node:20-slim`, installs from `package.json`/`package-lock.json`, runs `npm run dev -- --host 0.0.0.0` (Vite's default dev server only binds `localhost`, unreachable from outside the container without `--host`). Two real bugs found by actually building and running the containers, not by reading the Dockerfile: (1) `backend/requirements.txt` was missing torch/torchvision/timm/ultralytics (present only in the root `requirements.txt`) — the backend container crashed on startup importing `src.crop_violation_classifier`/`src.yolo_ui_detector` at module level; fixed by syncing the dependency list. (2) Even after fix (1), the rebuilt container still crashed — `ImportError: libxcb.so.1: cannot open shared object file` — because `ultralytics` pulls in the full GUI-capable `opencv-python`, not the headless build, which needs system libraries `python:3.10-slim` doesn't ship. Fixed by adding `RUN apt-get install libgl1 libglib2.0-0 libsm6 libxext6 libxrender1` to `backend/Dockerfile` before `pip install`. **Status: code fixes applied, image rebuild with both fixes succeeded (exit 0) — live container start + `/health` re-verification still pending**, since Docker Desktop became unresponsive immediately after the rebuild.
+`frontend/Dockerfile`: `node:20-slim`, installs from `package.json`/`package-lock.json`, runs `npm run dev -- --host 0.0.0.0` (Vite's default dev server only binds `localhost`, unreachable from outside the container without `--host`). Two real bugs found by actually building and running the containers, not by reading the Dockerfile: (1) `backend/requirements.txt` was missing torch/torchvision/timm/ultralytics (present only in the root `requirements.txt`) — the backend container crashed on startup importing `src.crop_violation_classifier`/`src.yolo_ui_detector` at module level; fixed by syncing the dependency list. (2) Even after fix (1), the rebuilt container still crashed — `ImportError: libxcb.so.1: cannot open shared object file` — because `ultralytics` pulls in the full GUI-capable `opencv-python`, not the headless build, which needs system libraries `python:3.10-slim` doesn't ship. Fixed by adding `RUN apt-get install libgl1 libglib2.0-0 libsm6 libxext6 libxrender1` to `backend/Dockerfile` before `pip install`. **Status: resolved.** The v2.15 "live `/health` re-verification pending" note is closed out — live containers, GPU access (`torch.cuda.is_available()` → `True` inside the container), and full audits including the frontend screenshot-only flow have since been verified end-to-end on the lab GPU deployment PC.
+
+**Self-contained image, build context change (08 Aug 2026).** `backend/Dockerfile`'s build context was `./backend`, so `COPY . .` never actually included the repo-root `src/` and `models/` that `backend/routers/audit.py` imports — the container only ever worked in practice because `docker-compose.yml` bind-mounts the entire repo over `/app` at runtime, silently papering over the gap. A standalone `docker run` (no bind mount — e.g. an image pulled on a different machine) would have crashed immediately with `ModuleNotFoundError: No module named 'src'`. Fixed by changing the build `context` to `.` (repo root) and `COPY`-ing `src/`, `models/`, and `backend/` explicitly — the image is now genuinely self-contained.
+
+**GPU reservation.** Added `deploy.resources.reservations.devices` (`driver: nvidia`) to the `backend` service, required for the CUDA device selection described in SDS §3.6.4/§3.7.5. This is honored by both plain `docker compose up` (not swarm-only) and Docker Desktop's WSL2 backend.
+
+**Port change for the lab GPU deployment PC.** That machine already had other lab members' services on port 8000, so `backend`'s ports mapping changed from `"8000:8000"` to `"8001:8000"` — the container's internal port is unchanged (`EXPOSE 8000`, uvicorn still listens on 8000 inside the container), only the externally published port differs. This is a compose-level config change, not a Dockerfile change, so it needed a container recreate (`docker compose up -d`) rather than a rebuild. `VITE_API_BASE` (§11.2) must be set to match whichever external port is live for a given environment — `:8000` for ordinary local dev, `:8001` specifically on the lab PC.
+
+**`docker-compose.deploy.yml` (new).** A second compose file for pulling pre-built `backend`/`frontend` images from a registry (`docker compose -f docker-compose.deploy.yml pull && ... up -d`) instead of building from source — supports a laptop-builds/pushes → lab-PC-pulls workflow as an alternative to `git clone` + local build. Carries the same port mapping and GPU reservation as the main compose file. In practice, the lab PC ended up using the `git clone` + local-build path instead, after extended local troubleshooting on that machine (Docker Desktop disk-space exhaustion on `C:`, then a corrupted WSL2 virtual disk requiring a full `docker-desktop-data` reset) — the deploy file remains available for environments where pushing pre-built images is preferable.
 
 ### 11.2 Environment variables
 
@@ -1182,14 +1218,14 @@ networks:
 | `LLM_PROVIDER` / provider keys | backend | Default `groq` (TBD-01); optional live explanations |
 | `CORS_ORIGINS` | backend | e.g. `http://localhost:5173` |
 | `DATASET_ROOT` | auditor | Batch parse path |
-| `VITE_API_BASE` | frontend | Points Axion at API; unset in Compose — browser calls `localhost:8000` directly, which already matches the backend's published port |
+| `VITE_API_BASE` | frontend | Points Axion at the API. Must match whatever port `backend` is *externally* published on for that environment — `http://127.0.0.1:8000` for ordinary local dev (unset falls back to this), `http://<lab-pc-ip>:8001` on the lab GPU PC (see §11.1's port note) |
 
 ### 11.3 Startup
 
 ```bash
 docker compose up --build
-# API docs:  http://localhost:8000/docs
-# Health:    http://localhost:8000/health
+# API docs:  http://localhost:8000/docs   (8001 on the lab GPU PC -- see §11.1)
+# Health:    http://localhost:8000/health (8001 on the lab GPU PC -- see §11.1)
 # Frontend:  http://localhost:5173   (now containerized — no separate `npm run dev` needed)
 ```
 
@@ -1476,4 +1512,4 @@ Design tokens: background `#0b1929`, primary `#1bc99a`, sidebar nav **Upload | D
 
 ---
 
-**— End of Software Design Specification v2.0 —**
+**— End of Software Design Specification v2.16 —**

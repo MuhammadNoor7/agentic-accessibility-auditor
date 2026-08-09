@@ -26,6 +26,7 @@ Feed the pipeline a **screenshot + UIAutomator XML** → get schema-compliant `c
 | **8-week plan v2.2** | [`updated_plan.md`](updated_plan.md) · [`docs/updated_plan_v2.2.docx`](docs/updated_plan_v2.2.docx) (older export: `docs/progress/updated_plan_v2.1.docx`, not yet regenerated) |
 | **Progress report v1.29** | [`docs/progress/Supplementary_Progress_Report_v1.29.md`](docs/progress/Supplementary_Progress_Report_v1.29.md) · [`.docx`](docs/progress/Supplementary_Progress_Report_v1.29.docx) — §16 Document history through 08 Aug: 33-backbone crop-classifier sweep (Swin-Tiny final pick), both CV models wired into the backend + GPU-accelerated (§15J/§15K), frontend completion (screenshot-only flow, `cv_confidence` badge, Records fix), lab GPU PC deployment, repo hygiene pass |
 | **Final Internship Report (IEEE)** | [`docs/final-report/Final_Internship_Report.tex`](docs/final-report/Final_Internship_Report.tex) · [`.pdf`](docs/final-report/Final_Internship_Report.pdf) |
+| **Presentation slides** | [`slides/Axion - Presentation Slides.html`](<slides/Axion - Presentation Slides.html>) — interactive 19-slide deck, offline-capable, built-in PDF export · [`slides/Axion - Presentation Slides.pptx`](<slides/Axion - Presentation Slides.pptx>) — PowerPoint version, rendered 1:1 from the HTML deck |
 | **Week 6 eval** | [`docs/week6/evaluation_sheet.md`](docs/week6/evaluation_sheet.md) · CSV · R26–R30 design DOCX |
 | **Week 7 QA** | [`docs/week7/README.md`](docs/week7/README.md) · rule/guideline summaries (MASC sample + Rico holdout variants) · team priorities |
 | **YOLO UI detector (post–Week 7)** | `notebooks/train_yolo_ui_detector.ipynb` · `src/yolo_ui_detector.py` · `runs/runs/yolo_ui_detector/` (config, metrics, plots, exported `best.pt`, 51.2 MB) — trained (60/60 epochs) + Rico-evaluated; wired into the backend pipeline (05 Aug), GPU-accelerated (07 Aug) |
@@ -359,7 +360,7 @@ streamlit run app.py
 
 **Never commit:** `.venv/`, `.env`, `backend/data/*.db.json` (local user/OTP DBs), `.pt` model weights anywhere (`runs/**/*.pt`, `models/*.pt`), raw dataset archives over the size budget (`data/data-rico-holdout.zip`), App Passwords, Word lock/temp files (`~$*.docx`, `~$*.doc` — appear while a `.docx` is open in Word), LaTeX build artifacts from compiling `docs/final-report/` (`*.aux`, `*.log`, `*.out`)
 
-**Tracked on `noor`:** `data/data-masc/parsed/` + `splits/`, `data/data-rico-holdout/parsed/` + `manifest/`, `outputs/validation_logs/`, `outputs/week7_eval/`, `outputs/*/samples/`, `docs/week6/`, `docs/week7/`, `docs/assets/figma/` (the single canonical Figma asset folder — do not re-create a mirror under `docs/progress/`), `runs/` (non-`.pt`)
+**Tracked on `noor`:** `data/data-masc/parsed/` + `splits/`, `data/data-rico-holdout/parsed/` + `manifest/`, `outputs/validation_logs/`, `outputs/week7_eval/`, `outputs/*/samples/`, `docs/week6/`, `docs/week7/`, `docs/assets/figma/` (the single canonical Figma asset folder — do not re-create a mirror under `docs/progress/`), `runs/` (non-`.pt`), `slides/` (HTML + PowerPoint presentation deck)
 
 ---
 

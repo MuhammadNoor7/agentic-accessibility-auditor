@@ -303,6 +303,8 @@ npm run dev
 # http://localhost:5173
 ```
 
+**Running the frontend bare (no Docker) now requires `frontend/.env`** with `VITE_API_BASE=http://127.0.0.1:8000`. As of the ngrok dev-server-proxy merge, `api.js`/`utils/api.js` default to a relative path routed through `vite.config.js`'s proxy, which targets the Docker-only hostname `backend:8000` — that only resolves inside `docker compose`'s network. Without the override, bare `npm run dev` fails every API call with `[vite] http proxy error: ... Error: getaddrinfo ENOTFOUND backend`. `frontend/.env` is gitignored (never commit it) — create it locally per machine.
+
 Auth: `POST /auth/register`, `/auth/login`, forgot/OTP/reset, `/auth/google`  
 Audit: `POST /api/v1/audit` (screenshot + XML) → report / download  
 Records: `GET /records` (JWT)

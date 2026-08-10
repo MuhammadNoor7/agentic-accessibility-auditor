@@ -117,7 +117,7 @@ export default function SignUp() {
         </Button>
       </form>
 
-      <div className="flex items-center gap-3 my-6" role="presentation">
+      <div className="flex items-center gap-3 my-4" role="presentation">
         <div className="h-px flex-1 bg-[var(--color-border)]" />
         <span className="text-sm text-[var(--color-gray-text)]">or</span>
         <div className="h-px flex-1 bg-[var(--color-border)]" />

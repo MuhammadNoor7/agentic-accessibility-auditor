@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { getAuditFiles, getAuditId } from '../state/auditFiles'
-import { getAuditReport } from '../api'
+import { getAuditReport, downloadAuditReport } from '../api'
 import Sidebar from '../components/Sidebar'
 import UserAvatar from '../components/ui/UserAvatar'
 
@@ -394,6 +394,7 @@ export default function Report() {
 
   const [showConfirm, setShowConfirm] = useState(false)
   const [flowStep, setFlowStep] = useState('idle') // idle | processing | preview
+  const [downloadError, setDownloadError] = useState(null)
   const [format, setFormat] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -447,8 +448,15 @@ export default function Report() {
     setFlowStep('processing')
   }
 
-  function handleProcessingDone() {
-    setFlowStep('preview')
+  async function handleProcessingDone() {
+    try {
+      await downloadAuditReport(auditId, format)
+      setFlowStep('idle')
+      setFormat(null)
+    } catch (err) {
+      setDownloadError(err.message || 'Download failed.')
+      setFlowStep('idle')
+    }
   }
 
   function handleClosePreview() {

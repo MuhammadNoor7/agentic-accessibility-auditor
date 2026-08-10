@@ -82,7 +82,7 @@ export default function Login() {
           required
           error={errors.password}
         />
-        <div className="flex justify-end mb-5 -mt-2">
+        <div className="flex justify-end mb-4 -mt-2">
           <Link
             to="/forgot-password"
             className="text-sm font-medium text-[var(--color-green-dark)] hover:underline min-h-[44px] flex items-center focus-visible:outline-3 focus-visible:outline-[var(--color-green)] rounded"
@@ -95,7 +95,7 @@ export default function Login() {
         </Button>
       </form>
 
-      <div className="flex items-center gap-3 my-6" role="presentation">
+      <div className="flex items-center gap-3 my-4" role="presentation">
         <div className="h-px flex-1 bg-[var(--color-border)]" />
         <span className="text-sm text-[var(--color-gray-text)]">or</span>
         <div className="h-px flex-1 bg-[var(--color-border)]" />

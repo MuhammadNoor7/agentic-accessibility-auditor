@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { getAuditFiles, getAuditId, hasRecordedAudit, markAuditRecorded } from '../state/auditFiles'
 import { getAuditReport, createRecord } from '../api'
@@ -435,6 +435,15 @@ export default function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedIssue, setSelectedIssue] = useState(null)
   const [showAuditPopup, setShowAuditPopup] = useState(false)
+  const [expandedRules, setExpandedRules] = useState(new Set())
+
+  function toggleExpanded(ruleId) {
+    setExpandedRules(prev => {
+      const next = new Set(prev)
+      next.has(ruleId) ? next.delete(ruleId) : next.add(ruleId)
+      return next
+    })
+  }
 
   useEffect(() => {
     if (!auditId) {
@@ -500,6 +509,22 @@ export default function Dashboard() {
       return [v.rule_id, v.issue, v.class, v.component_id, v.guideline]
         .some(field => field?.toLowerCase().includes(q))
     })
+
+  // Same rule fires once per affected component -- group those instances into
+  // a single row (rule_id + issue + severity + guideline are identical across
+  // instances) so the table reads as "issue types found" rather than a
+  // component-by-component dump. Sorted by severity, then by how many
+  // components each issue affects, so the highest-impact issues surface first.
+  const sevRank = { Critical: 0, Serious: 1, Minor: 2 }
+  const groupedIssues = Array.from(
+    filtered.reduce((map, v) => {
+      if (!map.has(v.rule_id)) {
+        map.set(v.rule_id, { rule_id: v.rule_id, issue: v.issue, severity: v.severity, guideline: v.guideline, instances: [] })
+      }
+      map.get(v.rule_id).instances.push(v)
+      return map
+    }, new Map()).values()
+  ).sort((a, b) => (sevRank[a.severity] ?? 3) - (sevRank[b.severity] ?? 3) || b.instances.length - a.instances.length)
 
   // ── Loading state ──────────────────────────────────────────────────────
   if (loading) {
@@ -806,7 +831,7 @@ export default function Dashboard() {
                   <option value="Minor">Minor</option>
                 </select>
                 <span style={{ fontSize: 13, color: '#94a3b8' }}>
-                  {filtered.length} of {total} shown
+                  {groupedIssues.length} issue type{groupedIssues.length === 1 ? '' : 's'} · {filtered.length} of {total} instances
                 </span>
               </div>
             </div>
@@ -815,7 +840,7 @@ export default function Dashboard() {
             <table style={{ width: '100%', borderCollapse: 'collapse' }} aria-label="Detected accessibility issues">
               <thead>
                 <tr style={{ background: '#f8fafc' }}>
-                  {['Rule', 'Issue & component', 'Severity', 'Guideline', ''].map(h => (
+                  {['Rule', 'Issue', 'Severity', 'Guideline', ''].map(h => (
                     <th key={h} scope="col" style={{
                       padding: '10px 16px', textAlign: 'left',
                       fontSize: 11, fontWeight: 700, color: '#64748b',
@@ -827,56 +852,91 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((v, i) => {
-                  const s = SEV[v.severity]
+                {groupedIssues.map(group => {
+                  const s = SEV[group.severity]
+                  const isOpen = expandedRules.has(group.rule_id)
+                  const n = group.instances.length
                   return (
-                    <tr key={i} style={{ borderTop: '0.5px solid #f0f2f8', transition: 'background 0.15s' }}
-                      onMouseEnter={e => e.currentTarget.style.background = '#fafbff'}
-                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                    >
-                      <td style={{ padding: '13px 16px', fontSize: 14, fontWeight: 700, color: '#1a2240', width: 70 }}>
-                        {v.rule_id}
-                      </td>
-                      <td style={{ padding: '13px 16px' }}>
-                        <p style={{ fontSize: 15, fontWeight: 600, color: '#0f1422', margin: 0 }}>{v.issue}</p>
-                        <p style={{ fontSize: 12, color: '#94a3b8', margin: '3px 0 0' }}>{v.class} · {v.component_id}</p>
-                        {v.cv_confidence != null && (
-                          <p style={{ fontSize: 11, color: '#1D9E75', margin: '3px 0 0', fontWeight: 600 }}>
-                            👁 CV-confirmed {Math.round(v.cv_confidence * 100)}%
-                          </p>
-                        )}
-                      </td>
-                      <td style={{ padding: '13px 16px', width: 120 }}>
-                        <span style={{
-                          background: s.bg, color: s.color, padding: '4px 12px', borderRadius: 99,
-                          fontSize: 12, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 5,
-                        }}>
-                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: s.dot, display: 'inline-block' }} aria-hidden="true" />
-                          {v.severity}
-                        </span>
-                      </td>
-                      <td style={{ padding: '13px 16px', fontSize: 13, color: '#475569', fontWeight: 500, width: 160 }}>
-                        {v.guideline}
-                      </td>
-                      <td style={{ padding: '13px 16px', width: 80, textAlign: 'right' }}>
-                        <button
-                          onClick={() => setSelectedIssue(v)}
-                          aria-label={`View details for ${v.issue}`}
-                          style={{
-                            background: '#1a2240', border: 'none', borderRadius: 6, padding: '6px 14px',
-                            fontSize: 12, color: '#fff', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
-                            transition: 'background 0.15s',
-                          }}
-                          onMouseEnter={e => e.currentTarget.style.background = '#2a3660'}
-                          onMouseLeave={e => e.currentTarget.style.background = '#1a2240'}
-                        >
-                          View
-                        </button>
-                      </td>
-                    </tr>
+                    <Fragment key={group.rule_id}>
+                      <tr style={{ borderTop: '0.5px solid #f0f2f8', transition: 'background 0.15s' }}
+                        onMouseEnter={e => e.currentTarget.style.background = '#fafbff'}
+                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                      >
+                        <td style={{ padding: '13px 16px', fontSize: 14, fontWeight: 700, color: '#1a2240', width: 70 }}>
+                          {group.rule_id}
+                        </td>
+                        <td style={{ padding: '13px 16px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                            <p style={{ fontSize: 15, fontWeight: 600, color: '#0f1422', margin: 0 }}>{group.issue}</p>
+                            <span style={{
+                              background: '#f1f5f9', color: '#475569', fontSize: 12, fontWeight: 700,
+                              padding: '2px 10px', borderRadius: 99,
+                            }}>
+                              {n} instance{n === 1 ? '' : 's'}
+                            </span>
+                          </div>
+                        </td>
+                        <td style={{ padding: '13px 16px', width: 120 }}>
+                          <span style={{
+                            background: s.bg, color: s.color, padding: '4px 12px', borderRadius: 99,
+                            fontSize: 12, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 5,
+                          }}>
+                            <span style={{ width: 6, height: 6, borderRadius: '50%', background: s.dot, display: 'inline-block' }} aria-hidden="true" />
+                            {group.severity}
+                          </span>
+                        </td>
+                        <td style={{ padding: '13px 16px', fontSize: 13, color: '#475569', fontWeight: 500, width: 160 }}>
+                          {group.guideline}
+                        </td>
+                        <td style={{ padding: '13px 16px', width: 80, textAlign: 'right' }}>
+                          <button
+                            onClick={() => toggleExpanded(group.rule_id)}
+                            aria-expanded={isOpen}
+                            aria-label={`${isOpen ? 'Hide' : 'Show'} the ${n} component${n === 1 ? '' : 's'} affected by ${group.issue}`}
+                            style={{
+                              background: '#f1f5f9', border: 'none', borderRadius: 6, width: 30, height: 30,
+                              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+                            }}
+                          >
+                            <span style={{ display: 'inline-flex', transform: isOpen ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s' }} aria-hidden="true">
+                              {Icon.arrow('#475569', 15)}
+                            </span>
+                          </button>
+                        </td>
+                      </tr>
+                      {isOpen && group.instances.map(inst => (
+                        <tr key={inst.component_id} style={{ background: '#f8fafc', borderTop: '0.5px solid #f0f2f8' }}>
+                          <td />
+                          <td colSpan={2} style={{ padding: '10px 16px 10px 40px' }}>
+                            <p style={{ fontSize: 13, color: '#334155', margin: 0, fontWeight: 500 }}>{inst.class} · {inst.component_id}</p>
+                            {inst.cv_confidence != null && (
+                              <p style={{ fontSize: 11, color: '#1D9E75', margin: '3px 0 0', fontWeight: 600 }}>
+                                👁 CV-confirmed {Math.round(inst.cv_confidence * 100)}%
+                              </p>
+                            )}
+                          </td>
+                          <td />
+                          <td style={{ padding: '10px 16px', textAlign: 'right' }}>
+                            <button
+                              onClick={() => setSelectedIssue(inst)}
+                              aria-label={`View details for ${inst.issue} on ${inst.component_id}`}
+                              style={{
+                                background: '#1a2240', border: 'none', borderRadius: 6, padding: '5px 14px',
+                                fontSize: 12, color: '#fff', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
+                                transition: 'background 0.15s',
+                              }}
+                              onMouseEnter={e => e.currentTarget.style.background = '#2a3660'}
+                              onMouseLeave={e => e.currentTarget.style.background = '#1a2240'}
+                            >
+                              View
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </Fragment>
                   )
                 })}
-                {filtered.length === 0 && (
+                {groupedIssues.length === 0 && (
                   <tr>
                     <td colSpan={5} style={{ padding: '40px', textAlign: 'center', color: '#94a3b8', fontSize: 14 }}>
                       {searchQuery.trim()

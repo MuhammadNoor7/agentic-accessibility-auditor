@@ -529,7 +529,7 @@ export default function Dashboard() {
   // ── Loading state ──────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f4f6fb' }}>
+      <div style={{ display: 'flex', height: '100vh', backgroundColor: '#f4f6fb' }}>
         <Sidebar activePage="dashboard" />
         <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ textAlign: 'center' }}>
@@ -544,7 +544,7 @@ export default function Dashboard() {
   // ── Error / no audit state ─────────────────────────────────────────────
   if (loadError) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f4f6fb' }}>
+      <div style={{ display: 'flex', height: '100vh', backgroundColor: '#f4f6fb' }}>
         <Sidebar activePage="dashboard" />
         <main style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32 }}>
           <div style={{ textAlign: 'center', maxWidth: 420 }}>
@@ -566,7 +566,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f4f6fb' }}>
+    <div style={{ display: 'flex', height: '100vh', backgroundColor: '#f4f6fb', overflow: 'hidden' }}>
       <Sidebar activePage="dashboard" />
 
       <style>{`
@@ -576,20 +576,20 @@ export default function Dashboard() {
         @keyframes spin { to { transform: rotate(360deg); } }
 
         .axion-topbar {
-          padding: 16px 32px;
+          padding: 10px 28px;
         }
         .axion-heading-row {
           flex-wrap: wrap;
           gap: 16px;
         }
         .axion-stat-grid {
-          grid-template-columns: 220px 1fr 1fr 1fr;
+          grid-template-columns: 170px 1fr 1fr 1fr;
         }
         .axion-search-input {
           width: 210px;
         }
         .axion-table-scroll {
-          overflow-x: auto;
+          overflow: auto;
         }
         .axion-drawer {
           width: 440px;
@@ -630,17 +630,18 @@ export default function Dashboard() {
         }
       `}</style>
 
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }} aria-label="Issues Dashboard">
+      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden', minWidth: 0 }} aria-label="Issues Dashboard">
 
-        {/* TOPBAR */}
+        {/* TOPBAR — fixed */}
         <div className="axion-topbar" style={{
           background: '#fff',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           borderBottom: '0.5px solid #e2e6f0',
+          flexShrink: 0,
         }}>
           <div>
-            <p style={{ fontSize: 15, color: '#5a6a8a', margin: 0 }}>Workspace</p>
-            <p style={{ fontSize: 20, fontWeight: 700, color: '#1a2240', margin: 0 }}>Issues Dashboard</p>
+            <p style={{ fontSize: 13, color: '#5a6a8a', margin: 0 }}>Workspace</p>
+            <p style={{ fontSize: 18, fontWeight: 700, color: '#1a2240', margin: 0 }}>Issues Dashboard</p>
           </div>
           <div className="axion-topbar-actions" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <input
@@ -650,7 +651,7 @@ export default function Dashboard() {
               onChange={e => setSearchQuery(e.target.value)}
               style={{
                 background: '#f4f6fb', border: '0.5px solid #dde2f0',
-                borderRadius: 6, padding: '9px 16px', fontSize: 15,
+                borderRadius: 6, padding: '7px 14px', fontSize: 13,
                 color: '#1a2240',
               }}
             />
@@ -658,69 +659,75 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* CONTENT */}
-        <div style={{ flex: 1, padding: '32px', display: 'flex', flexDirection: 'column', gap: 24 }}>
+        {/* CONTENT — fills remaining height exactly; nothing here scrolls
+            except the detected-issues table below, which owns its own
+            internal scroll region. */}
+        <div style={{
+          flex: 1, minHeight: 0, padding: '14px 28px 16px',
+          display: 'flex', flexDirection: 'column', gap: 12,
+          overflow: 'hidden',
+        }}>
 
-          {/* Heading row */}
-          <div className="axion-heading-row" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          {/* Heading row — fixed */}
+          <div className="axion-heading-row" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexShrink: 0 }}>
             <div>
               <span style={{
-                background: '#e8f5f0', color: '#0f6e56', fontSize: 13,
-                fontWeight: 700, padding: '4px 12px', borderRadius: 4, letterSpacing: '0.5px',
+                background: '#e8f5f0', color: '#0f6e56', fontSize: 11,
+                fontWeight: 700, padding: '2px 10px', borderRadius: 4, letterSpacing: '0.5px',
               }}>
                 AI-POWERED AUDIT
               </span>
-              <h1 style={{ fontSize: 30, fontWeight: 700, color: '#0f1422', margin: '10px 0 4px' }}>
+              <h1 style={{ fontSize: 20, fontWeight: 700, color: '#0f1422', margin: '6px 0 2px' }}>
                 Issues Dashboard
               </h1>
-              <p style={{ fontSize: 15, color: '#5a6a8a', margin: 0 }}>
+              <p style={{ fontSize: 13, color: '#5a6a8a', margin: 0 }}>
                 {report?.screen_id || screenshot?.name || 'screen'} &nbsp;·&nbsp; {total} issue{total === 1 ? '' : 's'} found &nbsp;·&nbsp; {report?.enrichment_mode === 'llm' ? 'AI-explained' : 'Rule-based'}
               </p>
             </div>
-           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 4 }}>
-  <button
-  aria-label="Start a new audit"
-  onClick={() => navigate('/upload')}
-  style={{
-    background: '#1a2240', color: '#fff', border: 'none',
-    borderRadius: 8, padding: '12px 22px', fontSize: 15,
-    fontWeight: 600, cursor: 'pointer',
-    display: 'flex', alignItems: 'center', gap: 6,
-  }}
->
-  <span aria-hidden="true" style={{ fontSize: 16 }}>+</span> New Audit
-</button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 2 }}>
+              <button
+                aria-label="Start a new audit"
+                onClick={() => navigate('/upload')}
+                style={{
+                  background: '#1a2240', color: '#fff', border: 'none',
+                  borderRadius: 8, padding: '8px 16px', fontSize: 13,
+                  fontWeight: 600, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 6,
+                }}
+              >
+                <span aria-hidden="true" style={{ fontSize: 15 }}>+</span> New Audit
+              </button>
 
-  <button
-    aria-label="Re-run accessibility audit"
-    onClick={() => setShowAuditPopup(true)}
-    style={{
-      background: '#1a2240', color: '#fff', border: 'none',
-      borderRadius: 8, padding: '12px 22px', fontSize: 15,
-      fontWeight: 600, cursor: 'pointer',
-      display: 'flex', alignItems: 'center', gap: 6,
-    }}
-  >
-    <span aria-hidden="true" style={{ fontSize: 16 }}>↺</span> Re-run Audit
-  </button>
-</div>
+              <button
+                aria-label="Re-run accessibility audit"
+                onClick={() => setShowAuditPopup(true)}
+                style={{
+                  background: '#1a2240', color: '#fff', border: 'none',
+                  borderRadius: 8, padding: '8px 16px', fontSize: 13,
+                  fontWeight: 600, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 6,
+                }}
+              >
+                <span aria-hidden="true" style={{ fontSize: 15 }}>↺</span> Re-run Audit
+              </button>
+            </div>
           </div>
 
-          {/* STAT CARDS */}
-          <div className="axion-stat-grid" style={{ display: 'grid', gap: 14 }}>
+          {/* STAT CARDS — fixed, compact */}
+          <div className="axion-stat-grid" style={{ display: 'grid', gap: 10, flexShrink: 0 }}>
 
             <div
               role="img"
               aria-label={`Accessibility score: ${report?.accessibility_score ?? '—'} out of 100. Based on ${total} detected issues.`}
               style={{
-                background: '#0f1422', borderRadius: 14,
-                padding: '20px 20px', display: 'flex', alignItems: 'center', gap: 16,
+                background: '#0f1422', borderRadius: 10,
+                padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10,
               }}
             >
-              <div style={{ position: 'relative', width: 72, height: 72, flexShrink: 0 }} aria-hidden="true">
-                <svg width="72" height="72" viewBox="0 0 72 72">
-                  <circle cx="36" cy="36" r="30" fill="none" stroke="#1e2d42" strokeWidth="6" />
-                  <circle cx="36" cy="36" r="30" fill="none" stroke="#1D9E75" strokeWidth="6"
+              <div style={{ position: 'relative', width: 42, height: 42, flexShrink: 0 }} aria-hidden="true">
+                <svg width="42" height="42" viewBox="0 0 72 72">
+                  <circle cx="36" cy="36" r="30" fill="none" stroke="#1e2d42" strokeWidth="7" />
+                  <circle cx="36" cy="36" r="30" fill="none" stroke="#1D9E75" strokeWidth="7"
                     strokeDasharray="188.5"
                     strokeDashoffset={188.5 - (188.5 * (report?.accessibility_score ?? 0)) / 100}
                     strokeLinecap="round" transform="rotate(-90 36 36)" />
@@ -728,16 +735,16 @@ export default function Dashboard() {
                 <div style={{
                   position: 'absolute', inset: 0,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 20, fontWeight: 700, color: '#fff',
+                  fontSize: 13, fontWeight: 700, color: '#fff',
                 }}>
                   {report?.accessibility_score ?? '—'}
                 </div>
               </div>
               <div aria-hidden="true">
-                <p style={{ fontSize: 11, color: '#4a5a7a', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', margin: '0 0 4px' }}>
+                <p style={{ fontSize: 9, color: '#4a5a7a', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', margin: '0 0 3px' }}>
                   Score
                 </p>
-                <p style={{ fontSize: 12, color: '#64748b', lineHeight: 1.5, margin: 0 }}>
+                <p style={{ fontSize: 10.5, color: '#64748b', lineHeight: 1.3, margin: 0 }}>
                   Based on {total} detected issues
                 </p>
               </div>
@@ -748,24 +755,25 @@ export default function Dashboard() {
               return (
                 <div key={sev} style={{
                   background: s.cardBg, border: `1px solid ${s.cardBorder}`,
-                  borderRadius: 14, padding: '18px 20px',
+                  borderRadius: 10, padding: '9px 14px',
                   cursor: 'pointer',
                   outline: severityFilter === sev ? `2px solid ${s.dot}` : 'none',
                   transition: 'outline 0.15s',
+                  display: 'flex', flexDirection: 'column', justifyContent: 'center',
                 }}
                   onClick={() => setSeverityFilter(severityFilter === sev ? 'All' : sev)}
                   title={`Filter by ${sev}`}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
-                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: s.dot, display: 'inline-block' }} aria-hidden="true" />
-                    <span style={{ fontSize: 11, color: s.color, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
+                    <span style={{ width: 7, height: 7, borderRadius: '50%', background: s.dot, display: 'inline-block' }} aria-hidden="true" />
+                    <span style={{ fontSize: 10, color: s.color, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.4px' }}>
                       {sev}
                     </span>
                   </div>
-                  <p style={{ fontSize: 32, fontWeight: 700, color: s.color, margin: '0 0 4px', lineHeight: 1 }}>
+                  <p style={{ fontSize: 19, fontWeight: 700, color: s.color, margin: '0 0 2px', lineHeight: 1 }}>
                     {counts[sev]}
                   </p>
-                  <p style={{ fontSize: 11, color: s.dot, margin: 0 }}>
+                  <p style={{ fontSize: 10, color: s.dot, margin: 0 }}>
                     {s.desc}
                   </p>
                 </div>
@@ -773,17 +781,18 @@ export default function Dashboard() {
             })}
           </div>
 
-          {/* PRIORITY BAR */}
+          {/* PRIORITY BAR — fixed, compact */}
           <div style={{
-            background: '#fff', borderRadius: 14,
-            border: '0.5px solid #e2e6f0', padding: '20px 24px',
+            background: '#fff', borderRadius: 10,
+            border: '0.5px solid #e2e6f0', padding: '10px 16px',
+            flexShrink: 0,
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-              <p style={{ fontSize: 17, fontWeight: 700, color: '#0f1422', margin: 0 }}>Issues by priority</p>
-              <p style={{ fontSize: 14, color: '#5a6a8a', margin: 0 }}>{total} total issues</p>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+              <p style={{ fontSize: 13, fontWeight: 700, color: '#0f1422', margin: 0 }}>Issues by priority</p>
+              <p style={{ fontSize: 11.5, color: '#5a6a8a', margin: 0 }}>{total} total issues</p>
             </div>
             <div
-              style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', height: 12, gap: 2 }}
+              style={{ display: 'flex', borderRadius: 6, overflow: 'hidden', height: 7, gap: 2 }}
               role="img"
               aria-label={`Issues by priority: Critical ${pct('Critical')}% (${counts.Critical}), Serious ${pct('Serious')}% (${counts.Serious}), Minor ${pct('Minor')}% (${counts.Minor})`}
             >
@@ -791,26 +800,28 @@ export default function Dashboard() {
               <div style={{ width: `${pct('Serious')}%`,  background: '#854F0B' }} aria-hidden="true" />
               <div style={{ width: `${pct('Minor')}%`,    background: '#5F5E5A', borderRadius: '0 99px 99px 0' }} aria-hidden="true" />
             </div>
-            <div style={{ display: 'flex', gap: 20, marginTop: 10, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 16, marginTop: 6, flexWrap: 'wrap' }}>
               {severityOrder.map(sev => (
-                <span key={sev} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: SEV[sev].color }}>
-                  <span style={{ width: 9, height: 9, borderRadius: '50%', background: SEV[sev].dot, display: 'inline-block' }} aria-hidden="true" />
+                <span key={sev} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, color: SEV[sev].color }}>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: SEV[sev].dot, display: 'inline-block' }} aria-hidden="true" />
                   {sev} {pct(sev)}%
                 </span>
               ))}
             </div>
           </div>
 
-          {/* ISSUES TABLE */}
+          {/* ISSUES TABLE — takes ALL remaining space; only this scrolls */}
           <div style={{
-            background: '#fff', borderRadius: 14,
+            background: '#fff', borderRadius: 12,
             border: '0.5px solid #e2e6f0', overflow: 'hidden',
+            flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column',
           }}>
             <div style={{
-              padding: '14px 20px', borderBottom: '0.5px solid #e2e6f0',
+              padding: '10px 18px', borderBottom: '0.5px solid #e2e6f0',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              flexShrink: 0, flexWrap: 'wrap', gap: 8,
             }}>
-              <p style={{ fontSize: 17, fontWeight: 700, color: '#0f1422', margin: 0 }}>
+              <p style={{ fontSize: 14, fontWeight: 700, color: '#0f1422', margin: 0 }}>
                 Detected issues
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -819,7 +830,7 @@ export default function Dashboard() {
                   onChange={e => setSeverityFilter(e.target.value)}
                   aria-label="Filter by severity"
                   style={{
-                    fontSize: 13, padding: '7px 14px',
+                    fontSize: 12.5, padding: '5px 10px',
                     border: '1.5px solid #94a3b8', borderRadius: 6,
                     color: '#1a2240', background: '#fff', cursor: 'pointer',
                     fontWeight: 600,
@@ -830,21 +841,22 @@ export default function Dashboard() {
                   <option value="Serious">Serious</option>
                   <option value="Minor">Minor</option>
                 </select>
-                <span style={{ fontSize: 13, color: '#94a3b8' }}>
+                <span style={{ fontSize: 12.5, color: '#94a3b8' }}>
                   {groupedIssues.length} issue type{groupedIssues.length === 1 ? '' : 's'} · {filtered.length} of {total} instances
                 </span>
               </div>
             </div>
 
-            <div className="axion-table-scroll">
+            <div className="axion-table-scroll" style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }} aria-label="Detected accessibility issues">
               <thead>
                 <tr style={{ background: '#f8fafc' }}>
                   {['Rule', 'Issue', 'Severity', 'Guideline', ''].map(h => (
                     <th key={h} scope="col" style={{
-                      padding: '10px 16px', textAlign: 'left',
+                      padding: '8px 16px', textAlign: 'left',
                       fontSize: 11, fontWeight: 700, color: '#64748b',
                       textTransform: 'uppercase', letterSpacing: '0.6px',
+                      position: 'sticky', top: 0, background: '#f8fafc', zIndex: 1,
                     }}>
                       {h}
                     </th>
@@ -862,33 +874,33 @@ export default function Dashboard() {
                         onMouseEnter={e => e.currentTarget.style.background = '#fafbff'}
                         onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                       >
-                        <td style={{ padding: '13px 16px', fontSize: 14, fontWeight: 700, color: '#1a2240', width: 70 }}>
+                        <td style={{ padding: '10px 16px', fontSize: 13.5, fontWeight: 700, color: '#1a2240', width: 70 }}>
                           {group.rule_id}
                         </td>
-                        <td style={{ padding: '13px 16px' }}>
+                        <td style={{ padding: '10px 16px' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                            <p style={{ fontSize: 15, fontWeight: 600, color: '#0f1422', margin: 0 }}>{group.issue}</p>
+                            <p style={{ fontSize: 13.5, fontWeight: 600, color: '#0f1422', margin: 0 }}>{group.issue}</p>
                             <span style={{
-                              background: '#f1f5f9', color: '#475569', fontSize: 12, fontWeight: 700,
+                              background: '#f1f5f9', color: '#475569', fontSize: 11.5, fontWeight: 700,
                               padding: '2px 10px', borderRadius: 99,
                             }}>
                               {n} instance{n === 1 ? '' : 's'}
                             </span>
                           </div>
                         </td>
-                        <td style={{ padding: '13px 16px', width: 120 }}>
+                        <td style={{ padding: '10px 16px', width: 120 }}>
                           <span style={{
                             background: s.bg, color: s.color, padding: '4px 12px', borderRadius: 99,
-                            fontSize: 12, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 5,
+                            fontSize: 11.5, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 5,
                           }}>
                             <span style={{ width: 6, height: 6, borderRadius: '50%', background: s.dot, display: 'inline-block' }} aria-hidden="true" />
                             {group.severity}
                           </span>
                         </td>
-                        <td style={{ padding: '13px 16px', fontSize: 13, color: '#475569', fontWeight: 500, width: 160 }}>
+                        <td style={{ padding: '10px 16px', fontSize: 12.5, color: '#475569', fontWeight: 500, width: 160 }}>
                           {group.guideline}
                         </td>
-                        <td style={{ padding: '13px 16px', width: 80, textAlign: 'right' }}>
+                        <td style={{ padding: '10px 16px', width: 80, textAlign: 'right' }}>
                           <button
                             onClick={() => toggleExpanded(group.rule_id)}
                             aria-expanded={isOpen}
@@ -949,19 +961,18 @@ export default function Dashboard() {
             </table>
             </div>
           </div>
-        </div>
 
-        {/* BOTTOM BAR */}
-        <div style={{ padding: '0 32px 32px' }}>
+          {/* BOTTOM BAR — fixed, compact */}
           <div style={{
-            background: '#0f1422', borderRadius: 14, padding: '18px 28px',
+            background: '#0f1422', borderRadius: 10, padding: '10px 20px',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20,
+            flexShrink: 0,
           }}>
             <div>
-              <p style={{ color: '#e2e6f0', fontSize: 18, fontWeight: 700, margin: 0 }}>
+              <p style={{ color: '#e2e6f0', fontSize: 14, fontWeight: 700, margin: 0 }}>
                 All critical issues reviewed?
               </p>
-              <p style={{ color: '#4a5a7a', fontSize: 14, margin: '5px 0 0' }}>
+              <p style={{ color: '#4a5a7a', fontSize: 11.5, margin: '2px 0 0' }}>
                 Compile this audit into a shareable accessibility report.
               </p>
             </div>
@@ -970,8 +981,8 @@ export default function Dashboard() {
               onClick={() => navigate('/report', { state: { auditId } })}
               style={{
                 background: '#1D9E75', color: '#fff', border: 'none',
-                borderRadius: 10, padding: '14px 30px',
-                fontSize: 17, fontWeight: 700, cursor: 'pointer',
+                borderRadius: 9, padding: '10px 22px',
+                fontSize: 13.5, fontWeight: 700, cursor: 'pointer',
                 whiteSpace: 'nowrap', flexShrink: 0, transition: 'background 0.2s',
               }}
               onMouseEnter={e => e.currentTarget.style.background = '#17876a'}

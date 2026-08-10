@@ -15,7 +15,7 @@ const injectResponsiveStyles = (() => {
     style.textContent = `
     @media (max-width: 767px) {
       .axion-topbar { padding: 14px 16px 14px 64px !important; flex-wrap: wrap; gap: 10px; }
-      .axion-search { display: none !important; }
+      .axion-search { width: 100% !important; }
       .axion-content { padding: 16px !important; }
       .axion-upload-zone { padding: 28px 18px 22px !important; }
       .axion-cta-bar { flex-direction: column !important; align-items: stretch !important; }
@@ -158,8 +158,8 @@ function extractNumber(filename) {
 // This fixes the false-positive bug: photo1.jpg no longer matches data1.xml,
 // since "photo" !== "data" even though both contain "1".
 function filesMatch(screenshotName, xmlName) {
-  const stem1 = getStem(screenshotName);
-  const stem2 = getStem(xmlName);
+  const stem1 = getStem(screenshotName).toLowerCase();
+  const stem2 = getStem(xmlName).toLowerCase();
   if (stem1 === stem2) return true;
 
   const n1 = extractNumber(screenshotName);
@@ -511,12 +511,12 @@ function ValidationPopup({ result, screenshotName, xmlName, onClose }) {
 
 // ── Audit Steps Config (cosmetic progress shown while real API call runs) ────
 const AUDIT_STEPS = [
-  { label: 'Parsing screenshot and XML',      detail: 'Extracting UI component tree from UIAutomator dump',           pct: 15 },
-  { label: 'Mapping components to bounds',    detail: 'Resolving components with spatial coordinates from XML',        pct: 32 },
-  { label: 'Running WCAG 2.2 AA rule engine', detail: 'Checking 18 rules: labels, contrast, touch targets and more',  pct: 55 },
-  { label: 'Detecting violations',            detail: 'Cross-referencing components against accessibility guidelines',  pct: 74 },
-  { label: 'Scoring and ranking issues',      detail: 'Classifying by severity: critical, serious, moderate, minor',   pct: 90 },
-  { label: 'Generating report',               detail: 'Compiling all findings into a structured accessibility report',  pct: 100 },
+  { label: 'Parsing screenshot and XML',      detail: 'Extracting the UI component tree',        pct: 15 },
+  { label: 'Mapping components to bounds',    detail: 'Resolving spatial coordinates',            pct: 32 },
+  { label: 'Running WCAG 2.2 AA rule engine', detail: 'Checking 18 accessibility rules',          pct: 55 },
+  { label: 'Detecting violations',            detail: 'Cross-referencing against guidelines',     pct: 74 },
+  { label: 'Scoring and ranking issues',      detail: 'By severity: critical to minor',           pct: 90 },
+  { label: 'Generating report',               detail: 'Compiling the final report',               pct: 100 },
 ];
 
 // ── Audit Processing Popup ────────────────────────────────────────────────────
@@ -643,62 +643,51 @@ function AuditPopup({ screenshotFile, xmlFile, onViewDashboard }) {
         overflow: 'hidden', boxShadow: '0 24px 64px rgba(0,0,0,0.22)',
         animation: 'pulseIn 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards',
       }}>
-        <div style={{ background: '#0f1422', padding: '22px 24px 18px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{
-              width: 40, height: 40, borderRadius: '50%', background: '#1D9E75',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-              animation: done ? 'checkPop 0.4s ease forwards' : 'none',
-            }}>
-              {done ? Icon.check('#fff', 20) : <Spinner size={18} color="#fff" />}
-            </div>
-            <div>
-              <p style={{ color: '#ffffff', fontSize: 18, fontWeight: 700, margin: 0 }}>
-                {done ? 'Audit complete' : 'Running accessibility audit'}
-              </p>
-              <p style={{ color: '#a8bbd4', fontSize: 14, margin: '5px 0 0', fontWeight: 500 }}>
-                {done ? 'Your report is ready to review' : 'Analyzing against WCAG 2.2 AA rules…'}
-              </p>
-            </div>
-          </div>
-          <div style={{ marginTop: 16, height: 4, background: '#1e2d42', borderRadius: 99, overflow: 'hidden' }}>
+        <div style={{ background: '#0f1422', padding: '16px 24px 14px' }}>
+          <p style={{ color: '#ffffff', fontSize: 17, fontWeight: 700, margin: 0 }}>
+            {done ? 'Audit complete' : 'Running accessibility audit'}
+          </p>
+          <p style={{ color: '#a8bbd4', fontSize: 13, margin: '4px 0 0', fontWeight: 500 }}>
+            {done ? 'Your report is ready to review' : 'Analyzing against WCAG 2.2 AA rules…'}
+          </p>
+          <div style={{ marginTop: 12, height: 4, background: '#1e2d42', borderRadius: 99, overflow: 'hidden' }}>
             <div style={{ height: '100%', borderRadius: 99, background: '#1D9E75', width: `${progress}%`, transition: 'width 0.5s cubic-bezier(0.4,0,0.2,1)' }} />
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
-            <span style={{ fontSize: 13, color: '#a8bbd4', fontWeight: 500 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6 }}>
+            <span style={{ fontSize: 12, color: '#a8bbd4', fontWeight: 500 }}>
               {done ? 'All steps complete' : `${AUDIT_STEPS[activeStep]?.label}…`}
             </span>
-            <span style={{ fontSize: 14, color: '#1D9E75', fontWeight: 700 }}>{progress}%</span>
+            <span style={{ fontSize: 13, color: '#1D9E75', fontWeight: 700 }}>{progress}%</span>
           </div>
         </div>
 
-        <div style={{ padding: '20px 24px 0' }}>
-          <p style={{ fontSize: 13, color: '#0f1422', fontWeight: 700, letterSpacing: '0.8px', margin: '0 0 14px', textTransform: 'uppercase' }}>
+        <div style={{ padding: '14px 24px 0' }}>
+          <p style={{ fontSize: 12, color: '#0f1422', fontWeight: 700, letterSpacing: '0.8px', margin: '0 0 8px', textTransform: 'uppercase' }}>
             Audit steps
           </p>
-          <div className="axion-audit-steps" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          <div className="axion-audit-steps" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
             {AUDIT_STEPS.map((s, i) => {
               const isComplete = completedSteps.includes(i);
               const isActive   = activeStep === i && !isComplete && !done;
               const isPending  = i > activeStep && !isComplete;
               return (
                 <div key={i} style={{
-                  display: 'flex', alignItems: 'flex-start', gap: 12, padding: '12px 14px', borderRadius: 8,
+                  display: 'flex', alignItems: 'flex-start', gap: 10, padding: '8px 10px', borderRadius: 8,
                   background: isComplete ? '#f0fdf8' : isActive ? '#fafafa' : '#f8fafc',
                   border: `1px solid ${isComplete ? '#6ee7b7' : isActive ? '#cbd5e1' : '#e2e8f0'}`,
                   opacity: isPending ? 0.45 : 1,
                   transition: 'background 0.3s, border-color 0.3s, opacity 0.3s',
                 }}>
                   <div style={{
-                    width: 30, height: 30, borderRadius: '50%',
+                    width: 22, height: 22, borderRadius: '50%',
                     background: isComplete ? '#1D9E75' : '#e2e8f0',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1,
                   }}>
-                    {isComplete ? Icon.check('#fff', 15) : isActive ? <Spinner size={14} color="#475569" /> : null}
+                    {isComplete ? Icon.check('#fff', 12) : isActive ? <Spinner size={11} color="#475569" /> : null}
                   </div>
                   <div>
-                    <p style={{ fontSize: 15, fontWeight: 600, color: isComplete ? '#065f46' : isPending ? '#94a3b8' : '#0f1422', margin: 0 }}>{s.label}</p>
-                    <p style={{ fontSize: 13, color: isPending ? '#b0bec5' : '#475569', margin: '3px 0 0', lineHeight: 1.5 }}>{s.detail}</p>
+                    <p style={{ fontSize: 13, fontWeight: 600, color: isComplete ? '#065f46' : isPending ? '#94a3b8' : '#0f1422', margin: 0 }}>{s.label}</p>
+                    <p style={{ fontSize: 11.5, color: isPending ? '#b0bec5' : '#475569', margin: '2px 0 0', lineHeight: 1.4 }}>{s.detail}</p>
                   </div>
                 </div>
               );
@@ -707,35 +696,35 @@ function AuditPopup({ screenshotFile, xmlFile, onViewDashboard }) {
         </div>
 
         {done ? (
-  <div style={{ padding: '20px 24px 24px' }}>
+  <div style={{ padding: '14px 24px 18px' }}>
     <div style={{
       background: '#f0fdf8', border: '1px solid #6ee7b7', borderRadius: 10,
-      padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center',
-      textAlign: 'center', gap: 10, marginBottom: 16,
+      padding: '12px 14px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      textAlign: 'center', gap: 10, marginBottom: 12,
     }}>
-      <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#1D9E75', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, animation: 'checkPop 0.4s ease forwards' }}>
-        {Icon.check('#fff', 22)}
+      <div style={{ width: 30, height: 30, borderRadius: '50%', background: '#1D9E75', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, animation: 'checkPop 0.4s ease forwards' }}>
+        {Icon.check('#fff', 16)}
       </div>
-      <div>
-        <p style={{ fontSize: 16, fontWeight: 700, color: '#0f1422', margin: 0 }}>Audit finished</p>
-        <p style={{ fontSize: 13.5, color: '#065f46', margin: '5px 0 0', fontWeight: 500 }}>Violations detected — ranked by severity and ready to review</p>
+      <div style={{ textAlign: 'left' }}>
+        <p style={{ fontSize: 14, fontWeight: 700, color: '#0f1422', margin: 0 }}>Audit finished</p>
+        <p style={{ fontSize: 12, color: '#065f46', margin: '2px 0 0', fontWeight: 500 }}>Ranked by severity, ready to review</p>
       </div>
     </div>
     <button
       onClick={() => onViewDashboard(auditId)}
       style={{
         width: '100%', background: '#1D9E75', color: '#fff', border: 'none',
-        borderRadius: 10, padding: '15px', fontSize: 16, fontWeight: 700, cursor: 'pointer',
+        borderRadius: 10, padding: '12px', fontSize: 15, fontWeight: 700, cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontFamily: 'inherit',
       }}
       onMouseEnter={e => e.currentTarget.style.background = '#17876a'}
       onMouseLeave={e => e.currentTarget.style.background = '#1D9E75'}
     >
-      View issues dashboard {Icon.arrow('#fff', 17)}
+      View issues dashboard {Icon.arrow('#fff', 16)}
     </button>
   </div>
 ) : (
-  <div style={{ height: 20 }} />
+  <div style={{ height: 14 }} />
 )}
       </div>
     </div>
@@ -848,13 +837,14 @@ export default function Upload() {
       <input ref={screenshotRef} type="file" accept=".png,.jpg,.jpeg" style={{ display: 'none' }} onChange={handleScreenshotChange} />
       <input ref={xmlRef}        type="file" accept=".xml"            style={{ display: 'none' }} onChange={handleXmlChange} />
 
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }} aria-label="Upload Audit Assets">
+      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, height: '100vh', overflowY: 'auto' }} aria-label="Upload Audit Assets">
 
         {/* Topbar */}
         <div className="axion-topbar" style={{
-          background: '#fff', padding: '16px 32px',
+          background: '#fff', padding: '12px 32px',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           borderBottom: '0.5px solid #e2e6f0',
+          flexShrink: 0,
         }}>
           <div>
             <p style={{ fontSize: 15, color: '#5a6a8a', margin: 0 }}>Workspace</p>
@@ -876,39 +866,39 @@ export default function Upload() {
         </div>
 
         {/* Content */}
-        <div className="axion-content" style={{ flex: 1, padding: '32px', display: 'flex', flexDirection: 'column', gap: 24, justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <div className="axion-content" style={{ flex: 1, minHeight: 0, padding: '14px 32px', display: 'flex', flexDirection: 'column', gap: 12, justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
 
             <div>
-              <span style={{ background: '#e8f5f0', color: '#0f6e56', fontSize: 13, fontWeight: 700, padding: '4px 12px', borderRadius: 4, letterSpacing: '0.5px' }}>
+              <span style={{ background: '#e8f5f0', color: '#0f6e56', fontSize: 12, fontWeight: 700, padding: '3px 10px', borderRadius: 4, letterSpacing: '0.5px' }}>
                 AI-POWERED AUDIT
               </span>
-              <h1 className="axion-heading" style={{ fontSize: 30, fontWeight: 700, color: '#0f1422', margin: '10px 0 4px' }}>Upload Audit Assets</h1>
-              <p style={{ fontSize: 15, color: '#5a6a8a', margin: 0 }}>
-                Upload your Android screenshot and UIAutomator XML separately. We'll validate them as a matching pair.
+              <h1 className="axion-heading" style={{ fontSize: 21, fontWeight: 700, color: '#0f1422', margin: '6px 0 3px' }}>Upload Audit Assets</h1>
+              <p style={{ fontSize: 13.5, color: '#5a6a8a', margin: 0 }}>
+                Upload your screenshot and UIAutomator XML — we'll validate them as a pair.
               </p>
             </div>
 
             {/* Upload Zone */}
             <div className="axion-upload-zone" style={{
               background: zoneBg, border: zoneBorder, borderRadius: 14,
-              padding: '44px 32px 32px',
+              padding: '18px 28px 16px',
               display: 'flex', flexDirection: 'column', alignItems: 'center',
               transition: 'all 0.25s',
             }}>
               <div style={{
-                width: 56, height: 56, borderRadius: '50%',
+                width: 36, height: 36, borderRadius: '50%',
                 background: step === 'mismatched' ? '#fee2e2' : '#e8f5f0',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8,
               }}>
-                {step === 'empty'          && Icon.folder('#1D9E75', 26)}
-                {step === 'waiting'        && Icon.xml('#1D9E75', 26)}
-                {step === 'matched'        && Icon.check('#1D9E75', 26)}
-                {step === 'screenshot_only' && Icon.check('#1D9E75', 26)}
-                {step === 'mismatched'     && Icon.alert('#ef4444', 26)}
+                {step === 'empty'          && Icon.folder('#1D9E75', 20)}
+                {step === 'waiting'        && Icon.xml('#1D9E75', 20)}
+                {step === 'matched'        && Icon.check('#1D9E75', 20)}
+                {step === 'screenshot_only' && Icon.check('#1D9E75', 20)}
+                {step === 'mismatched'     && Icon.alert('#ef4444', 20)}
               </div>
 
-              <p style={{ fontSize: 17, fontWeight: 700, color: '#0f1422', margin: '0 0 6px', textAlign: 'center', wordBreak: 'break-word' }}>
+              <p style={{ fontSize: 15.5, fontWeight: 700, color: '#0f1422', margin: '0 0 4px', textAlign: 'center', wordBreak: 'break-word' }}>
                 {step === 'empty'          && 'Upload files'}
                 {step === 'waiting'        && screenshot?.name}
                 {step === 'matched'        && 'Files matched'}
@@ -916,12 +906,12 @@ export default function Upload() {
                 {step === 'mismatched'     && 'File mismatch'}
               </p>
 
-              <p style={{ fontSize: 14, color: '#5a6a8a', margin: '0 0 24px', textAlign: 'center', maxWidth: 440, lineHeight: 1.6 }}>
-                {step === 'empty'          && 'Select your PNG or JPG screenshot first, then the matching XML file'}
-                {step === 'waiting'        && 'Screenshot uploaded — select the matching XML file, or continue with just the screenshot'}
+              <p style={{ fontSize: 13, color: '#5a6a8a', margin: '0 0 10px', textAlign: 'center', maxWidth: 440, lineHeight: 1.45 }}>
+                {step === 'empty'          && 'Select your PNG or JPG screenshot, then the matching XML'}
+                {step === 'waiting'        && 'Screenshot uploaded — select matching XML, or skip it'}
                 {step === 'matched'        && `"${screenshot?.name}" and "${xml?.name}" are a validated pair`}
-                {step === 'screenshot_only' && `"${screenshot?.name}" will be analyzed from pixels alone (no XML) using the on-device UI detector`}
-                {step === 'mismatched'     && `"${screenshot?.name}" and "${xml?.name}" don't share the same identifier`}
+                {step === 'screenshot_only' && `"${screenshot?.name}" will be analyzed from pixels alone (no XML)`}
+                {step === 'mismatched'     && `"${screenshot?.name}" and "${xml?.name}" don't match`}
               </p>
 
               <button
@@ -930,14 +920,14 @@ export default function Upload() {
                   display: 'inline-flex', alignItems: 'center', gap: 8,
                   background: validationResult ? '#475569' : '#1a2240',
                   color: '#fff', border: 'none', borderRadius: 8,
-                  fontSize: 15, fontWeight: 600, padding: '12px 28px',
-                  cursor: 'pointer', fontFamily: 'inherit', marginBottom: 24,
+                  fontSize: 14, fontWeight: 600, padding: '9px 24px',
+                  cursor: 'pointer', fontFamily: 'inherit', marginBottom: 10,
                 }}
               >
                 {btnIcon}{btnLabel}
               </button>
 
-              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: 8 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: 4 }}>
                 <span style={{ fontSize: 14, color: step === 'empty' ? '#5a6a8a' : progressColor, fontWeight: 500 }}>
                   {step === 'empty'          && 'No files uploaded'}
                   {step === 'waiting'        && 'Screenshot uploaded'}
@@ -948,7 +938,7 @@ export default function Upload() {
                 <span style={{ fontSize: 14, fontWeight: 700, color: step === 'empty' ? '#5a6a8a' : progressColor }}>{progress}%</span>
               </div>
 
-              <div style={{ width: '100%', height: 5, background: '#e2e6f0', borderRadius: 99, overflow: 'hidden', marginBottom: 14 }}>
+              <div style={{ width: '100%', height: 5, background: '#e2e6f0', borderRadius: 99, overflow: 'hidden', marginBottom: 8 }}>
                 <div style={{
                   height: '100%', borderRadius: 99,
                   width: `${progress}%`,
@@ -958,17 +948,17 @@ export default function Upload() {
               </div>
 
               {step === 'empty' && (
-                <span style={{ fontSize: 14, color: '#f59e0b', fontWeight: 500 }}>Upload your screenshot to begin</span>
+                <span style={{ fontSize: 13, color: '#f59e0b', fontWeight: 500 }}>Upload your screenshot to begin</span>
               )}
               {step === 'waiting' && (
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                  <span style={{ fontSize: 14, color: '#f59e0b', fontWeight: 500 }}>Now select the matching XML file — or skip it</span>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+                  <span style={{ fontSize: 13, color: '#f59e0b', fontWeight: 500 }}>Now select the matching XML — or skip it</span>
                   <button
                     onClick={handleScreenshotOnly}
                     style={{
                       background: 'transparent', border: '1px solid #1D9E75', color: '#1D9E75',
-                      borderRadius: 99, fontSize: 13, fontWeight: 600,
-                      padding: '6px 16px', cursor: 'pointer', fontFamily: 'inherit',
+                      borderRadius: 99, fontSize: 12.5, fontWeight: 600,
+                      padding: '5px 14px', cursor: 'pointer', fontFamily: 'inherit',
                     }}
                   >
                     Continue with screenshot only
@@ -978,20 +968,20 @@ export default function Upload() {
 
               {/* Action pills row — shown only when both files uploaded */}
               {validationResult && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
                   <button
                     onClick={() => setShowPopup(true)}
                     style={{
                       display: 'inline-flex', alignItems: 'center', gap: 6,
                       border: '1px solid #1a2240',
-                      borderRadius: 99, fontSize: 13, fontWeight: 600,
-                      padding: '5px 14px', cursor: 'pointer',
+                      borderRadius: 99, fontSize: 12.5, fontWeight: 600,
+                      padding: '4px 12px', cursor: 'pointer',
                       background: '#f1f5f9',
                       color: '#1a2240',
                       fontFamily: 'inherit',
                     }}
                   >
-                    {Icon.eye('#1a2240', 14)}
+                    {Icon.eye('#1a2240', 13)}
                     View validation status
                   </button>
 
@@ -1001,14 +991,14 @@ export default function Upload() {
                       style={{
                         display: 'inline-flex', alignItems: 'center', gap: 6,
                         border: '1px solid #1a2240',
-                        borderRadius: 99, fontSize: 13, fontWeight: 600,
-                        padding: '5px 14px', cursor: 'pointer',
+                        borderRadius: 99, fontSize: 12.5, fontWeight: 600,
+                        padding: '4px 12px', cursor: 'pointer',
                         background: '#f1f5f9',
                         color: '#1a2240',
                         fontFamily: 'inherit',
                       }}
                     >
-                      {Icon.fileSearch('#1a2240', 14)}
+                      {Icon.fileSearch('#1a2240', 13)}
                       Preview files
                     </button>
                   )}
@@ -1019,13 +1009,14 @@ export default function Upload() {
 
           {/* CTA bar */}
           <div className="axion-cta-bar" style={{
-            background: '#0f1422', borderRadius: 14, padding: '18px 28px',
+            background: '#0f1422', borderRadius: 14, padding: '12px 28px',
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20,
+            flexShrink: 0,
           }}>
             <div>
-              <p style={{ color: '#e2e6f0', fontSize: 18, fontWeight: 700, margin: 0 }}>Ready to Generate Accessibility Report?</p>
-              <p style={{ color: '#4a5a7a', fontSize: 14, margin: '5px 0 0' }}>
-                {canAudit ? 'Files validated. Click "Start Audit" to run the WCAG 2.2 AA check.' : 'Upload a matching screenshot and XML file to enable the audit.'}
+              <p style={{ color: '#e2e6f0', fontSize: 16, fontWeight: 700, margin: 0 }}>Ready to Generate Accessibility Report?</p>
+              <p style={{ color: '#4a5a7a', fontSize: 13, margin: '3px 0 0' }}>
+                {canAudit ? 'Files validated — click "Start Audit" to run the WCAG 2.2 AA check.' : 'Upload a matching screenshot and XML to enable the audit.'}
               </p>
             </div>
             <button
@@ -1038,13 +1029,13 @@ export default function Upload() {
                 background: canAudit ? '#1D9E75' : '#2d3f52',
                 color: canAudit ? '#fff' : '#4a5a7a',
                 border: 'none', borderRadius: 10,
-                fontSize: 17, fontWeight: 700, padding: '14px 30px',
+                fontSize: 15, fontWeight: 700, padding: '11px 24px',
                 cursor: canAudit ? 'pointer' : 'not-allowed',
                 fontFamily: 'inherit', whiteSpace: 'nowrap', flexShrink: 0,
                 transition: 'background 0.25s',
               }}
             >
-              Start Audit {Icon.arrow(canAudit ? '#fff' : '#4a5a7a', 16)}
+              Start Audit {Icon.arrow(canAudit ? '#fff' : '#4a5a7a', 15)}
             </button>
           </div>
         </div>

@@ -10,6 +10,14 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+from src.rules import check_audio_without_transcript
+from src.rules import check_audio_only_notification
+from src.rules import check_bad_focus_order
+from src.rules import check_decorative_in_focus_tree
+from src.rules import check_insufficient_spacing
+from src.rules import check_multi_gesture_only
+from src.rules import check_destructive_without_confirmation
+from src.rules import check_hint_only_label
 
 from src.parser import load_xml_root, parse_xml_tree
 from src.rules import (
@@ -419,7 +427,157 @@ def test_r12_stub_returns_empty_list_for_non_media_components() -> None:
     ]
     assert check_missing_captions(components) == []
 
+def test_audio_without_transcript_ignores_video_components() -> None:
+    """R13 must not flag a VideoView as 'audio-only' — a component with a
+    picture track has a visual channel, so it isn't the audio-only case
+    R13 is meant to catch. Without this guard, any video player without a
+    transcript link would be wrongly flagged."""
+    components = [
+        {
+            "component_id": "c_001",
+            "class": "android.widget.VideoView",
+            "text": "",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "com.example.app:id/video_player",
+            "clickable": False,
+            "enabled": True,
+            "focusable": False,
+            "bounds": [0, 0, 200, 200],
+        }
+    ]
+    assert check_audio_without_transcript(components) == []
 
+
+def test_audio_only_notification_ignores_nearby_icon() -> None:
+    """R14 must not flag notification-style text when a visible icon/banner
+    sits nearby — the rule exists to catch sound-only alerts, not ones that
+    are already paired with a visual cue."""
+    components = [
+        {
+            "component_id": "c_001",
+            "class": "android.widget.TextView",
+            "text": "New message notification",
+            "content_desc": "",
+            "hint": "",
+            "resource_id": "com.example.app:id/notif_text",
+            "clickable": False,
+            "enabled": True,
+            "focusable": False,
+            "bounds": [0, 0, 200, 40],
+        },
+        {
+            "component_id": "c_002",
+            "class": "android.widget.ImageView",
+            "text": "",
+            "content_desc": "notification icon",
+            "hint": "",
+            "resource_id": "com.example.app:id/notif_icon",
+            "clickable": False,
+            "enabled": True,
+            "focusable": False,
+            "bounds": [0, 40, 40, 80],
+        },
+    ]
+    assert check_audio_only_notification(components) == []
+
+def test_bad_focus_order_ignores_single_focusable() -> None:
+    """R15 needs at least 2 focusable elements to compare order; with only
+    one, there's nothing to be 'out of order' relative to."""
+    components = [
+        {
+            "component_id": "c_001", "class": "android.widget.Button",
+            "text": "OK", "content_desc": "", "hint": "",
+            "resource_id": "com.example.app:id/ok", "clickable": True,
+            "enabled": True, "focusable": True, "bounds": [0, 0, 100, 50],
+        }
+    ]
+    assert check_bad_focus_order(components) == []
+
+
+def test_decorative_in_focus_tree_ignores_non_focusable() -> None:
+    """R16 only concerns elements actually in the focus tree; a non-focusable
+    decorative image can't cause a focus-tree accessibility problem."""
+    components = [
+        {
+            "component_id": "c_001", "class": "android.widget.ImageView",
+            "text": "", "content_desc": "", "hint": "",
+            "resource_id": "com.example.app:id/deco", "clickable": False,
+            "enabled": True, "focusable": False, "bounds": [0, 0, 50, 50],
+        }
+    ]
+    assert check_decorative_in_focus_tree(components) == []
+
+
+def test_insufficient_spacing_ignores_well_spaced_targets() -> None:
+    """R17 should not flag two clickable elements with generous spacing
+    between them (well above the 8dp minimum)."""
+    components = [
+        {
+            "component_id": "c_001", "class": "android.widget.Button",
+            "text": "A", "content_desc": "", "hint": "",
+            "resource_id": "com.example.app:id/a", "clickable": True,
+            "enabled": True, "focusable": True, "bounds": [0, 0, 100, 100],
+        },
+        {
+            "component_id": "c_002", "class": "android.widget.Button",
+            "text": "B", "content_desc": "", "hint": "",
+            "resource_id": "com.example.app:id/b", "clickable": True,
+            "enabled": True, "focusable": True, "bounds": [500, 0, 600, 100],
+        },
+    ]
+    assert check_insufficient_spacing(components) == []
+
+
+def test_multi_gesture_only_ignores_normal_text() -> None:
+    """R18 should not flag ordinary controls with no gesture-related
+    language and no long-click behavior."""
+    components = [
+        {
+            "component_id": "c_001", "class": "android.widget.Button",
+            "text": "Submit", "content_desc": "", "hint": "",
+            "resource_id": "com.example.app:id/submit", "clickable": True,
+            "enabled": True, "focusable": True, "bounds": [0, 0, 100, 50],
+            "long_clickable": False,
+        }
+    ]
+    assert check_multi_gesture_only(components) == []
+
+
+def test_destructive_without_confirmation_ignores_when_confirm_text_present() -> None:
+    """R19 should not flag a destructive action if confirmation language is
+    already present somewhere on screen."""
+    components = [
+        {
+            "component_id": "c_001", "class": "android.widget.Button",
+            "text": "Delete account", "content_desc": "", "hint": "",
+            "resource_id": "com.example.app:id/delete", "clickable": True,
+            "enabled": True, "focusable": True, "bounds": [0, 0, 100, 50],
+        },
+        {
+            "component_id": "c_002", "class": "android.widget.TextView",
+            "text": "Are you sure you want to continue?", "content_desc": "",
+            "hint": "", "resource_id": "com.example.app:id/confirm_text",
+            "clickable": False, "enabled": True, "focusable": False,
+            "bounds": [0, 60, 200, 90],
+        },
+    ]
+    assert check_destructive_without_confirmation(components) == []
+
+
+def test_hint_only_label_ignores_field_with_content_desc() -> None:
+    """R20 should not flag an input field that relies on hint text if it
+    also has a real content_desc as a durable label."""
+    components = [
+        {
+            "component_id": "c_001", "class": "android.widget.EditText",
+            "text": "", "content_desc": "Email address", "hint": "Email",
+            "resource_id": "com.example.app:id/email", "clickable": True,
+            "enabled": True, "focusable": True, "bounds": [0, 0, 200, 50],
+        }
+    ]
+    assert check_hint_only_label(components) == []
+    
 def test_check_handles_missing_image_path_gracefully() -> None:
     """check() must not crash when image_path points to a nonexistent file;
     R09 (check_low_contrast) in particular must gracefully return [] rather

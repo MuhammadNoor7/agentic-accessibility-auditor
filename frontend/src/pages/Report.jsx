@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { getAuditFiles, getAuditId } from '../state/auditFiles'
-import { getAuditReport } from '../api'
+import { getAuditReport, downloadAuditReport } from '../api'
 import Sidebar from '../components/Sidebar'
 import UserAvatar from '../components/ui/UserAvatar'
 
@@ -394,6 +394,7 @@ export default function Report() {
 
   const [showConfirm, setShowConfirm] = useState(false)
   const [flowStep, setFlowStep] = useState('idle') // idle | processing | preview
+  const [downloadError, setDownloadError] = useState(null)
   const [format, setFormat] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -447,8 +448,15 @@ export default function Report() {
     setFlowStep('processing')
   }
 
-  function handleProcessingDone() {
-    setFlowStep('preview')
+  async function handleProcessingDone() {
+    try {
+      await downloadAuditReport(auditId, format)
+      setFlowStep('idle')
+      setFormat(null)
+    } catch (err) {
+      setDownloadError(err.message || 'Download failed.')
+      setFlowStep('idle')
+    }
   }
 
   function handleClosePreview() {
@@ -614,7 +622,7 @@ export default function Report() {
               style={{
                 background: '#1a2240', color: '#fff', border: 'none',
                 borderRadius: 8, padding: '12px 22px', fontSize: 15,
-                fontWeight: 700, cursor: 'pointer', marginTop: 4,
+                fontWeight: 600, cursor: 'pointer', marginTop: 4,
                 display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
               }}
             >
@@ -706,7 +714,9 @@ export default function Report() {
             </p>
             {filteredViolations.length === 0 && (
               <p style={{ padding: '24px 0', textAlign: 'center', color: '#94a3b8', fontSize: 14 }}>
-                No issues match "{searchQuery}"
+                {totalIssues === 0
+                  ? 'No issues found — this screen looks clean! 🎉'
+                  : `No issues match "${searchQuery}"`}
               </p>
             )}
             {filteredViolations.map((v, i) => {

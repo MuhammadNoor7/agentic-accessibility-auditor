@@ -11,9 +11,9 @@ export default defineConfig({
     // ngrok's free-plan subdomain is random per tunnel, so we can't pin one hostname here.
     allowedHosts: true,
     proxy: {
-      '/api': { target: 'http://backend:8000', changeOrigin: true },
-      '/auth': { target: 'http://backend:8000', changeOrigin: true },
-      '/records': { target: 'http://backend:8000', changeOrigin: true },
-    },
+  '/api': { target: 'http://127.0.0.1:8000', changeOrigin: true },
+  '/auth': { target: 'http://127.0.0.1:8000', changeOrigin: true },
+  '/records': { target: 'http://127.0.0.1:8000', changeOrigin: true },
+},
   },
 })

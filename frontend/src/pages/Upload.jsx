@@ -513,7 +513,7 @@ function ValidationPopup({ result, screenshotName, xmlName, onClose }) {
 const AUDIT_STEPS = [
   { label: 'Parsing screenshot and XML',      detail: 'Extracting the UI component tree',        pct: 15 },
   { label: 'Mapping components to bounds',    detail: 'Resolving spatial coordinates',            pct: 32 },
-  { label: 'Running WCAG 2.2 AA rule engine', detail: 'Checking 18 accessibility rules',          pct: 55 },
+  { label: 'Running WCAG 2.2 AA rule engine', detail: 'Checking 30 accessibility rules',          pct: 55 },
   { label: 'Detecting violations',            detail: 'Cross-referencing against guidelines',     pct: 74 },
   { label: 'Scoring and ranking issues',      detail: 'By severity: critical to minor',           pct: 90 },
   { label: 'Generating report',               detail: 'Compiling the final report',               pct: 100 },

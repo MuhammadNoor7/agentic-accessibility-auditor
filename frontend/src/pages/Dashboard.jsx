@@ -94,7 +94,7 @@ function Spinner({ size = 14, color = '#94a3b8' }) {
 const AUDIT_STEPS = [
   { label: 'Parsing screenshot and XML', detail: 'Extracting UI component tree from UIAutomator dump', pct: 15 },
   { label: 'Mapping components to bounds', detail: 'Resolving components with spatial coordinates from XML', pct: 32 },
-  { label: 'Running WCAG 2.2 AA rule engine', detail: 'Checking 18 rules: labels, contrast, touch targets and more', pct: 55 },
+  { label: 'Running WCAG 2.2 AA rule engine', detail: 'Checking 30 rules: labels, contrast, touch targets and more', pct: 55 },
   { label: 'Detecting violations', detail: 'Cross-referencing components against accessibility guidelines', pct: 74 },
   { label: 'Scoring and ranking issues', detail: 'Classifying by severity: critical, serious, moderate, minor', pct: 90 },
   { label: 'Generating report', detail: 'Compiling all findings into a structured accessibility report', pct: 100 },
